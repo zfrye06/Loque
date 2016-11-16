@@ -17,6 +17,8 @@ brew install sfml
 
 cd ..
 cd edu-app-unescaped-characters
+# Here you may or may not have to manually specify where tmxlite is located within cmake.
+# The `sudo cp ...` commands above show where all the necessary files are.
 cmake ./
 make
 ./loque

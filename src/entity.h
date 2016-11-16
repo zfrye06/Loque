@@ -5,7 +5,9 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <tmxlite/Map.hpp>
 #include "resource.h"
+#include "SFMLOrthogonalLayer.hpp"
 
 class Entity {
 public:
@@ -16,12 +18,13 @@ public:
     virtual void draw( sf::RenderWindow& window );
 };
 
-class Tile : public Entity {
+class Map : public Entity {
 private:
-    sf::Sprite sprite; 
+    tmx::Map* map;
+    MapLayer* layerOne;
 public:
-    Tile( std::string resource );
-    ~Tile();
+    Map( std::string resource );
+    ~Map();
     void update( double dt );
     void onHit( Entity* collider );
     void draw( sf::RenderWindow& window );

@@ -11,16 +11,16 @@ void Entity::onHit( Entity* collider ) {
 void Entity::draw( sf::RenderWindow& window ) {
 }
 
-Tile::Tile( std::string resource ) {
-    sprite.setTexture( *Resources->getTexture( resource.c_str() ) );
+Map::Map( std::string resource ) {
+    map = Resources->getMap(resource);
+    layerOne = new MapLayer( *map, 0 );
 }
-Tile::~Tile() {
+Map::~Map() {
 }
-void Tile::draw( sf::RenderWindow& window ) {
-    window.draw( sprite );
+void Map::draw( sf::RenderWindow& window ) {
+    window.draw(*layerOne);
 }
-void Tile::update( double dt ) {
-    sprite.rotate( dt );
+void Map::update( double dt ) {
 }
-void Tile::onHit( Entity* collider ) {
+void Map::onHit( Entity* collider ) {
 }

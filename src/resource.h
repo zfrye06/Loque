@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include <tmxlite/Map.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <vector>
 #include <string>
@@ -26,11 +27,22 @@ public:
     void* get();
 };
 
+class MapResource : public Resource {
+private:
+    tmx::Map* map;
+public:
+    MapResource( std::string name );
+    virtual ~MapResource();
+    void load();
+    void* get();
+};
+
 class ResourceManager {
 private:
     std::vector<Resource*> resources;
 public:
     sf::Texture* getTexture( std::string name );
+    tmx::Map* getMap( std::string name );
 };
 
 extern ResourceManager* Resources;

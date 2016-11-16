@@ -31,11 +31,14 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules" )
 #See the FindSFML.cmake file for additional details and instructions
 find_package(SFML 2 REQUIRED system window graphics network audio)
 find_package(OpenGL REQUIRED)
+find_package(TMXLITE REQUIRED)
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR}
-                      ${OPENGL_INCLUDE_DIR})
+                      ${OPENGL_INCLUDE_DIR}
+                      ${TMXLITE_INCLUDE_DIR})
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
-                                           ${OPENGL_LIBRARIES})
+                                           ${OPENGL_LIBRARIES}
+                                           ${TMXLITE_LIBRARIES})
 endif()
 
 

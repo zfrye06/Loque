@@ -7,7 +7,7 @@
 int main( int argc, char** argv ) {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     World world;
-    world.addEntity( new Tile( "blah.jpg" ) );
+    world.addEntity( new Map( "assets/candyland.tmx" ) );
     sf::Clock deltaClock;
     // Set up camera view.
     sf::View view;

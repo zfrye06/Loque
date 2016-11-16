@@ -1,8 +1,17 @@
 #include <SFML/Window.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
+#include "world.h"
+#include "entity.h"
 
 int main( int argc, char** argv ) {
-    sf::Window window(sf::VideoMode(800, 600), "Game");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
+    World world;
+    world.addEntity( new Tile( "blah.jpg" ) );
+    sf::Clock deltaClock;
+    // Set up camera view.
+    sf::View view;
+    view.reset(sf::FloatRect(0,0,800,600));
     while( window.isOpen() ) {
         // Catch events, probably should be in some sort of event handler.
         sf::Event event;
@@ -13,14 +22,20 @@ int main( int argc, char** argv ) {
                     break;
                 }
                 case sf::Event::Resized: {
-                    glViewport(0, 0, event.size.width, event.size.height);
+                    view.reset(sf::FloatRect(0,0,event.size.width,event.size.height ));
+                    // RenderWindow uses its own matrix mumbojumbo...
+                    //glViewport(0, 0, event.size.width, event.size.height);
                     break;
                 }
                 default: { break; }
             } 
         }
         // Actually do rendering.
+        window.setView( view );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        world.draw(window);
         window.display();
+        // Update world
+        world.update( deltaClock.restart().asSeconds() );
     }
 }

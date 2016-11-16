@@ -17,6 +17,9 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(EXECUTABLE_NAME "loque")
 
 set( source
+         src/entity.cpp
+         src/resource.cpp
+         src/world.cpp
          src/main.cpp )
 
 add_executable(${EXECUTABLE_NAME} ${source})

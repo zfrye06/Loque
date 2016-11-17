@@ -13,10 +13,20 @@ void Entity::draw( sf::RenderWindow& window ) {
 
 Map::Map( std::string resource ) {
     map = Resources->getMap(resource);
+
+    // Parse map properties
+    for ( tmx::Property p : map->getProperties() ) {
+        if ( p.getType() == tmx::Property::Type::String && p.getName() == "ambient" ) {
+            ambient.openFromFile(p.getStringValue());
+            ambient.play();
+        }
+    }
+
     background = new MapLayer( *map, 0 );
     ground = new MapLayer( *map, 1 );
 }
 Map::~Map() {
+    ambient.stop();
     delete background;
     delete ground;
 }
@@ -48,7 +58,7 @@ void Player::draw( sf::RenderWindow& window ) {
 void Player::update( double dt ) {
     timer+=dt;
     sprite->update( sf::seconds(dt) );
-    sprite->move( sf::Vector2f(sin(timer)/10+1,dt*10) );
+    sprite->move( sf::Vector2f(sin(timer)/10+dt,dt*10) );
 }
 void Player::onHit( Entity* collider ) {
 }

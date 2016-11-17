@@ -3,9 +3,11 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Audio/Music.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <tmxlite/Map.hpp>
+#include <tmxlite/Property.hpp>
 
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
@@ -23,6 +25,7 @@ public:
 
 class Map : public Entity {
 private:
+    sf::Music ambient;
     tmx::Map* map;
     MapLayer* background;
     MapLayer* ground;

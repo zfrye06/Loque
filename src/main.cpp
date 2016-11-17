@@ -4,7 +4,7 @@
 #include "world.h"
 #include "entity.h"
 
-int main( int argc, char** argv ) {
+int app() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     World world;
     world.addEntity( new Map( "assets/candyland.tmx" ) );
@@ -38,5 +38,15 @@ int main( int argc, char** argv ) {
         window.display();
         // Update world
         world.update( deltaClock.restart().asSeconds() );
+    }
+    return 0;
+}
+
+int main( int argc, char** argv ) {
+    try {
+        return app();
+    } catch( std::exception e ) {
+        std::cout << "ERROR: " << e.what() << "\n";
+        return 1;
     }
 }

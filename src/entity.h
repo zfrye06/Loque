@@ -39,7 +39,9 @@ public:
 
 class Player : public Entity {
 private:
-    double timer;
+    float playerSpeed;
+    sf::Vector2f accel;
+    sf::Vector2f vel;
     sf::Texture* texture;
     AnimatedSprite* sprite;
     Animation currentAnimation;

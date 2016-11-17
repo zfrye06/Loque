@@ -40,7 +40,7 @@ void Map::onHit( Entity* collider ) {
 }
 
 Player::Player( std::string resource ) {
-    timer = 0;
+    playerSpeed = 0.08;
     texture = Resources->getTexture(resource);
     //OK, going to define some animations here...
     currentAnimation.setSpriteSheet(*texture);
@@ -56,9 +56,25 @@ void Player::draw( sf::RenderWindow& window ) {
     window.draw( *sprite );
 }
 void Player::update( double dt ) {
-    timer+=dt;
     sprite->update( sf::seconds(dt) );
-    sprite->move( sf::Vector2f(sin(timer)/10+dt,dt*10) );
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) ) {
+        accel += sf::Vector2f(dt,0);
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) ) {
+        accel += sf::Vector2f(-dt,0);
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) ) {
+        accel += sf::Vector2f(0,-dt);
+    }
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) ) {
+        accel += sf::Vector2f(0,dt);
+    }
+    vel += accel*playerSpeed;
+    // Fast acceleration decrease = more responsive movement.
+    accel -= accel*(float)dt*50.f;
+    // Friction with no input
+    vel -= vel*(float)dt*10.f;
+    sprite->move( vel );
 }
 void Player::onHit( Entity* collider ) {
 }

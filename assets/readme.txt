@@ -1,2 +1,2 @@
-Map format rules:
-The .tmx files should be __bit , CSV? and have a size of __ x __ tiles of __ x __ pixels each. 
+Map format guide:
+Make maps using Tiled. On the "New Map" window, choose Orientation: Orthogonal; Tile layer format: Base64 (zlib compressed); Tile render order: Right Down, Map Size: as desired; and Tile Size: 64 x 64.

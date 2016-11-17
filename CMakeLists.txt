@@ -20,6 +20,8 @@ set(EXECUTABLE_NAME "loque")
 
 set( source
          src/entity.cpp
+         src/Animation.cpp
+         src/AnimatedSprite.cpp
          src/resource.cpp
          src/world.cpp
          src/main.cpp )

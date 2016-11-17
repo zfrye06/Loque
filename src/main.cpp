@@ -8,6 +8,7 @@ int main( int argc, char** argv ) {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     World world;
     world.addEntity( new Map( "assets/candyland.tmx" ) );
+    world.addEntity( new Player( "assets/images/alienPink.png" ) );
     sf::Clock deltaClock;
     // Set up camera view.
     sf::View view;

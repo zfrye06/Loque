@@ -6,6 +6,9 @@
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <tmxlite/Map.hpp>
+
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
 #include "resource.h"
 #include "SFMLOrthogonalLayer.hpp"
 
@@ -21,10 +24,25 @@ public:
 class Map : public Entity {
 private:
     tmx::Map* map;
-    MapLayer* layerOne;
+    MapLayer* background;
+    MapLayer* ground;
 public:
     Map( std::string resource );
     ~Map();
+    void update( double dt );
+    void onHit( Entity* collider );
+    void draw( sf::RenderWindow& window );
+};
+
+class Player : public Entity {
+private:
+    double timer;
+    sf::Texture* texture;
+    AnimatedSprite* sprite;
+    Animation currentAnimation;
+public:
+    Player( std::string resource );
+    ~Player();
     void update( double dt );
     void onHit( Entity* collider );
     void draw( sf::RenderWindow& window );

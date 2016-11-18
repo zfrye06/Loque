@@ -24,6 +24,43 @@ Map::Map( std::string resource ) {
 
     background = new MapLayer( *map, 0 );
     ground = new MapLayer( *map, 1 );
+
+    boxDef.type = b2_staticBody;
+    boxDef.position.Set(0, 0);
+    boxDef.angle = 0;
+    boxShape.SetAsBox(.5,.5);
+    boxFixtureDef.shape = &boxShape;
+    boxFixtureDef.density = 500;
+    boxFixtureDef.restitution = 0;
+
+    // First grab physical layer
+    tmx::TileLayer* tileSet;
+    //for( auto l : map->getLayers() ) {
+    for ( int i=0;i<map->getLayers().size();i++ ) {
+        auto l = map->getLayers()[i].get();
+        if ( l->getType() == tmx::Layer::Type::Tile ) {
+            if ( l->getName() == "physical" ) {
+                tileSet = (tmx::TileLayer*)l;
+            }
+        }
+    }
+    // Then loop through the tiles, placing 1x1 boxes where there's tiles.
+    auto tiles = tileSet->getTiles();
+    auto mapSize = map->getTileCount();
+    int x = 0;
+    int y = 0;
+    for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {
+        if ( tiles[i].ID != 0) {
+            boxDef.position.Set(x, y);
+            b2Body* b = physicalWorld->get().CreateBody( &boxDef );
+            b->CreateFixture(&boxFixtureDef);
+        }
+        x++;
+        if ( x >= mapSize.x ) {
+            y++;
+            x=0;
+        }
+    }
 }
 Map::~Map() {
     ambient.stop();
@@ -39,8 +76,9 @@ void Map::update( double dt ) {
 void Map::onHit( Entity* collider ) {
 }
 
-Player::Player( std::string resource ) {
-    playerSpeed = 0.05; // in meters per second
+Player::Player( std::string resource, sf::View& view ) {
+    this->view = &view;
+    playerSpeed = 0.5; // in meters per second
     texture = Resources->getTexture(resource);
     //OK, going to define some animations here...
     currentAnimation.setSpriteSheet(*texture);
@@ -51,12 +89,13 @@ Player::Player( std::string resource ) {
 
     // Physics....
     myBodyDef.type = b2_dynamicBody;
-    myBodyDef.position.Set(0, 0);
+    myBodyDef.position.Set(4,1);
     myBodyDef.angle = 0;
     myBody = physicalWorld->get().CreateBody( &myBodyDef );
-    boxShape.SetAsBox(1,1);
+    boxShape.SetAsBox(.5,.3);
     boxFixtureDef.shape = &boxShape;
-    boxFixtureDef.density = 1;
+    boxFixtureDef.density = 500;
+    boxFixtureDef.restitution = 0;
     myBody->CreateFixture(&boxFixtureDef);
 }
 Player::~Player() {
@@ -86,7 +125,8 @@ void Player::update( double dt ) {
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
     sprite->setPosition( pos.x*64, pos.y*64 );
-    sprite->setRotation( ang );
+    sprite->setRotation( ang*180/3.149562 );
+    view->setCenter( pos.x*64, pos.y*64 );
     //sprite->move( vel );
 }
 void Player::onHit( Entity* collider ) {

@@ -11,9 +11,9 @@
    eJxjYCAd8JKhhxigCcThUJoawJVC/UFUccUowAY8kdhWFJoVRqH+kQwAcFsCJw==
   </data>
  </layer>
- <layer name="ground" width="16" height="16">
+ <layer name="physical" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYKA/8KdQvx8OcTYgZgFiETL1g4AgmfYzQ+0WhNLImJUE+4kBuPQLU6ifUvtBgIMBNfw1gNgYiE3RaDMcesWIdIMHDr3ExB+yfli8wfSSgocDAADxZQYk
+   eJxjYKA/8KdQvx8OcTYgZgFiETL1g4AgifYzQ+2EYUE0PgizkmA/MQCXfmEK9VNqPwhwMKCGvwYQGwOxKRpthkOvGJFu8MChl5j4Q9YPiz+YXlLwcAAAB1wGLA==
   </data>
  </layer>
  <objectgroup name="objects"/>

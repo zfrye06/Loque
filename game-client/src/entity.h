@@ -31,6 +31,9 @@ private:
     tmx::Map* map;
     MapLayer* background;
     MapLayer* ground;
+    b2BodyDef boxDef;
+    b2PolygonShape boxShape;
+    b2FixtureDef boxFixtureDef;
 public:
     Map( std::string resource );
     ~Map();
@@ -43,15 +46,16 @@ class Player : public Entity {
 private:
     float playerSpeed;
     b2Vec2 accel;
+    sf::View* view;
     sf::Texture* texture;
     b2BodyDef myBodyDef;
-    b2PolygonShape boxShape;
     b2FixtureDef boxFixtureDef;
+    b2PolygonShape boxShape;
     b2Body* myBody;
     AnimatedSprite* sprite;
     Animation currentAnimation;
 public:
-    Player( std::string resource );
+    Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );
     void onHit( Entity* collider );

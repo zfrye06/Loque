@@ -8,13 +8,14 @@
 
 int app() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
-    World world;
-    world.addEntity( new Map( "assets/candyland.tmx" ) );
-    world.addEntity( new Player( "assets/images/alienPink.png" ) );
-    sf::Clock deltaClock;
-    // Set up camera view.
     sf::View view;
     view.reset(sf::FloatRect(0,0,800,600));
+    World world;
+    world.addEntity( new Map( "assets/candyland.tmx" ) );
+    world.addEntity( new Player( "assets/images/alienPink.png", view ) );
+    sf::Clock deltaClock;
+    // Set up camera view.
+    glMatrixMode(GL_MODELVIEW);
     while( window.isOpen() ) {
         // Catch events, probably should be in some sort of event handler.
         sf::Event event;
@@ -34,10 +35,12 @@ int app() {
             }
         }
         // Actually do rendering.
+        window.pushGLStates();
         window.setView( view );
         glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         world.draw(window);
         window.display();
+        window.popGLStates();
         // Update world
         double dt = deltaClock.restart().asSeconds();
         world.update( dt );

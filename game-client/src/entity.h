@@ -8,7 +8,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Property.hpp>
+#include <Box2D/Box2D.h>
 
+#include "physicalworld.h"
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
 #include "resource.h"
@@ -40,9 +42,12 @@ public:
 class Player : public Entity {
 private:
     float playerSpeed;
-    sf::Vector2f accel;
-    sf::Vector2f vel;
+    b2Vec2 accel;
     sf::Texture* texture;
+    b2BodyDef myBodyDef;
+    b2PolygonShape boxShape;
+    b2FixtureDef boxFixtureDef;
+    b2Body* myBody;
     AnimatedSprite* sprite;
     Animation currentAnimation;
 public:

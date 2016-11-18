@@ -40,7 +40,7 @@ void Map::onHit( Entity* collider ) {
 }
 
 Player::Player( std::string resource ) {
-    playerSpeed = 0.08;
+    playerSpeed = 0.05; // in meters per second
     texture = Resources->getTexture(resource);
     //OK, going to define some animations here...
     currentAnimation.setSpriteSheet(*texture);
@@ -48,6 +48,16 @@ Player::Player( std::string resource ) {
     currentAnimation.addFrame(sf::IntRect(0, 0, 70, 96));
     sprite = new AnimatedSprite( sf::seconds(0.2), false, true );
     sprite->play( currentAnimation );
+
+    // Physics....
+    myBodyDef.type = b2_dynamicBody;
+    myBodyDef.position.Set(0, 0);
+    myBodyDef.angle = 0;
+    myBody = physicalWorld->get().CreateBody( &myBodyDef );
+    boxShape.SetAsBox(1,1);
+    boxFixtureDef.shape = &boxShape;
+    boxFixtureDef.density = 1;
+    myBody->CreateFixture(&boxFixtureDef);
 }
 Player::~Player() {
     delete sprite;
@@ -57,24 +67,27 @@ void Player::draw( sf::RenderWindow& window ) {
 }
 void Player::update( double dt ) {
     sprite->update( sf::seconds(dt) );
+    accel = b2Vec2(0,0);
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) ) {
-        accel += sf::Vector2f(dt,0);
+        accel += b2Vec2(playerSpeed,0);
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) ) {
-        accel += sf::Vector2f(-dt,0);
+        accel += b2Vec2(-playerSpeed,0);
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) ) {
-        accel += sf::Vector2f(0,-dt);
+        accel += b2Vec2(0,-playerSpeed);
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) ) {
-        accel += sf::Vector2f(0,dt);
+        accel += b2Vec2(0,playerSpeed);
     }
-    vel += accel*playerSpeed;
-    // Fast acceleration decrease = more responsive movement.
-    accel -= accel*(float)dt*50.f;
-    // Friction with no input
-    vel -= vel*(float)dt*10.f;
-    sprite->move( vel );
+    //myBody->ApplyForceToCenter( accel, true );
+    myBody->ApplyLinearImpulse( accel, b2Vec2(0,0), true );
+    b2Vec2 pos = myBody->GetWorldCenter();
+    float ang = myBody->GetAngle();
+    // We'll assume 64 pixels is a meter
+    sprite->setPosition( pos.x*64, pos.y*64 );
+    sprite->setRotation( ang );
+    //sprite->move( vel );
 }
 void Player::onHit( Entity* collider ) {
 }

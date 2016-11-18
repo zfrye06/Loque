@@ -22,6 +22,7 @@ set( source
          src/entity.cpp
          src/Animation.cpp
          src/AnimatedSprite.cpp
+         src/physicalworld.cpp
          src/resource.cpp
          src/world.cpp
          src/main.cpp )

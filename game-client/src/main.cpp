@@ -2,6 +2,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
 
+#include "physicalworld.h"
 #include "world.h"
 #include "entity.h"
 
@@ -38,7 +39,9 @@ int app() {
         world.draw(window);
         window.display();
         // Update world
-        world.update( deltaClock.restart().asSeconds() );
+        double dt = deltaClock.restart().asSeconds();
+        world.update( dt );
+        physicalWorld->step( dt );
     }
     return 0;
 }

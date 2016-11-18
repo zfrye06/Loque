@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="103" height="25" tilewidth="64" tileheight="64" nextobjectid="1">
+ <tileset firstgid="1" name="Math" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+  <image source="../images/MathSpritesheet.png" width="320" height="384"/>
+ </tileset>
+ <tileset firstgid="31" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="../images/candylandTiles.png" width="896" height="448"/>
+ </tileset>
+ <tileset firstgid="129" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="25" columns="5">
+  <image source="../images/LevelHazards.png" width="320" height="320"/>
+ </tileset>
+ <tileset firstgid="154" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="156" columns="12">
+  <image source="../images/DungeonTiles.png" width="768" height="832"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="103" height="25">
+  <data encoding="base64" compression="zlib">
+   eJzNmstqFEEUhisXjc7eRLNTMQsVJSJ4AQO6EME7XiB4iSYQo0ZMJHHGwZWCom7UqFn5BOLKhUvBN3Ar+i7WT9dhzhxP3brToz/89ExNd1V1fV2nTldiTJrGM7w30VdEG28S+wJ9Zp9P1mzq72zGveXY126q6mCzT7TxTmn3l6c/YDPcV7huNiSwaTGX4dAS5s8jlfWCTa40NreUsq/WH5nrYnJKtDsrvvPx1hhIFtqYrFqPWG+0HrDuMx0+qcplU0Zg0+/6OWj9zXrJHUng8snUz0ZygWIx1zf+pPdK2WqkzphyuIxXaEfOm0lmSOOy1mw0JqQy4zjovM7obF6XqJMrlUnOWq6J+vndHZeYfVzWis2ZhP6BzUCF+9PYlI0xyKNSmLTc+VXn55GAz5nerPch5dzfqF04+oQ1Dtrz/Mz6eaDuVC48hqHvtF74tCXwW51jvxZsqsYfjQ3iOOUCQ6bIBV5Z/wzUkzpfWuya0HPVsN4gyu6K7/87m/nE83zysZHaaX3QU0fKnGkp14Weq2Gl7I74/i+Y7DL1ssGcaDh/UH7XxuxmoL4yXHw5Gvo05Gknh83lyO9V5koqm6q5jsZGm0uXAnXk5MhVcmcfmxl3bLOjYd/hlLwqRROuvlDuTNLGNqYRu4A0mKU0NouB+rQ1RWNQlsttd9TYxMY8Z32YSHAqFwhslOFNVmqelsqGRHxa4rwymnNHySYlZqSyoXFvR+pFzF1vPWqKd8RQHinXhqsJ/eACmx2iTMufwGbaU4fGQVPZ+Otjo72bSUk2eN/WcnZ+npYLlZHs7/XM67V9RtpPQw5L97JoOnPnS2YbpJz4y/csq7J5a/1C8YrpxKo2uwZscN+DGf19opTVwUbL07DehuIa7mOTKXIsmucy7wabfuPPw8ast5nibwF8DzfEBvU1jH8czzv7ftPiXe47o+/9Yi3YyFiEMsqZKT8DlxlxXm78DM0bcNlvOs9JKpuY6P15syn2tkLrA5STO8RUhc0eo+cCKKP15YH1PdMd02JtTXrK5fM45Y5jpvvvGBDY0LNQhU2q+HtMO3IuSYtjXBobzHOsFZjr/D0Tjj03EMbohilYgA3eb6eNzuaacv2SO2LMtwtvFUYMo/nC5+ssa8/HhlgfEuUnPPdFa89L4RWTxuSY6d5PjeXvMvfJjWmkKfaZ5g3FsXnjnzfUHvbpJQuMufZ3tJCpDclm2fzNJrQP/VRYy9dy9u/BBXvbp919pMwtWg9JuWywjh1wpvWMxgjPMM0bYiOfe26NRVU22L8Cm4emYLOb9b3MvsvRjLF57I7EJbQHpYnHcMxtH5vD4rtv3kN83kg2dfzfSIgN5gvYNE3BBt+JTxk2Z03a+z835/IoMG5SFIuPW1/I9EVPnf+aDeYI2Cy7zzymLTtDvdx/BhcZJ2OeK3FNzBijBTdOC44Njvd7wAZtNBmbpumOaU3Gp5dsfpTwXMnrcvyb+Q+uyp3o
+  </data>
+ </layer>
+</map>

@@ -23,6 +23,7 @@ set( source
          src/Animation.cpp
          src/AnimatedSprite.cpp
          src/physicalworld.cpp
+         src/DebugDraw.cpp
          src/resource.cpp
          src/world.cpp
          src/main.cpp )

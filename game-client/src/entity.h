@@ -11,6 +11,7 @@
 #include <Box2D/Box2D.h>
 
 #include "physicalworld.h"
+#include "DebugDraw.h"
 #include "Animation.hpp"
 #include "AnimatedSprite.hpp"
 #include "resource.h"
@@ -57,6 +58,17 @@ private:
 public:
     Player( std::string resource, sf::View& view );
     ~Player();
+    void update( double dt );
+    void onHit( Entity* collider );
+    void draw( sf::RenderWindow& window );
+};
+
+class PhysicsDebug : public Entity {
+private:
+    DebugDraw* drawer;
+public:
+    PhysicsDebug( sf::RenderWindow& window );
+    ~PhysicsDebug();
     void update( double dt );
     void onHit( Entity* collider );
     void draw( sf::RenderWindow& window );

@@ -131,3 +131,24 @@ void Player::update( double dt ) {
 }
 void Player::onHit( Entity* collider ) {
 }
+
+PhysicsDebug::PhysicsDebug(sf::RenderWindow& window) {
+    uint32 flags = b2Draw::e_shapeBit;
+    flags += b2Draw::e_jointBit;
+    //flags += b2Draw::e_aabbBit;
+    //flags += b2Draw::e_pairBit;
+    flags += b2Draw::e_centerOfMassBit;
+
+    drawer = new DebugDraw(window);
+    drawer->SetFlags(flags);
+    physicalWorld->get().SetDebugDraw(drawer);
+}
+PhysicsDebug::~PhysicsDebug(){}
+void PhysicsDebug::update( double dt ){}
+void PhysicsDebug::onHit( Entity* collider ){}
+void PhysicsDebug::draw( sf::RenderWindow& window ) {
+    window.pushGLStates();
+    physicalWorld->get().DrawDebugData();
+    window.popGLStates();
+}
+

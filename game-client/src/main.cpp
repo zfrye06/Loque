@@ -13,6 +13,7 @@ int app() {
     World world;
     world.addEntity( new Map( "assets/candyland.tmx" ) );
     world.addEntity( new Player( "assets/images/alienPink.png", view ) );
+    world.addEntity( new PhysicsDebug(window) );
     sf::Clock deltaClock;
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);

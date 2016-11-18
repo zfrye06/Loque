@@ -1,6 +1,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
+
 #include "world.h"
 #include "entity.h"
 
@@ -29,7 +30,7 @@ int app() {
                     break;
                 }
                 default: { break; }
-            } 
+            }
         }
         // Actually do rendering.
         window.setView( view );

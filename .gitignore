@@ -1,3 +1,5 @@
+*.layout
+*.cbp
 *.exe
 
 # C++ objects and libs

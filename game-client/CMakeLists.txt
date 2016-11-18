@@ -36,12 +36,15 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules" )
 find_package(SFML 2 REQUIRED system window graphics network audio)
 find_package(OpenGL REQUIRED)
 find_package(TMXLITE REQUIRED)
+find_package(Box2D REQUIRED)
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR}
                       ${OPENGL_INCLUDE_DIR}
+		      ${BOX2D_INCLUDE_DIR}
                       ${TMXLITE_INCLUDE_DIR})
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
                                            ${OPENGL_LIBRARIES}
+					   ${BOX2D_LIBRARIES}
                                            ${TMXLITE_LIBRARIES})
 endif()
 

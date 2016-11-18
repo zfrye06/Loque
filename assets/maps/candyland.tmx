@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="64" tileheight="64" nextobjectid="4">
+ <properties>
+  <property name="ambient" value="assets/sound_effects/erh__electroscape2.wav"/>
+ </properties>
+ <tileset firstgid="1" name="candy" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="images/sheet.png" width="896" height="448"/>
+ </tileset>
+ <layer name="background" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAd8JKhhxigCcThUJoawJVC/UFUccUowAY8kdhWFJoVRqH+kQwAcFsCJw==
+  </data>
+ </layer>
+ <layer name="ground" width="16" height="16">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA/8KdQvx8OcTYgZgFiETL1g4AgmfYzQ+0WhNLImJUE+4kBuPQLU6ifUvtBgIMBNfw1gNgYiE3RaDMcesWIdIMHDr3ExB+yfli8wfSSgocDAADxZQYk
+  </data>
+ </layer>
+ <objectgroup name="objects"/>
+</map>

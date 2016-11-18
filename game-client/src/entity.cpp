@@ -78,7 +78,7 @@ void Map::onHit( Entity* collider ) {
 
 Player::Player( std::string resource, sf::View& view ) {
     this->view = &view;
-    playerSpeed = 0.5; // in meters per second
+    playerSpeed = 5000; // in meters per second
     texture = Resources->getTexture(resource);
     //OK, going to define some animations here...
     currentAnimation.setSpriteSheet(*texture);
@@ -88,6 +88,7 @@ Player::Player( std::string resource, sf::View& view ) {
     sprite->play( currentAnimation );
 
     // Physics....
+    myBodyDef.fixedRotation = true;
     myBodyDef.type = b2_dynamicBody;
     myBodyDef.position.Set(4,1);
     myBodyDef.angle = 0;
@@ -107,20 +108,21 @@ void Player::draw( sf::RenderWindow& window ) {
 void Player::update( double dt ) {
     sprite->update( sf::seconds(dt) );
     accel = b2Vec2(0,0);
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right ) ) {
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right) || sf::Keyboard::isKeyPressed( sf::Keyboard::D ) ) {
         accel += b2Vec2(playerSpeed,0);
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) ) {
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) || sf::Keyboard::isKeyPressed( sf::Keyboard::A ) ) {
         accel += b2Vec2(-playerSpeed,0);
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) ) {
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) || sf::Keyboard::isKeyPressed( sf::Keyboard::W ) ) {
         accel += b2Vec2(0,-playerSpeed);
     }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) ) {
+    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) || sf::Keyboard::isKeyPressed( sf::Keyboard::S ) ) {
         accel += b2Vec2(0,playerSpeed);
     }
     //myBody->ApplyForceToCenter( accel, true );
-    myBody->ApplyLinearImpulse( accel, b2Vec2(0,0), true );
+    b2Vec2 tempAccel( accel.x * dt, accel.y * dt);
+    myBody->ApplyLinearImpulse(tempAccel, b2Vec2(.5f, .5f), true );
     b2Vec2 pos = myBody->GetWorldCenter();
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter

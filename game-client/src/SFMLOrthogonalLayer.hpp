@@ -63,7 +63,7 @@ public:
     MapLayer(const tmx::Map& map, std::size_t idx)
     {
         const auto& layers = map.getLayers();
-        if (map.getOrientation() == tmx::Orientation::Orthogonal && 
+        if (map.getOrientation() == tmx::Orientation::Orthogonal &&
             idx < layers.size() && layers[idx]->getType() == tmx::Layer::Type::Tile)
         {
             //round the chunk size to the nearest tile
@@ -99,7 +99,7 @@ private:
     using TextureResource = std::map<std::string, std::unique_ptr<sf::Texture>>;
     TextureResource m_textureResource;
 
-    class Chunk final : public sf::Transformable, public sf::Drawable 
+    class Chunk final : public sf::Transformable, public sf::Drawable
     {
     public:
         using Ptr = std::unique_ptr<Chunk>;
@@ -115,7 +115,7 @@ private:
             sf::Vector2f layerOffset(offset.x, offset.y);
 
             const auto& tileIDs = layer.getTiles();
-            
+
             //go through the tiles and create the appropriate arrays
             for (const auto ts : tilesets)
             {
@@ -146,12 +146,12 @@ private:
                             }
                             auto& ca = m_chunkArrays.back();
                             sf::Vector2f tileOffset(x * tileSize.x, y * tileSize.y);
-                            
+
                             auto idIndex = tileIDs[idx].ID - ts->getFirstGID();
                             sf::Vector2f tileIndex(idIndex % tsTileCount.x, idIndex / tsTileCount.x);
                             tileIndex.x *= tileSize.x;
                             tileIndex.y *= tileSize.y;
-                            Tile tile = 
+                            Tile tile =
                             {
                                 sf::Vertex(tileOffset, vertColour, tileIndex),
                                 sf::Vertex(tileOffset + sf::Vector2f(tileSize.x, 0.f), vertColour, tileIndex + sf::Vector2f(tileSize.x, 0.f)),
@@ -163,7 +163,7 @@ private:
                     }
                 }
             }
-            
+
             setPosition(position);
         }
         ~Chunk() = default;
@@ -270,7 +270,7 @@ private:
         {
             for (auto x = 0u; x < m_chunkCount.x; ++x)
             {
-                m_chunks.emplace_back(std::make_unique<Chunk>(layer, usedTileSets, 
+                m_chunks.emplace_back(std::make_unique<Chunk>(layer, usedTileSets,
                     sf::Vector2f(x * m_chunkSize.x, y * m_chunkSize.y), tileCount, map.getTileCount().x, m_textureResource));
             }
         }
@@ -280,14 +280,14 @@ private:
     {
         sf::Vector2f viewCorner = view.getCenter();
         viewCorner -= view.getSize() / 2.f;
-        
+
         int posX = static_cast<int>(std::floor(viewCorner.x / m_chunkSize.x));
         int posY = static_cast<int>(std::floor(viewCorner.y / m_chunkSize.y));
 
         std::vector<const Chunk*> visible;
-        for (auto y = posY; y < posY + 2; ++y)
+        for (auto y = posY; y < posY + 3; ++y)
         {
-            for (auto x = posX; x < posX + 2; ++x)
+            for (auto x = posX; x < posX + 3; ++x)
             {
                 auto idx = y * int(m_chunkCount.x) + x;
                 if (idx >= 0 && idx < m_chunks.size() && !m_chunks[idx]->empty())

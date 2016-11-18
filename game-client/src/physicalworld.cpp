@@ -4,10 +4,13 @@ PhysicalWorld* physicalWorld = new PhysicalWorld();
 
 PhysicalWorld::PhysicalWorld() {
     world = new b2World( b2Vec2( 0, 13 ) );
+    contactlistenerinstance = new ContactListener();
+    world->SetContactListener(contactlistenerinstance);
 }
 
 PhysicalWorld::~PhysicalWorld() {
     delete world;
+    delete contactlistenerinstance;
 }
 
 b2World& PhysicalWorld::get() {

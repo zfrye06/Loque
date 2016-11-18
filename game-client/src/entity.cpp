@@ -10,6 +10,9 @@ void Entity::onHit( Entity* collider ) {
 }
 void Entity::draw( sf::RenderWindow& window ) {
 }
+Entity::Type Entity::getType(){
+    return Entity::Type::None;
+}
 
 Map::Map( std::string resource ) {
     map = Resources->getMap(resource);
@@ -54,6 +57,7 @@ Map::Map( std::string resource ) {
             boxDef.position.Set(x, y);
             b2Body* b = physicalWorld->get().CreateBody( &boxDef );
             b->CreateFixture(&boxFixtureDef);
+            b->SetUserData(this);
         }
         x++;
         if ( x >= mapSize.x ) {
@@ -75,6 +79,9 @@ void Map::update( double dt ) {
 }
 void Map::onHit( Entity* collider ) {
 }
+Entity::Type Map::getType(){
+    return Entity::Type::Map;
+}
 
 Player::Player( std::string resource, sf::View& view ) {
     this->view = &view;
@@ -93,6 +100,7 @@ Player::Player( std::string resource, sf::View& view ) {
     myBodyDef.position.Set(4,1);
     myBodyDef.angle = 0;
     myBody = physicalWorld->get().CreateBody( &myBodyDef );
+    myBody->SetUserData(this);
     boxShape.SetAsBox(.5,.3);
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 500;
@@ -132,6 +140,11 @@ void Player::update( double dt ) {
     //sprite->move( vel );
 }
 void Player::onHit( Entity* collider ) {
+    std::cout<<(int)collider->getType()<<std::endl;
+
+}
+Entity::Type Player::getType(){
+    return Entity::Type::Player;
 }
 
 PhysicsDebug::PhysicsDebug(sf::RenderWindow& window) {
@@ -152,5 +165,9 @@ void PhysicsDebug::draw( sf::RenderWindow& window ) {
     window.pushGLStates();
     physicalWorld->get().DrawDebugData();
     window.popGLStates();
+}
+
+Entity::Type PhysicsDebug::getType(){
+    return Entity::Type::None;
 }
 

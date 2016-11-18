@@ -2,6 +2,7 @@
 #define LQ_PHYSICALWORLD_H_
 
 #include <Box2D/Box2D.h>
+#include "contactlistener.h"
 
 class PhysicalWorld {
 private:
@@ -12,6 +13,7 @@ public:
     ~PhysicalWorld();
     void step( double dt );
     b2World& get();
+    ContactListener* contactlistenerinstance;
 };
 
 extern PhysicalWorld* physicalWorld;

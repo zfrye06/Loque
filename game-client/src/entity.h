@@ -24,6 +24,12 @@ public:
     virtual void update( double dt );
     virtual void onHit( Entity* collider );
     virtual void draw( sf::RenderWindow& window );
+    enum class Type{
+        Map,
+        Player,
+        None
+    };
+    virtual Type getType();
 };
 
 class Map : public Entity {
@@ -41,6 +47,7 @@ public:
     void update( double dt );
     void onHit( Entity* collider );
     void draw( sf::RenderWindow& window );
+    Entity::Type getType();
 };
 
 class Player : public Entity {
@@ -61,6 +68,7 @@ public:
     void update( double dt );
     void onHit( Entity* collider );
     void draw( sf::RenderWindow& window );
+    Entity::Type getType();
 };
 
 class PhysicsDebug : public Entity {
@@ -72,6 +80,7 @@ public:
     void update( double dt );
     void onHit( Entity* collider );
     void draw( sf::RenderWindow& window );
+    Entity::Type getType();
 };
 
 #endif

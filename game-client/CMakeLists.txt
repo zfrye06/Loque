@@ -26,6 +26,7 @@ set( source
          src/DebugDraw.cpp
          src/resource.cpp
          src/world.cpp
+	 src/contactlistener.cpp
          src/main.cpp )
 
 add_executable(${EXECUTABLE_NAME} ${source})

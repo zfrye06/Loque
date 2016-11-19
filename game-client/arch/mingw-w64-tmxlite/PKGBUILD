@@ -1,0 +1,40 @@
+pkgname=mingw-w64-tmxlite
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="lightweight C++14 parser for Tiled tmx files (mingw-w64)"
+arch=('any')
+url="https://github.com/fallahn/tmxlite"
+license=('GPL')
+makedepends=('mingw-w64-cmake')
+depends=('mingw-w64-crt')
+options=('!strip' '!buildflags' 'staticlibs')
+source=("git+https://github.com/fallahn/tmxlite.git#branch=master")
+md5sums=('SKIP')
+
+_architectures="i686-w64-mingw32 x86_64-w64-mingw32"
+
+build() { 
+  unset LDFLAGS
+  cd "$srcdir/tmxlite/tmxlite"
+  for _arch in ${_architectures}; do
+    echo "
+    set_target_properties(tmxlite PROPERTIES LINKER_LANGUAGE CXX)
+    " >> CMakeLists.txt
+    sed -i 's/add_library(${PROJECT_NAME} SHARED WIN32 ${PROJECT_SRC})/add_library(${PROJECT_NAME} SHARED ${PROJECT_SRC})/g' CMakeLists.txt
+    mkdir -p build-${_arch} && pushd build-${_arch}
+    ${_arch}-cmake \
+      -DCMAKE_BUILD_TYPE=Release \
+      ..
+    make
+    popd
+  done
+}
+
+package() {
+  for _arch in ${_architectures}; do
+    cd "${srcdir}/tmxlite/tmxlite/build-${_arch}"
+    make DESTDIR="${pkgdir}" install
+    ${_arch}-strip --strip-unneeded "$pkgdir"/usr/${_arch}/bin/*.dll
+    ${_arch}-strip -g "$pkgdir"/usr/${_arch}/lib/*.a
+  done
+}

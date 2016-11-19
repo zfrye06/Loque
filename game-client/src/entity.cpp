@@ -6,7 +6,7 @@ Entity::~Entity() {
 }
 void Entity::update( double dt ) {
 }
-void Entity::onHit( Entity* collider ) {
+void Entity::onHit( Entity* collider, b2Contact* c ) {
 }
 void Entity::draw( sf::RenderWindow& window ) {
 }
@@ -54,7 +54,7 @@ Map::Map( std::string resource ) {
     int y = 0;
     for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {
         if ( tiles[i].ID != 0) {
-            boxDef.position.Set(x, y);
+            boxDef.position.Set(x+0.5, y+0.5);
             b2Body* b = physicalWorld->get().CreateBody( &boxDef );
             b->CreateFixture(&boxFixtureDef);
             b->SetUserData(this);
@@ -77,7 +77,7 @@ void Map::draw( sf::RenderWindow& window ) {
 }
 void Map::update( double dt ) {
 }
-void Map::onHit( Entity* collider ) {
+void Map::onHit( Entity* collider, b2Contact* c ) {
 }
 Entity::Type Map::getType(){
     return Entity::Type::Map;
@@ -95,13 +95,16 @@ Player::Player( std::string resource, sf::View& view ) {
     sprite->play( currentAnimation );
 
     // Physics....
+    b2BodyDef myBodyDef;
     myBodyDef.fixedRotation = true;
     myBodyDef.type = b2_dynamicBody;
     myBodyDef.position.Set(4,1);
     myBodyDef.angle = 0;
     myBody = physicalWorld->get().CreateBody( &myBodyDef );
     myBody->SetUserData(this);
-    boxShape.SetAsBox(.5,.3);
+    b2PolygonShape boxShape;
+    boxShape.SetAsBox(.35,.55);
+    b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 500;
     boxFixtureDef.restitution = 0;
@@ -134,14 +137,12 @@ void Player::update( double dt ) {
     b2Vec2 pos = myBody->GetWorldCenter();
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
-    sprite->setPosition( pos.x*64, pos.y*64 );
+    sprite->setPosition( pos.x*64-32, pos.y*64-64 );
     sprite->setRotation( ang*180/3.149562 );
     view->setCenter( pos.x*64, pos.y*64 );
     //sprite->move( vel );
 }
-void Player::onHit( Entity* collider ) {
-    std::cout<<(int)collider->getType()<<std::endl;
-
+void Player::onHit( Entity* collider, b2Contact* c ) {
 }
 Entity::Type Player::getType(){
     return Entity::Type::Player;
@@ -160,7 +161,7 @@ PhysicsDebug::PhysicsDebug(sf::RenderWindow& window) {
 }
 PhysicsDebug::~PhysicsDebug(){}
 void PhysicsDebug::update( double dt ){}
-void PhysicsDebug::onHit( Entity* collider ){}
+void PhysicsDebug::onHit( Entity* collider, b2Contact* c ){}
 void PhysicsDebug::draw( sf::RenderWindow& window ) {
     window.pushGLStates();
     physicalWorld->get().DrawDebugData();

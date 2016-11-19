@@ -22,7 +22,7 @@ public:
     Entity();
     virtual ~Entity();
     virtual void update( double dt );
-    virtual void onHit( Entity* collider );
+    virtual void onHit( Entity* collider, b2Contact* c );
     virtual void draw( sf::RenderWindow& window );
     enum class Type{
         Map,
@@ -45,7 +45,7 @@ public:
     Map( std::string resource );
     ~Map();
     void update( double dt );
-    void onHit( Entity* collider );
+    void onHit( Entity* collider, b2Contact* c );
     void draw( sf::RenderWindow& window );
     Entity::Type getType();
 };
@@ -56,9 +56,6 @@ private:
     b2Vec2 accel;
     sf::View* view;
     sf::Texture* texture;
-    b2BodyDef myBodyDef;
-    b2FixtureDef boxFixtureDef;
-    b2PolygonShape boxShape;
     b2Body* myBody;
     AnimatedSprite* sprite;
     Animation currentAnimation;
@@ -66,7 +63,7 @@ public:
     Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );
-    void onHit( Entity* collider );
+    void onHit( Entity* collider, b2Contact* c );
     void draw( sf::RenderWindow& window );
     Entity::Type getType();
 };
@@ -78,7 +75,7 @@ public:
     PhysicsDebug( sf::RenderWindow& window );
     ~PhysicsDebug();
     void update( double dt );
-    void onHit( Entity* collider );
+    void onHit( Entity* collider, b2Contact* c );
     void draw( sf::RenderWindow& window );
     Entity::Type getType();
 };

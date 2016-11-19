@@ -18,7 +18,7 @@ void ContactListener::BeginContact(b2Contact* contact){
     if(bodyA && bodyB){
         Entity* entityA = static_cast<Entity*>( bodyA );
         Entity* entityB = static_cast<Entity*>( bodyB );
-        entityA->onHit(entityB);
-        entityB->onHit(entityA);
+        entityA->onHit(entityB, contact);
+        entityB->onHit(entityA, contact);
     }
 }

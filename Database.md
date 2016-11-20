@@ -46,7 +46,7 @@
 - UserId: userID
  - Int
  - Non-nullable
-- Level: level
+- Map: mapID
  - Int
  - Non-nullable
 - highScore: levelScore

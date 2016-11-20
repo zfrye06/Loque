@@ -12,51 +12,75 @@
 
 ### User
 - UserId: userID
- - Int, auto increment, non-nullable, primary key
+ - Int
+ - Auto increment
+ - Non-nullable
+ - Primary key
 - Username: username
- - String, non-nullable
+ - String
+ - Non-nullable
 - Password: password
- - String, salted hash, non-nullable
+ - String 
+ - Salted hash
+ - Non-nullable
 - isAdmin: isAdmin
- - Tinyint(bool), non-nullable 
+ - Tinyint(bool)
+ - Non-nullable 
 - levelsCompleted: levelsCompleted
- - Varbinary(bit flag), non-nullable
+ - Varbinary(bit flag)
+ - Non-nullable 
 - Total Score: totalScore
- - Int, non-nullable
+ - Int
+ - Non-nullable
 - Total play time: totalTime
- - Int, non-nullable
+ - Int
+ - Non-nullable
  
 ### UserAssociations
 - UserID: userID
- - Int, non-nullable
+ - Int
+ - Non-nullable
 - ClassID: classID
- - Int, non-nullable
+ - Int
+ - Non-nullable
  
 ### Score Info
 - UserId: userID
- - Int, non-nullable
+ - Int
+ - Non-nullable
 - Level: level
- - Int, non-nullable
+ - Int
+ - Non-nullable
 - highScore: levelScore
- - Int, non-nullable
+ - Int
+ - Non-nullable
 - Time to completion: completionTime
- - Int, non-nullable
+ - Int
+ - Non-nullable
  
 ### MapAssociations
 - ClassID: classID
- - Int, non-nullable
+ - Int
+ - Non-nullable
 - MapID: mapID
- - Int, non-nullable
+ - Int
+ - Non-nullable
 
 ### Map
 - MapID: mapID
- - Int, primary key, non-nullable
+ - Int
+ - Primary key
+ - Non-nullable
 - Name: mapName
- - String, non-nullable, unique
+ - String
+ - Non-nullable
+ - Unique
 - Category: category
  - String
 - FilePath: path
- - String, non-nullable, unique
+ - String
+ - Non-nullable
+ - Unique
 - DataURL: url
  - String
 

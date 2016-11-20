@@ -1,36 +1,56 @@
+# Database
 
-# Tables:
+## Tables:
 
-- User
- - UserId (Auto Increment Int)
- - Username (String)
- - Password (salted hash String)
- - isAdmin (bool)
- - levelsCompleted (bit flag)
- - Total play time (Int)
- - Total Score (Int)
-- UserAssociations
- - ClassID
- - UserID
-- Score Info
- - StudentId
- - Lvl (Int)
- - highScore (Int)
- - Time to completion (Int)
-- MapAssociations
- - ClassID
- - MapID
-- Map
- - MapID
- - Name
- - Category
- - FilePath
- - DataURL 
+### User
+- UserId: userID
+ - Int, auto increment, non-nullable, primary key
+- Username: username
+ - String, non-nullable
+- Password: password
+ - String, salted hash, non-nullable
+- isAdmin: isAdmin
+ - Tinyint(bool), non-nullable 
+- levelsCompleted: levelsCompleted
+ - Varbinary(bit flag), non-nullable
+- Total Score: totalScore
+ - Int, non-nullable
+- Total play time: totalTime
+ - Int, non-nullable
+ 
+### UserAssociations
+- UserID: userID
+ - Int, non-nullable
+- ClassID: classID
+ - Int, non-nullable
+ 
+### Score Info
+- UserId: userID
+ - Int, non-nullable
+- Level: level
+ - Int, non-nullable
+- highScore: levelScore
+ - Int, non-nullable
+- Time to completion: completionTime
+ - Int, non-nullable
+ 
+### MapAssociations
+- ClassID: classID
+ - Int, non-nullable
+- MapID: mapID
+ - Int, non-nullable
 
-
-
-
-
+### Map
+- MapID: mapID
+ - Int, primary key, non-nullable
+- Name: mapName
+ - String, non-nullable, unique
+- Category: category
+ - String
+- FilePath: path
+ - String, non-nullable, unique
+- DataURL: url
+ - String
 
 # Actions:
 

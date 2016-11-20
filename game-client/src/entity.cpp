@@ -28,10 +28,13 @@ Map::Map( std::string resource ) {
     background = new MapLayer( *map, 0 );
     ground = new MapLayer( *map, 1 );
 
+    b2BodyDef boxDef;
     boxDef.type = b2_staticBody;
     boxDef.position.Set(0, 0);
     boxDef.angle = 0;
+    b2PolygonShape boxShape;
     boxShape.SetAsBox(.5,.5);
+    b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 500;
     boxFixtureDef.restitution = 0;
@@ -82,96 +85,6 @@ void Map::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
 Entity::Type Map::getType(){
     return Entity::Type::Map;
 }
-
-Player::Player( std::string resource, sf::View& view ) {
-    this->view = &view;
-    playerSpeed = 10; // in meters per second
-    texture = Resources->getTexture(resource);
-    //OK, going to define some animations here...
-    currentAnimation.setSpriteSheet(*texture);
-    currentAnimation.addFrame(sf::IntRect(69, 193, 68, 93));
-    currentAnimation.addFrame(sf::IntRect(0, 0, 70, 96));
-    sprite = new AnimatedSprite( sf::seconds(0.2), false, true );
-    sprite->play( currentAnimation );
-
-    // Physics....
-    b2BodyDef myBodyDef;
-    myBodyDef.fixedRotation = true;
-    myBodyDef.type = b2_dynamicBody;
-    myBodyDef.position.Set(0,0);
-    myBodyDef.angle = 0;
-    myBody = physicalWorld->get().CreateBody( &myBodyDef );
-    myBody->SetUserData(this);
-    b2PolygonShape boxShape;
-    b2CircleShape circleShape;
-    circleShape.m_p.Set(0,.30);
-    circleShape.m_radius = .35;
-    boxShape.SetAsBox(.35,.30);
-    b2FixtureDef boxFixtureDef;
-    boxFixtureDef.shape = &boxShape;
-    boxFixtureDef.density = 1;
-    boxFixtureDef.restitution = 0;
-    myBody->CreateFixture(&boxFixtureDef);
-    boxFixtureDef.shape = &circleShape;
-    myBody->CreateFixture(&boxFixtureDef);
-    circleShape.m_p.Set(0,-.30);
-    myBody->CreateFixture(&boxFixtureDef);
-    canJump = false;
-}
-
-Player::~Player() {
-    delete sprite;
-}
-
-void Player::draw( sf::RenderWindow& window ) {
-    window.draw( *sprite );
-}
-
-void Player::update( double dt ) {
-    sprite->update( sf::seconds(dt) );
-    accel = b2Vec2(0,0);
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right) || sf::Keyboard::isKeyPressed( sf::Keyboard::D ) ) {
-        accel += b2Vec2(playerSpeed,0);
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) || sf::Keyboard::isKeyPressed( sf::Keyboard::A ) ) {
-        accel += b2Vec2(-playerSpeed,0);
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) || sf::Keyboard::isKeyPressed( sf::Keyboard::W ) ) {
-        if ( canJump ) {
-            accel += b2Vec2(0,-10000);
-            canJump = false;
-        }
-    }
-    if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) || sf::Keyboard::isKeyPressed( sf::Keyboard::S ) ) {
-        accel += b2Vec2(0,playerSpeed);
-    }
-    //myBody->ApplyForceToCenter( accel, true );
-    b2Vec2 tempAccel( accel.x * dt, accel.y * dt);
-    myBody->ApplyLinearImpulse(tempAccel, b2Vec2(.5f, .5f), true );
-    b2Vec2 pos = myBody->GetWorldCenter();
-    float ang = myBody->GetAngle();
-    // We'll assume 64 pixels is a meter
-    sprite->setPosition( pos.x*64-35, pos.y*64-50 );
-    sprite->setRotation( ang*180/3.149562 );
-    view->setCenter( pos.x*64, pos.y*64 );
-    //sprite->move( vel );
-}
-
-void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
-    // If we hit a map...
-    if ( collider->getType() == Entity::Type::Map ) {
-        // If the degrees between up and the hitnormal is within pi/5ths...
-        if ( fabs(atan( hitnormal.x )) < M_PI/5.f ) {
-            // Then we can jump!
-            canJump = true;
-        }
-    }
-}
-
-Entity::Type Player::getType(){
-    return Entity::Type::Player;
-}
-
 PhysicsDebug::PhysicsDebug(sf::RenderWindow& window) {
     uint32 flags = b2Draw::e_shapeBit;
     flags += b2Draw::e_jointBit;

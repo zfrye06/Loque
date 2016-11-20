@@ -40,31 +40,9 @@ private:
     tmx::Map* map;
     MapLayer* background;
     MapLayer* ground;
-    b2BodyDef boxDef;
-    b2PolygonShape boxShape;
-    b2FixtureDef boxFixtureDef;
 public:
     Map( std::string resource );
     ~Map();
-    void update( double dt );
-    void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
-    void draw( sf::RenderWindow& window );
-    Entity::Type getType();
-};
-
-class Player : public Entity {
-private:
-    float playerSpeed;
-    b2Vec2 accel;
-    sf::View* view;
-    sf::Texture* texture;
-    b2Body* myBody;
-    AnimatedSprite* sprite;
-    Animation currentAnimation;
-    bool canJump;
-public:
-    Player( std::string resource, sf::View& view );
-    ~Player();
     void update( double dt );
     void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
     void draw( sf::RenderWindow& window );

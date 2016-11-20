@@ -3,7 +3,7 @@
 PhysicalWorld* physicalWorld = new PhysicalWorld();
 
 PhysicalWorld::PhysicalWorld() {
-    world = new b2World( b2Vec2( 0, 13 ) );
+    world = new b2World( b2Vec2( 0, 15 ) );
     contactlistenerinstance = new ContactListener();
     world->SetContactListener(contactlistenerinstance);
 }

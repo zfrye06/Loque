@@ -1,5 +1,4 @@
 #include "contactlistener.h"
-#include "entity.h"
 
 ContactListener::ContactListener()
 {
@@ -24,4 +23,19 @@ void ContactListener::BeginContact(b2Contact* contact){
         entityA->onHit(entityB, contact, worldManifold.normal);
         entityB->onHit(entityA, contact, worldManifold.normal);
     }
+}
+
+MapQueryCallback::MapQueryCallback() {
+    foundMap = false;
+}
+
+bool MapQueryCallback::ReportFixture(b2Fixture* fixture) {
+    if ( !fixture->GetBody()->GetUserData() ) {
+        return true;
+    }
+    if ( ((Entity*)fixture->GetBody()->GetUserData())->getType() == Entity::Type::Map ) {
+        foundMap = true;
+        return false;
+    }
+    return true;
 }

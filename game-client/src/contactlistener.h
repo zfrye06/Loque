@@ -2,7 +2,7 @@
 #define CONTACTLISTENER_H
 
 #include <Box2D/Box2D.h>
-
+#include "entity.h"
 
 class ContactListener : public b2ContactListener
 {
@@ -15,6 +15,13 @@ class ContactListener : public b2ContactListener
     protected:
 
     private:
+};
+
+class MapQueryCallback : public b2QueryCallback {
+public:
+    MapQueryCallback();
+    bool foundMap;
+    bool ReportFixture(b2Fixture* fixture);
 };
 
 #endif // CONTACTLISTENER_H

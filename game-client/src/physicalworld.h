@@ -4,6 +4,8 @@
 #include <Box2D/Box2D.h>
 #include "contactlistener.h"
 
+class ContactListener;
+
 class PhysicalWorld {
 private:
     double timer;

@@ -67,3 +67,26 @@ tmx::Map* ResourceManager::getMap( std::string name ) {
     return (tmx::Map*)((MapResource*)resources.back())->get();
 }
 
+FontResource::FontResource( std::string name ) {
+    this->name = name;
+    font = new sf::Font();
+    font->loadFromFile(name.c_str());
+}
+
+FontResource::~FontResource() {
+    delete font;
+}
+
+void* FontResource::get() {
+    return font;
+}
+
+sf::Font* ResourceManager::getFont( std::string name ) {
+    for( Resource* r : resources ) {
+        if ( r->name == name ) {
+            return (sf::Font*)((FontResource*)r)->get();
+        }
+    }
+    resources.push_back( new FontResource( name ) );
+    return (sf::Font*)((FontResource*)resources.back())->get();
+}

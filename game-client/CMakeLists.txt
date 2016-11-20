@@ -22,11 +22,12 @@ set( source
          src/entity.cpp
          src/Animation.cpp
          src/AnimatedSprite.cpp
-         src/physicalworld.cpp
          src/DebugDraw.cpp
          src/resource.cpp
          src/world.cpp
-	 src/contactlistener.cpp
+         src/player.cpp
+         src/contactlistener.cpp
+         src/physicalworld.cpp
          src/main.cpp )
 
 add_executable(${EXECUTABLE_NAME} ${source})

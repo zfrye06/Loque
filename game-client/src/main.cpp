@@ -5,6 +5,7 @@
 #include "physicalworld.h"
 #include "world.h"
 #include "entity.h"
+#include "player.h"
 
 int app() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");

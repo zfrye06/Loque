@@ -5,6 +5,7 @@
 
 #include <tmxlite/Map.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <vector>
 #include <string>
 
@@ -37,11 +38,22 @@ public:
     void* get();
 };
 
+class FontResource : public Resource {
+private:
+    sf::Font* font;
+public:
+    FontResource( std::string name );
+    virtual ~FontResource();
+    void load();
+    void* get();
+};
+
 class ResourceManager {
 private:
     std::vector<Resource*> resources;
 public:
     sf::Texture* getTexture( std::string name );
+    sf::Font* getFont( std::string name );
     tmx::Map* getMap( std::string name );
 };
 

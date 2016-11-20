@@ -1,6 +1,8 @@
 
 #include <SFML/Network.hpp>
 #include <iostream>
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
 
 constexpr int PORT = 5001;
 

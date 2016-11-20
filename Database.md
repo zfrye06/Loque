@@ -49,7 +49,7 @@
 - Map: mapID
  - Int
  - Non-nullable
-- highScore: levelScore
+- High Score for Level: levelHighScore
  - Int
  - Non-nullable
 - Time to completion: completionTime

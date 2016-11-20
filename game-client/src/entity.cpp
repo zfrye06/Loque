@@ -85,7 +85,7 @@ Entity::Type Map::getType(){
 
 Player::Player( std::string resource, sf::View& view ) {
     this->view = &view;
-    playerSpeed = 5000; // in meters per second
+    playerSpeed = 10; // in meters per second
     texture = Resources->getTexture(resource);
     //OK, going to define some animations here...
     currentAnimation.setSpriteSheet(*texture);
@@ -98,16 +98,23 @@ Player::Player( std::string resource, sf::View& view ) {
     b2BodyDef myBodyDef;
     myBodyDef.fixedRotation = true;
     myBodyDef.type = b2_dynamicBody;
-    myBodyDef.position.Set(4,1);
+    myBodyDef.position.Set(0,0);
     myBodyDef.angle = 0;
     myBody = physicalWorld->get().CreateBody( &myBodyDef );
     myBody->SetUserData(this);
     b2PolygonShape boxShape;
-    boxShape.SetAsBox(.35,.55);
+    b2CircleShape circleShape;
+    circleShape.m_p.Set(0,.30);
+    circleShape.m_radius = .35;
+    boxShape.SetAsBox(.35,.30);
     b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
-    boxFixtureDef.density = 500;
+    boxFixtureDef.density = 1;
     boxFixtureDef.restitution = 0;
+    myBody->CreateFixture(&boxFixtureDef);
+    boxFixtureDef.shape = &circleShape;
+    myBody->CreateFixture(&boxFixtureDef);
+    circleShape.m_p.Set(0,-.30);
     myBody->CreateFixture(&boxFixtureDef);
 }
 Player::~Player() {
@@ -137,7 +144,7 @@ void Player::update( double dt ) {
     b2Vec2 pos = myBody->GetWorldCenter();
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
-    sprite->setPosition( pos.x*64-32, pos.y*64-64 );
+    sprite->setPosition( pos.x*64-35, pos.y*64-50 );
     sprite->setRotation( ang*180/3.149562 );
     view->setCenter( pos.x*64, pos.y*64 );
     //sprite->move( vel );

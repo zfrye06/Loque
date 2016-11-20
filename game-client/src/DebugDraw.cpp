@@ -45,8 +45,8 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
     polygon.setPoint(3, sf::Vector2f(aabb->lowerBound.x*RATIO, aabb->upperBound.y*RATIO) );
 
     polygon.setOutlineThickness(1);
-    polygon.setOutlineColor(B2SFColor(color,200));
-    polygon.setFillColor(B2SFColor(color,150));
+    polygon.setOutlineColor(B2SFColor(color,ALPHA+50));
+    polygon.setFillColor(B2SFColor(color,ALPHA));
 	this->window->draw(polygon);
     std::cout << "DrawAABB\n";
 }
@@ -76,15 +76,15 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 	//red (X axis)
 	p2 = p1 + (lineProportion * xf.q.GetXAxis());
     sf::Vertex redline[] = {
-        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), sf::Color(255,0,0,255)),
-        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), sf::Color(255,0,0,255))
+        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), sf::Color(ALPHA+50,0,0,ALPHA+50)),
+        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), sf::Color(ALPHA+50,0,0,ALPHA+50))
     };
 
 	//green (Y axis)
 	p2 = p1 - (lineProportion * xf.q.GetYAxis());
     sf::Vertex greenline[] = {
-        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), sf::Color(0,255,0,255)),
-        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), sf::Color(0,255,0,255))
+        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), sf::Color(0,ALPHA+50,0,ALPHA+50)),
+        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), sf::Color(0,ALPHA+50,0,ALPHA+50))
     };
 
     this->window->draw(redline,2,sf::Lines);
@@ -94,8 +94,8 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
     sf::Vertex line[] = {
-        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), B2SFColor(color,150)),
-        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), B2SFColor(color,150))
+        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), B2SFColor(color,ALPHA)),
+        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), B2SFColor(color,ALPHA))
     };
     this->window->draw(line,2,sf::Lines);
 }
@@ -104,16 +104,16 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 {
     //no converion in cordinates of center and upper left corner, Circle in sfml is managed by default with the center
     sf::CircleShape circle = sf::CircleShape((radius*RATIO));
-    circle.setPosition(sf::Vector2f(center.x*RATIO, center.y*RATIO));
-    circle.setFillColor( B2SFColor(color,150) );
-    circle.setOutlineColor( B2SFColor(color,200) );
+    circle.setPosition(sf::Vector2f(center.x*RATIO-radius*RATIO, center.y*RATIO-radius*RATIO));
+    circle.setFillColor( B2SFColor(color,ALPHA) );
+    circle.setOutlineColor( B2SFColor(color,ALPHA+50) );
     circle.setOutlineThickness(1);
 
     // line of the circle wich shows the angle
     b2Vec2 p = center + (radius * axis);
     sf::Vertex line[] = {
-        sf::Vertex(sf::Vector2f(center.x*RATIO, center.y*RATIO), B2SFColor(color,200)),
-        sf::Vertex(sf::Vector2f(p.x*RATIO, p.y*RATIO), B2SFColor(color,200))
+        sf::Vertex(sf::Vector2f(center.x*RATIO, center.y*RATIO), B2SFColor(color,ALPHA+50)),
+        sf::Vertex(sf::Vector2f(p.x*RATIO, p.y*RATIO), B2SFColor(color,ALPHA+50))
     };
 
     this->window->draw(circle);
@@ -123,8 +123,8 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 {
     sf::CircleShape circle = sf::CircleShape((radius*RATIO));
-    circle.setPosition(sf::Vector2f(center.x*RATIO, center.y*RATIO));
-    circle.setOutlineColor( B2SFColor(color,200) );
+    circle.setPosition(sf::Vector2f(center.x*RATIO-radius*RATIO, center.y*RATIO-radius*RATIO));
+    circle.setOutlineColor( B2SFColor(color,ALPHA+50) );
     circle.setOutlineThickness(1);
     this->window->draw(circle);
 }
@@ -139,9 +139,9 @@ void DebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, cons
 		b2Vec2 vertex = vertices[i];
 		polygon.setPoint(i,sf::Vector2f(vertex.x*RATIO, vertex.y*RATIO));
 	}
-    polygon.setOutlineColor( B2SFColor(color,200) );
+    polygon.setOutlineColor( B2SFColor(color,ALPHA+50) );
     polygon.setOutlineThickness(1);
-    polygon.setFillColor( B2SFColor(color,150) );
+    polygon.setFillColor( B2SFColor(color,ALPHA) );
 	this->window->draw(polygon);
 }
 
@@ -154,9 +154,9 @@ void DebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2C
         polygon.setPointCount(vertexCount);
 		polygon.setPoint(i,sf::Vector2f(vertex.x*RATIO, vertex.y*RATIO));
 	}
-	polygon.setOutlineColor(B2SFColor(color,200));
+	polygon.setOutlineColor(B2SFColor(color,ALPHA+50));
     polygon.setOutlineThickness(1);
-	polygon.setFillColor(B2SFColor(color,150));
+	polygon.setFillColor(B2SFColor(color,ALPHA));
 	this->window->draw(polygon);
 }
 
@@ -171,8 +171,8 @@ void DebugDraw::DrawMouseJoint(b2Vec2& p1, b2Vec2& p2, const b2Color &boxColor, 
     float p2y = p2.y * RATIO;
     float size = 4.0f;
 
-    sf::Color boxClr = this->B2SFColor(boxColor,150);
-    sf::Color lineClr = this->B2SFColor(lineColor,200);
+    sf::Color boxClr = this->B2SFColor(boxColor,ALPHA);
+    sf::Color lineClr = this->B2SFColor(lineColor,ALPHA+50);
 
     //first green box for the joint
     polygon.setPointCount( 4 );

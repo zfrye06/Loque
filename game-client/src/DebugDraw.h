@@ -25,6 +25,7 @@
 #include <SFML/Graphics.hpp>
 
 #define RATIO 64.f
+#define ALPHA 75
 
 class DebugDraw : public b2Draw {
     public:

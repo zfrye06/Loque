@@ -17,12 +17,14 @@
 #include "resource.h"
 #include "SFMLOrthogonalLayer.hpp"
 
+#define M_PI 3.14159265358979323846
+
 class Entity {
 public:
     Entity();
     virtual ~Entity();
     virtual void update( double dt );
-    virtual void onHit( Entity* collider, b2Contact* c );
+    virtual void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
     virtual void draw( sf::RenderWindow& window );
     enum class Type{
         Map,
@@ -45,7 +47,7 @@ public:
     Map( std::string resource );
     ~Map();
     void update( double dt );
-    void onHit( Entity* collider, b2Contact* c );
+    void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
     void draw( sf::RenderWindow& window );
     Entity::Type getType();
 };
@@ -59,11 +61,12 @@ private:
     b2Body* myBody;
     AnimatedSprite* sprite;
     Animation currentAnimation;
+    bool canJump;
 public:
     Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );
-    void onHit( Entity* collider, b2Contact* c );
+    void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
     void draw( sf::RenderWindow& window );
     Entity::Type getType();
 };
@@ -75,7 +78,7 @@ public:
     PhysicsDebug( sf::RenderWindow& window );
     ~PhysicsDebug();
     void update( double dt );
-    void onHit( Entity* collider, b2Contact* c );
+    void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
     void draw( sf::RenderWindow& window );
     Entity::Type getType();
 };

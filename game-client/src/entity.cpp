@@ -6,7 +6,7 @@ Entity::~Entity() {
 }
 void Entity::update( double dt ) {
 }
-void Entity::onHit( Entity* collider, b2Contact* c ) {
+void Entity::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal  ) {
 }
 void Entity::draw( sf::RenderWindow& window ) {
 }
@@ -77,7 +77,7 @@ void Map::draw( sf::RenderWindow& window ) {
 }
 void Map::update( double dt ) {
 }
-void Map::onHit( Entity* collider, b2Contact* c ) {
+void Map::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
 }
 Entity::Type Map::getType(){
     return Entity::Type::Map;
@@ -116,13 +116,17 @@ Player::Player( std::string resource, sf::View& view ) {
     myBody->CreateFixture(&boxFixtureDef);
     circleShape.m_p.Set(0,-.30);
     myBody->CreateFixture(&boxFixtureDef);
+    canJump = false;
 }
+
 Player::~Player() {
     delete sprite;
 }
+
 void Player::draw( sf::RenderWindow& window ) {
     window.draw( *sprite );
 }
+
 void Player::update( double dt ) {
     sprite->update( sf::seconds(dt) );
     accel = b2Vec2(0,0);
@@ -133,7 +137,10 @@ void Player::update( double dt ) {
         accel += b2Vec2(-playerSpeed,0);
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) || sf::Keyboard::isKeyPressed( sf::Keyboard::W ) ) {
-        accel += b2Vec2(0,-playerSpeed);
+        if ( canJump ) {
+            accel += b2Vec2(0,-10000);
+            canJump = false;
+        }
     }
     if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) || sf::Keyboard::isKeyPressed( sf::Keyboard::S ) ) {
         accel += b2Vec2(0,playerSpeed);
@@ -149,8 +156,18 @@ void Player::update( double dt ) {
     view->setCenter( pos.x*64, pos.y*64 );
     //sprite->move( vel );
 }
-void Player::onHit( Entity* collider, b2Contact* c ) {
+
+void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
+    // If we hit a map...
+    if ( collider->getType() == Entity::Type::Map ) {
+        // If the degrees between up and the hitnormal is within pi/5ths...
+        if ( fabs(atan( hitnormal.x )) < M_PI/5.f ) {
+            // Then we can jump!
+            canJump = true;
+        }
+    }
 }
+
 Entity::Type Player::getType(){
     return Entity::Type::Player;
 }
@@ -168,7 +185,7 @@ PhysicsDebug::PhysicsDebug(sf::RenderWindow& window) {
 }
 PhysicsDebug::~PhysicsDebug(){}
 void PhysicsDebug::update( double dt ){}
-void PhysicsDebug::onHit( Entity* collider, b2Contact* c ){}
+void PhysicsDebug::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal  ){}
 void PhysicsDebug::draw( sf::RenderWindow& window ) {
     window.pushGLStates();
     physicalWorld->get().DrawDebugData();

@@ -46,10 +46,10 @@
 - UserId: userID
  - Int
  - Non-nullable
-- Level: level
+- Map: mapID
  - Int
  - Non-nullable
-- highScore: levelScore
+- High Score for Level: levelHighScore
  - Int
  - Non-nullable
 - Time to completion: completionTime
@@ -87,7 +87,6 @@
 
 - Admin disables certain maps for their class 
 - Admin enables certain maps for their class
-- Admin enables certain maps for one student
 - Student completes map, generating score info
 - Game menu displays which maps are enabled and which are disabled (by category?)
 - Admin retrieves aggregate statistics for all students in their class 

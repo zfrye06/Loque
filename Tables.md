@@ -1,6 +1,14 @@
 # Database
 
-## Tables:
+## How to view the Database
+1. Download mySQL Community Server: https://dev.mysql.com/downloads/mysql/
+2. When it asks you what you would like to install make sure mySQL workbench is selected.
+3. After installing open mySQL workbench and add a connection.
+4. Name the connection whatever you want.
+5. Hostname: bernardcosgriff.com, Port: 3306, Username: teamaccess, Password: password
+6. You should now be able to see the tables I created and make new ones if necessary.
+
+## Tables
 
 ### User
 - UserId: userID

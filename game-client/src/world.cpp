@@ -1,5 +1,9 @@
 #include "world.h"
 
+bool World::setBackground(std::string fileName){
+    return background.loadFromFile(fileName);
+}
+
 void World::addEntity( Entity* e ) {
     entities.push_back(e);
 }
@@ -13,6 +17,8 @@ void World::removeEntity( Entity* e ) {
 }
 
 void World::draw( sf::RenderWindow& window ) {
+    sf::Sprite spriteBackground(background);
+    window.draw(spriteBackground);
     for ( Entity* e : entities ) {
         e->draw( window );
     }

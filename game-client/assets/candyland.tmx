@@ -8,7 +8,7 @@
  </tileset>
  <layer name="background" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYCAd8JKhhxigCcThUJoawJVC/UFUccUowAY8kdhWFJoVRqH+kQwAcFsCJw==
+   eJxjYCAd8GIR4yDDHHSgCcThUJoawJVC/UFUccUowAY8kdhWFJoVRqH+kQwAjhsCLw==
   </data>
  </layer>
  <layer name="physical" width="16" height="16">

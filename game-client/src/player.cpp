@@ -25,6 +25,7 @@ Player::Player( std::string resource, sf::View& view ) {
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
+    myBody->SetTransform(b2Vec2(10,10),0);
     currentState = new IdleState(this);
 }
 
@@ -118,7 +119,7 @@ void Player::update( double dt ) {
     detectGround();
     detectWalls();
 
-    /*for (int i=0;i<11;i++ ) {
+    /*for (int i=0;i<sf::Joystick::getButtonCount(0);i++ ) {
         if (sf::Joystick::isButtonPressed(0,i)) {
             std::cout << i << std::endl;
         }

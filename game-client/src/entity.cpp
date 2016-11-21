@@ -27,9 +27,6 @@ Map::Map( std::string resource ) {
         }
     }
 
-    background = new MapLayer( *map, 0 );
-    ground = new MapLayer( *map, 1 );
-
     b2BodyDef boxDef;
     boxDef.type = b2_staticBody;
     boxDef.position.Set(0, 0);
@@ -41,8 +38,10 @@ Map::Map( std::string resource ) {
     for ( int i=0;i<map->getLayers().size();i++ ) {
         auto l = map->getLayers()[i].get();
         if ( l->getType() == tmx::Layer::Type::Tile ) {
-            if ( l->getName() == "physical" ) {
+            if ( l->getName() == "physical" || l->getName() == "Physical" ) {
                 tileSet = (tmx::TileLayer*)l;
+            } else {
+                layers.push_back( new MapLayer( *map, i ) );
             }
         }
     }
@@ -137,12 +136,14 @@ Map::Map( std::string resource ) {
 }
 Map::~Map() {
     ambient.stop();
-    delete background;
-    delete ground;
+    for ( auto i : layers ) {
+        delete i;
+    }
 }
 void Map::draw( sf::RenderWindow& window ) {
-    window.draw(*background);
-    window.draw(*ground);
+    for ( auto i : layers ) {
+        window.draw(*i);
+    }
 }
 void Map::update( double dt ) {
 }

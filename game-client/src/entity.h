@@ -47,8 +47,7 @@ class Map : public Entity {
 private:
     sf::Music ambient;
     tmx::Map* map;
-    MapLayer* background;
-    MapLayer* ground;
+    std::vector<MapLayer*> layers;
 public:
     Map( std::string resource );
     ~Map();

@@ -16,7 +16,7 @@ int app() {
     if(!world.setBackground("assets/images/blueBackground.png")){
         return 1;
     }
-    world.addEntity( new Map( "assets/candyland.tmx" ) );
+    world.addEntity( new Map( "assets/Zapper_Level_1.tmx" ) );
     world.addEntity( new Player( "assets/images/sonicsheet.png", view ) );
     //world.addEntity( new PhysicsDebug(window) );
     sf::Clock deltaClock;

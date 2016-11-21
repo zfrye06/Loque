@@ -53,7 +53,7 @@ Map::Map( std::string resource ) {
     int y = 0;
     for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {
         if ( tiles[i].ID != 0) {
-            std::cout<<tiles[i].ID<<std::endl;
+            //std::cout<<tiles[i].ID<<std::endl;
             switch(tiles[i].ID){
                 case 1:
                     break;

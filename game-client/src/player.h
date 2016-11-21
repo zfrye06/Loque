@@ -3,22 +3,24 @@
 
 #include "entity.h"
 
-static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "WallSliding", "SpecialFall" };
+static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "WallSliding", "SpecialFall", "Jumping" };
 
 class Player : public Entity {
 private:
-    enum State { Idle, Dashing, Running, Walking, JumpSquat, Airborne, WallSliding, SpecialFall };
+    enum State { Idle, Dashing, Running, Walking, JumpSquat, Airborne, WallSliding, SpecialFall, Jumping };
 
     // Configurable variables
     float walkLength;
     float walkTimer;
     float deadZone;
-    float dashDifficulty;
+    float jumpSquatTimer;
+    float jumpSquatLength;
     float dashingMultiplier;
     float dashLength;
     float playerHeight;
     float playerWidth;
     float playerSpeed;
+    float jumpHelpAmount;
     float fullHopHeight;
     float shortHopHeight;
     float airControlMultiplier;
@@ -42,6 +44,8 @@ private:
     void playerDashing( glm::vec2 direction, float dt);
     void playerRunning( glm::vec2 direction, float dt);
     void playerAirborne( glm::vec2 direction, float dt);
+    void playerJumping( glm::vec2 direction, float dt);
+    void playerJumpSquat( glm::vec2 direction, float dt);
 
     sf::View* view;
     sf::Texture* texture;

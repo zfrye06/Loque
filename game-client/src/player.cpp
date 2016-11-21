@@ -2,16 +2,18 @@
 
 Player::Player( std::string resource, sf::View& view ) {
     walkTimer = 0;
+    jumpHelpAmount = 1;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
+    jumpSquatLength = 0.06; // Time in seconds to wait for button release for a short hop.
     dashLength = 0.3; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
     playerSpeed = 5; // in meters
     dashingMultiplier = 2; // in percentage
-    fullHopHeight = 8000;
-    shortHopHeight = 4000;
-    airControlMultiplier = 8;
+    fullHopHeight = 450;
+    shortHopHeight = 200;
+    airControlMultiplier = 6;
     jumps = 0;
     currentState = Player::State::Idle;
     this->view = &view;
@@ -75,6 +77,11 @@ void Player::update( double dt ) {
     detectGround();
 
     glm::vec2 direction(0,0);
+    /*for (int i=0;i<11;i++ ) {
+        if (sf::Joystick::isButtonPressed(0,i)) {
+            std::cout << i << std::endl;
+        }
+    }*/
     if ( sf::Joystick::isConnected(0) && sf::Joystick::getButtonCount( 0 ) == 11) {
         if ( sf::Joystick::hasAxis(0,sf::Joystick::Axis::X) && sf::Joystick::hasAxis(0,sf::Joystick::Axis::Y) ) {
             direction = glm::vec2( sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::Y) );
@@ -123,6 +130,14 @@ void Player::update( double dt ) {
                                          playerAirborne(direction, dt);
                                          break;
                                      }
+        case Player::State::JumpSquat: {
+                                         playerJumpSquat(direction, dt);
+                                         break;
+                                     }
+        case Player::State::Jumping: {
+                                         playerJumping(direction, dt);
+                                         break;
+                                     }
         default: {
                      break;
                  }
@@ -161,6 +176,10 @@ void Player::playerIdle( glm::vec2 direction, float dt ) {
     if ( !onGround ) {
         currentState = Player::State::Airborne;
     }
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        jumpSquatTimer = 0;
+        currentState = Player::State::JumpSquat;
+    }
 }
 
 void Player::playerWalking( glm::vec2 direction, float dt) {
@@ -175,6 +194,10 @@ void Player::playerWalking( glm::vec2 direction, float dt) {
     if ( !onGround ) {
         currentState = Player::State::Airborne;
     }
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        jumpSquatTimer = 0;
+        currentState = Player::State::JumpSquat;
+    }
 }
 
 void Player::playerDashing( glm::vec2 direction, float dt ) {
@@ -188,7 +211,6 @@ void Player::playerDashing( glm::vec2 direction, float dt ) {
     newvel.x = dashingDirection*playerSpeed*dashingMultiplier;
     newvel.y = vel.y;
     myBody->SetLinearVelocity( toB2(newvel) );
-    // We give the player twice the amount of time to smash from one side to the other...
     if ( direction.x < -0.9 && dashingDirection == 1 ) {
         walkTimer = 0;
         dashTimer = 0;
@@ -209,6 +231,10 @@ void Player::playerDashing( glm::vec2 direction, float dt ) {
     if ( !onGround ) {
         currentState = Player::State::Airborne;
     }
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        jumpSquatTimer = 0;
+        currentState = Player::State::JumpSquat;
+    }
 }
 
 void Player::playerRunning( glm::vec2 direction, float dt ) {
@@ -222,6 +248,10 @@ void Player::playerRunning( glm::vec2 direction, float dt ) {
     }
     if ( !onGround ) {
         currentState = Player::State::Airborne;
+    }
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        jumpSquatTimer = 0;
+        currentState = Player::State::JumpSquat;
     }
 }
 
@@ -246,6 +276,36 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
             currentState = Player::State::Walking;
         }
     }
+}
+
+void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        jumpSquatTimer += dt;
+    } else {
+        myBody->ApplyForceToCenter( b2Vec2(0,-shortHopHeight), true );
+        currentState = Player::State::Jumping;
+    }
+    if ( jumpSquatTimer > jumpSquatLength ) {
+        myBody->ApplyForceToCenter( b2Vec2(0,-fullHopHeight), true );
+        currentState = Player::State::Jumping;
+    }
+}
+
+void Player::playerJumping( glm::vec2 direction, float dt ) {
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
+    if ( vel.y < 0 ) {
+        // Resist gravity a tad if they are still holding the jump button.
+        if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+            myBody->ApplyForceToCenter( b2Vec2(0,-jumpHelpAmount*dt), true );
+        }
+    } else {
+        currentState = Player::State::Airborne;
+    }
+    vel = toGLM(myBody->GetLinearVelocity());
+    glm::vec2 newvel;
+    newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
+    newvel.y = vel.y;
+    myBody->SetLinearVelocity( toB2(newvel) );
 }
 
 

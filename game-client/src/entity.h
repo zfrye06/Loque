@@ -17,6 +17,10 @@ inline glm::vec2 toGLM(const b2Vec2 &v) {
         return glm::vec2(v.x, v.y);
 }
 
+inline glm::vec2 toGLM(const sf::Vector2f &v) {
+        return glm::vec2(v.x, v.y);
+}
+
 #include "physicalworld.h"
 #include "DebugDraw.h"
 #include "Animation.hpp"
@@ -70,4 +74,17 @@ public:
     Entity::Type getType();
 };
 
+class Background : public Entity {
+private:
+    sf::Sprite sky;
+    sf::Sprite clouds;
+    sf::Sprite hills;
+    sf::View* defaultView;
+public:
+    Background(sf::View* view, std::string skyFile, std::string cloudsFile, std::string hillsFile);
+    void update(double dt);
+    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
+    void draw(sf::RenderWindow& window);
+    Entity::Type getType();
+};
 #endif

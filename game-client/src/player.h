@@ -2,16 +2,17 @@
 #define LQ_PLAYER_H_
 
 #include "entity.h"
+#include "playerstate.h"
 
-static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "WallSliding", "SpecialFall", "Jumping" };
+class GenericPlayerState;
 
 class Player : public Entity {
-private:
-    enum State { Idle, Dashing, Running, Walking, JumpSquat, Airborne, WallSliding, SpecialFall, Jumping };
+public:
 
     // Configurable variables
     float walkLength;
     float deadZone;
+    float fastFallSpeed;
     float jumpSquatLength;
     float dashingMultiplier;
     float dashLength;
@@ -25,29 +26,29 @@ private:
     float airControlMultiplier;
 
     // Control variables
+    bool fastFalling;
     bool canDoubleJump;
     bool releasedJump;
     glm::vec2 lastDirection;
+    glm::vec2 direction;
     float dashingDirection;
     float dashTimer;
     float jumpSquatTimer;
-    float walkTimer;
 
     // Helper variables
+    bool canWallJumpLeft;
+    bool canWallJumpRight;
     bool onGround;
-    State currentState;
+    glm::vec2 groundHitNormal;
+    GenericPlayerState* currentState;
+    GenericPlayerState* newState;
 
     // Helper functions
     void detectGround();
+    void detectWalls();
     void setUpBody();
     void setUpSprite( std::string resource );
-    void playerIdle( glm::vec2 direction, float dt );
-    void playerWalking( glm::vec2 direction, float dt );
-    void playerDashing( glm::vec2 direction, float dt);
-    void playerRunning( glm::vec2 direction, float dt);
-    void playerAirborne( glm::vec2 direction, float dt);
-    void playerJumping( glm::vec2 direction, float dt);
-    void playerJumpSquat( glm::vec2 direction, float dt);
+    void switchState( GenericPlayerState* state );
 
     bool flipped;
 
@@ -62,7 +63,6 @@ private:
     Animation runningAnimation;
     Animation jumpSquatAnimation;
     Animation airborneAnimation;
-public:
     Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );

@@ -19,6 +19,8 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(EXECUTABLE_NAME "server")
 
 set( source
+         src/main.cpp
+         src/serverutil.cpp
          include/json.hpp
          src/main.cpp )
 

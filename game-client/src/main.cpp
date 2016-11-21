@@ -18,7 +18,7 @@ int app() {
     }
     world.addEntity( new Map( "assets/candyland.tmx" ) );
     world.addEntity( new Player( "assets/images/sonicsheet.png", view ) );
-    world.addEntity( new PhysicsDebug(window) );
+    //world.addEntity( new PhysicsDebug(window) );
     sf::Clock deltaClock;
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);
@@ -40,6 +40,10 @@ int app() {
                 default: { break; }
             }
         }
+        // Update world
+        double dt = deltaClock.restart().asSeconds();
+        world.update( dt );
+        physicalWorld->step( dt );
         // Actually do rendering.
         window.pushGLStates();
         window.setView( view );
@@ -47,10 +51,6 @@ int app() {
         world.draw(window);
         window.display();
         window.popGLStates();
-        // Update world
-        double dt = deltaClock.restart().asSeconds();
-        world.update( dt );
-        physicalWorld->step( dt );
     }
     return 0;
 }

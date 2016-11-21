@@ -34,8 +34,8 @@ bool MapQueryCallback::ReportFixture(b2Fixture* fixture) {
         return true;
     }
     if ( ((Entity*)fixture->GetBody()->GetUserData())->getType() == Entity::Type::Map ) {
+        hitFixtures.push_back(fixture);
         foundMap = true;
-        return false;
     }
     return true;
 }

@@ -9,6 +9,13 @@
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Property.hpp>
 #include <Box2D/Box2D.h>
+#include <glm/glm.hpp>
+inline b2Vec2 toB2(const glm::vec2 &v) {
+        return b2Vec2(v.x, v.y);
+}
+inline glm::vec2 toGLM(const b2Vec2 &v) {
+        return glm::vec2(v.x, v.y);
+}
 
 #include "physicalworld.h"
 #include "DebugDraw.h"

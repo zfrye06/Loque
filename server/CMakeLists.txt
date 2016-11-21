@@ -26,22 +26,18 @@ set( source
 
 add_executable(${EXECUTABLE_NAME} ${source})
 
-
-# Detect and add SFML
+# Detect and add SFML and MYSQL
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules" )
 #Find any version 2.X of SFML
 #See the FindSFML.cmake file for additional details and instructions
 find_package(SFML 2 REQUIRED network)
-if(SFML_FOUND)
+find_package(MySQLClient REQUIRED)
+#if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR}
-                      ${OPENGL_INCLUDE_DIR}
-		      ${BOX2D_INCLUDE_DIR}
-                      ${TMXLITE_INCLUDE_DIR})
+                      ${MYSQL_INCLUDE_DIR})
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
-                                           ${OPENGL_LIBRARIES}
-					   ${BOX2D_LIBRARIES}
-                                           ${TMXLITE_LIBRARIES})
-endif()
+                                           ${MYSQL_LIBRARIES})
+#endif()
 
 
 # Install target

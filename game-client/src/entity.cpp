@@ -176,3 +176,37 @@ Entity::Type PhysicsDebug::getType(){
     return Entity::Type::None;
 }
 
+Background::Background(sf::View* view, std::string skyFile, std::string cloudsFile, std::string hillsFile){
+    defaultView = view;
+    sky = sf::Sprite(*Resources->getTexture(skyFile));
+    clouds = sf::Sprite(*Resources->getTexture(cloudsFile));
+    hills = sf::Sprite(*Resources->getTexture(hillsFile));
+    Resources->getTexture(skyFile)->setRepeated(true);
+    Resources->getTexture(cloudsFile)->setRepeated(true);
+    Resources->getTexture(hillsFile)->setRepeated(true);
+}
+
+void Background::update( double dt){
+    glm::vec2 viewPos = toGLM(defaultView->getCenter());
+    sf::IntRect hillUV = hills.getTextureRect();
+    hillUV.left = viewPos.x/4;
+//    hillUV.top += viewPos.y/256;
+    hills.setTextureRect(hillUV);
+}
+
+void Background::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+}
+
+void Background::draw(sf::RenderWindow& window){
+    
+    sf::View view(sf::FloatRect(0,0,800,600));
+    window.setView(view);
+    window.draw(sky);
+    window.draw(clouds);
+    window.draw(hills);
+    window.setView(*defaultView);
+}
+
+Entity::Type Background::getType(){
+    return Entity::Type::None;
+}

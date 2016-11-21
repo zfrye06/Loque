@@ -17,8 +17,6 @@ void World::removeEntity( Entity* e ) {
 }
 
 void World::draw( sf::RenderWindow& window ) {
-    sf::Sprite spriteBackground(background);
-    window.draw(spriteBackground);
     for ( Entity* e : entities ) {
         e->draw( window );
     }

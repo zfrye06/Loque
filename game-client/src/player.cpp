@@ -25,7 +25,7 @@ Player::Player( std::string resource, sf::View& view ) {
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
-    myBody->SetTransform(b2Vec2(10,10),0);
+    myBody->SetTransform(b2Vec2(5,10),0);
     currentState = new IdleState(this);
 }
 

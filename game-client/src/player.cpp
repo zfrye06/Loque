@@ -1,9 +1,14 @@
 #include "player.h"
 
 Player::Player( std::string resource, sf::View& view ) {
-    playerWidth = .7;
-    playerHeight = .6;
-    playerSpeed = 15;
+    walkTimer = 0;
+    deadZone = 0.25; // in percentage
+    walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
+    dashLength = 0.3; // in seconds
+    playerWidth = .7; // in meters
+    playerHeight = .6; // in meters
+    playerSpeed = 5; // in meters
+    dashingMultiplier = 2; // in percentage
     fullHopHeight = 8000;
     shortHopHeight = 4000;
     airControlMultiplier = 0.5;
@@ -69,6 +74,58 @@ void Player::draw( sf::RenderWindow& window ) {
 void Player::update( double dt ) {
     detectGround();
 
+    glm::vec2 direction(0,0);
+
+    if ( sf::Joystick::isConnected(0) ) {
+        if ( sf::Joystick::hasAxis(0,sf::Joystick::Axis::X) && sf::Joystick::hasAxis(0,sf::Joystick::Axis::Y) ) {
+            direction = glm::vec2( sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::Y) );
+            direction /= 100.f;
+        }
+    } else {
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right) || sf::Keyboard::isKeyPressed( sf::Keyboard::D ) ) {
+			direction += glm::vec2(1,0);
+		}
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Left ) || sf::Keyboard::isKeyPressed( sf::Keyboard::A ) ) {
+			direction += glm::vec2(-1,0);
+		}
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) || sf::Keyboard::isKeyPressed( sf::Keyboard::W ) ) {
+			direction += glm::vec2(0,1);
+		}
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) || sf::Keyboard::isKeyPressed( sf::Keyboard::S ) ) {
+			direction += glm::vec2(0,-1);
+		}
+		if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) ) {
+            direction *= .8;
+        }
+    }
+    // 25% deadzone
+    if ( glm::length(direction) < deadZone ) {
+        direction = glm::vec2(0,0);
+    }
+
+    switch( currentState ) {
+        case Player::State::Idle: {
+                                      playerIdle(direction, dt);
+                                      break;
+                                  }
+        case Player::State::Walking: {
+                                      playerWalking(direction, dt);
+                                      break;
+                                  }
+        case Player::State::Dashing: {
+                                         playerDashing(direction, dt);
+                                         break;
+                                     }
+        case Player::State::Running: {
+                                         playerRunning(direction, dt);
+                                         break;
+                                     }
+        default: {
+                     break;
+                 }
+    }
+
+    lastDirection = direction;
     b2Vec2 pos = myBody->GetWorldCenter();
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
@@ -77,6 +134,82 @@ void Player::update( double dt ) {
     view->setCenter( pos.x*64, pos.y*64 );
     sprite->update( sf::seconds(dt) );
 }
+
+void Player::playerIdle( glm::vec2 direction, float dt ) {
+    if ( direction.x != 0 ) {
+        walkTimer += dt;
+    } else {
+        walkTimer = 0;
+    }
+    if ( walkTimer > walkLength ) {
+        if ( fabs(direction.x) > 0.9 ) {
+            currentState = Player::State::Dashing;
+            if ( direction.x > 0 ) {
+                dashTimer = 0;
+                dashingDirection = 1;
+            } else {
+                dashTimer = 0;
+                dashingDirection = -1;
+            }
+        } else {
+            currentState = Player::State::Walking;
+        }
+    }
+}
+
+void Player::playerWalking( glm::vec2 direction, float dt) {
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
+    glm::vec2 newvel = direction*playerSpeed;
+    newvel.y = vel.y;
+    myBody->SetLinearVelocity( toB2(newvel) );
+
+    if ( newvel.x == 0 ) {
+        currentState = Player::State::Idle;
+    }
+}
+
+void Player::playerDashing( glm::vec2 direction, float dt ) {
+    if ( fabs(direction.x) < 0.9 ) {
+        walkTimer += dt;
+    } else {
+        walkTimer = 0;
+    }
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
+    glm::vec2 newvel;
+    newvel.x = dashingDirection*playerSpeed*dashingMultiplier;
+    newvel.y = vel.y;
+    myBody->SetLinearVelocity( toB2(newvel) );
+    // We give the player twice the amount of time to smash from one side to the other...
+    if ( direction.x < -0.9 && dashingDirection == 1 ) {
+        walkTimer = 0;
+        dashTimer = 0;
+        dashingDirection = -1;
+    } else if ( direction.x > 0.9 && dashingDirection == -1) {
+        walkTimer = 0;
+        dashTimer = 0;
+        dashingDirection = 1;
+    }
+    dashTimer += dt;
+    if ( dashTimer > dashLength ) {
+        if ( walkTimer > walkLength ) {
+            currentState = Player::State::Walking;
+        } else {
+            currentState = Player::State::Running;
+        }
+    }
+}
+
+void Player::playerRunning( glm::vec2 direction, float dt ) {
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
+    glm::vec2 newvel;
+    newvel.x = dashingDirection*playerSpeed*dashingMultiplier;
+    newvel.y = vel.y;
+    myBody->SetLinearVelocity( toB2(newvel) );
+    if ( fabs( direction.x ) < 0.7 ) {
+        currentState = Player::State::Walking;
+    }
+}
+
 
 void Player::detectGround() {
     b2AABB testAABB;

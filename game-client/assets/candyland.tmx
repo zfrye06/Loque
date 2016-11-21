@@ -13,7 +13,7 @@
  </layer>
  <layer name="physical" width="16" height="16">
   <data encoding="base64" compression="zlib">
-   eJxjYKA/8KdQvx8OcTYgZgFiETL1g4AgifYzQ+2EYUE0PgizkmA/MQCXfmEK9VNqPwhwMKCGvwYQGwOxKRpthkOvGJFu8MChl5j4Q9YPiz+YXlLwcAAAB1wGLA==
+   eJxjYKA/8KdQv98g0s8MxCxEYFYa2Y8MhCnUT6n9IMABxCJIfA0gNgZiUzTaDIdeMSLd4IFDryCJ+mHxB9NLCh4OAABdYQX0
   </data>
  </layer>
  <objectgroup name="objects"/>

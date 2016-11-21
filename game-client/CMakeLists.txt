@@ -26,6 +26,7 @@ set( source
          src/resource.cpp
          src/world.cpp
          src/player.cpp
+         src/playerstate.cpp
          src/contactlistener.cpp
          src/physicalworld.cpp
          src/main.cpp )

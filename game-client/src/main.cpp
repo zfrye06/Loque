@@ -1,6 +1,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
+#include <string>
 
 #include "physicalworld.h"
 #include "world.h"
@@ -12,8 +13,11 @@ int app() {
     sf::View view;
     view.reset(sf::FloatRect(0,0,800,600));
     World world;
+    if(!world.setBackground("assets/images/blueBackground.png")){
+        return 1;
+    }
     world.addEntity( new Map( "assets/candyland.tmx" ) );
-    world.addEntity( new Player( "assets/images/alienPink.png", view ) );
+    world.addEntity( new Player( "assets/images/sonicsheet.png", view ) );
     world.addEntity( new PhysicsDebug(window) );
     sf::Clock deltaClock;
     // Set up camera view.

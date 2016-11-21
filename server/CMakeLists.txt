@@ -20,7 +20,9 @@ set(EXECUTABLE_NAME "server")
 
 set( source
          src/main.cpp
-         src/serverutil.cpp )
+         src/serverutil.cpp
+         include/json.hpp
+         src/main.cpp )
 
 add_executable(${EXECUTABLE_NAME} ${source})
 

@@ -3,14 +3,19 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Graphics.hpp>
 #include <vector>
+#include <string>
 #include "entity.h"
+#include <string>
 
 class World {
 private:
 // vector probably isn't the most efficient way to store the world...
     std::vector<Entity*> entities;
+    sf::Texture background;
 public:
+    bool setBackground(std::string fileName);
     void addEntity( Entity* e );
     void removeEntity( Entity* e );
     void draw( sf::RenderWindow& window );

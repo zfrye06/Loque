@@ -6,6 +6,13 @@
 5. Hostname: bernardcosgriff.com, Port: 3306, Username: teamaccess, Password: password
 6. You should now be able to see the tables I created and make new ones if necessary.
 
+# Install mySQL and mySQL Connector
+MySQL for ubuntu was:
+> sudo apt-get install mysql-server
+
+MySQL Connector for ubuntu was:
+> apt-get install libmysqlcppconn-dev
+
 # Tables
 
 ## User

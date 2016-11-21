@@ -13,7 +13,7 @@ int app() {
     view.reset(sf::FloatRect(0,0,800,600));
     World world;
     world.addEntity( new Map( "assets/candyland.tmx" ) );
-    world.addEntity( new Player( "assets/images/alienPink.png", view ) );
+    world.addEntity( new Player( "assets/images/sonicsheet.png", view ) );
     world.addEntity( new PhysicsDebug(window) );
     sf::Clock deltaClock;
     // Set up camera view.

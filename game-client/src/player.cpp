@@ -16,9 +16,11 @@ Player::Player( std::string resource, sf::View& view ) {
     doubleJumpHeight = 12; // in meters per second
     fullHopHeight = 15; // actually a force, in newtons
     shortHopHeight = 8; // in newtons
+    canWallJumpLeft = false;
+    canWallJumpRight = false;
     canDoubleJump = true;
     releasedJump = true;
-    airControlMultiplier = 3;
+    airControlMultiplier = .0025;
     currentState = Player::State::Idle;
     this->view = &view;
     setUpSprite( resource );
@@ -113,6 +115,7 @@ void Player::draw( sf::RenderWindow& window ) {
 
 void Player::update( double dt ) {
     detectGround();
+    detectWalls();
 
     glm::vec2 direction(0,0);
     /*for (int i=0;i<11;i++ ) {
@@ -233,8 +236,12 @@ void Player::playerIdle( glm::vec2 direction, float dt ) {
         currentState = Player::State::Airborne;
     }
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
-        jumpSquatTimer = 0;
-        currentState = Player::State::JumpSquat;
+        if ( releasedJump ) {
+            jumpSquatTimer = 0;
+            currentState = Player::State::JumpSquat;
+        }
+    } else {
+        releasedJump = true;
     }
 }
 
@@ -251,8 +258,12 @@ void Player::playerWalking( glm::vec2 direction, float dt) {
         currentState = Player::State::Airborne;
     }
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
-        jumpSquatTimer = 0;
-        currentState = Player::State::JumpSquat;
+        if ( releasedJump ) {
+            jumpSquatTimer = 0;
+            currentState = Player::State::JumpSquat;
+        }
+    } else {
+        releasedJump = true;
     }
 }
 
@@ -290,8 +301,12 @@ void Player::playerDashing( glm::vec2 direction, float dt ) {
         currentState = Player::State::Airborne;
     }
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
-        jumpSquatTimer = 0;
-        currentState = Player::State::JumpSquat;
+        if ( releasedJump ) {
+            jumpSquatTimer = 0;
+            currentState = Player::State::JumpSquat;
+        }
+    } else {
+        releasedJump = true;
     }
 }
 
@@ -310,8 +325,12 @@ void Player::playerRunning( glm::vec2 direction, float dt ) {
         currentState = Player::State::Airborne;
     }
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
-        jumpSquatTimer = 0;
-        currentState = Player::State::JumpSquat;
+        if ( releasedJump ) {
+            jumpSquatTimer = 0;
+            currentState = Player::State::JumpSquat;
+        }
+    } else {
+        releasedJump = true;
     }
 }
 
@@ -320,7 +339,7 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
     sprite->setFrameTime(sf::seconds(0.15));
     glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
     glm::vec2 newvel;
-    newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
+    newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier);
     newvel.y = vel.y;
     if ( direction.y > 0.9 && !fastFalling ) {
         newvel.y += fastFallSpeed;
@@ -356,6 +375,24 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
     } else {
         releasedJump = true;
     }
+    // Walljumping
+    if ( direction.x != 0 ) {
+        walkTimer += dt;
+    } else {
+        walkTimer = 0;
+    }
+    if ( walkTimer > walkLength ) {
+        if ( direction.x > 0.9 && canWallJumpRight ) {
+            currentState = Player::State::Jumping;
+            myBody->SetLinearVelocity( b2Vec2(doubleJumpHeight,-doubleJumpHeight) );
+        } else if ( direction.x < -0.9 && canWallJumpLeft ) {
+            currentState = Player::State::Jumping;
+            myBody->SetLinearVelocity( b2Vec2(-doubleJumpHeight,-doubleJumpHeight) );
+        } else {
+            // gotta reset to neutral before trying to walljump again
+            walkTimer = -1000;
+        }
+    }
 }
 
 void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
@@ -373,6 +410,7 @@ void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
         newvel.y = vel.y-shortHopHeight;
         myBody->SetLinearVelocity( toB2(newvel) );
         currentState = Player::State::Jumping;
+        walkTimer = -1000;
         jumpSquatTimer = 0;
         return;
     }
@@ -382,6 +420,7 @@ void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
         newvel.y = vel.y-fullHopHeight;
         myBody->SetLinearVelocity( toB2(newvel) );
         currentState = Player::State::Jumping;
+        walkTimer = -1000;
         jumpSquatTimer = 0;
     }
 }
@@ -412,17 +451,36 @@ void Player::playerJumping( glm::vec2 direction, float dt ) {
     // aircontrol
     vel = toGLM(myBody->GetLinearVelocity());
     glm::vec2 newvel;
-    newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
+    newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier);
     newvel.y = vel.y;
     myBody->SetLinearVelocity( toB2(newvel) );
+
+    // Walljumping
+    if ( direction.x != 0 ) {
+        walkTimer += dt;
+    } else {
+        walkTimer = 0;
+    }
+    if ( walkTimer > walkLength ) {
+        if ( direction.x > 0.9 && canWallJumpRight ) {
+            currentState = Player::State::Jumping;
+            myBody->SetLinearVelocity( b2Vec2(doubleJumpHeight,-doubleJumpHeight) );
+        } else if ( direction.x < -0.9 && canWallJumpLeft ) {
+            currentState = Player::State::Jumping;
+            myBody->SetLinearVelocity( b2Vec2(-doubleJumpHeight,-doubleJumpHeight) );
+        } else {
+            // gotta reset to neutral before trying to walljump again
+            walkTimer = -1000;
+        }
+    }
 }
 
 
 void Player::detectGround() {
     b2AABB testAABB;
     b2Vec2 pos = myBody->GetWorldCenter();
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight+0.1);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/3.f, pos.y);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/3.f, pos.y+playerHeight+0.1);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     onGround = queryCallback.foundMap;
@@ -441,6 +499,20 @@ void Player::detectGround() {
             }
         }
     }
+}
+
+void Player::detectWalls() {
+    b2AABB testAABB;
+    b2Vec2 pos = myBody->GetWorldCenter();
+    testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.1, pos.y+playerHeight);
+    MapQueryCallback queryCallback;
+    physicalWorld->get().QueryAABB( &queryCallback, testAABB );
+    canWallJumpLeft = queryCallback.foundMap;
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight);
+    testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight);
+    physicalWorld->get().QueryAABB( &queryCallback, testAABB );
+    canWallJumpRight = queryCallback.foundMap;
 }
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {

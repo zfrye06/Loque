@@ -36,12 +36,15 @@ private:
     float walkTimer;
 
     // Helper variables
+    bool canWallJumpLeft;
+    bool canWallJumpRight;
     bool onGround;
     glm::vec2 groundHitNormal;
     State currentState;
 
     // Helper functions
     void detectGround();
+    void detectWalls();
     void setUpBody();
     void setUpSprite( std::string resource );
     void playerIdle( glm::vec2 direction, float dt );

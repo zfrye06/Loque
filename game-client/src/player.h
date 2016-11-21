@@ -49,11 +49,19 @@ private:
     void playerJumping( glm::vec2 direction, float dt);
     void playerJumpSquat( glm::vec2 direction, float dt);
 
+    bool flipped;
+
     sf::View* view;
     sf::Texture* texture;
     b2Body* myBody;
     AnimatedSprite* sprite;
-    Animation currentAnimation;
+    Animation* currentAnimation;
+    Animation walkingAnimation;
+    Animation idleAnimation;
+    Animation dashingAnimation;
+    Animation runningAnimation;
+    Animation jumpSquatAnimation;
+    Animation airborneAnimation;
 public:
     Player( std::string resource, sf::View& view );
     ~Player();

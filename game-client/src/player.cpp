@@ -6,7 +6,7 @@ Player::Player( std::string resource, sf::View& view ) {
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.06; // Time in seconds to wait for button release for a short hop.
-    dashLength = 0.3; // in seconds
+    dashLength = 0.4; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
     playerSpeed = 5; // in meters per second
@@ -26,11 +26,43 @@ Player::Player( std::string resource, sf::View& view ) {
 void Player::setUpSprite( std::string resource ) {
     texture = Resources->getTexture(resource);
     // Walking animation
-    currentAnimation.setSpriteSheet(*texture);
-    currentAnimation.addFrame(sf::IntRect(69, 193, 68, 93));
-    currentAnimation.addFrame(sf::IntRect(0, 0, 70, 96));
+    dashingAnimation.setSpriteSheet(*texture);
+    dashingAnimation.addFrame(sf::IntRect(335, 43, 27, 43));
+    dashingAnimation.addFrame(sf::IntRect(364,43,28,43));
+    dashingAnimation.addFrame(sf::IntRect(1,43,34,40));
+    dashingAnimation.addFrame(sf::IntRect(449,1,32,40));
+    dashingAnimation.addFrame(sf::IntRect(68,43,27,41));
+    dashingAnimation.addFrame(sf::IntRect(37,43,29,41));
+    dashingAnimation.addFrame(sf::IntRect(378,1,35,39));
+    dashingAnimation.addFrame(sf::IntRect(415,1,32,39));
+    idleAnimation.setSpriteSheet(*texture);
+    idleAnimation.addFrame(sf::IntRect(165,43,32,42));
+    idleAnimation.addFrame(sf::IntRect(199,43,32,42));
+    idleAnimation.addFrame(sf::IntRect(131,43,32,42));
+    idleAnimation.addFrame(sf::IntRect(267,43,32,42));
+    idleAnimation.addFrame(sf::IntRect(233,43,32,42));
+    idleAnimation.addFrame(sf::IntRect(301,43,32,42));
+    idleAnimation.addFrame(sf::IntRect(97,43,32,42));
+    airborneAnimation.setSpriteSheet(*texture);
+    airborneAnimation.addFrame(sf::IntRect(426,43,31,44));
+    airborneAnimation.addFrame(sf::IntRect(459,43,28,44));
+    airborneAnimation.addFrame(sf::IntRect(394,43,30,44));
+    jumpSquatAnimation.setSpriteSheet(*texture);
+    jumpSquatAnimation.addFrame(sf::IntRect(169,1,29,35));
+    jumpSquatAnimation.addFrame(sf::IntRect(239,1,27,37));
+    runningAnimation.setSpriteSheet(*texture);
+    runningAnimation.addFrame(sf::IntRect(342,1,34,39));
+    runningAnimation.addFrame(sf::IntRect(200,1,37,37));
+    runningAnimation.addFrame(sf::IntRect(45,1,43,33));
+    runningAnimation.addFrame(sf::IntRect(129,1,38,35));
+    runningAnimation.addFrame(sf::IntRect(307,1,33,38));
+    runningAnimation.addFrame(sf::IntRect(268,1,37,37));
+    runningAnimation.addFrame(sf::IntRect(1,1,42,32));
+    runningAnimation.addFrame(sf::IntRect(90,1,37,34));
+
     sprite = new AnimatedSprite( sf::seconds(0.2), false, true );
-    sprite->play( currentAnimation );
+    sprite->play( idleAnimation);
+    sprite->scale(2,2);
 }
 
 void Player::setUpBody() {
@@ -57,6 +89,7 @@ void Player::setUpBody() {
     myBody->CreateFixture(&boxFixtureDef);
     circleShape.m_p.Set(0,-playerHeight/2.f);
     myBody->CreateFixture(&boxFixtureDef);
+    flipped = false;
 }
 
 Player::~Player() {
@@ -148,17 +181,32 @@ void Player::update( double dt ) {
         canDoubleJump = true;
     }
 
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
+    if ( vel.x > 0 && flipped) {
+        sprite->scale(-1,1);
+        flipped = false;
+    } else if ( vel.x < 0 && !flipped ) {
+        sprite->scale(-1,1);
+        flipped = true;
+    }
+
     lastDirection = direction;
     b2Vec2 pos = myBody->GetWorldCenter();
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
-    sprite->setPosition( pos.x*64-35, pos.y*64-50 );
+    if ( !flipped ) {
+        sprite->setPosition( pos.x*64-35, pos.y*64-40 );
+    } else {
+        sprite->setPosition( pos.x*64+35, pos.y*64-40 );
+    }
     sprite->setRotation( ang*180/3.149562 );
     view->setCenter( pos.x*64, pos.y*64 );
     sprite->update( sf::seconds(dt) );
 }
 
 void Player::playerIdle( glm::vec2 direction, float dt ) {
+    sprite->play( idleAnimation );
+    sprite->setFrameTime(sf::seconds(0.2));
     if ( direction.x != 0 ) {
         walkTimer += dt;
     } else {
@@ -206,6 +254,8 @@ void Player::playerWalking( glm::vec2 direction, float dt) {
 }
 
 void Player::playerDashing( glm::vec2 direction, float dt ) {
+    sprite->play( dashingAnimation );
+    sprite->setFrameTime(sf::seconds(dashLength/(float)dashingAnimation.getSize()));
     if ( fabs(direction.x) < 0.9 ) {
         walkTimer += dt;
     } else {
@@ -243,6 +293,8 @@ void Player::playerDashing( glm::vec2 direction, float dt ) {
 }
 
 void Player::playerRunning( glm::vec2 direction, float dt ) {
+    sprite->play( runningAnimation );
+    sprite->setFrameTime(sf::seconds(dashLength/(float)dashingAnimation.getSize()));
     glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
     glm::vec2 newvel;
     newvel.x = dashingDirection*playerSpeed*dashingMultiplier;
@@ -261,6 +313,8 @@ void Player::playerRunning( glm::vec2 direction, float dt ) {
 }
 
 void Player::playerAirborne( glm::vec2 direction, float dt ) {
+    sprite->play( airborneAnimation );
+    sprite->setFrameTime(sf::seconds(0.15));
     glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
     glm::vec2 newvel;
     newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
@@ -294,6 +348,8 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
 }
 
 void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
+    sprite->play( jumpSquatAnimation );
+    sprite->setFrameTime(sf::seconds(jumpSquatLength/(float)jumpSquatAnimation.getSize()));
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
         releasedJump = false;
         jumpSquatTimer += dt;
@@ -309,6 +365,8 @@ void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
 }
 
 void Player::playerJumping( glm::vec2 direction, float dt ) {
+    sprite->play( airborneAnimation );
+    sprite->setFrameTime(sf::seconds(0.15));
     glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
     if ( vel.y < 0 ) {
         // Resist gravity a tad if they are still holding the jump button.

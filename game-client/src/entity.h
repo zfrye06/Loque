@@ -24,7 +24,9 @@ inline glm::vec2 toGLM(const b2Vec2 &v) {
 #include "resource.h"
 #include "SFMLOrthogonalLayer.hpp"
 
+#ifndef M_PI
 #define M_PI 3.14159265358979323846
+#endif
 
 class Entity {
 public:

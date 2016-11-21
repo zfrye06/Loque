@@ -11,7 +11,7 @@ Player::Player( std::string resource, sf::View& view ) {
     dashingMultiplier = 2; // in percentage
     fullHopHeight = 8000;
     shortHopHeight = 4000;
-    airControlMultiplier = 0.5;
+    airControlMultiplier = 8;
     jumps = 0;
     currentState = Player::State::Idle;
     this->view = &view;
@@ -158,6 +158,9 @@ void Player::playerIdle( glm::vec2 direction, float dt ) {
             currentState = Player::State::Walking;
         }
     }
+    if ( !onGround ) {
+        currentState = Player::State::Airborne;
+    }
 }
 
 void Player::playerWalking( glm::vec2 direction, float dt) {
@@ -168,6 +171,9 @@ void Player::playerWalking( glm::vec2 direction, float dt) {
 
     if ( newvel.x == 0 ) {
         currentState = Player::State::Idle;
+    }
+    if ( !onGround ) {
+        currentState = Player::State::Airborne;
     }
 }
 
@@ -200,6 +206,9 @@ void Player::playerDashing( glm::vec2 direction, float dt ) {
             currentState = Player::State::Running;
         }
     }
+    if ( !onGround ) {
+        currentState = Player::State::Airborne;
+    }
 }
 
 void Player::playerRunning( glm::vec2 direction, float dt ) {
@@ -211,12 +220,32 @@ void Player::playerRunning( glm::vec2 direction, float dt ) {
     if ( fabs( direction.x ) < 0.7 ) {
         currentState = Player::State::Walking;
     }
+    if ( !onGround ) {
+        currentState = Player::State::Airborne;
+    }
 }
 
 void Player::playerAirborne( glm::vec2 direction, float dt ) {
     glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
-    glm::vec2 newvel = vel+direction*playerSpeed*airControlMultiplier;
+    glm::vec2 newvel;
+    newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
+    newvel.y = vel.y;
     myBody->SetLinearVelocity( toB2(newvel) );
+    if ( onGround ) {
+        if ( direction.x < -0.9 ) {
+            walkTimer = 0;
+            dashTimer = 0;
+            dashingDirection = -1;
+            currentState = Player::State::Dashing;
+        } else if ( direction.x > 0.9 ) {
+            walkTimer = 0;
+            dashTimer = 0;
+            dashingDirection = 1;
+            currentState = Player::State::Dashing;
+        } else {
+            currentState = Player::State::Walking;
+        }
+    }
 }
 
 

@@ -1,4 +1,6 @@
 #include "entity.h"
+#include <vector>
+#include <iostream>
 
 Entity::Entity() {
 }
@@ -32,12 +34,6 @@ Map::Map( std::string resource ) {
     boxDef.type = b2_staticBody;
     boxDef.position.Set(0, 0);
     boxDef.angle = 0;
-    b2PolygonShape boxShape;
-    boxShape.SetAsBox(.5,.5);
-    b2FixtureDef boxFixtureDef;
-    boxFixtureDef.shape = &boxShape;
-    boxFixtureDef.density = 500;
-    boxFixtureDef.restitution = 0;
 
     // First grab physical layer
     tmx::TileLayer* tileSet;
@@ -57,10 +53,44 @@ Map::Map( std::string resource ) {
     int y = 0;
     for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {
         if ( tiles[i].ID != 0) {
-            boxDef.position.Set(x+0.5, y+0.5);
-            b2Body* b = physicalWorld->get().CreateBody( &boxDef );
-            b->CreateFixture(&boxFixtureDef);
-            b->SetUserData(this);
+            std::cout<<tiles[i].ID<<std::endl;
+            switch(tiles[i].ID){
+                case 1:
+                    break;
+                case 7:
+                    {
+                        std::cout<<"slope"<<std::endl;
+                        b2PolygonShape slopeRight;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(-.5, -.5),
+                            b2Vec2(.5, -.5),
+                            b2Vec2(.5, .5)
+                        };
+                        slopeRight.Set(vertices, 3);
+                        b2FixtureDef slopeRightFixureDef;
+                        slopeRightFixureDef.shape = &slopeRight;
+                        slopeRightFixureDef.density = 500;
+                        slopeRightFixureDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        slopeBody->SetUserData(this);
+                        break;
+                    }
+                default:
+                    {
+                        b2PolygonShape boxShape;
+                        boxShape.SetAsBox(.5,.5);
+                        b2FixtureDef boxFixtureDef;
+                        boxFixtureDef.shape = &boxShape;
+                        boxFixtureDef.density = 500;
+                        boxFixtureDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* b = physicalWorld->get().CreateBody( &boxDef );
+                        b->CreateFixture(&boxFixtureDef);
+                        b->SetUserData(this);
+                    }
+            }
         }
         x++;
         if ( x >= mapSize.x ) {

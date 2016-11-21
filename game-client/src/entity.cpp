@@ -57,12 +57,12 @@ Map::Map( std::string resource ) {
             switch(tiles[i].ID){
                 case 1:
                     break;
-                case 7:
+                //Right slope
+                case 8:
                     {
-                        std::cout<<"slope"<<std::endl;
                         b2PolygonShape slopeRight;
                         b2Vec2 vertices[] = {
-                            b2Vec2(-.5, -.5),
+                            b2Vec2(-.5, .5),
                             b2Vec2(.5, -.5),
                             b2Vec2(.5, .5)
                         };
@@ -75,6 +75,42 @@ Map::Map( std::string resource ) {
                         b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
                         slopeBody->CreateFixture(&slopeRightFixureDef);
                         slopeBody->SetUserData(this);
+                        break;
+                    }
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 23:
+                case 24:
+                case 25:
+                case 26:
+                case 37:
+                case 38:
+                case 39:
+                case 40:
+                case 51:
+                case 52:
+                case 53:
+                case 54:
+                    {
+                        b2PolygonShape slopeRight;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(-.5, -.5),
+                            b2Vec2(-.5, 0),
+                            b2Vec2(.5, 0),
+                            b2Vec2(.5, -.5)
+                        };
+                        slopeRight.Set(vertices, 4);
+                        b2FixtureDef slopeRightFixureDef;
+                        slopeRightFixureDef.shape = &slopeRight;
+                        slopeRightFixureDef.density = 500;
+                        slopeRightFixureDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        slopeBody->SetUserData(this);
+
                         break;
                     }
                 default:

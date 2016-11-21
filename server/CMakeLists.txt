@@ -19,7 +19,8 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(EXECUTABLE_NAME "server")
 
 set( source
-         src/main.cpp )
+         src/main.cpp
+         src/serverutil.cpp )
 
 add_executable(${EXECUTABLE_NAME} ${source})
 

@@ -75,8 +75,7 @@ void Player::update( double dt ) {
     detectGround();
 
     glm::vec2 direction(0,0);
-
-    if ( sf::Joystick::isConnected(0) ) {
+    if ( sf::Joystick::isConnected(0) && sf::Joystick::getButtonCount( 0 ) == 11) {
         if ( sf::Joystick::hasAxis(0,sf::Joystick::Axis::X) && sf::Joystick::hasAxis(0,sf::Joystick::Axis::Y) ) {
             direction = glm::vec2( sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::Y) );
             direction /= 100.f;
@@ -118,6 +117,10 @@ void Player::update( double dt ) {
                                      }
         case Player::State::Running: {
                                          playerRunning(direction, dt);
+                                         break;
+                                     }
+        case Player::State::Airborne: {
+                                         playerAirborne(direction, dt);
                                          break;
                                      }
         default: {
@@ -208,6 +211,12 @@ void Player::playerRunning( glm::vec2 direction, float dt ) {
     if ( fabs( direction.x ) < 0.7 ) {
         currentState = Player::State::Walking;
     }
+}
+
+void Player::playerAirborne( glm::vec2 direction, float dt ) {
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
+    glm::vec2 newvel = vel+direction*playerSpeed*airControlMultiplier;
+    myBody->SetLinearVelocity( toB2(newvel) );
 }
 
 

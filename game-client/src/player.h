@@ -41,6 +41,7 @@ private:
     void playerWalking( glm::vec2 direction, float dt );
     void playerDashing( glm::vec2 direction, float dt);
     void playerRunning( glm::vec2 direction, float dt);
+    void playerAirborne( glm::vec2 direction, float dt);
 
     sf::View* view;
     sf::Texture* texture;

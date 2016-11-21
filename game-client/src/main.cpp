@@ -13,9 +13,7 @@ int app() {
     sf::View view;
     view.reset(sf::FloatRect(0,0,800,600));
     World world;
-    if(!world.setBackground("assets/images/blueBackground.png")){
-        return 1;
-    }
+    world.addEntity( new Background(&view, "assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ) );
     world.addEntity( new Map( "assets/candyland.tmx" ) );
     world.addEntity( new Player( "assets/images/sonicsheet.png", view ) );
     //world.addEntity( new PhysicsDebug(window) );

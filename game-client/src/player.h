@@ -12,6 +12,7 @@ private:
     // Configurable variables
     float walkLength;
     float deadZone;
+    float fastFallSpeed;
     float jumpSquatLength;
     float dashingMultiplier;
     float dashLength;
@@ -25,6 +26,7 @@ private:
     float airControlMultiplier;
 
     // Control variables
+    bool fastFalling;
     bool canDoubleJump;
     bool releasedJump;
     glm::vec2 lastDirection;
@@ -35,6 +37,7 @@ private:
 
     // Helper variables
     bool onGround;
+    glm::vec2 groundHitNormal;
     State currentState;
 
     // Helper functions

@@ -2,21 +2,23 @@
 
 Player::Player( std::string resource, sf::View& view ) {
     walkTimer = 0;
-    jumpHelpAmount = 1;
+    jumpHelpAmount = 2;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
-    jumpSquatLength = 0.06; // Time in seconds to wait for button release for a short hop.
-    dashLength = 0.4; // in seconds
+    jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
+    dashLength = 0.35; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
+    fastFallSpeed = 13;
+    fastFalling = false;
     playerSpeed = 5; // in meters per second
     dashingMultiplier = 2; // in percentage
-    doubleJumpHeight = 9; // in meters per second
-    fullHopHeight = 350; // actually a force, in newtons
-    shortHopHeight = 280; // in newtons
+    doubleJumpHeight = 12; // in meters per second
+    fullHopHeight = 15; // actually a force, in newtons
+    shortHopHeight = 8; // in newtons
     canDoubleJump = true;
     releasedJump = true;
-    airControlMultiplier = 5;
+    airControlMultiplier = 3;
     currentState = Player::State::Idle;
     this->view = &view;
     setUpSprite( resource );
@@ -79,10 +81,11 @@ void Player::setUpBody() {
     circleShape.m_p.Set(0,playerHeight/2.f);
     circleShape.m_radius = playerWidth/2.f;
     // Box is smaller than spheres.
-    boxShape.SetAsBox(playerWidth/2.f-0.3,playerHeight/2.f);
+    boxShape.SetAsBox(playerWidth/2.f-0.03,playerHeight/2.f);
     b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 1;
+    boxFixtureDef.friction = 1;
     boxFixtureDef.restitution = 0;
     myBody->CreateFixture(&boxFixtureDef);
     boxFixtureDef.shape = &circleShape;
@@ -319,25 +322,33 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
     glm::vec2 newvel;
     newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
     newvel.y = vel.y;
+    if ( direction.y > 0.9 && !fastFalling ) {
+        newvel.y += fastFallSpeed;
+        fastFalling = true;
+    }
     myBody->SetLinearVelocity( toB2(newvel) );
     if ( onGround ) {
         if ( direction.x < -0.9 ) {
             walkTimer = 0;
             dashTimer = 0;
             dashingDirection = -1;
+            fastFalling = false;
             currentState = Player::State::Dashing;
         } else if ( direction.x > 0.9 ) {
             walkTimer = 0;
             dashTimer = 0;
             dashingDirection = 1;
+            fastFalling = false;
             currentState = Player::State::Dashing;
         } else {
+            fastFalling = false;
             currentState = Player::State::Walking;
         }
     }
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
         if ( canDoubleJump && releasedJump ) {
-            myBody->SetLinearVelocity( b2Vec2(direction.x*doubleJumpHeight,-doubleJumpHeight) );
+            myBody->SetLinearVelocity( b2Vec2(direction.x*doubleJumpHeight*.5,-doubleJumpHeight) );
+            fastFalling = false;
             currentState = Player::State::Jumping;
             canDoubleJump = false;
             releasedJump = false;
@@ -350,22 +361,34 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
 void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
     sprite->play( jumpSquatAnimation );
     sprite->setFrameTime(sf::seconds(jumpSquatLength/(float)jumpSquatAnimation.getSize()));
+    fastFalling = false;
+    glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
         releasedJump = false;
         jumpSquatTimer += dt;
     } else {
         releasedJump = true;
-        myBody->ApplyForceToCenter( b2Vec2(0,-shortHopHeight), true );
+        glm::vec2 newvel;
+        newvel.x = vel.x;
+        newvel.y = vel.y-shortHopHeight;
+        myBody->SetLinearVelocity( toB2(newvel) );
         currentState = Player::State::Jumping;
+        jumpSquatTimer = 0;
+        return;
     }
     if ( jumpSquatTimer > jumpSquatLength ) {
-        myBody->ApplyForceToCenter( b2Vec2(0,-fullHopHeight), true );
+        glm::vec2 newvel;
+        newvel.x = vel.x;
+        newvel.y = vel.y-fullHopHeight;
+        myBody->SetLinearVelocity( toB2(newvel) );
         currentState = Player::State::Jumping;
+        jumpSquatTimer = 0;
     }
 }
 
 void Player::playerJumping( glm::vec2 direction, float dt ) {
     sprite->play( airborneAnimation );
+    fastFalling = false;
     sprite->setFrameTime(sf::seconds(0.15));
     glm::vec2 vel = toGLM(myBody->GetLinearVelocity());
     if ( vel.y < 0 ) {
@@ -378,7 +401,7 @@ void Player::playerJumping( glm::vec2 direction, float dt ) {
     }
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
         if ( canDoubleJump && releasedJump ) {
-            myBody->ApplyForceToCenter( b2Vec2(direction.x*shortHopHeight,-fullHopHeight), true );
+            myBody->SetLinearVelocity( b2Vec2(direction.x*doubleJumpHeight*.5,-doubleJumpHeight) );
             currentState = Player::State::Jumping;
             canDoubleJump = false;
             releasedJump = false;
@@ -386,6 +409,7 @@ void Player::playerJumping( glm::vec2 direction, float dt ) {
     } else {
         releasedJump = true;
     }
+    // aircontrol
     vel = toGLM(myBody->GetLinearVelocity());
     glm::vec2 newvel;
     newvel.x = vel.x+(direction.x*playerSpeed*airControlMultiplier)*dt;
@@ -397,11 +421,26 @@ void Player::playerJumping( glm::vec2 direction, float dt ) {
 void Player::detectGround() {
     b2AABB testAABB;
     b2Vec2 pos = myBody->GetWorldCenter();
-    testAABB.lowerBound = b2Vec2(pos.x, pos.y);
-    testAABB.upperBound = b2Vec2(pos.x+0.01, pos.y+playerHeight);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight+0.1);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     onGround = queryCallback.foundMap;
+    if (queryCallback.foundMap) {
+        b2RayCastInput input;
+        input.p1 = pos;
+        input.p2 = pos+b2Vec2(0,playerHeight+0.1);
+        input.maxFraction = 2;
+        b2RayCastOutput output;
+        for ( b2Fixture* f : queryCallback.hitFixtures ) {
+            if( f->RayCast(&output,input,0) ) {
+                groundHitNormal = toGLM(output.normal);
+                //glm::vec2 hitPosition = toGLM(input.p1) + output.fraction * toGLM(input.p2-input.p1);
+                //myBody->SetTransform(toB2(hitPosition-glm::vec2(0,playerHeight)), 0);
+                break;
+            }
+        }
+    }
 }
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {

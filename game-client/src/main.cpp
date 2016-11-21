@@ -40,6 +40,10 @@ int app() {
                 default: { break; }
             }
         }
+        // Update world
+        double dt = deltaClock.restart().asSeconds();
+        world.update( dt );
+        physicalWorld->step( dt );
         // Actually do rendering.
         window.pushGLStates();
         window.setView( view );
@@ -47,10 +51,6 @@ int app() {
         world.draw(window);
         window.display();
         window.popGLStates();
-        // Update world
-        double dt = deltaClock.restart().asSeconds();
-        world.update( dt );
-        physicalWorld->step( dt );
     }
     return 0;
 }

@@ -9,12 +9,14 @@ Player::Player( std::string resource, sf::View& view ) {
     dashLength = 0.3; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
-    playerSpeed = 5; // in meters
+    playerSpeed = 5; // in meters per second
     dashingMultiplier = 2; // in percentage
-    fullHopHeight = 450;
-    shortHopHeight = 200;
-    airControlMultiplier = 6;
-    jumps = 0;
+    doubleJumpHeight = 9; // in meters per second
+    fullHopHeight = 350; // actually a force, in newtons
+    shortHopHeight = 280; // in newtons
+    canDoubleJump = true;
+    releasedJump = true;
+    airControlMultiplier = 5;
     currentState = Player::State::Idle;
     this->view = &view;
     setUpSprite( resource );
@@ -141,6 +143,9 @@ void Player::update( double dt ) {
         default: {
                      break;
                  }
+    }
+    if (onGround ) {
+        canDoubleJump = true;
     }
 
     lastDirection = direction;
@@ -276,12 +281,24 @@ void Player::playerAirborne( glm::vec2 direction, float dt ) {
             currentState = Player::State::Walking;
         }
     }
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        if ( canDoubleJump && releasedJump ) {
+            myBody->SetLinearVelocity( b2Vec2(direction.x*doubleJumpHeight,-doubleJumpHeight) );
+            currentState = Player::State::Jumping;
+            canDoubleJump = false;
+            releasedJump = false;
+        }
+    } else {
+        releasedJump = true;
+    }
 }
 
 void Player::playerJumpSquat( glm::vec2 direction, float dt ) {
     if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        releasedJump = false;
         jumpSquatTimer += dt;
     } else {
+        releasedJump = true;
         myBody->ApplyForceToCenter( b2Vec2(0,-shortHopHeight), true );
         currentState = Player::State::Jumping;
     }
@@ -300,6 +317,16 @@ void Player::playerJumping( glm::vec2 direction, float dt ) {
         }
     } else {
         currentState = Player::State::Airborne;
+    }
+    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        if ( canDoubleJump && releasedJump ) {
+            myBody->ApplyForceToCenter( b2Vec2(direction.x*shortHopHeight,-fullHopHeight), true );
+            currentState = Player::State::Jumping;
+            canDoubleJump = false;
+            releasedJump = false;
+        }
+    } else {
+        releasedJump = true;
     }
     vel = toGLM(myBody->GetLinearVelocity());
     glm::vec2 newvel;
@@ -320,14 +347,6 @@ void Player::detectGround() {
 }
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
-    // If we hit a map...
-    if ( collider->getType() == Entity::Type::Map ) {
-        // If the degrees between up and the hitnormal is within pi/5ths...
-        if ( fabs(atan( hitnormal.x )) < M_PI/5.f ) {
-            // Then we can jump!
-            jumps = 2;
-        }
-    }
 }
 
 Entity::Type Player::getType(){

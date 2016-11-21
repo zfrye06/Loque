@@ -11,12 +11,11 @@ private:
 
     // Configurable variables
     float walkLength;
-    float walkTimer;
     float deadZone;
-    float jumpSquatTimer;
     float jumpSquatLength;
     float dashingMultiplier;
     float dashLength;
+    float doubleJumpHeight;
     float playerHeight;
     float playerWidth;
     float playerSpeed;
@@ -26,10 +25,13 @@ private:
     float airControlMultiplier;
 
     // Control variables
-    int jumps;
+    bool canDoubleJump;
+    bool releasedJump;
     glm::vec2 lastDirection;
     float dashingDirection;
     float dashTimer;
+    float jumpSquatTimer;
+    float walkTimer;
 
     // Helper variables
     bool onGround;

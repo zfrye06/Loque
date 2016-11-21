@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="103" height="25" tilewidth="64" tileheight="64" nextobjectid="1">
+ <properties>
+  <property name="ambient" value=""/>
+ </properties>
  <tileset firstgid="1" name="Math" tilewidth="64" tileheight="64" tilecount="30" columns="5">
   <image source="../images/MathSpritesheet.png" width="320" height="384"/>
  </tileset>
@@ -22,8 +25,7 @@
  </layer>
  <layer name="Physical" width="103" height="25">
   <data encoding="base64" compression="zlib">
-   eJztmWluxDAIhWfu0XNkaXv/c1X+YcmiYLaHnUp9kqWZNAHK5wUmr5dNx9t44wZ76Nio7T6QtizDY7ciDoSq2NAY2+drGJEcXmSMytj1CJWvm7FzFjEe1Wx+v39fo98Pkk96TeIw01XIpnK/Ogv3r+6P42KRN6cIWeZm5RzuquIyxh5hslNWLhV++6hcLzuZZPKm5b3vqR59KL6qagZJq/chhCxc/kot/AS/yLrUsl68a2YUrcF2sPHMr2x81ue1vKL3MYsPyWfV3tbtrWKDUIRLJHceNtSHt8eenWE7c47sG6X+K/L/Sbb657F/a6I9HkIra2cu5iib8Uzh1n80Tzdja7SnxebZgyxjVf2MmE9czukczvjy7vNcbNb7IueiVONn1eL5TPLhOCC1kg1SiDrtCfUE1c2sN8QZxf29al49lU1b595+hv5e3JVhM4sB9Vuj5APBhtrdsY5OwgTFhtPsfEDXdFF9CXHQa9w7EaRGLtcCNpwOJgaETa+0usLa42nPc++0Zn2d1N+h2Gh9mMZkxTs6TVE22di9bDTW3L1RnSSeqpp0FPc+esbGMv+jirCR7EixRfqFHVwkZfc0hN8MG81HZPRnPVz6c3T+W8fMZiYHEa1gE1V0HlTH8c8mvt5Wjh+sj2dq
+   eJztWVtuAzEITO7Rc2R3+7j/tSp/WLKmYMMA3qrqSJaSyB4QAyzOPh42vJ7GjQE+1ka2b8jdVyaXZXl4K/zIQJU26GP7fA6LieEpcHREeD3Iitcl8BxFGo9onJ/Pn7/h9xfEE3/TdJjBs1fyK2uvl+so7F/dnqSL5AvCG9MMWHKzMoc7qnQZfZc0qUQ0Xrt00XpGW5X1cocmo+3I2dn53lM9eFvYqpoZNOzqQ9mz6UqXymfLLljtVvcfD4+lXrw1MwJnsDu08eTXLm1WcWX6WHTO1s5X9bbOt0ubDE5Wl0pt0Ib3jj17hv0lbfA7m9MaV/883t8a8I6XgZ2zc8YsgPE5IWbjPiZOl8A18q188+S5Ze2an7O0wRhgDjO8eM7a0yTfrPuYu/psxo+gnX8Pckg6aLYYeJ/BeDZTQ6/t6Pm77gkzXEK9ZWsz1ntktm/4Sug/0nmmV6zQ6tx7n8H/i9Efxq+ZD1r/8trRbGRog7x31NEBmmRpI0F7PnQbmTMdiw9j3kjvRBhovo66nBu00Xzz9jepjyGnF7O8kTjZmVp6pzW712n3u8ichvu1XLRo4n1HV5FLbAyi7xcZbWZaS3tZHOBPdHawAN9Hd9sjME6emHiQVTcz35j7AqvLb6qbTLsVPa2fYVY/66mXfg7z37pmnJEYMNihDQs2D6r9+NeGr7ed6xuN9W3q
   </data>
  </layer>
- <objectgroup name="Object Layer 1"/>
 </map>

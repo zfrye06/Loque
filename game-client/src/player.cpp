@@ -158,7 +158,7 @@ void Player::update( double dt ) {
             direction *= .8;
         }
     }
-    if ( sf::Joystick::isConnected( controllerID ) ) {
+    if ( sf::Joystick::isConnected( controllerID ) && controllerFound ) {
         if ( sf::Joystick::isButtonPressed(controllerID,2) || sf::Joystick::isButtonPressed(controllerID,3) ) {
             jumpButton = true;
         } else {

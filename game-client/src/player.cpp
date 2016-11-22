@@ -8,7 +8,7 @@ Player::Player( std::string resource, sf::View& view ) {
     dashLength = 0.35; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
-    fastFallSpeed = 13;
+    fastFallSpeed = 10;
     fastFalling = false;
     playerSpeed = 5; // in meters per second
     dashingMultiplier = 2; // in percentage
@@ -19,13 +19,14 @@ Player::Player( std::string resource, sf::View& view ) {
     canWallJumpRight = false;
     canDoubleJump = true;
     releasedJump = true;
-    airControlMultiplier = .0025;
+    airControlMultiplier = .01;
     newState = nullptr;
     this->view = &view;
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
     myBody->SetTransform(b2Vec2(1,10),0);
+    controllerID = 0;
     currentState = new IdleState(this);
 }
 
@@ -109,7 +110,7 @@ void Player::draw( sf::RenderWindow& window ) {
     stateText.setString( StateString[currentState->getType()] );
     stateText.setCharacterSize(20);
     stateText.setStyle(sf::Text::Bold);
-    stateText.setFillColor(sf::Color::Red);
+    //stateText.setColor(sf::Color::Red);
     stateText.setPosition(myBody->GetWorldCenter().x*64, myBody->GetWorldCenter().y*64);
     window.draw( *sprite );
     window.draw( stateText );
@@ -124,10 +125,18 @@ void Player::update( double dt ) {
             std::cout << i << std::endl;
         }
     }*/
+
+    // Scan for an Xbox controller...
+    for ( int i=0;i<4;i++ ) {
+        if ( sf::Joystick::isConnected(i) && sf::Joystick::getIdentification(i).vendorId == 1118) {
+            controllerID = i;
+            break;
+        }
+    }
     direction = glm::vec2(0,0);
-    if ( sf::Joystick::isConnected(0) && sf::Joystick::getButtonCount( 0 ) == 11) {
-        if ( sf::Joystick::hasAxis(0,sf::Joystick::Axis::X) && sf::Joystick::hasAxis(0,sf::Joystick::Axis::Y) ) {
-            direction = glm::vec2( sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(0,sf::Joystick::Axis::Y) );
+    if ( sf::Joystick::isConnected(controllerID) ) {
+        if ( sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::X) && sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::Y) ) {
+            direction = glm::vec2( sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Y) );
             direction /= 100.f;
         }
     } else {
@@ -147,6 +156,20 @@ void Player::update( double dt ) {
             direction *= .8;
         }
     }
+    if ( sf::Joystick::isConnected( controllerID ) ) {
+        if ( sf::Joystick::isButtonPressed(controllerID,2) || sf::Joystick::isButtonPressed(controllerID,3) ) {
+            jumpButton = true;
+        } else {
+            jumpButton = false;
+        }
+    } else {
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+            jumpButton = true;
+        } else {
+            jumpButton = false;
+        }
+    }
+
     // 25% deadzone
     if ( glm::length(direction) < deadZone ) {
         direction = glm::vec2(0,0);
@@ -211,19 +234,20 @@ void Player::detectGround() {
 }
 
 void Player::detectWalls() {
-    b2AABB testAABB;
     b2Vec2 pos = myBody->GetWorldCenter();
-    testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.1, pos.y+playerHeight);
+
+    b2AABB testAABB;
+    testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.1, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
 
-    MapQueryCallback queryCallback2;
     b2AABB testAABB2;
-    testAABB2.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight);
-    testAABB2.upperBound = b2Vec2(pos.x, pos.y+playerHeight);
-    physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
+    testAABB2.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight/2.f);
+    testAABB2.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
+    MapQueryCallback queryCallback2;
+    physicalWorld->get().QueryAABB( &queryCallback2, testAABB2 );
     canWallJumpRight = queryCallback2.foundMap;
 }
 

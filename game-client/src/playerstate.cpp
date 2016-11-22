@@ -33,7 +33,7 @@ void WalkingState::update( Player* player, double dt ) {
     if ( !player->onGround ) {
         player->switchState( new AirborneState(player) );
     }
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         if ( player->releasedJump ) {
             player->switchState( new JumpSquatState(player) );
         }
@@ -73,7 +73,7 @@ void IdleState::update( Player* player, double dt ) {
     if ( !player->onGround ) {
         player->switchState( new AirborneState(player) );
     }
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         if ( player->releasedJump ) {
             player->switchState( new JumpSquatState(player) );
         }
@@ -126,7 +126,7 @@ void DashingState::update( Player* player, double dt ) {
     if ( !player->onGround ) {
         player->switchState( new AirborneState(player) );
     }
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         if ( player->releasedJump ) {
             player->switchState( new JumpSquatState(player) );
         }
@@ -148,7 +148,7 @@ void JumpSquatState::update( Player* player, double dt ) {
     player->sprite->setFrameTime(sf::seconds(player->jumpSquatLength/(float)player->jumpSquatAnimation.getSize()));
     player->fastFalling = false;
     glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         player->releasedJump = false;
         jumpSquatTimer += dt;
     } else {
@@ -172,6 +172,7 @@ void JumpSquatState::update( Player* player, double dt ) {
 JumpingState::JumpingState( Player* player) {
     this->player = player;
     walkTimer = 0;
+    canWallJump = false;
     player->fastFalling = false;
     player->sprite->play( player->airborneAnimation );
     player->sprite->setFrameTime(sf::seconds(0.15));
@@ -185,13 +186,13 @@ void JumpingState::update( Player* player, double dt ) {
     glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
     if ( vel.y < 0 ) {
         // Resist gravity a tad if they are still holding the jump button.
-        if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+        if ( player->jumpButton ) {
             player->myBody->ApplyForceToCenter( b2Vec2(0,-player->jumpHelpAmount*dt), true );
         }
     } else {
         player->switchState( new AirborneState(player) );
     }
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         if ( player->canDoubleJump && player->releasedJump ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight*.5,-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
@@ -212,19 +213,18 @@ void JumpingState::update( Player* player, double dt ) {
     if ( player->direction.x != 0 ) {
         walkTimer += dt;
     } else {
+        canWallJump = true;
         walkTimer = 0;
     }
-    if ( walkTimer > player->walkLength ) {
+    if ( walkTimer > player->walkLength && canWallJump ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
-        } else {
-            // gotta reset to neutral before trying to walljump again
-            walkTimer = -1000;
         }
+        canWallJump = false;
     }
 }
 AirborneState::AirborneState( Player* player) {
@@ -232,6 +232,7 @@ AirborneState::AirborneState( Player* player) {
     player->sprite->play( player->airborneAnimation );
     player->sprite->setFrameTime(sf::seconds(0.15));
     walkTimer = 0;
+    canWallJump = false;
 }
 AirborneState::~AirborneState() {
     player->fastFalling = false;
@@ -258,7 +259,7 @@ void AirborneState::update( Player* player, double dt ) {
             player->switchState( new WalkingState(player) );
         }
     }
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         if ( player->canDoubleJump && player->releasedJump ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight*.5,-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
@@ -273,17 +274,16 @@ void AirborneState::update( Player* player, double dt ) {
         walkTimer += dt;
     } else {
         walkTimer = 0;
+        canWallJump = true;
     }
-    if ( walkTimer > player->walkLength ) {
+    if ( walkTimer > player->walkLength && canWallJump ) {
+        canWallJump = false;
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
-        } else {
-            // gotta reset to neutral before trying to walljump again
-            walkTimer = -1000;
         }
     }
 }
@@ -311,7 +311,7 @@ void RunningState::update( Player* player, double dt ) {
     if ( !player->onGround ) {
         player->switchState( new AirborneState(player) );
     }
-    if ( sf::Joystick::isButtonPressed(0,2) || sf::Joystick::isButtonPressed(0,3) || sf::Keyboard::isKeyPressed( sf::Keyboard::Space ) ) {
+    if ( player->jumpButton ) {
         if ( player->releasedJump ) {
             player->switchState( new JumpSquatState(player) );
         }

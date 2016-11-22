@@ -57,6 +57,7 @@ public:
 
 class JumpingState : public GenericPlayerState {
 public:
+    bool canWallJump;
     double walkTimer;
     JumpingState( Player* player );
     ~JumpingState();
@@ -66,6 +67,7 @@ public:
 
 class AirborneState : public GenericPlayerState {
 public:
+    bool canWallJump;
     double walkTimer;
     AirborneState( Player* player );
     ~AirborneState();

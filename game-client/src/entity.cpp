@@ -52,12 +52,9 @@ Map::Map( std::string resource ) {
     int y = 0;
     for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {
         if ( tiles[i].ID != 0) {
-            //std::cout<<tiles[i].ID<<std::endl;
             switch(tiles[i].ID){
-                case 1:
-                    break;
                 //Right slope
-                case 8:
+                case 309+2:
                     {
                         b2PolygonShape slopeRight;
                         b2Vec2 vertices[] = {
@@ -76,22 +73,28 @@ Map::Map( std::string resource ) {
                         slopeBody->SetUserData(this);
                         break;
                     }
-                case 9:
-                case 10:
-                case 11:
-                case 12:
-                case 23:
-                case 24:
-                case 25:
-                case 26:
-                case 37:
-                case 38:
-                case 39:
-                case 40:
-                case 51:
-                case 52:
-                case 53:
-                case 54:
+                //Left slope
+                case 309+5:
+                    {
+                        b2PolygonShape slopeRight;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(.5, .5),
+                            b2Vec2(-.5, -.5),
+                            b2Vec2(-.5, .5)
+                        };
+                        slopeRight.Set(vertices, 3);
+                        b2FixtureDef slopeRightFixureDef;
+                        slopeRightFixureDef.shape = &slopeRight;
+                        slopeRightFixureDef.density = 500;
+                        slopeRightFixureDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        slopeBody->SetUserData(this);
+                        break;
+                    }
+                //HalfBox
+                case 309+3:
                     {
                         b2PolygonShape slopeRight;
                         b2Vec2 vertices[] = {
@@ -107,6 +110,32 @@ Map::Map( std::string resource ) {
                         slopeRightFixureDef.restitution = 0;
                         boxDef.position.Set(x+0.5, y+0.5);
                         b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        slopeBody->SetUserData(this);
+
+                        break;
+                    }
+                // Circle cap
+                case 309+4:
+                    {
+                        b2PolygonShape slopeRight;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(-.5, 0),
+                            b2Vec2(.5, 0),
+                            b2Vec2(.5, .5),
+                            b2Vec2(-.5, .5)
+                        };
+                        slopeRight.Set(vertices, 4);
+                        b2FixtureDef slopeRightFixureDef;
+                        slopeRightFixureDef.shape = &slopeRight;
+                        slopeRightFixureDef.density = 500;
+                        slopeRightFixureDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        b2CircleShape circleShape;
+                        circleShape.m_radius = .5;
+                        slopeRightFixureDef.shape = &circleShape;
                         slopeBody->CreateFixture(&slopeRightFixureDef);
                         slopeBody->SetUserData(this);
 
@@ -156,7 +185,7 @@ PhysicsDebug::PhysicsDebug(sf::RenderWindow& window) {
     uint32 flags = b2Draw::e_shapeBit;
     flags += b2Draw::e_jointBit;
     //flags += b2Draw::e_aabbBit;
-    //flags += b2Draw::e_pairBit;
+    flags += b2Draw::e_pairBit;
     flags += b2Draw::e_centerOfMassBit;
 
     drawer = new DebugDraw(window);

@@ -48,7 +48,6 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
     polygon.setOutlineColor(B2SFColor(color,ALPHA+50));
     polygon.setFillColor(B2SFColor(color,ALPHA));
 	this->window->draw(polygon);
-    std::cout << "DrawAABB\n";
 }
 
 

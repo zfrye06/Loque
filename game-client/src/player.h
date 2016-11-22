@@ -30,6 +30,7 @@ public:
     bool canDoubleJump;
     bool releasedJump;
     glm::vec2 lastDirection;
+    bool jumpButton;
     glm::vec2 direction;
     float dashingDirection;
     float dashTimer;
@@ -39,6 +40,7 @@ public:
     bool canWallJumpLeft;
     bool canWallJumpRight;
     bool onGround;
+    int controllerID;
     glm::vec2 groundHitNormal;
     GenericPlayerState* currentState;
     GenericPlayerState* newState;

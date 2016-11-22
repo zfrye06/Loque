@@ -192,6 +192,9 @@ void Background::update( double dt){
     hillUV.left = viewPos.x/4;
 //    hillUV.top += viewPos.y/256;
     hills.setTextureRect(hillUV);
+    sf::IntRect cloudsUV = clouds.getTextureRect();
+    cloudsUV.left = viewPos.x/8;
+    clouds.setTextureRect(cloudsUV);
 }
 
 void Background::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){

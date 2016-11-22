@@ -56,20 +56,20 @@ Map::Map( std::string resource ) {
                 //Right slope
                 case 309+2:
                     {
-                        b2PolygonShape slopeRight;
+                        b2PolygonShape shape;
                         b2Vec2 vertices[] = {
                             b2Vec2(-.5, .5),
-                            b2Vec2(.5, -.5),
-                            b2Vec2(.5, .5)
+                            b2Vec2(.5, .5),
+                            b2Vec2(.5, -.5)
                         };
-                        slopeRight.Set(vertices, 3);
-                        b2FixtureDef slopeRightFixureDef;
-                        slopeRightFixureDef.shape = &slopeRight;
-                        slopeRightFixureDef.density = 500;
-                        slopeRightFixureDef.restitution = 0;
+                        shape.Set(vertices, 3);
+                        b2FixtureDef shapeFixDef;
+                        shapeFixDef.shape = &shape;
+                        shapeFixDef.density = 500;
+                        shapeFixDef.restitution = 0;
                         boxDef.position.Set(x+0.5, y+0.5);
                         b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
-                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        slopeBody->CreateFixture(&shapeFixDef);
                         slopeBody->SetUserData(this);
                         break;
                     }
@@ -96,21 +96,21 @@ Map::Map( std::string resource ) {
                 //HalfBox
                 case 309+3:
                     {
-                        b2PolygonShape slopeRight;
+                        b2PolygonShape shape;
                         b2Vec2 vertices[] = {
                             b2Vec2(-.5, -.5),
                             b2Vec2(-.5, 0),
                             b2Vec2(.5, 0),
                             b2Vec2(.5, -.5)
                         };
-                        slopeRight.Set(vertices, 4);
-                        b2FixtureDef slopeRightFixureDef;
-                        slopeRightFixureDef.shape = &slopeRight;
-                        slopeRightFixureDef.density = 500;
-                        slopeRightFixureDef.restitution = 0;
+                        shape.Set(vertices, 4);
+                        b2FixtureDef shapeFixDef;
+                        shapeFixDef.shape = &shape;
+                        shapeFixDef.density = 500;
+                        shapeFixDef.restitution = 0;
                         boxDef.position.Set(x+0.5, y+0.5);
                         b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
-                        slopeBody->CreateFixture(&slopeRightFixureDef);
+                        slopeBody->CreateFixture(&shapeFixDef);
                         slopeBody->SetUserData(this);
 
                         break;
@@ -138,7 +138,73 @@ Map::Map( std::string resource ) {
                         slopeRightFixureDef.shape = &circleShape;
                         slopeBody->CreateFixture(&slopeRightFixureDef);
                         slopeBody->SetUserData(this);
-
+                        break;
+                    }
+                // Ledge left
+                case 315:
+                    {
+                        b2PolygonShape shape;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(-.5, -.5),
+                            b2Vec2(-.5, 0),
+                            b2Vec2(-.25, 0),
+                            b2Vec2(.25, .5),
+                            b2Vec2(.5, .5),
+                            b2Vec2(.5, -.5)
+                        };
+                        shape.Set(vertices, 6);
+                        b2FixtureDef shapeFixDef;
+                        shapeFixDef.shape = &shape;
+                        shapeFixDef.density = 500;
+                        shapeFixDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&shapeFixDef);
+                        slopeBody->SetUserData(this);
+                        break;
+                    }
+                // Ledge right
+                case 316:
+                    {
+                        b2PolygonShape shape;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(-.5, -.5),
+                            b2Vec2(-.5, .5),
+                            b2Vec2(-.25, .5),
+                            b2Vec2(.25, 0),
+                            b2Vec2(.5, 0),
+                            b2Vec2(.5, -.5)
+                        };
+                        shape.Set(vertices, 6);
+                        b2FixtureDef shapeFixDef;
+                        shapeFixDef.shape = &shape;
+                        shapeFixDef.density = 500;
+                        shapeFixDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&shapeFixDef);
+                        slopeBody->SetUserData(this);
+                        break;
+                    }
+                // Half lower
+                case 317:
+                    {
+                        b2PolygonShape shape;
+                        b2Vec2 vertices[] = {
+                            b2Vec2(-.5, 0),
+                            b2Vec2(-.5, .5),
+                            b2Vec2(.5, .5),
+                            b2Vec2(.5, 0)
+                        };
+                        shape.Set(vertices, 4);
+                        b2FixtureDef shapeFixDef;
+                        shapeFixDef.shape = &shape;
+                        shapeFixDef.density = 500;
+                        shapeFixDef.restitution = 0;
+                        boxDef.position.Set(x+0.5, y+0.5);
+                        b2Body* slopeBody = physicalWorld->get().CreateBody( &boxDef );
+                        slopeBody->CreateFixture(&shapeFixDef);
+                        slopeBody->SetUserData(this);
                         break;
                     }
                 default:

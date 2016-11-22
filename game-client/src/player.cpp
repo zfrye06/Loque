@@ -126,15 +126,17 @@ void Player::update( double dt ) {
         }
     }*/
 
+    bool controllerFound = false;
     // Scan for an Xbox controller...
     for ( int i=0;i<4;i++ ) {
         if ( sf::Joystick::isConnected(i) && sf::Joystick::getIdentification(i).vendorId == 1118 && sf::Joystick::getIdentification(i).productId == 654) {
             controllerID = i;
+            controllerFound = true;
             break;
         }
     }
     direction = glm::vec2(0,0);
-    if ( sf::Joystick::isConnected(controllerID) ) {
+    if ( sf::Joystick::isConnected(controllerID) && controllerFound) {
         if ( sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::X) && sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::Y) ) {
             direction = glm::vec2( sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Y) );
             direction /= 100.f;

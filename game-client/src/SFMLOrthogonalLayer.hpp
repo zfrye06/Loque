@@ -204,7 +204,7 @@ private:
         std::vector<ChunkArray::Ptr> m_chunkArrays;
         void draw(sf::RenderTarget& rt, sf::RenderStates states) const override
         {
-            states.transform *= getTransform();
+            //states.transform *= getTransform();
             for (const auto& a : m_chunkArrays)
             {
                 rt.draw(*a, states);
@@ -285,9 +285,9 @@ private:
         int posY = static_cast<int>(std::floor(viewCorner.y / m_chunkSize.y));
 
         std::vector<const Chunk*> visible;
-        for (auto y = posY; y < posY + 3; ++y)
+        for (auto y = posY; y < posY + 2; ++y)
         {
-            for (auto x = posX; x < posX + 3; ++x)
+            for (auto x = posX; x < posX + 2; ++x)
             {
                 auto idx = y * int(m_chunkCount.x) + x;
                 if (idx >= 0 && idx < m_chunks.size() && !m_chunks[idx]->empty())
@@ -296,6 +296,9 @@ private:
                 }
             }
         }
+        //for (int i=0;i<m_chunks.size();i++) {
+            //visible.push_back( m_chunks[i].get() );
+        //}
 
         std::swap(m_visibleChunks, visible);
     }

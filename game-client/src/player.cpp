@@ -25,7 +25,7 @@ Player::Player( std::string resource, sf::View& view ) {
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
-    myBody->SetTransform(b2Vec2(5,10),0);
+    myBody->SetTransform(b2Vec2(1,10),0);
     currentState = new IdleState(this);
 }
 
@@ -218,10 +218,13 @@ void Player::detectWalls() {
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight);
-    testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight);
-    physicalWorld->get().QueryAABB( &queryCallback, testAABB );
-    canWallJumpRight = queryCallback.foundMap;
+
+    MapQueryCallback queryCallback2;
+    b2AABB testAABB2;
+    testAABB2.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight);
+    testAABB2.upperBound = b2Vec2(pos.x, pos.y+playerHeight);
+    physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
+    canWallJumpRight = queryCallback2.foundMap;
 }
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {

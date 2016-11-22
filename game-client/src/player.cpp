@@ -128,7 +128,7 @@ void Player::update( double dt ) {
 
     // Scan for an Xbox controller...
     for ( int i=0;i<4;i++ ) {
-        if ( sf::Joystick::isConnected(i) && sf::Joystick::getIdentification(i).vendorId == 1118) {
+        if ( sf::Joystick::isConnected(i) && sf::Joystick::getIdentification(i).vendorId == 1118 && sf::Joystick::getIdentification(i).productId == 654) {
             controllerID = i;
             break;
         }

@@ -41,8 +41,8 @@ bool LoginResult::successful() const {
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
 
 status LoqueClient::attemptLogin(const std::string& username,
-                                             const std::string& userpass,
-                                             LoginResult& result) {
+                                 const std::string& userpass,
+                                 LoginResult& result) {
     sf::Packet outgoing, incoming;
     makeLoginRequest(username, userpass, outgoing);
     auto status = sendRequest(outgoing, incoming);

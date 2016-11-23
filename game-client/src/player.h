@@ -2,7 +2,12 @@
 #define LQ_PLAYER_H_
 
 #include "entity.h"
+#include <glm/glm.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <Box2D/Box2D.h>
 #include "playerstate.h"
+#include "Animation.hpp"
+#include "AnimatedSprite.hpp"
 
 class GenericPlayerState;
 

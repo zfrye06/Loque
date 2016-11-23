@@ -283,11 +283,13 @@ private:
 
         int posX = static_cast<int>(std::floor(viewCorner.x / m_chunkSize.x));
         int posY = static_cast<int>(std::floor(viewCorner.y / m_chunkSize.y));
+        int width = static_cast<int>(std::ceil(view.getSize().x / m_chunkSize.x));
+        int height = static_cast<int>(std::ceil(view.getSize().y / m_chunkSize.y));
 
         std::vector<const Chunk*> visible;
-        for (auto y = posY; y < posY + 2; ++y)
+        for (auto y = posY; y < posY + height + 1; ++y)
         {
-            for (auto x = posX; x < posX + 2; ++x)
+            for (auto x = posX; x < posX + width + 1; ++x)
             {
                 auto idx = y * int(m_chunkCount.x) + x;
                 if (idx >= 0 && idx < m_chunks.size() && !m_chunks[idx]->empty())

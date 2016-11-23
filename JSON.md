@@ -23,7 +23,7 @@ int main() {
     // Send request. 
     sf::Packet toSend;
     json req;
-    req["packet-type"] = "LOGIN";
+    req["request-type"] = "LOGIN";
     req["user-name"] = "nerd";
     req["login-hash"] = "8182384812358134234815"; 
     std::cout << "Sending request to server. Message: " << req.dump() << std::endl;
@@ -58,7 +58,7 @@ int main() {
 ### Client Sends
 ```
 “{
-"packet-type": “LOGIN”,
+"request-type": “LOGIN”,
 "user-name": “nerd”,
 "login-hash": "SHA256 81407JFHASFU1hAsdf892#$HA",
 }”

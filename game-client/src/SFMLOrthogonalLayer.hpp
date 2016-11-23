@@ -289,7 +289,7 @@ private:
         std::vector<const Chunk*> visible;
         for (auto y = posY; y < posY + height + 1; ++y)
         {
-            for (auto x = posX; x < posX + width + 1; ++x)
+            for (auto x = posX; x < posX + width + 2; ++x)
             {
                 auto idx = y * int(m_chunkCount.x) + x;
                 if (idx >= 0 && idx < m_chunks.size() && !m_chunks[idx]->empty())

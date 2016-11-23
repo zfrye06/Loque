@@ -1,5 +1,16 @@
 #include "map.h"
 
+bool Map::isPowerOfTwo( int x ) {
+    int y = 2;
+    while( y < x && y > 0 ) {
+        y*=2;
+    }
+    if ( y == x ) {
+        return true;
+    }
+    return false;
+}
+
 Map::Map( std::string resource ) {
     map = Resources->getMap(resource);
 
@@ -32,6 +43,9 @@ Map::Map( std::string resource ) {
     // Then loop through the tiles, placing 1x1 boxes where there's tiles.
     auto tiles = tileSet->getTiles();
     auto mapSize = map->getTileCount();
+    if ( !isPowerOfTwo(mapSize.x) || !isPowerOfTwo(mapSize.y) ) {
+        std::cerr << "Map size isn't powers of two, may not load properly!\n";
+    }
     int x = 0;
     int y = 0;
     for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {

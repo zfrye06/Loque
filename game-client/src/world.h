@@ -7,7 +7,6 @@
 #include <vector>
 #include <string>
 #include "entity.h"
-#include <string>
 
 class World {
 private:
@@ -20,6 +19,9 @@ public:
     void removeEntity( Entity* e );
     void draw( sf::RenderWindow& window );
     void update( double dt );
+    std::vector<Entity*> getEntitiesByType(Entity::Type t);
 };
+
+extern World* world;
 
 #endif

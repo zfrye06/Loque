@@ -25,7 +25,11 @@ Player::Player( std::string resource, sf::View& view ) {
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
-    myBody->SetTransform(b2Vec2(1,10),0);
+    std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
+    if (spawns.size() >= 1 ) {
+        ::PlayerSpawn* spawn = (::PlayerSpawn*)spawns[0];
+        myBody->SetTransform(toB2(spawn->pos),0);
+    }
     controllerID = 0;
     currentState = new IdleState(this);
 }

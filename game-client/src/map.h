@@ -5,6 +5,7 @@
 #include <SFML/Audio/Music.hpp>
 
 #include "entity.h"
+#include "world.h"
 #include "SFMLOrthogonalLayer.hpp"
 
 class Map : public Entity {
@@ -13,6 +14,7 @@ private:
     tmx::Map* map;
     std::vector<MapLayer*> layers;
     bool isPowerOfTwo( int x );
+    void spawnObject( tmx::Object& object );
 public:
     Map( std::string resource );
     ~Map();

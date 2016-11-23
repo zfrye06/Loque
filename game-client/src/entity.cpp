@@ -76,3 +76,20 @@ void Background::draw(sf::RenderWindow& window){
 Entity::Type Background::getType(){
     return Entity::Type::None;
 }
+
+PlayerSpawn::PlayerSpawn(tmx::Object& obj){
+    pos = glm::vec2(obj.getPosition().x/64,obj.getPosition().y/64);
+}
+
+void PlayerSpawn::update( double dt){
+}
+
+void PlayerSpawn::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+}
+
+void PlayerSpawn::draw(sf::RenderWindow& window){
+}
+
+Entity::Type PlayerSpawn::getType(){
+    return Entity::Type::PlayerSpawn;
+}

@@ -32,12 +32,22 @@ Map::Map( std::string resource ) {
     //for( auto l : map->getLayers() ) {
     for ( int i=0;i<map->getLayers().size();i++ ) {
         auto l = map->getLayers()[i].get();
-        if ( l->getType() == tmx::Layer::Type::Tile ) {
-            if ( l->getName() == "physical" || l->getName() == "Physical" ) {
-                tileSet = (tmx::TileLayer*)l;
-            } else {
-                layers.push_back( new MapLayer( *map, i ) );
-            }
+        switch( l->getType() ) {
+            case tmx::Layer::Type::Tile: {
+                if ( l->getName() == "physical" || l->getName() == "Physical" ) {
+                    tileSet = (tmx::TileLayer*)l;
+                } else {
+                    layers.push_back( new MapLayer( *map, i ) );
+                }
+                break;
+                                         }
+            case tmx::Layer::Type::Object: {
+                for ( auto i : ((tmx::ObjectGroup*)l)->getObjects() ) {
+                    spawnObject( i );
+                }
+                break;
+                                           }
+            default: {}
         }
     }
     // Then loop through the tiles, placing 1x1 boxes where there's tiles.
@@ -233,16 +243,25 @@ Map::~Map() {
         delete i;
     }
 }
+
 void Map::draw( sf::RenderWindow& window ) {
     for ( auto i : layers ) {
         window.draw(*i);
     }
 }
+
 void Map::update( double dt ) {
 }
+
 void Map::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
 }
 
 Entity::Type Map::getType(){
     return Entity::Type::Map;
+}
+
+void Map::spawnObject( tmx::Object& obj ) {
+    if ( obj.getName() == "playerSpawn" ) {
+        world->addEntity(new ::PlayerSpawn(obj));
+    }
 }

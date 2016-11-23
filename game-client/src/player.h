@@ -7,6 +7,7 @@
 #include <Box2D/Box2D.h>
 #include "playerstate.h"
 #include "Animation.hpp"
+#include "world.h"
 #include "AnimatedSprite.hpp"
 
 class GenericPlayerState;

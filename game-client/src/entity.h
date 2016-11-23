@@ -15,7 +15,6 @@ inline b2Vec2 toB2(const glm::vec2 &v) {
 inline glm::vec2 toGLM(const b2Vec2 &v) {
         return glm::vec2(v.x, v.y);
 }
-
 inline glm::vec2 toGLM(const sf::Vector2f &v) {
         return glm::vec2(v.x, v.y);
 }
@@ -38,6 +37,7 @@ public:
     enum Type {
         Map,
         Player,
+        PlayerSpawn,
         None
     };
     virtual Type getType();
@@ -63,6 +63,16 @@ private:
     sf::View* defaultView;
 public:
     Background(sf::View* view, std::string skyFile, std::string cloudsFile, std::string hillsFile);
+    void update(double dt);
+    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
+    void draw(sf::RenderWindow& window);
+    Entity::Type getType();
+};
+
+class PlayerSpawn : public Entity {
+public:
+    glm::vec2 pos;
+    PlayerSpawn(tmx::Object& obj);
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderWindow& window);

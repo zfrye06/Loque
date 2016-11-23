@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-11-21T12:46:44
+# Project created by QtCreator 2016-11-23T11:16:56
 #
 #-------------------------------------------------
 
@@ -13,11 +13,17 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    loginwindow.cpp \
+    ../shared/loqueclient.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    loginwindow.h \
+    ../shared/loqueclient.h
 
-FORMS    += mainwindow.ui
+
+FORMS    += mainwindow.ui \
+    loginwindow.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

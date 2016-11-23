@@ -12,6 +12,7 @@ private:
     sf::Music ambient;
     tmx::Map* map;
     std::vector<MapLayer*> layers;
+    bool isPowerOfTwo( int x );
 public:
     Map( std::string resource );
     ~Map();

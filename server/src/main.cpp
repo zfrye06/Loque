@@ -5,8 +5,7 @@
 #include <mysql.h>
 #include <string.h>
 #include <thread>
-#include "../include/json.hpp"
-#include "../../shared/clientserver.h"
+#include "../../shared/json.hpp"
 
 using json = nlohmann::json;
 
@@ -49,7 +48,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client) {
         }
 
         json resp;
-        if (*reqType== requesttypes::LOGIN) {
+        if (*reqType == "LOGIN") {
             handleLogin(req, resp);
         } else {
             std::cerr << "ERROR: Unrecognized request type. Raw request message: " <<

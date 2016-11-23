@@ -11,7 +11,7 @@ endif()
 
 project(loque)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
 
 include_directories("${PROJECT_BINARY_DIR}")
 
@@ -19,10 +19,7 @@ include_directories("${PROJECT_BINARY_DIR}")
 set(EXECUTABLE_NAME "server")
 
 set( source
-         src/main.cpp
-         src/serverutil.cpp
-         include/json.hpp
-         src/main.cpp )
+         src/main.cpp)
 
 add_executable(${EXECUTABLE_NAME} ${source})
 
@@ -32,12 +29,13 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules" )
 #See the FindSFML.cmake file for additional details and instructions
 find_package(SFML 2 REQUIRED network)
 find_package(MySQLClient REQUIRED)
-#if(SFML_FOUND)
-  include_directories(${SFML_INCLUDE_DIR}
-                      ${MYSQL_INCLUDE_DIR})
-  target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
-                                           ${MYSQL_LIBRARIES})
-#endif()
+include_directories(${SFML_INCLUDE_DIR}
+#                   ${MYSQL_INCLUDE_DIR}
+                    ${MYSQLCONNECTORCPP_INCLUDE_DIRS})
+target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
+                                         ${MYSQL_LIBRARIES}    
+                                         ${MYSQLCONNECTORCPP_LIBRARIES}
+                                         "/usr/local/Cellar/mysql-connector-c++/1.1.6_1/lib/libmysqlcppconn.dylib")
 
 
 # Install target

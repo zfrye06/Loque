@@ -1,8 +1,12 @@
 
+
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/resultset.h>
+#include <cppconn/statement.h>
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <memory>
-#include <mysql.h>
 #include <string.h>
 #include <thread>
 #include "../../shared/json.hpp"
@@ -46,33 +50,26 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client) {
                 "Raw request message: " << rawMessage << std::endl;
             return;
         }
-
         json resp;
         if (*reqType == "LOGIN") {
             handleLogin(req, resp);
         } else {
-            std::cerr << "ERROR: Unrecognized request type. Raw request message: " <<
-                rawMessage << std::endl;
+            std::cerr << "ERROR: Unrecognized request type. Raw request message: " << rawMessage << std::endl;
             return;
         }
-
         sf::Packet respPacket;
         respPacket << resp.dump();
         status = client->send(respPacket);
         if (status != sf::Socket::Done) {
-            std::cerr << "ERROR: Unable to send response. send() returned status " <<
-                status << "." << std::endl;
+            std::cerr << "ERROR: Unable to send response. send() returned status " << status << "." << std::endl;
             return;
         }
-
     } catch (std::exception& e) {
         std::cerr << "ERROR: Unable to parse request. Exception: " << e.what() << std::endl;
-        return;
     }
 }
 
 int main(int argc, char **argv) {
-
     int port = DEFAULT_PORT;
     if (argc > 1) {
         for (int i = 1; i < argc; i += 2) {
@@ -85,9 +82,8 @@ int main(int argc, char **argv) {
             }
         }
     }
-    
     std::cout << "Starting Loque Server on port " << port << "." << std::endl;
-
+    sql::Driver *driver = get_driver_instance();
     sf::TcpListener listener;
     int status = listener.listen(port);
     if (status != sf::Socket::Done) {
@@ -95,7 +91,6 @@ int main(int argc, char **argv) {
            "listen() returned status " << status << "." << std::endl;
         return 1;
     }
-
     while (true) {
         std::unique_ptr<sf::TcpSocket> client(new sf::TcpSocket);
         int status = listener.accept(*client);
@@ -106,9 +101,7 @@ int main(int argc, char **argv) {
         }
         std::cout << "Accepted client connection with " <<
             client->getRemoteAddress().toString() << std::endl;
-
         std::thread worker(handleClient, std::move(client));
-
         worker.detach();
     }
 }

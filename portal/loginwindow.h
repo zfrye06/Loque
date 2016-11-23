@@ -3,15 +3,20 @@
 
 #include <QMainWindow>
 
-class loginwindow : public QMainWindow
+namespace Ui {
+class LoginWindow;
+}
+
+class LoginWindow : public QMainWindow
 {
     Q_OBJECT
+
 public:
-    explicit loginwindow(QWidget *parent = 0);
-
-signals:
-
-public slots:
+    explicit LoginWindow(QWidget *parent = 0);
+    ~LoginWindow();
+    void sendUserInfo();
+private:
+    Ui::LoginWindow *ui;
 };
 
 #endif // LOGINWINDOW_H

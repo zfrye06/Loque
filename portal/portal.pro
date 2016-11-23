@@ -14,10 +14,22 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    loginwindow.cpp
+    loginwindow.cpp \
+    ../shared/loqueclient.cpp
 
 HEADERS  += mainwindow.h \
-    loginwindow.h
+    loginwindow.h \
+    ../shared/loqueclient.h
+
 
 FORMS    += mainwindow.ui \
     loginwindow.ui
+
+unix:!macx {
+LIBS += -L/usr/local/lib -lsfml-network -lsfml-system
+INCLUDEPATH += /ur/local/include/SFML
+}
+macx:  {
+LIBS += -L/usr/local/Cellar/sfml/2.3.2/lib -lsfml-network -lsfml-system
+INCLUDEPATH += /usr/local/Cellar/sfml/2.3.2/include
+}

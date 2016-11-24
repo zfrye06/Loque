@@ -264,4 +264,8 @@ void Map::spawnObject( tmx::Object& obj ) {
     if ( obj.getName() == "playerSpawn" ) {
         world->addEntity(new ::PlayerSpawn(obj));
     }
+    else if( obj.getName() == "laser" ) {
+        std::cout<<"laser"<<std::endl;
+        world->addEntity( new ::Laser(obj));
+    }
 }

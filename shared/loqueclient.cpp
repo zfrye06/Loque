@@ -4,9 +4,11 @@
 
 using json = nlohmann::json;
 
+#include <iostream>
 void jsonFromPacket(sf::Packet& p, json& jobj) {
     std::string raw;
     p >> raw;
+    std::cout << raw << std::endl;
     jobj = json::parse(raw); 
 }
 
@@ -55,6 +57,14 @@ status LoqueClient::attemptLogin(const std::string& username,
 
 status LoqueClient::sendRequest(sf::Packet& req, sf::Packet& resp) {
     auto status = conn.connect(host, port);
+    if (status != sf::Socket::Done) {
+        return status;
+    }
+    status = conn.send(req);
+    if (status != sf::Socket::Done) {
+        return status;
+    }
+    status = conn.receive(resp);
     conn.disconnect();
     return status;
 }

@@ -88,6 +88,6 @@ public:
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderWindow& window);
     Entity::Type getType();
-    int value;
+    bool canBePassed;
 };
 #endif

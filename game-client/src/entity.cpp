@@ -96,7 +96,15 @@ Entity::Type PlayerSpawn::getType(){
 
 Laser::Laser(tmx::Object& obj){
     pos = glm::vec2(obj.getPosition().x/64, obj.getPosition().y/64); 
-    value = 16;
+
+    std::vector<tmx::Property> properties = obj.getProperties();
+    for(int i = 0; i < properties.size(); i++) {
+        tmx::Property temp = properties[i];
+        if(temp.getName() == "canBePassed"){
+            canBePassed = temp.getBoolValue();
+        }
+    }
+
     tmx::FloatRect size = obj.getAABB();
     size.width = size.width / 64;
     size.height = size.height / 64;
@@ -135,7 +143,6 @@ void Laser::update( double dt ){
 }
 
 void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
-    std::cout<<value<<std::endl;
 }
 
 void Laser::draw( sf::RenderWindow& window ){

@@ -1,10 +1,12 @@
 #ifndef LQ_PLAYER_H_
 #define LQ_PLAYER_H_
 
-#include "entity.h"
 #include <glm/glm.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include <Box2D/Box2D.h>
+
+#include "entity.h"
 #include "playerstate.h"
 #include "Animation.hpp"
 #include "world.h"
@@ -41,6 +43,7 @@ public:
     float dashingDirection;
     float dashTimer;
     float jumpSquatTimer;
+    bool airDodgePressed;
 
     // Helper variables
     bool canWallJumpLeft;

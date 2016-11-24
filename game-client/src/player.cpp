@@ -19,6 +19,7 @@ Player::Player( std::string resource, sf::View& view ) {
     canWallJumpRight = false;
     canDoubleJump = true;
     releasedJump = true;
+    airDodgePressed = false;
     airControlMultiplier = .01;
     newState = nullptr;
     this->view = &view;
@@ -175,6 +176,21 @@ void Player::update( double dt ) {
             jumpButton = false;
         }
     }
+    if ( sf::Joystick::isConnected( controllerID ) && controllerFound && sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::Z) ) {
+            float check = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Z);
+            float check2 = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R);
+            if( check > 90 || check2 > 90 ) {
+                airDodgePressed = true;
+            } else {
+                airDodgePressed = false;
+            }
+    } else {
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::R ) ) {
+            airDodgePressed = true;
+        } else {
+            airDodgePressed = false;
+        }
+    }
 
     // 25% deadzone
     if ( glm::length(direction) < deadZone ) {
@@ -265,5 +281,8 @@ Entity::Type Player::getType(){
 }
 
 void Player::switchState( GenericPlayerState* state ) {
+    if ( newState ) {
+        delete newState;
+    }
     newState = state;
 }

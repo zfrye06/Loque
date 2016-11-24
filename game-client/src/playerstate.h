@@ -5,8 +5,8 @@
 
 class Player;
 
-static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "WallSliding", "SpecialFall", "Jumping", "None" };
-enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, WallSliding, SpecialFall, Jumping, None };
+static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "WallSliding", "SpecialFall", "Jumping", "AirDodge", "None" };
+enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, WallSliding, SpecialFall, Jumping, AirDodge, None };
 
 class GenericPlayerState {
 public:
@@ -80,6 +80,15 @@ public:
     float dashingDirection;
     RunningState( Player* player, float direction );
     ~RunningState();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class AirDodgeState : public GenericPlayerState {
+    glm::vec2 airDirection;
+public:
+    AirDodgeState( Player* player, glm::vec2 airdirection );
+    ~AirDodgeState();
     PlayerState getType();
     void update( Player* player, double dt );
 };

@@ -22,12 +22,10 @@ PlayerState WalkingState::getType() {
     return PlayerState::Walking;
 }
 void WalkingState::update( Player* player, double dt ) {
-    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
-    glm::vec2 newvel = player->direction*player->playerSpeed;
-    newvel.y = vel.y;
-    player->myBody->SetLinearVelocity( toB2(newvel) );
+    glm::vec2 vel = player->direction.x*player->playerSpeed*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
+    player->myBody->SetLinearVelocity( toB2(vel) );
 
-    if ( newvel.x == 0 ) {
+    if ( vel.x == 0 ) {
         player->switchState( new IdleState(player) );
     }
     if ( !player->onGround ) {
@@ -101,11 +99,8 @@ void DashingState::update( Player* player, double dt ) {
     } else {
         walkTimer = 0;
     }
-    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
-    glm::vec2 newvel;
-    newvel.x = dashingDirection*player->playerSpeed*player->dashingMultiplier;
-    newvel.y = vel.y;
-    player->myBody->SetLinearVelocity( toB2(newvel) );
+    glm::vec2 vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
+    player->myBody->SetLinearVelocity( toB2(vel) );
     if ( player->direction.x < -0.9 && dashingDirection == 1 ) {
         dashTimer = 0;
         walkTimer = 0;
@@ -226,6 +221,9 @@ void JumpingState::update( Player* player, double dt ) {
         }
         canWallJump = false;
     }
+    if ( player->airDodgePressed ) {
+        player->switchState( new AirDodgeState(player, player->direction ) );
+    }
 }
 AirborneState::AirborneState( Player* player) {
     this->player = player;
@@ -251,13 +249,7 @@ void AirborneState::update( Player* player, double dt ) {
     }
     player->myBody->SetLinearVelocity( toB2(newvel) );
     if ( player->onGround ) {
-        if ( player->direction.x < -0.9 ) {
-            player->switchState( new DashingState(player,-1) );
-        } else if ( player->direction.x > 0.9 ) {
-            player->switchState( new DashingState(player,1) );
-        } else {
-            player->switchState( new WalkingState(player) );
-        }
+        player->switchState( new WalkingState(player) );
     }
     if ( player->jumpButton ) {
         if ( player->canDoubleJump && player->releasedJump ) {
@@ -286,6 +278,9 @@ void AirborneState::update( Player* player, double dt ) {
             player->switchState( new JumpingState(player) );
         }
     }
+    if ( player->airDodgePressed ) {
+        player->switchState( new AirDodgeState(player, player->direction ) );
+    }
 }
 
 RunningState::RunningState( Player* player, float direction ) {
@@ -294,17 +289,17 @@ RunningState::RunningState( Player* player, float direction ) {
     player->sprite->play( player->runningAnimation );
     player->sprite->setFrameTime(sf::seconds(player->dashLength/(float)player->dashingAnimation.getSize()));
 }
+
 RunningState::~RunningState() {
 }
+
 PlayerState RunningState::getType() {
     return PlayerState::Running;
 }
+
 void RunningState::update( Player* player, double dt ) {
-    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
-    glm::vec2 newvel;
-    newvel.x = dashingDirection*player->playerSpeed*player->dashingMultiplier;
-    newvel.y = vel.y;
-    player->myBody->SetLinearVelocity( toB2(newvel) );
+    glm::vec2 vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
+    player->myBody->SetLinearVelocity( toB2(vel) );
     if ( fabs( player->direction.x ) < 0.7 ) {
         player->switchState( new WalkingState(player) );
     }
@@ -318,4 +313,19 @@ void RunningState::update( Player* player, double dt ) {
     } else {
         player->releasedJump = true;
     }
+}
+
+AirDodgeState::AirDodgeState( Player* player, glm::vec2 direction ) {
+    airDirection = direction;
+    this->player = player;
+}
+
+AirDodgeState::~AirDodgeState() {
+}
+
+PlayerState AirDodgeState::getType() {
+    return PlayerState::AirDodge;
+}
+
+void AirDodgeState::update( Player* player, double dt ) {
 }

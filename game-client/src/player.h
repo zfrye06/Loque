@@ -22,6 +22,7 @@ public:
     float airDodgeVelocity;
     float airDodgeTime;
     float deadZone;
+    float turnAroundTime;
     float fastFallSpeed;
     float jumpSquatLength;
     float dashingMultiplier;

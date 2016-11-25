@@ -8,8 +8,9 @@ Player::Player( std::string resource, sf::View& view ) {
     dashLength = 0.35; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
-    airDodgeVelocity = 18;
-    airDodgeTime = 0.55;
+    airDodgeVelocity = 19;
+    airDodgeTime = 0.4;
+    turnAroundTime = 0.4;
     fastFallSpeed = 10;
     fastFalling = false;
     playerSpeed = 5; // in meters per second
@@ -97,7 +98,7 @@ void Player::setUpBody() {
     b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 1;
-    boxFixtureDef.friction = 1;
+    boxFixtureDef.friction = 3;
     boxFixtureDef.restitution = 0;
     myBody->CreateFixture(&boxFixtureDef);
     boxFixtureDef.shape = &circleShape;

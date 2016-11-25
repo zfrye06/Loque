@@ -285,6 +285,7 @@ void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
     }
     else if(collider->getType() == Entity::Type::Trampoline){
         //TODO Need to add functionality to propell player upwards.
+        myBody->SetLinearVelocity(b2Vec2(myBody->GetLinearVelocity().x, -20));
     }
 }
 

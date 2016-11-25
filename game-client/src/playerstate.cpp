@@ -246,6 +246,12 @@ void AirborneState::update( Player* player, double dt ) {
     glm::vec2 newvel;
     newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier);
     newvel.y = vel.y;
+    if ( player->canWallJumpLeft && newvel.x > 0 ) {
+        newvel.x = 0;
+    }
+    if ( player->canWallJumpRight && newvel.x < 0 ) {
+        newvel.x = 0;
+    }
     if ( player->direction.y > 0.9 && !player->fastFalling ) {
         newvel.y += player->fastFallSpeed;
         player->fastFalling = true;
@@ -290,6 +296,8 @@ void AirborneState::update( Player* player, double dt ) {
 
 RunningState::RunningState( Player* player, float direction ) {
     dashingDirection = direction;
+    walkTimer = 0;
+    crossedNeutral = false;
     this->player = player;
     player->sprite->play( player->runningAnimation );
     player->sprite->setFrameTime(sf::seconds(player->dashLength/(float)player->dashingAnimation.getSize()));
@@ -303,9 +311,23 @@ PlayerState RunningState::getType() {
 }
 
 void RunningState::update( Player* player, double dt ) {
-    glm::vec2 vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    player->myBody->SetLinearVelocity( toB2(vel) );
-    if ( fabs( player->direction.x ) < 0.7 ) {
+    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
+    if ( player->direction.x < -0.9 && dashingDirection == 1 && crossedNeutral ) {
+        player->switchState( new TurningState(player, -1) );
+    } else if ( player->direction.x > 0.9 && dashingDirection == -1 && crossedNeutral ) {
+        player->switchState( new TurningState(player, 1) );
+    }
+    if ( (player->direction.x == 0 && player->direction.y == 0) || glm::length(player->direction) < 0.5 ) {
+        crossedNeutral = true;
+        walkTimer += dt;
+    } else {
+        if ( vel.x/fabs(vel.x) != dashingDirection ) {
+            walkTimer += dt;
+        } else {
+            walkTimer = 0;
+        }
+    }
+    if ( walkTimer >= player->walkLength ) {
         player->switchState( new WalkingState(player) );
     }
     if ( !player->onGround ) {
@@ -318,6 +340,8 @@ void RunningState::update( Player* player, double dt ) {
     } else {
         player->releasedJump = true;
     }
+    vel = player->direction.x*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
+    player->myBody->SetLinearVelocity( toB2(vel) );
 }
 
 AirDodgeState::AirDodgeState( Player* player, glm::vec2 direction ) {
@@ -372,5 +396,30 @@ void SpecialFallState::update( Player* player, double dt ) {
     player->myBody->SetLinearVelocity( toB2(newvel) );
     if ( player->onGround ) {
         player->switchState( new IdleState(player) );
+    }
+}
+
+TurningState::TurningState( Player* player, float direction ) {
+    float d = direction*player->playerSpeed*player->dashingMultiplier;
+    tweenX = tweeny::from(-d).to(d).during(player->turnAroundTime*1000).via(tweeny::easing::quadraticInOut);
+    turnDirection = direction;
+    turnTimer = 0;
+    this->player = player;
+}
+
+TurningState::~TurningState() {
+}
+
+PlayerState TurningState::getType() {
+    return PlayerState::Turning;
+}
+
+void TurningState::update( Player* player, double dt ) {
+    // If the code reaches here you should never play smash again probably
+    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
+    player->myBody->SetLinearVelocity( b2Vec2(tweenX.step((int)(dt*1000)),vel.y) );
+    turnTimer += dt;
+    if ( turnTimer > player->turnAroundTime ) {
+        player->switchState( new DashingState(player,turnDirection) );
     }
 }

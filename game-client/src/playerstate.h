@@ -7,8 +7,8 @@
 
 class Player;
 
-static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "WallSliding", "SpecialFall", "Jumping", "AirDodge", "None" };
-enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, WallSliding, SpecialFall, Jumping, AirDodge, None };
+static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "SpecialFall", "Jumping", "AirDodge", "Turning", "None" };
+enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, SpecialFall, Jumping, AirDodge, Turning, None };
 
 class GenericPlayerState {
 public:
@@ -80,6 +80,8 @@ public:
 
 class RunningState : public GenericPlayerState {
 public:
+    bool crossedNeutral;
+    double walkTimer;
     float dashingDirection;
     RunningState( Player* player, float direction );
     ~RunningState();
@@ -102,6 +104,17 @@ class SpecialFallState : public GenericPlayerState {
 public:
     SpecialFallState( Player* player);
     ~SpecialFallState();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class TurningState : public GenericPlayerState {
+    tweeny::tween<float> tweenX;
+    float turnDirection;
+    float turnTimer;
+public:
+    TurningState( Player* player, float direction);
+    ~TurningState();
     PlayerState getType();
     void update( Player* player, double dt );
 };

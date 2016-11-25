@@ -27,21 +27,7 @@ PlayerState WalkingState::getType() {
     return PlayerState::Walking;
 }
 void WalkingState::update( Player* player, double dt ) {
-    glm::vec2 vel;
-    // on level ground approaching an upwardslope
-    if ( player->futureGroundHitNormal.x < 0 && player->groundHitNormal.y == -1 && player->direction.x > 0) {
-        vel = player->direction.x*player->playerSpeed*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    // on a upwardslope approaching level ground
-    } else if ( player->futureGroundHitNormal.y == -1 && player->groundHitNormal.x < 0 && player->direction.x > 0 ) {
-        vel = player->direction.x*player->playerSpeed*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    // on level ground approaching a downwardslope
-    } else if ( player->groundHitNormal.y == -1 && player->futureGroundHitNormal.x < 0 && player->direction.x < 0 ) {
-        vel = player->direction.x*player->playerSpeed*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    //} else if ( player->futureGroundHitNormal.y == -1 && player->groundHitNormal.x < 0 && player->direction.x < 0 ) {
-        //vel = player->direction.x*player->playerSpeed*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    } else {
-        vel = player->direction.x*player->playerSpeed*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    }
+    glm::vec2 vel = player->direction.x*player->playerSpeed*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
     player->myBody->SetLinearVelocity( toB2(vel) );
     player->sprite->setFrameTime(sf::seconds(.5/fabs(vel.x)));
 
@@ -130,19 +116,7 @@ void DashingState::update( Player* player, double dt ) {
     } else {
         walkTimer = 0;
     }
-    glm::vec2 vel;
-    // on level ground approaching an upwardslope
-    if ( player->futureGroundHitNormal.x < 0 && player->groundHitNormal.y == -1 && player->direction.x > 0) {
-        vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    // on a upwardslope approaching level ground
-    } else if ( player->futureGroundHitNormal.y == -1 && player->groundHitNormal.x < 0 && player->direction.x > 0 ) {
-        vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    // on level ground approaching a downwardslope
-    } else if ( player->groundHitNormal.y == -1 && player->futureGroundHitNormal.x < 0 && player->direction.x < 0 ) {
-        vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    } else {
-        vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    }
+    glm::vec2 vel = dashingDirection*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
     player->myBody->SetLinearVelocity( toB2(vel) );
     if ( player->direction.x < -0.9 && dashingDirection == 1 ) {
         dashTimer = 0;
@@ -266,10 +240,10 @@ void JumpingState::update( Player* player, double dt ) {
         newvel.x = -player->playerSpeed*player->dashingMultiplier;
     }
     newvel.y = vel.y;
-    if ( player->canWallJumpLeft && newvel.x > 0 ) {
+    if ( player->touchingWallRight && newvel.x > 0 ) {
         newvel.x = 0;
     }
-    if ( player->canWallJumpRight && newvel.x < 0 ) {
+    if ( player->touchingWallLeft && newvel.x < 0 ) {
         newvel.x = 0;
     }
     player->myBody->SetLinearVelocity( toB2(newvel) );
@@ -329,10 +303,10 @@ void AirborneState::update( Player* player, double dt ) {
         newvel.x = -player->playerSpeed*player->dashingMultiplier;
     }
     newvel.y = vel.y;
-    if ( player->canWallJumpLeft && newvel.x > 0 ) {
+    if ( player->touchingWallRight && newvel.x > 0 ) {
         newvel.x = 0;
     }
-    if ( player->canWallJumpRight && newvel.x < 0 ) {
+    if ( player->touchingWallLeft && newvel.x < 0 ) {
         newvel.x = 0;
     }
     if ( player->direction.y > 0.9 && !player->fastFalling ) {
@@ -426,18 +400,7 @@ void RunningState::update( Player* player, double dt ) {
     } else {
         player->releasedJump = true;
     }
-    // on level ground approaching an upwardslope
-    if ( player->futureGroundHitNormal.x < 0 && player->groundHitNormal.y == -1 && player->direction.x > 0) {
-        vel = player->direction.x*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    // on a upwardslope approaching level ground
-    } else if ( player->futureGroundHitNormal.y == -1 && player->groundHitNormal.x < 0 && player->direction.x > 0 ) {
-        vel = player->direction.x*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->futureGroundHitNormal, (float)M_PI/2.f );
-    // on level ground approaching a downwardslope
-    } else if ( player->groundHitNormal.y == -1 && player->futureGroundHitNormal.x < 0 && player->direction.x < 0 ) {
-        vel = player->direction.x*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    } else {
-        vel = player->direction.x*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
-    }
+    vel = player->direction.x*player->playerSpeed*player->dashingMultiplier*glm::rotate( player->groundHitNormal, (float)M_PI/2.f );
     player->myBody->SetLinearVelocity( toB2(vel) );
 }
 
@@ -500,10 +463,10 @@ void SpecialFallState::update( Player* player, double dt ) {
         newvel.x = -player->playerSpeed*player->dashingMultiplier;
     }
     newvel.y = vel.y;
-    if ( player->canWallJumpLeft && newvel.x > 0 ) {
+    if ( player->touchingWallRight && newvel.x > 0 ) {
         newvel.x = 0;
     }
-    if ( player->canWallJumpRight && newvel.x < 0 ) {
+    if ( player->touchingWallLeft && newvel.x < 0 ) {
         newvel.x = 0;
     }
     if ( player->direction.y > 0.9 && !player->fastFalling ) {

@@ -45,8 +45,8 @@ void DebugDraw::DrawAABB(b2AABB* aabb, const b2Color& color)
     polygon.setPoint(3, sf::Vector2f(aabb->lowerBound.x*RATIO, aabb->upperBound.y*RATIO) );
 
     polygon.setOutlineThickness(1);
-    polygon.setOutlineColor(B2SFColor(color,ALPHA+50));
-    polygon.setFillColor(B2SFColor(color,ALPHA));
+    polygon.setOutlineColor(B2SFColor(color,(ALPHA+50)/4.f));
+    polygon.setFillColor(B2SFColor(color,ALPHA/4.f));
 	this->window->draw(polygon);
 }
 
@@ -61,7 +61,12 @@ void DebugDraw::DrawString(int x, int y, const char* string)
 
 void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 {
-    std::cout << "DrawPoint\n";
+    sf::CircleShape circle = sf::CircleShape(1);
+    circle.setPosition(sf::Vector2f(p.x*RATIO, p.y*RATIO));
+    circle.setFillColor( B2SFColor(color,ALPHA) );
+    circle.setOutlineColor( B2SFColor(color,ALPHA+50) );
+    circle.setOutlineThickness(1);
+    this->window->draw( circle );
 }
 
 void DebugDraw::DrawTransform(const b2Transform& xf)
@@ -93,8 +98,8 @@ void DebugDraw::DrawTransform(const b2Transform& xf)
 void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
     sf::Vertex line[] = {
-        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), B2SFColor(color,ALPHA)),
-        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), B2SFColor(color,ALPHA))
+        sf::Vertex(sf::Vector2f(p1.x*RATIO, p1.y*RATIO), B2SFColor(color,ALPHA+50)),
+        sf::Vertex(sf::Vector2f(p2.x*RATIO, p2.y*RATIO), B2SFColor(color,ALPHA+50))
     };
     this->window->draw(line,2,sf::Lines);
 }

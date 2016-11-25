@@ -1,70 +1,73 @@
 
 #include "loqueclient.h"
-#include "json.hpp"
 
-using json = nlohmann::json;
-
-#include <iostream>
-void jsonFromPacket(sf::Packet& p, json& jobj) {
-    std::string raw;
-    p >> raw;
-    std::cout << raw << std::endl;
-    jobj = json::parse(raw); 
+sf::Packet& operator<<(sf::Packet& packet, const UserType& ut) {
+    packet << static_cast<int>(ut);
+    return packet;
 }
 
-UserType parseUserType(const std::string& s) {
-    if (s == "ADMIN") return UserType::Admin;
-    if (s == "STUDENT") return UserType::Student;
-    if (s == "DNE") return UserType::DNE;
-    throw std::invalid_argument("Unrecognized user type: " + s);
+sf::Packet& operator>>(sf::Packet& packet, UserType& ut) {
+    int i;
+    packet >> i;
+    ut = static_cast<UserType>(i);
+    return packet;
 }
 
-void makeLoginRequest(const std::string& username,
-                      const std::string& userpass,
-                      sf::Packet& request) {
-    json req;
-    req["request-type"] = "LOGIN";
-    req["user-name"] = username;
-    req["user-pass"] = userpass;
-    request << req.dump();
+sf::Packet& operator>>(sf::Packet& packet, LoginResult& res) {
+    packet >> res.userId >> res.userType;
+    return packet;
 }
 
-void parseLoginResult(sf::Packet& res, LoginResult& result) {
-    json resp;
-    jsonFromPacket(res, resp); 
-    result.userId = *resp.find("user-id");
-    result.userType = parseUserType(*resp.find("user-type"));
+sf::Packet& operator<<(sf::Packet& packet, const GameStats& stats) {
+    packet << stats.levelId << stats.secToComplete << stats.pointsScored;
+    return packet;
 }
 
-bool LoginResult::successful() const {
-    return userType != UserType::DNE;
-}
-
-LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
-
-status LoqueClient::attemptLogin(const std::string& username,
+Status LoqueClient::attemptLogin(const std::string& username,
                                  const std::string& userpass,
                                  LoginResult& result) {
-    sf::Packet outgoing, incoming;
-    makeLoginRequest(username, userpass, outgoing);
-    auto status = sendRequest(outgoing, incoming);
-    if (status != sf::Socket::Done) {
+    sf::Packet toSend;
+    toSend << "LOGIN" << username << userpass;
+    auto status = conn.send(toSend);
+    if (!ok(status)) {
         return status;
     }
-    parseLoginResult(incoming, result);
+    sf::Packet toReceive;
+    status = conn.receive(toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> result;
     return status;
 }
 
-status LoqueClient::sendRequest(sf::Packet& req, sf::Packet& resp) {
-    auto status = conn.connect(host, port);
-    if (status != sf::Socket::Done) {
+Status LoqueClient::createAccount(const std::string& username,
+                                  const std::string& userpass,
+                                  UserType type,
+                                  LoginResult& result) {
+    sf::Packet toSend;
+    toSend << "CREATE-ACC" << type << username << userpass;
+    auto status = conn.send(toSend);
+    if (!ok(status)) {
         return status;
     }
-    status = conn.send(req);
-    if (status != sf::Socket::Done) {
+    sf::Packet toReceive;
+    status = conn.receive(toReceive);
+    if (!ok(status)) {
         return status;
     }
-    status = conn.receive(resp);
-    conn.disconnect();
+    toReceive >> result;
+    return status;
+}
+
+Status LoqueClient::postGameStats(int userId, const GameStats& stats) {
+    sf::Packet toSend;
+    toSend << "POST-STATS" << stats;
+    auto status = conn.send(toSend);
+    if (!ok(status)) {
+        return status;
+    }
+    sf::Packet toReceive;
+    status = conn.receive(toReceive);
     return status;
 }

@@ -31,6 +31,7 @@ public:
 class IdleState : public GenericPlayerState {
 public:
     double walkTimer;
+    bool reset;
     IdleState( Player* player );
     ~IdleState();
     PlayerState getType();
@@ -88,10 +89,19 @@ public:
 
 class AirDodgeState : public GenericPlayerState {
     glm::vec2 airDirection;
-    tweeny::tween<float,float> tween;
+    glm::vec2 vel;
+    tweeny::tween<float> tweenX,tweenY;
 public:
     AirDodgeState( Player* player, glm::vec2 airdirection );
     ~AirDodgeState();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class SpecialFallState : public GenericPlayerState {
+public:
+    SpecialFallState( Player* player);
+    ~SpecialFallState();
     PlayerState getType();
     void update( Player* player, double dt );
 };

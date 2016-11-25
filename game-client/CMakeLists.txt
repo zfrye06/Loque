@@ -1,5 +1,5 @@
 #Change this if you need to target a specific CMake version
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 
 
 # Enable debug symbols by default
@@ -11,7 +11,10 @@ endif()
 
 project(loque)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
 
 include_directories("${PROJECT_BINARY_DIR}")
 
@@ -46,8 +49,9 @@ find_package(Box2D REQUIRED)
 find_package(GLM REQUIRED)
 
 #tweeny stuff
-add_subdirectory(tweeny)
-
+SET(TWEENY_BUILD_EXAMPLES OFF CACHE BOOL "Build examples contained in examples/ folder. It might require additional dependencies." FORCE)
+SET(TWEENY_BUILD_DOCUMENTATION OFF CACHE BOOL "Attempts to build the documentation. You'll need doxygen and graphviz installed" FORCE)
+add_subdirectory(tweeny bin)
 
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR}

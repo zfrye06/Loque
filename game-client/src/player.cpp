@@ -8,6 +8,8 @@ Player::Player( std::string resource, sf::View& view ) {
     dashLength = 0.35; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
+    airDodgeVelocity = 18;
+    airDodgeTime = 0.55;
     fastFallSpeed = 10;
     fastFalling = false;
     playerSpeed = 5; // in meters per second

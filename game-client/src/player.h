@@ -62,6 +62,11 @@ public:
     // Helper functions
     void detectGround();
     void detectWalls();
+    float flashPeriod;
+    float flashLength;
+    float flashTimer;
+    sf::Color flashColor;
+    void flash(sf::Color c, float length, float period);
     void setUpBody();
     void setUpSprite( std::string resource );
     void switchState( GenericPlayerState* state );

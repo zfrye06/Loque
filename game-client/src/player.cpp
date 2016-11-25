@@ -5,7 +5,7 @@ Player::Player( std::string resource, sf::View& view ) {
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
-    dashLength = 0.35; // in seconds
+    dashLength = 0.30; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
     airDodgeVelocity = 18;
@@ -24,6 +24,7 @@ Player::Player( std::string resource, sf::View& view ) {
     releasedJump = true;
     airDodgePressed = false;
     airControlMultiplier = 6;
+    flashTimer = 0;
     newState = nullptr;
     this->view = &view;
     direction = glm::vec2(0,0);
@@ -214,6 +215,12 @@ Player::~Player() {
     delete sprite;
 }
 
+void Player::flash(sf::Color c, float length, float period) {
+    flashLength = length;
+    flashPeriod = period;
+    flashColor = c;
+}
+
 void Player::draw( sf::RenderWindow& window ) {
     sf::Text stateText;
     stateText.setFont( *Resources->getFont( "assets/fonts/arial.ttf" ) );
@@ -229,7 +236,23 @@ void Player::draw( sf::RenderWindow& window ) {
 void Player::update( double dt ) {
     detectGround();
     detectWalls();
-
+    if ( flashLength != -1 && flashLength > 0 ) {
+        if ( fmod(flashLength,flashPeriod*2)<flashPeriod ) {
+            sprite->setColor( flashColor );
+        } else {
+            sprite->setColor( sf::Color(255,255,255,255) );
+        }
+        flashLength -= dt;
+    } else if ( flashLength != -1 ) {
+        sprite->setColor( sf::Color(255,255,255,255) );
+    } else {
+        flashTimer += dt;
+        if ( fmod(flashTimer,flashPeriod*2)<flashPeriod ) {
+            sprite->setColor( flashColor );
+        } else {
+            sprite->setColor( sf::Color(255,255,255,255) );
+        }
+    }
     /*for (int i=0;i<sf::Joystick::getButtonCount(0);i++ ) {
         if (sf::Joystick::isButtonPressed(0,i)) {
             std::cout << i << std::endl;

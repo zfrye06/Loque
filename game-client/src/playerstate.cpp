@@ -200,7 +200,7 @@ void JumpingState::init() {
         player->sprite->setFrameTime(sf::seconds(0.16));
     } else {
         player->sprite->play( player->wallJumpAnimation );
-        player->sprite->setFrameTime(sf::seconds(0.09));
+        player->sprite->setFrameTime(sf::seconds(0.1));
     }
     player->sprite->setFrame(0, true);
 }
@@ -258,9 +258,11 @@ void JumpingState::update( Player* player, double dt ) {
     if ( walkTimer > player->walkLength && canWallJump ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player,1) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player,-1) );
         }
         canWallJump = false;
@@ -340,9 +342,11 @@ void AirborneState::update( Player* player, double dt ) {
         canWallJump = false;
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player, 1) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player, -1) );
         }
     }
@@ -443,9 +447,11 @@ SpecialFallState::SpecialFallState( Player* player ) {
 void SpecialFallState::init() {
     player->sprite->play( player->specialFallAnimation );
     player->sprite->setFrameTime(sf::seconds(0.15));
+    player->flash(sf::Color(200,150,150,255),-1,0.08);
 }
 
 SpecialFallState::~SpecialFallState() {
+    player->flash(sf::Color(255,255,255,255),0,0.1);
 }
 
 PlayerState SpecialFallState::getType() {

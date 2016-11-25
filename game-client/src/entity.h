@@ -38,6 +38,7 @@ public:
         Map,
         Player,
         PlayerSpawn,
+        Laser,
         None
     };
     virtual Type getType();
@@ -77,5 +78,16 @@ public:
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderWindow& window);
     Entity::Type getType();
+};
+
+class Laser : public Entity {
+public:
+    Laser(tmx::Object& obj);
+    glm::vec2 pos;
+    void update(double dt);
+    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
+    void draw(sf::RenderWindow& window);
+    Entity::Type getType();
+    bool canBePassed;
 };
 #endif

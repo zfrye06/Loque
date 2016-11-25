@@ -16,7 +16,7 @@ void ContactListener::BeginContact(b2Contact* contact){
 
     b2WorldManifold worldManifold;
     contact->GetWorldManifold( &worldManifold );
-
+    
     if(bodyA && bodyB){
         Entity* entityA = static_cast<Entity*>( bodyA );
         Entity* entityB = static_cast<Entity*>( bodyB );

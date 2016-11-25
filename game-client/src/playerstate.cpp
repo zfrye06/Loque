@@ -42,6 +42,7 @@ void WalkingState::update( Player* player, double dt ) {
 
 IdleState::IdleState( Player* player ) {
     this->player = player;
+    reset = false;
     player->sprite->play( player->idleAnimation );
     player->sprite->setFrameTime(sf::seconds(0.2));
     walkTimer = 0;
@@ -52,10 +53,11 @@ PlayerState IdleState::getType() {
     return PlayerState::Idle;
 }
 void IdleState::update( Player* player, double dt ) {
-    if ( player->direction.x != 0 ) {
+    if ( player->direction.x != 0 && reset ) {
         walkTimer += dt;
-    } else {
+    } else if (player->direction.x == 0 ) {
         walkTimer = 0;
+        reset = true;
     }
     if ( walkTimer > player->walkLength ) {
         if ( fabs(player->direction.x) > 0.9 ) {
@@ -239,6 +241,7 @@ PlayerState AirborneState::getType() {
     return PlayerState::Airborne;
 }
 void AirborneState::update( Player* player, double dt ) {
+    // Air control
     glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
     glm::vec2 newvel;
     newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier);
@@ -247,10 +250,12 @@ void AirborneState::update( Player* player, double dt ) {
         newvel.y += player->fastFallSpeed;
         player->fastFalling = true;
     }
+    // Hit ground
     player->myBody->SetLinearVelocity( toB2(newvel) );
     if ( player->onGround ) {
-        player->switchState( new WalkingState(player) );
+        player->switchState( new IdleState(player) );
     }
+    // Double jumping
     if ( player->jumpButton ) {
         if ( player->canDoubleJump && player->releasedJump ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight*.5,-player->doubleJumpHeight) );
@@ -317,6 +322,9 @@ void RunningState::update( Player* player, double dt ) {
 
 AirDodgeState::AirDodgeState( Player* player, glm::vec2 direction ) {
     airDirection = direction;
+    vel = glm::normalize(direction)*player->airDodgeVelocity;
+    tweenX = tweeny::from(vel.x).to(0.f).during(player->airDodgeTime*1000).via(tweeny::easing::quadraticOut);
+    tweenY = tweeny::from(vel.y).to(0.f).during(player->airDodgeTime*1000).via(tweeny::easing::quadraticOut);
     this->player = player;
 }
 
@@ -328,4 +336,41 @@ PlayerState AirDodgeState::getType() {
 }
 
 void AirDodgeState::update( Player* player, double dt ) {
+    glm::vec2 vel = glm::vec2(tweenX.step((int)(dt*1000)),tweenY.step((int)(dt*1000)));
+    player->myBody->SetLinearVelocity( toB2(vel) );
+    if ( tweenX.progress() >= 1.f && tweenY.progress() >= 1.f ) {
+        player->switchState( new SpecialFallState(player) );
+    }
+    if ( player->onGround ) {
+        player->switchState( new IdleState(player) );
+    }
+}
+
+
+SpecialFallState::SpecialFallState( Player* player ) {
+    this->player = player;
+}
+
+SpecialFallState::~SpecialFallState() {
+}
+
+PlayerState SpecialFallState::getType() {
+    return PlayerState::SpecialFall;
+}
+
+void SpecialFallState::update( Player* player, double dt ) {
+    // Air control
+    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
+    glm::vec2 newvel;
+    newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier);
+    newvel.y = vel.y;
+    if ( player->direction.y > 0.9 && !player->fastFalling ) {
+        newvel.y += player->fastFallSpeed;
+        player->fastFalling = true;
+    }
+    // Hit ground
+    player->myBody->SetLinearVelocity( toB2(newvel) );
+    if ( player->onGround ) {
+        player->switchState( new IdleState(player) );
+    }
 }

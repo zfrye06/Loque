@@ -19,6 +19,8 @@ public:
 
     // Configurable variables
     float walkLength;
+    float airDodgeVelocity;
+    float airDodgeTime;
     float deadZone;
     float fastFallSpeed;
     float jumpSquatLength;

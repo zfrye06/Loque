@@ -14,7 +14,7 @@
 using json = nlohmann::json;
 
 const int DEFAULT_PORT = 5002;
-const std::string DB_ADDR = "tcp://www.bernardcosgriff.com:3306";
+const std::string DB_ADDR = "tcp://bernardcosgriff.com:3306";
 const std::string DB_USER = "teamaccess";
 const std::string DB_PASS = "password";
 const std::string TABLE_USER = "User";
@@ -139,7 +139,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client, std::unique_ptr<sql::Co
 
 int main(int argc, char **argv) {
     conn->setSchema("3505");
-    addUser("bob", "pass", false);
+//    addUser("bob", "pass", false);
     int port = DEFAULT_PORT;
     if (argc > 1) {
         for (int i = 1; i < argc; i += 2) {

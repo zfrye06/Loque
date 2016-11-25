@@ -27,12 +27,10 @@ void ContactListener::BeginContact(b2Contact* contact){
 
 MapQueryCallback::MapQueryCallback() {
     foundMap = false;
+    hitFixtures.clear();
 }
 
 bool MapQueryCallback::ReportFixture(b2Fixture* fixture) {
-    if ( !fixture->GetBody()->GetUserData() ) {
-        return true;
-    }
     if ( ((Entity*)fixture->GetBody()->GetUserData())->getType() == Entity::Type::Map ) {
         hitFixtures.push_back(fixture);
         foundMap = true;

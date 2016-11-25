@@ -51,10 +51,11 @@ public:
     // Helper variables
     bool canWallJumpLeft;
     bool canWallJumpRight;
+    bool touchingWallLeft;
+    bool touchingWallRight;
     bool onGround;
     int controllerID;
     glm::vec2 groundHitNormal;
-    glm::vec2 futureGroundHitNormal;
     GenericPlayerState* currentState;
     GenericPlayerState* newState;
 

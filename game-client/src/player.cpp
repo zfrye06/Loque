@@ -348,8 +348,8 @@ void Player::detectGround() {
     onGround = queryCallback.foundMap;
 
     b2AABB testAABB2;
-    testAABB2.lowerBound = b2Vec2(pos.x-playerWidth*10, pos.y-playerHeight);
-    testAABB2.upperBound = b2Vec2(pos.x+playerWidth*10, pos.y+playerHeight*10);
+    testAABB2.lowerBound = b2Vec2(pos.x-2, pos.y-playerHeight-2);
+    testAABB2.upperBound = b2Vec2(pos.x+2, pos.y+playerHeight+2);
     MapQueryCallback queryCallback2;
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB2 );
 
@@ -357,24 +357,72 @@ void Player::detectGround() {
     if (queryCallback2.foundMap) {
         b2RayCastInput input;
         input.p1 = pos;
-        input.p2 = pos+b2Vec2(0,playerHeight+1);
+        input.p2 = pos+b2Vec2(0,playerHeight+10);
         input.maxFraction = 1;
         b2RayCastOutput output;
+        float closestFrac = input.maxFraction+0.1;
+        glm::vec2 currentOutput = glm::vec2(0,-1);
         for ( b2Fixture* f : queryCallback2.hitFixtures ) {
-            if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) ) {
-                groundHitNormal = toGLM(output.normal);
+            if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) && output.fraction < closestFrac ) {
+                closestFrac = output.fraction;
+                currentOutput = toGLM(output.normal);
             }
         }
+        groundHitNormal = currentOutput;
 
-        input.p1 = pos;
-        input.p2 = pos+b2Vec2(0,playerHeight+1);
-        float d = direction.x/fabs(direction.x);
-        input.p1 += b2Vec2( d/2.f, 0);
-        input.p2 += b2Vec2( d/2.f, 0);
-        input.maxFraction = 1;
-        for ( b2Fixture* f : queryCallback2.hitFixtures ) {
-            if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) ) {
-                futureGroundHitNormal = toGLM(output.normal);
+        if ( direction.x > 0 ) {
+            input.p1 = pos;
+            input.p2 = pos+b2Vec2(0,playerHeight+10);
+            input.p1 += b2Vec2( .5, 0);
+            input.p2 += b2Vec2( .5, 0);
+            input.maxFraction = 1;
+            closestFrac = input.maxFraction+0.1;
+            currentOutput = glm::vec2(0,-1);
+            for ( b2Fixture* f : queryCallback2.hitFixtures ) {
+                if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) && output.fraction < closestFrac ) {
+                    closestFrac = output.fraction;
+                    currentOutput = toGLM(output.normal);
+                }
+            }
+            if ( closestFrac != input.maxFraction+0.1 ) {
+                // on level ground approaching upward slope to the right
+                if ( currentOutput.x < 0 && groundHitNormal.y == -1 ) {
+                    groundHitNormal = currentOutput;
+                // on upward slope approaching level ground to the right
+                } else if ( groundHitNormal.x < 0 && currentOutput.y == -1 ) {
+                    groundHitNormal = currentOutput;
+                // on level ground approaching downward slope to the right
+                } else if ( groundHitNormal.y == -1 && currentOutput.x > 0 ) {
+                // on downward slope approaching level ground to the right
+                } else if ( groundHitNormal.x > 0 && currentOutput.y == -1 ) {
+                }
+            }
+        } else {
+            input.p1 = pos;
+            input.p2 = pos+b2Vec2(0,playerHeight+10);
+            input.p1 -= b2Vec2( .5, 0);
+            input.p2 -= b2Vec2( .5, 0);
+            input.maxFraction = 1;
+            closestFrac = input.maxFraction+0.1;
+            currentOutput = glm::vec2(0,-1);
+            for ( b2Fixture* f : queryCallback2.hitFixtures ) {
+                if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) && output.fraction < closestFrac ) {
+                    closestFrac = output.fraction;
+                    currentOutput = toGLM(output.normal);
+                }
+            }
+            if ( closestFrac != input.maxFraction+0.1 ) {
+                // on level ground approaching upward slope to the left
+                if ( currentOutput.x > 0 && groundHitNormal.y == -1 ) {
+                    groundHitNormal = currentOutput;
+                // on upward slope approaching level ground to the left
+                } else if ( groundHitNormal.x > 0 && currentOutput.y == -1 ) {
+                    groundHitNormal = currentOutput;
+                // on level ground approaching downward slope to the left
+                } else if ( groundHitNormal.y == -1 && currentOutput.x < 0 ) {
+                // on downward slope approaching level ground to the left
+                } else if ( groundHitNormal.x < 0 && currentOutput.y == -1 ) {
+                }
             }
         }
     }
@@ -390,12 +438,23 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
 
-    b2AABB testAABB2;
-    testAABB2.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight/2.f);
-    testAABB2.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback2;
-    physicalWorld->get().QueryAABB( &queryCallback2, testAABB2 );
-    canWallJumpRight = queryCallback2.foundMap;
+    physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
+    touchingWallRight = queryCallback2.foundMap;
+
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
+    MapQueryCallback queryCallback3;
+    physicalWorld->get().QueryAABB( &queryCallback3, testAABB );
+    canWallJumpRight = queryCallback3.foundMap;
+
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y-playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
+    MapQueryCallback queryCallback4;
+    physicalWorld->get().QueryAABB( &queryCallback4, testAABB );
+    touchingWallLeft = queryCallback4.foundMap;
 }
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {

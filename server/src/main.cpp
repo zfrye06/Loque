@@ -81,6 +81,14 @@ void toggleMaps(int classID, std::vector<int> mapIDs, bool enable) {
 void levelCompleted(int userID, int mapID, int newScore, int newTime) {
     try {
         bool update = false;
+
+        // Update total time played and total score
+        pstmt = conn->prepareStatement("UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userID  = ?");
+        pstmt->setInt(1, newTime);
+        pstmt->setInt(2, newScore);
+        pstmt->setInt(3, userID);
+        pstmt->execute();
+
         // Grab levelsCompleted flag
         pstmt = conn->prepareStatement(
                 "SELECT levelsCompleted FROM User WHERE userID = ?");
@@ -89,7 +97,10 @@ void levelCompleted(int userID, int mapID, int newScore, int newTime) {
         if(rs->next()){
             // Set the flag for the level just completed
             unsigned int flag = rs->getInt(1);
-            flag = flag | 1;
+
+            // Wrong I think
+            // flag = flag | mapID;
+
             pstmt = conn->prepareStatement("UPDATE User SET levelsCompleted = ? WHERE userID = ?");
             pstmt->setInt(1, flag);
             pstmt->setInt(2, userID);
@@ -141,7 +152,7 @@ void levelCompleted(int userID, int mapID, int newScore, int newTime) {
 
 
     } catch (sql::SQLException &e) {
-        std::cout << "Level completion update failed: " << e.what() << std::endl;
+        std::cout << "Level Completion Update Failed: " << e.what() << std::endl;
     }
 }
 
@@ -169,21 +180,67 @@ std::vector<int> getEnabledMaps(int classID) {
  *
  */
 std::map<int, int> getTotalScores(int classID) {
-
+    try {
+        std::map<int, int> v;
+        pstmt = conn->prepareStatement("SELECT userID, totalScore FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
+        pstmt->setInt(1, classID);
+        rs = pstmt->executeQuery();
+        while(rs->next()){
+            v.insert(rs->getInt(1), rs->getInt(2));
+        }
+        delete pstmt;
+        return v;
+    } catch (sql::SQLException &e) {
+        std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+    }
 }
 
 /*
  *
  */
 std::map<int, int> getTotalTimes(int classID) {
-
+    try {
+        std::map<int, int> v;
+        pstmt = conn->prepareStatement("SELECT userID, totalTime FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
+        pstmt->setInt(1, classID);
+        rs = pstmt->executeQuery();
+        while(rs->next()){
+            v.insert(rs->getInt(1), rs->getInt(2));
+        }
+        delete pstmt;
+        return v;
+    } catch (sql::SQLException &e) {
+        std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+    }
 }
 
 /*
  * Returns the highest level completed by the specified user
  */
 int getHighestLevelCompleted(int userID) {
-
+    try {
+        unsigned int levels = 0;
+        int highestLevel = 0;
+        pstmt = conn->prepareStatement("SELECT levelsCompleted FROM User WHERE userID = ?");
+        pstmt->setInt(1, userID);
+        rs = pstmt->executeQuery();
+        if(rs->next()){
+            levels = rs->getInt(1);
+        }
+        else{
+            std::cout << "User Does Not Exist" << std::endl;
+            return 0;
+        }
+        for(unsigned int i = 128; i >= 0; i/2){
+            if((i & levels) != 0){
+                highestLevel = log(i);
+            }
+        }
+        delete pstmt;
+        return highestLevel;
+    } catch (sql::SQLException &e) {
+        std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+    }
 }
 
 /*

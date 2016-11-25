@@ -3,7 +3,7 @@
 PhysicalWorld* physicalWorld = new PhysicalWorld();
 
 PhysicalWorld::PhysicalWorld() {
-    timer = 0;
+    //timer = 0;
     world = new b2World( b2Vec2( 0, 20 ) );
     contactlistenerinstance = new ContactListener();
     world->SetContactListener(contactlistenerinstance);
@@ -19,11 +19,12 @@ b2World& PhysicalWorld::get() {
 }
 
 void PhysicalWorld::step( double dt ) {
-    timer += dt;
+    //timer += dt;
     // Physics will run at 60fps.
-    double step = 1.f/60.f;
-    while ( timer > step ) {
-        world->Step(step,8,3);
-        timer -= step;
-    }
+    //      nevermind 60fps physics sucks
+    //double step = 1.f/60.f;
+    //while ( timer > step ) {
+        world->Step(dt,3,3);
+        //timer -= step;
+    //}
 }

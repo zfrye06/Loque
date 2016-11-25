@@ -1,0 +1,3 @@
+[submodule "game-client/tweeny"]
+	path = game-client/tweeny
+	url = https://github.com/mobius3/tweeny.git

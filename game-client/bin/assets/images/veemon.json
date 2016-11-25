@@ -1,0 +1,113 @@
+airborne
+	.addFrame(sf::IntRect(1,1,48,48));
+	.addFrame(sf::IntRect(51,1,48,48));
+airdodge
+	.addFrame(sf::IntRect(101,1,48,48));
+	.addFrame(sf::IntRect(151,1,48,48));
+	.addFrame(sf::IntRect(201,1,48,48));
+falling
+	.addFrame(sf::IntRect(251,1,48,48));
+	.addFrame(sf::IntRect(301,1,48,48));
+idle
+	.addFrame(sf::IntRect(351,1,48,48));
+	.addFrame(sf::IntRect(401,1,48,48));
+	.addFrame(sf::IntRect(451,1,48,48));
+	.addFrame(sf::IntRect(1,51,48,48));
+	.addFrame(sf::IntRect(51,51,48,48));
+	.addFrame(sf::IntRect(101,51,48,48));
+	.addFrame(sf::IntRect(151,51,48,48));
+	.addFrame(sf::IntRect(201,51,48,48));
+	.addFrame(sf::IntRect(251,51,48,48));
+	.addFrame(sf::IntRect(301,51,48,48));
+jumping
+	.addFrame(sf::IntRect(351,51,48,48));
+	.addFrame(sf::IntRect(401,51,48,48));
+	.addFrame(sf::IntRect(451,51,48,48));
+jumpSquat
+	.addFrame(sf::IntRect(1,101,48,48));
+	.addFrame(sf::IntRect(51,101,48,48));
+	.addFrame(sf::IntRect(101,101,48,48));
+knockback
+	.addFrame(sf::IntRect(151,101,48,48));
+	.addFrame(sf::IntRect(201,101,48,48));
+	.addFrame(sf::IntRect(251,101,48,48));
+	.addFrame(sf::IntRect(301,101,48,48));
+	.addFrame(sf::IntRect(351,101,48,48));
+	.addFrame(sf::IntRect(401,101,48,48));
+	.addFrame(sf::IntRect(451,101,48,48));
+	.addFrame(sf::IntRect(1,151,48,48));
+	.addFrame(sf::IntRect(51,151,47,48));
+	.addFrame(sf::IntRect(100,151,48,48));
+	.addFrame(sf::IntRect(150,151,48,48));
+	.addFrame(sf::IntRect(200,151,48,48));
+	.addFrame(sf::IntRect(250,151,48,48));
+	.addFrame(sf::IntRect(300,151,48,48));
+	.addFrame(sf::IntRect(350,151,48,48));
+knockbackRecover
+	.addFrame(sf::IntRect(400,151,48,48));
+	.addFrame(sf::IntRect(450,151,48,48));
+	.addFrame(sf::IntRect(1,201,48,48));
+	.addFrame(sf::IntRect(51,201,48,48));
+lose
+	.addFrame(sf::IntRect(101,201,48,48));
+	.addFrame(sf::IntRect(151,201,48,48));
+	.addFrame(sf::IntRect(201,201,48,48));
+	.addFrame(sf::IntRect(251,201,48,48));
+	.addFrame(sf::IntRect(301,201,48,48));
+	.addFrame(sf::IntRect(351,201,48,48));
+	.addFrame(sf::IntRect(401,201,48,48));
+	.addFrame(sf::IntRect(451,201,48,48));
+	.addFrame(sf::IntRect(1,251,48,48));
+	.addFrame(sf::IntRect(51,251,48,48));
+run
+	.addFrame(sf::IntRect(101,251,48,48));
+	.addFrame(sf::IntRect(151,251,48,48));
+	.addFrame(sf::IntRect(201,251,48,48));
+	.addFrame(sf::IntRect(251,251,48,48));
+	.addFrame(sf::IntRect(301,251,48,48));
+	.addFrame(sf::IntRect(351,251,48,48));
+	.addFrame(sf::IntRect(401,251,48,48));
+	.addFrame(sf::IntRect(451,251,48,48));
+shocked
+	.addFrame(sf::IntRect(1,301,48,48));
+	.addFrame(sf::IntRect(51,301,48,48));
+tec
+	.addFrame(sf::IntRect(101,301,48,48));
+	.addFrame(sf::IntRect(151,301,48,48));
+	.addFrame(sf::IntRect(201,301,48,48));
+	.addFrame(sf::IntRect(251,301,48,48));
+	.addFrame(sf::IntRect(301,301,48,48));
+slide
+	.addFrame(sf::IntRect(351,301,48,48));
+	.addFrame(sf::IntRect(401,301,48,48));
+specialFall
+	.addFrame(sf::IntRect(451,301,48,48));
+	.addFrame(sf::IntRect(1,351,48,48));
+	.addFrame(sf::IntRect(51,351,48,48));
+	.addFrame(sf::IntRect(101,351,48,48));
+walljump
+	.addFrame(sf::IntRect(151,351,48,48));
+	.addFrame(sf::IntRect(201,351,48,48));
+	.addFrame(sf::IntRect(251,351,48,48));
+	.addFrame(sf::IntRect(301,351,48,48));
+	.addFrame(sf::IntRect(351,351,48,48));
+win
+	.addFrame(sf::IntRect(401,351,48,48));
+	.addFrame(sf::IntRect(451,351,48,48));
+	.addFrame(sf::IntRect(1,401,48,48));
+	.addFrame(sf::IntRect(51,401,48,48));
+	.addFrame(sf::IntRect(101,401,48,48));
+	.addFrame(sf::IntRect(151,401,48,48));
+	.addFrame(sf::IntRect(201,401,48,48));
+	.addFrame(sf::IntRect(251,401,48,48));
+	.addFrame(sf::IntRect(301,401,48,48));
+	.addFrame(sf::IntRect(351,401,48,48));
+	.addFrame(sf::IntRect(401,401,48,48));
+	.addFrame(sf::IntRect(451,401,48,48));
+	.addFrame(sf::IntRect(1,451,48,48));
+	.addFrame(sf::IntRect(51,451,48,48));
+	.addFrame(sf::IntRect(101,451,48,48));
+	.addFrame(sf::IntRect(151,451,48,48));
+	.addFrame(sf::IntRect(201,451,48,48));
+	.addFrame(sf::IntRect(251,451,48,48));
+	.addFrame(sf::IntRect(301,451,48,48));

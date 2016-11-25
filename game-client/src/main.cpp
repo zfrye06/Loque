@@ -16,8 +16,8 @@ int app() {
     World world;
     world.addEntity( new Background(&view, "assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ) );
     world.addEntity( new Map( "assets/Zapper_Level_1.tmx" ) );
-    world.addEntity( new Player( "assets/images/sonicsheet.png", view ) );
-    world.addEntity( new PhysicsDebug( window ) );
+    world.addEntity( new Player( "assets/images/veemon.png", view ) );
+    //world.addEntity( new PhysicsDebug( window ) );
     sf::Clock deltaClock;
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);

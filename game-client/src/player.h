@@ -19,7 +19,10 @@ public:
 
     // Configurable variables
     float walkLength;
+    float airDodgeVelocity;
+    float airDodgeTime;
     float deadZone;
+    float turnAroundTime;
     float fastFallSpeed;
     float jumpSquatLength;
     float dashingMultiplier;
@@ -51,6 +54,7 @@ public:
     bool onGround;
     int controllerID;
     glm::vec2 groundHitNormal;
+    glm::vec2 futureGroundHitNormal;
     GenericPlayerState* currentState;
     GenericPlayerState* newState;
 
@@ -63,17 +67,28 @@ public:
 
     bool flipped;
 
+    glm::vec2 smoothCamera;
     sf::View* view;
     sf::Texture* texture;
     b2Body* myBody;
     AnimatedSprite* sprite;
-    Animation* currentAnimation;
-    Animation walkingAnimation;
     Animation idleAnimation;
-    Animation dashingAnimation;
-    Animation runningAnimation;
+    Animation dashAnimation;
+    Animation runAnimation;
+    Animation slideAnimation;
     Animation jumpSquatAnimation;
     Animation airborneAnimation;
+    Animation airDodgeAnimation;
+    Animation jumpingAnimation;
+    Animation wallJumpAnimation;
+    Animation fallingAnimation;
+    Animation specialFallAnimation;
+    Animation knockBackAnimation;
+    Animation knockBackRecoverAnimation;
+    Animation loseAnimation;
+    Animation winAnimation;
+    Animation shockedAnimation;
+    Animation tecAnimation;
     Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );

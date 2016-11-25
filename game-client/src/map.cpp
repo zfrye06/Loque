@@ -267,4 +267,7 @@ void Map::spawnObject( tmx::Object& obj ) {
     else if( obj.getName() == "laser" ) {
         world->addEntity( new ::Laser(obj));
     }
+    else if( obj.getName() == "trampoline" ) {
+        world->addEntity( new ::Trampoline(obj));
+    }
 }

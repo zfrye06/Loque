@@ -50,6 +50,8 @@ CMakeLists.txt.user*
 
 # Cmake ignore
 
+CPackConfig.cmake
+CPackSourceConfig.cmake
 CMakeCache.txt
 CMakeFiles
 CMakeScripts

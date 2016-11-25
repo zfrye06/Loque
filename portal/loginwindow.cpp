@@ -8,6 +8,7 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
+    connect(ui->submit, SIGNAL(clicked()), this, SLOT(sendUserInfo()));
 }
 
 LoginWindow::~LoginWindow()

@@ -9,6 +9,9 @@
 #include <tmxlite/Map.hpp>
 #include <tmxlite/Property.hpp>
 #include <Box2D/Box2D.h>
+inline sf::Vector2f toSFML(const glm::vec2 &v) {
+        return sf::Vector2f(v.x, v.y);
+}
 inline b2Vec2 toB2(const glm::vec2 &v) {
         return b2Vec2(v.x, v.y);
 }

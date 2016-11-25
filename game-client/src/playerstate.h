@@ -15,6 +15,7 @@ public:
     Player* player;
     GenericPlayerState( Player* player );
     GenericPlayerState();
+    virtual void init();
     virtual ~GenericPlayerState();
     virtual PlayerState getType();
     virtual void update( Player* player, double dt );
@@ -24,6 +25,7 @@ class WalkingState : public GenericPlayerState {
 public:
     WalkingState( Player* player );
     ~WalkingState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -34,6 +36,7 @@ public:
     bool reset;
     IdleState( Player* player );
     ~IdleState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -45,6 +48,7 @@ public:
     double dashTimer;
     DashingState( Player* player, float direction );
     ~DashingState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -54,6 +58,7 @@ public:
     double jumpSquatTimer;
     JumpSquatState( Player* player );
     ~JumpSquatState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -62,8 +67,10 @@ class JumpingState : public GenericPlayerState {
 public:
     bool canWallJump;
     double walkTimer;
-    JumpingState( Player* player );
+    float wallJumpDirection;
+    JumpingState( Player* player, float wallJumpDirection = 0 );
     ~JumpingState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -74,6 +81,7 @@ public:
     double walkTimer;
     AirborneState( Player* player );
     ~AirborneState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -85,6 +93,7 @@ public:
     float dashingDirection;
     RunningState( Player* player, float direction );
     ~RunningState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -96,6 +105,7 @@ class AirDodgeState : public GenericPlayerState {
 public:
     AirDodgeState( Player* player, glm::vec2 airdirection );
     ~AirDodgeState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -104,6 +114,7 @@ class SpecialFallState : public GenericPlayerState {
 public:
     SpecialFallState( Player* player);
     ~SpecialFallState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };
@@ -115,6 +126,7 @@ class TurningState : public GenericPlayerState {
 public:
     TurningState( Player* player, float direction);
     ~TurningState();
+    void init();
     PlayerState getType();
     void update( Player* player, double dt );
 };

@@ -8,7 +8,7 @@ class ContactListener;
 
 class PhysicalWorld {
 private:
-    double timer;
+    //double timer;
     b2World* world;
 public:
     PhysicalWorld();

@@ -18,6 +18,7 @@ TextureResource::TextureResource( std::string name ) {
     this->name = name;
     texture = new sf::Texture();
     texture->loadFromFile(name.c_str());
+    texture->setSmooth( false );
 }
 
 TextureResource::~TextureResource() {

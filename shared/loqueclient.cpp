@@ -23,6 +23,8 @@ sf::Packet& operator<<(sf::Packet& packet, const GameStats& stats) {
     return packet;
 }
 
+LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
+
 Status LoqueClient::attemptLogin(const std::string& username,
                                  const std::string& userpass,
                                  LoginResult& result) {

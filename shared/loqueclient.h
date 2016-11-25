@@ -5,7 +5,7 @@
 
 typedef sf::Socket::Status Status;
 
-bool ok(Status s) { return s == sf::Socket::Done; }
+inline bool ok(Status s) { return s == sf::Socket::Done; }
 
 enum UserType {
     Admin,

@@ -275,10 +275,13 @@ void Player::detectWalls() {
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
     if(collider->getType() == Entity::Type::Laser){
-       ::Laser* laser = static_cast<::Laser*>( collider );
-       if(!laser->canBePassed){
-           std::cout<<"You died!"<<std::endl;
-       }
+        ::Laser* laser = static_cast<::Laser*>( collider );
+        if(!laser->canBePassed){
+            std::cout<<"You died!"<<std::endl;
+        }
+    }
+    else if(collider->getType() == Entity::Type::Trampoline){
+        //TODO Need to add functionality to propell player upwards.
     }
 }
 

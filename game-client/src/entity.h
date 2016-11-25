@@ -39,6 +39,7 @@ public:
         Player,
         PlayerSpawn,
         Laser,
+        Trampoline,
         None
     };
     virtual Type getType();
@@ -89,5 +90,15 @@ public:
     void draw(sf::RenderWindow& window);
     Entity::Type getType();
     bool canBePassed;
+};
+
+class Trampoline : public Entity {
+public:
+    Trampoline(tmx::Object& obj);
+    glm::vec2 pos;
+    void update(double dt);
+    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
+    void draw(sf::RenderWindow& window);
+    Entity::Type getType();
 };
 #endif

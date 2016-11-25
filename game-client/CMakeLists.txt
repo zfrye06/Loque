@@ -45,6 +45,10 @@ find_package(TMXLITE REQUIRED)
 find_package(Box2D REQUIRED)
 find_package(GLM REQUIRED)
 
+#tweeny stuff
+add_subdirectory(tweeny)
+
+
 if(SFML_FOUND)
   include_directories(${SFML_INCLUDE_DIR}
                       ${OPENGL_INCLUDE_DIR}
@@ -54,8 +58,10 @@ if(SFML_FOUND)
   target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
                                            ${OPENGL_LIBRARIES}
                                            ${BOX2D_LIBRARIES}
-                                           ${TMXLITE_LIBRARIES})
+                                           ${TMXLITE_LIBRARIES}
+                                           tweeny)
 endif()
+
 
 
 # Install target

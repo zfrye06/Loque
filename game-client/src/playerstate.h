@@ -1,6 +1,8 @@
 #ifndef LQ_PLAYERSTATE_H_
 #define LQ_PLAYERSTATE_H_
 
+#include <tweeny.h>
+
 #include "player.h"
 
 class Player;
@@ -86,6 +88,7 @@ public:
 
 class AirDodgeState : public GenericPlayerState {
     glm::vec2 airDirection;
+    tweeny::tween<float,float> tween;
 public:
     AirDodgeState( Player* player, glm::vec2 airdirection );
     ~AirDodgeState();

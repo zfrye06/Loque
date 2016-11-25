@@ -3,6 +3,7 @@ loque
 *.layout
 *.cbp
 *.exe
+server
 
 # C++ objects and libs
 

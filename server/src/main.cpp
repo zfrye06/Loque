@@ -1,6 +1,6 @@
-
 #include <cppconn/connection.h>
 #include <cppconn/driver.h>
+#include <cppconn/prepared_statement.h>
 #include <cppconn/exception.h>
 #include <cppconn/resultset.h>
 #include <cppconn/statement.h>
@@ -14,9 +14,72 @@
 using json = nlohmann::json;
 
 const int DEFAULT_PORT = 5002;
-const std::string DB_ADDR = "tcp://www.bernardcosgriff.com:3306";
+const std::string DB_ADDR = "tcp://bernardcosgriff.com:3306";
 const std::string DB_USER = "teamaccess";
 const std::string DB_PASS = "password";
+const std::string TABLE_USER = "User";
+const std::string TABLE_USER_ASSOCIATIONS = "UserAssociations";
+const std::string TABLE_MAPS = "Maps";
+const std::string TABLE_MAPS_ASSOCIATIONS = "MapAssociations";
+const std::string TABLE_SCORE_INFO = "ScoreInfo";
+sql::Driver *driver = get_driver_instance();
+sql::Connection *conn = driver->connect(DB_ADDR, DB_USER, DB_PASS);
+sql::PreparedStatement *pstmt;
+sql::ResultSet *rs;
+
+bool addUser(std::string username, std::string password, bool isAdmin){
+    try {
+        pstmt = conn->prepareStatement(
+                "INSERT INTO User(username, password, isAdmin, levelsCompleted, totalScore, totalTime) VALUES (?, ?, ?, ?, ?, ?)");
+        pstmt->setString(1, username);
+        pstmt->setString(2, password);
+        pstmt->setBoolean(3, isAdmin);
+        pstmt->setInt(4, 0);
+        pstmt->setInt(5, 0);
+        pstmt->setInt(6, 0);
+        bool success = pstmt->execute();
+        std::cout << success << std::endl;
+        return true;
+    } catch(sql::SQLException &e){
+        std::cout << "Insert Failed: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+void toggleMaps(int classID, std::vector<int> mapIDs, bool enabled){
+
+}
+void levelCompleted(int userID, int mapID, int score, int time){
+
+}
+std::vector<int> getEnabledMaps(int classID){
+    try {
+        pstmt = conn->prepareStatement(
+                "SELECT mapID FROM " + TABLE_MAPS_ASSOCIATIONS + " WHERE mapID = ?");
+        pstmt->setInt(1, classID);
+        rs = pstmt->executeQuery();
+        std::vector<int> v;
+        while(rs->next()){
+            v.push_back(rs->getInt(1));
+        }
+        std::cout << v[0] << std::endl;
+        delete pstmt;
+    } catch(sql::SQLException &e){
+        std::cout << "Insert Failed: " << e.what() << std::endl;
+    }
+}
+std::map<int, int> getTotalScores(int classID){
+
+}
+std::map<int, int> getTotalTimes(int classID){
+
+}
+int getHighestLevelCompleted(int userID){
+
+}
+int getClassLevelAverage(int classID, int mapID){
+
+}
 
 void printUsage(const std::string& progname) {
     std::cout << std::endl;
@@ -75,6 +138,8 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client, std::unique_ptr<sql::Co
 }
 
 int main(int argc, char **argv) {
+    conn->setSchema("3505");
+//    addUser("bob", "pass", false);
     int port = DEFAULT_PORT;
     if (argc > 1) {
         for (int i = 1; i < argc; i += 2) {

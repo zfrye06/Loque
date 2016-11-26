@@ -32,11 +32,11 @@ struct ActionResult {
     std::string reason; // Reason for failure, if any. 
 };
 
-typedef int LevelId; 
+
 
 // Information about a single completed game. 
 struct GameStats {
-    LevelId levelId;
+    int levelId;
     int secToComplete;
     int pointsScored;
 };
@@ -48,7 +48,7 @@ struct UserStats {
     std::string username; 
     int totalSecPlayed;
     int totalScore;
-    std::unordered_map<LevelId, int> highScores;
+    std::unordered_map<int, int> highScores; // Maps level ids to scores.
 
     // If the user is an instructor, these reflect the classes they manage.
     // If the user is a student, these reflect the classes they are a member of. 
@@ -100,10 +100,10 @@ class LoqueClient {
     Status getUserStats(int userId, UserStats& stats);
 
     // Enables a level for the given class. UserId must be an instructor id.
-    Status enableLevel(int userId, int classId, LevelId id, ActionResult& res);
+    Status enableLevel(int userId, int classId, int levelId, ActionResult& res);
 
     // Disables a level for the given class. UserId must be an instructor id. 
-    Status disableLevel(int userId, int classId, LevelId id, ActionResult& res);
+    Status disableLevel(int userId, int classId, int levelId, ActionResult& res);
 
     // Retrieves statistics for the given class. UserId must be an instructor id. 
     Status getClassStats(int userId, int classId, ClassStats& stats); 

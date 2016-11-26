@@ -23,7 +23,7 @@ Status LoqueClient::createAccount(const std::string& username,
                                   UserType type,
                                   LoginResult& result) {
     sf::Packet toSend;
-    toSend << ReqType::CREATE_ACC << type << username << userpass;
+    toSend << ReqType::CREATE_ACC <<  username << userpass << type;
     sf::Packet toReceive;
     auto status = makeRequest(toSend, toReceive);
     if (!ok(status)) {
@@ -69,9 +69,9 @@ Status LoqueClient::getUserStats(int userId, UserStats& stats) {
     return status;
 }
 
-Status LoqueClient::enableLevel(int userId, int classId, LevelId id, ActionResult& result) {
+Status LoqueClient::enableLevel(int userId, int classId, int levelId, ActionResult& result) {
     sf::Packet toSend;
-    toSend << ReqType::ENABLE_LEVEL << userId << classId << id;
+    toSend << ReqType::ENABLE_LEVEL << userId << classId << levelId;
     sf::Packet toReceive;
     auto status = makeRequest(toSend, toReceive);
     if (!ok(status)) {
@@ -81,9 +81,9 @@ Status LoqueClient::enableLevel(int userId, int classId, LevelId id, ActionResul
     return status;
 }
 
-Status LoqueClient::disableLevel(int userId, int classId, LevelId id, ActionResult& result) {
+Status LoqueClient::disableLevel(int userId, int classId, int levelId, ActionResult& result) {
     sf::Packet toSend;
-    toSend << ReqType::DISABLE_LEVEL << userId << classId << id;
+    toSend << ReqType::DISABLE_LEVEL << userId << classId << levelId;
     sf::Packet toReceive;
     auto status = makeRequest(toSend, toReceive);
     if (!ok(status)) {

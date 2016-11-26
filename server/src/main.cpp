@@ -273,19 +273,50 @@ void printUsage(const std::string &progname) {
 }
 
 void handleLogin(sql::Connection& dbconn,
-                        const LoginRequest& req,
-                        LoginResult& res) {
+                 std::string username, std::string userpass,
+                 LoginResult& res) {
     return;
 }
 
 void handleCreateAcc(sql::Connection& dbconn,
-                            const CreateAccountRequest& req,
-                            LoginResult& res) {
+                     std::string username, std::string userpass, UserType type,
+                     LoginResult& res) {
+    return;
+}
+
+void handleAddClassroom(sql::Connection& dbconn,
+                        int userId, int classId,
+                        ActionResult& res) {
     return;
 }
 
 void handlePostStats(sql::Connection& dbconn,
-                     const PostStatsRequest& stats) {
+                     int userId, const GameStats& stats,
+                     ActionResult& res) {
+    return;
+}
+
+void handleGetUserStats(sql::Connection& dbconn,
+                        int userId,
+                        UserStats& stats) {
+    return;
+}
+
+void handleEnableLevel(sql::Connection& dbconn,
+                       int userId, int classId, int levelId,
+                       ActionResult& res) {
+    return;
+}
+
+void handleDisableLevel(sql::Connection& dbconn,
+                        int userId, int classId, int levelId,
+                        ActionResult& res) {
+    return; 
+}
+
+void handleGetClassStats(sql::Connection& dbconn,
+                         int userId, int classId,
+                         ClassStats& stats) {
     return;
 }
 
@@ -306,29 +337,77 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     switch (rtype){
     case LOGIN:
     {
-        LoginRequest req;
-        reqPacket >> req;
+        std::string username, userpass;
+        reqPacket >> username >> userpass;
         LoginResult res;
-        handleLogin(*dbconn, req, res);
+        handleLogin(*dbconn, username, userpass, res);
         respPacket << res;
         break;
     }
     case CREATE_ACC:
     {
-        CreateAccountRequest req;
-        reqPacket >> req;
+        std::string username, userpass;
+        UserType type;
+        reqPacket >> username >> userpass >> type;
         LoginResult res;
-        handleCreateAcc(*dbconn, req, res);
+        handleCreateAcc(*dbconn, username, userpass, type, res);
+        respPacket << res;
+        break;
+    }
+    case ADD_CLASS:
+    {
+        int userId, classId;
+        reqPacket >> userId >> classId;
+        ActionResult res;
+        handleAddClassroom(*dbconn, userId, classId, res);
         respPacket << res;
         break;
     }
     case POST_STATS:
     {
-        PostStatsRequest req;
-        respPacket >> req;
-        handlePostStats(*dbconn, req);
-        // No response on post stats.
+        int userId;
+        GameStats stats;
+        respPacket >> userId >> stats;
+        ActionResult res;
+        handlePostStats(*dbconn, userId, stats, res);
+        respPacket << res;
         return;
+    }
+    case GET_USER_STATS:
+    {
+        int userId;
+        reqPacket >> userId;
+        UserStats res;
+        handleGetUserStats(*dbconn, userId, res);
+        respPacket << res;
+        break;
+    }
+    case ENABLE_LEVEL:
+    {
+        int userId, classId, lid;
+        reqPacket >> userId >> classId >> lid;
+        ActionResult res;
+        handleEnableLevel(*dbconn, userId, classId, lid, res);
+        respPacket >> res;
+        break;
+    }
+    case DISABLE_LEVEL:
+    {
+        int userId, classId, lid;
+        reqPacket >> userId >> classId >> lid;
+        ActionResult res;
+        handleDisableLevel(*dbconn, userId, classId, lid, res);
+        respPacket >> res;
+        break;
+    }
+    case GET_CLASS_STATS:
+    {
+        int userId, classId;
+        reqPacket >> userId >> classId;
+        ClassStats res;
+        handleGetClassStats(*dbconn, userId, classId, res);
+        respPacket >> res;
+        break; 
     }
     default:
         std::cerr << "ERROR: Unrecognized request type " << static_cast<int>(rtype) << std::endl;
@@ -344,7 +423,6 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
 }
 
 int main(int argc, char **argv) {
-    conn->setSchema("3505");
     int port = DEFAULT_PORT;
     if (argc > 1) {
         for (int i = 1; i < argc; i += 2) {
@@ -379,6 +457,7 @@ int main(int argc, char **argv) {
         std::cout << "Accepted client connection with " <<
                   client->getRemoteAddress().toString() << std::endl;
         std::unique_ptr<sql::Connection> dbconn(driver->connect(DB_ADDR, DB_USER, DB_PASS));
+        dbconn->setSchema("3505");
         std::thread worker(handleClient, std::move(client), std::move(dbconn));
         worker.detach();
     }

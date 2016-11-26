@@ -426,10 +426,10 @@ void Player::detectGround() {
             if ( closestFrac != input.maxFraction+0.1 ) {
                 // on level ground approaching upward slope to the right
                 if ( currentOutput.x < 0 && groundHitNormal.y == -1 ) {
-                    groundHitNormal = currentOutput;
+                    groundHitNormal = glm::normalize(groundHitNormal + currentOutput);
                 // on upward slope approaching level ground to the right
                 } else if ( groundHitNormal.x < 0 && currentOutput.y == -1 ) {
-                    groundHitNormal = currentOutput;
+                    groundHitNormal = glm::normalize(groundHitNormal + currentOutput);
                 // on level ground approaching downward slope to the right
                 } else if ( groundHitNormal.y == -1 && currentOutput.x > 0 ) {
                 // on downward slope approaching level ground to the right
@@ -453,10 +453,10 @@ void Player::detectGround() {
             if ( closestFrac != input.maxFraction+0.1 ) {
                 // on level ground approaching upward slope to the left
                 if ( currentOutput.x > 0 && groundHitNormal.y == -1 ) {
-                    groundHitNormal = currentOutput;
+                    groundHitNormal = glm::normalize(groundHitNormal + currentOutput);
                 // on upward slope approaching level ground to the left
                 } else if ( groundHitNormal.x > 0 && currentOutput.y == -1 ) {
-                    groundHitNormal = currentOutput;
+                    groundHitNormal = glm::normalize(groundHitNormal + currentOutput);
                 // on level ground approaching downward slope to the left
                 } else if ( groundHitNormal.y == -1 && currentOutput.x < 0 ) {
                 // on downward slope approaching level ground to the left
@@ -464,6 +464,11 @@ void Player::detectGround() {
                 }
             }
         }
+    }
+    if ( groundHitNormal.x > 0.9 ) {
+        groundHitNormal = glm::normalize(glm::vec2(1, -1));
+    } else if (groundHitNormal.x < -0.9 ) {
+        groundHitNormal = glm::normalize(glm::vec2(-1, -1));
     }
 }
 
@@ -477,8 +482,8 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/3.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight/3.f);
     MapQueryCallback queryCallback2;
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
     touchingWallRight = queryCallback2.foundMap;
@@ -489,8 +494,8 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback3, testAABB );
     canWallJumpRight = queryCallback3.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y-playerHeight/3.f);
+    testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/3.f);
     MapQueryCallback queryCallback4;
     physicalWorld->get().QueryAABB( &queryCallback4, testAABB );
     touchingWallLeft = queryCallback4.foundMap;

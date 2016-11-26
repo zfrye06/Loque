@@ -19,7 +19,7 @@ TextureResource::TextureResource( std::string name ) {
     texture = new sf::Texture();
     texture->loadFromFile(name.c_str());
     texture->setSmooth( false );
-    texture->generateMipmap();
+    //texture->generateMipmap();
 }
 
 TextureResource::~TextureResource() {

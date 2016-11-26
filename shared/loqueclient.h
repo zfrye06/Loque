@@ -62,7 +62,7 @@ class LoqueClient {
     const int port;
     sf::TcpSocket conn;
 
-    Status sendRequest(sf::Packet& req, sf::Packet& resp);
+    Status makeRequest(sf::Packet&, sf::Packet *);
 };
 
 #endif

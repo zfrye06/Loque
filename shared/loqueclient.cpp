@@ -33,10 +33,35 @@ Status LoqueClient::createAccount(const std::string& username,
     return status;
 }
 
+Status LoqueClient::addClassroom(int userId, int classId) {
+    // TODO: Impl.
+    return static_cast<Status>(1);
+}
+
 Status LoqueClient::postGameStats(int userId, const GameStats& stats) {
     sf::Packet toSend;
     toSend << ReqType::POST_STATS << userId << stats;
     return makeRequest(toSend, nullptr);
+}
+
+Status LoqueClient::getUserStats(int userId, UserStats& stats) {
+    // TODO: Impl. 
+    return static_cast<Status>(1);
+}
+
+Status LoqueClient::enableLevel(int userId, int classId, LevelId id) {
+    // TODO: IMPL.
+    return static_cast<Status>(1);
+}
+
+Status LoqueClient::disableLevel(int userId, int classId, LevelId id) {
+    // TODO: IMPL.
+    return static_cast<Status>(1); 
+}
+
+Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
+    // TODO: IMPL.
+    return static_cast<Status>(1); 
 }
 
 Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet *response) {

@@ -26,6 +26,7 @@ Player::Player( std::string resource, sf::View& view ) {
     airDodgePressed = false;
     airControlMultiplier = 6;
     flashTimer = 0;
+    flashLength = 0;
     newState = nullptr;
     this->view = &view;
     direction = glm::vec2(0,0);

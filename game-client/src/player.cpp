@@ -5,13 +5,14 @@ Player::Player( std::string resource, sf::View& view ) {
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
-    dashLength = 0.35; // in seconds
+    dashLength = 0.30; // in seconds
     playerWidth = .7; // in meters
     playerHeight = .6; // in meters
     airDodgeVelocity = 18;
     airDodgeTime = 0.3;
     turnAroundTime = 0.4;
     fastFallSpeed = 10;
+    landLength = 0.2;
     fastFalling = false;
     playerSpeed = 5; // in meters per second
     dashingMultiplier = 2; // in percentage
@@ -24,11 +25,13 @@ Player::Player( std::string resource, sf::View& view ) {
     releasedJump = true;
     airDodgePressed = false;
     airControlMultiplier = 6;
+    flashTimer = 0;
     newState = nullptr;
     this->view = &view;
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
+    setUpSounds();
     std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
     if (spawns.size() >= 1 ) {
         ::PlayerSpawn* spawn = (::PlayerSpawn*)spawns[0];
@@ -76,6 +79,11 @@ void Player::setUpSprite( std::string resource ) {
 	jumpSquatAnimation.addFrame(sf::IntRect(1,101,48,48));
 	jumpSquatAnimation.addFrame(sf::IntRect(51,101,48,48));
 	jumpSquatAnimation.addFrame(sf::IntRect(101,101,48,48));
+
+    landingAnimation.setSpriteSheet(*texture);
+	landingAnimation.addFrame(sf::IntRect(101,101,48,48));
+	landingAnimation.addFrame(sf::IntRect(51,101,48,48));
+	landingAnimation.addFrame(sf::IntRect(1,101,48,48));
 
     knockBackAnimation.setSpriteSheet(*texture);
 	knockBackAnimation.addFrame(sf::IntRect(151,101,48,48));
@@ -182,6 +190,14 @@ void Player::setUpSprite( std::string resource ) {
     sprite->scale(2,2);
 }
 
+void Player::setUpSounds() {
+    dashSound = sf::Sound(*Resources->getSound( "assets/audio/effects/dash.ogg" ));
+    jump1Sound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump.ogg" ));
+    jump2Sound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump4.ogg" ));
+    wallJumpSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump3.ogg" ));
+    airDodgeSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump2.ogg" ));
+}
+
 void Player::setUpBody() {
     // Physics....
     b2BodyDef myBodyDef;
@@ -200,7 +216,7 @@ void Player::setUpBody() {
     b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 1;
-    boxFixtureDef.friction = 4.5;
+    boxFixtureDef.friction = 3;
     boxFixtureDef.restitution = 0;
     myBody->CreateFixture(&boxFixtureDef);
     boxFixtureDef.shape = &circleShape;
@@ -212,6 +228,12 @@ void Player::setUpBody() {
 
 Player::~Player() {
     delete sprite;
+}
+
+void Player::flash(sf::Color c, float length, float period) {
+    flashLength = length;
+    flashPeriod = period;
+    flashColor = c;
 }
 
 void Player::draw( sf::RenderWindow& window ) {
@@ -229,7 +251,23 @@ void Player::draw( sf::RenderWindow& window ) {
 void Player::update( double dt ) {
     detectGround();
     detectWalls();
-
+    if ( flashLength != -1 && flashLength > 0 ) {
+        if ( fmod(flashLength,flashPeriod*2)<flashPeriod ) {
+            sprite->setColor( flashColor );
+        } else {
+            sprite->setColor( sf::Color(255,255,255,255) );
+        }
+        flashLength -= dt;
+    } else if ( flashLength != -1 ) {
+        sprite->setColor( sf::Color(255,255,255,255) );
+    } else {
+        flashTimer += dt;
+        if ( fmod(flashTimer,flashPeriod*2)<flashPeriod ) {
+            sprite->setColor( flashColor );
+        } else {
+            sprite->setColor( sf::Color(255,255,255,255) );
+        }
+    }
     /*for (int i=0;i<sf::Joystick::getButtonCount(0);i++ ) {
         if (sf::Joystick::isButtonPressed(0,i)) {
             std::cout << i << std::endl;

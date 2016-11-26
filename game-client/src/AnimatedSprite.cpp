@@ -140,6 +140,7 @@ void AnimatedSprite::setFrame(std::size_t newFrame, bool resetTime)
         m_vertices[2].texCoords = sf::Vector2f(right, bottom);
         m_vertices[3].texCoords = sf::Vector2f(right, top);
     }
+    m_currentFrame = newFrame;
 
     if (resetTime)
         m_currentTime = sf::Time::Zero;

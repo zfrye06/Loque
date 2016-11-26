@@ -2,6 +2,8 @@
 #define LQ_PLAYER_H_
 
 #include <glm/glm.hpp>
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <Box2D/Box2D.h>
@@ -34,6 +36,7 @@ public:
     float jumpHelpAmount;
     float fullHopHeight;
     float shortHopHeight;
+    float landLength;
     float airControlMultiplier;
 
     // Control variables
@@ -62,7 +65,13 @@ public:
     // Helper functions
     void detectGround();
     void detectWalls();
+    float flashPeriod;
+    float flashLength;
+    float flashTimer;
+    sf::Color flashColor;
+    void flash(sf::Color c, float length, float period);
     void setUpBody();
+    void setUpSounds();
     void setUpSprite( std::string resource );
     void switchState( GenericPlayerState* state );
 
@@ -78,6 +87,7 @@ public:
     Animation runAnimation;
     Animation slideAnimation;
     Animation jumpSquatAnimation;
+    Animation landingAnimation;
     Animation airborneAnimation;
     Animation airDodgeAnimation;
     Animation jumpingAnimation;
@@ -90,6 +100,12 @@ public:
     Animation winAnimation;
     Animation shockedAnimation;
     Animation tecAnimation;
+
+    sf::Sound dashSound;
+    sf::Sound jump1Sound;
+    sf::Sound jump2Sound;
+    sf::Sound wallJumpSound;
+    sf::Sound airDodgeSound;
     Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );

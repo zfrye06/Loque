@@ -19,6 +19,7 @@ TextureResource::TextureResource( std::string name ) {
     texture = new sf::Texture();
     texture->loadFromFile(name.c_str());
     texture->setSmooth( false );
+    texture->generateMipmap();
 }
 
 TextureResource::~TextureResource() {
@@ -90,4 +91,28 @@ sf::Font* ResourceManager::getFont( std::string name ) {
     }
     resources.push_back( new FontResource( name ) );
     return (sf::Font*)((FontResource*)resources.back())->get();
+}
+
+SoundResource::SoundResource( std::string name ) {
+    this->name = name;
+    sound = new sf::SoundBuffer();
+    sound->loadFromFile(name.c_str());
+}
+
+SoundResource::~SoundResource() {
+    delete sound;
+}
+
+void* SoundResource::get() {
+    return sound;
+}
+
+sf::SoundBuffer* ResourceManager::getSound( std::string name ) {
+    for( Resource* r : resources ) {
+        if ( r->name == name ) {
+            return (sf::SoundBuffer*)((SoundResource*)r)->get();
+        }
+    }
+    resources.push_back( new SoundResource( name ) );
+    return (sf::SoundBuffer*)((SoundResource*)resources.back())->get();
 }

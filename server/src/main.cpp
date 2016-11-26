@@ -21,6 +21,43 @@ const std::string DB_PASS = "password";
  sql::PreparedStatement *pstmt;
  sql::ResultSet *rs;
 
+
+/*
+ * Checks if user credentials are in the database
+ */
+bool login(std::string username, std::string password){
+    bool success = false;
+    try {
+        pstmt = conn->prepareStatement(
+                "SELECT userID FROM User WHERE username = ? AND password = ?");
+        pstmt->setString(1, username);
+        pstmt->setString(2, password);
+        success = pstmt->execute();
+        return success;
+    } catch (sql::SQLException &e) {
+        std::cout << "Select User for Login Failed: " << e.what() << std::endl;
+        return success;
+    }
+}
+
+/*
+ * Adds a class with class name and associates the teacher with their class.
+ */
+bool addClass(std::string username, std::string className){
+    bool success = false;
+    try {
+        pstmt = conn->prepareStatement(
+                "INSERT INTO ClassAssociations(username, className) VALUES(?, ?)");
+        pstmt->setString(1, username);
+        pstmt->setString(2, className);
+        success = pstmt->execute();
+        return success;
+    } catch (sql::SQLException &e) {
+        std::cout << "Insert New Class Failed: " << e.what() << std::endl;
+        return success;
+    }
+}
+
  /*
   * Returns true if user is succesfully added and false if not (i.e. username already in use).
   */
@@ -37,6 +74,7 @@ const std::string DB_PASS = "password";
          pstmt->execute();
          return true;
      } catch (sql::SQLException &e) {
+         std::cout << "Insert User Failed: " << e.what() << std::endl;
          return false;
      }
  }

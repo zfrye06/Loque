@@ -174,7 +174,7 @@ bool addClass(std::string username, std::string className){
 
                  //Otherwise just insert a new row
              } else{
-                 pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelScore, completionTime) VALUES(?, ?, ?, ?)");
+                 pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelHighScore, completionTime) VALUES(?, ?, ?, ?)");
                  pstmt->setInt(1, userID);
                  pstmt->setInt(2, mapID);
                  pstmt->setInt(3, newScore);
@@ -296,7 +296,28 @@ bool addClass(std::string username, std::string className){
   * Gets the average high score for the class with classID on the level with mapID.
   */
  int getClassLevelAverage(int classID, int mapID) {
-    return 0;
+     int total = 0;
+     int entries = 0;
+
+     try {
+         pstmt = conn->prepareStatement("SELECT levelHighScore FROM ScoreInfo WHERE mapID = ? AND userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
+         pstmt->setInt(1, mapID);
+         pstmt->setInt(2, classID);
+         rs = pstmt->executeQuery();
+         while(rs->next()) {
+             total = total + rs->getInt(1);
+             entries++;
+         }
+         delete pstmt;
+         if(entries == 0) {
+            return 0;
+         } else {
+             return total/entries;
+         }
+     } catch (sql::SQLException &e) {
+         std::cout << "Select Average Scores Failed: " << e.what() << std::endl;
+         return 0;
+     }
  }
 
 void printUsage(const std::string &progname) {
@@ -461,6 +482,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
 }
 
 int main(int argc, char **argv) {
+    conn->setSchema("3505");
     int port = DEFAULT_PORT;
     if (argc > 1) {
         for (int i = 1; i < argc; i += 2) {

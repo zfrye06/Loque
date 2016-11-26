@@ -9,6 +9,7 @@
 #include <memory>
 #include <string.h>
 #include <thread>
+#include <math.h>
 #include "../../shared/serialization.h"
 
 const int DEFAULT_PORT = 5001;
@@ -158,12 +159,12 @@ const std::string DB_PASS = "password";
   * Returns all maps enabled for the specified class.
   */
  std::vector<int> getEnabledMaps(int classID) {
+     std::vector<int> v;
      try {
          pstmt = conn->prepareStatement(
                  "SELECT mapID FROM MapAssociations WHERE classID = ?");
          pstmt->setInt(1, classID);
          rs = pstmt->executeQuery();
-         std::vector<int> v;
          while (rs->next()) {
              v.push_back(rs->getInt(1));
          }
@@ -171,6 +172,7 @@ const std::string DB_PASS = "password";
          return v;
      } catch (sql::SQLException &e) {
          std::cout << "Select Failed: " << e.what() << std::endl;
+         return v;
      }
  }
 
@@ -178,10 +180,10 @@ const std::string DB_PASS = "password";
   *
   */
  std::map<int, int> getTotalScores(int classID) {
+     std::map<int, int> v;
      try {
          int user;
          int score;
-         std::map<int, int> v;
          pstmt = conn->prepareStatement("SELECT userID, totalScore FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
          pstmt->setInt(1, classID);
          rs = pstmt->executeQuery();
@@ -194,6 +196,7 @@ const std::string DB_PASS = "password";
          return v;
      } catch (sql::SQLException &e) {
          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+         return v;
      }
  }
 
@@ -201,10 +204,10 @@ const std::string DB_PASS = "password";
   *
   */
  std::map<int, int> getTotalTimes(int classID) {
+     std::map<int, int> v;
      try {
          int user;
          int time;
-         std::map<int, int> v;
          pstmt = conn->prepareStatement("SELECT userID, totalTime FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
          pstmt->setInt(1, classID);
          rs = pstmt->executeQuery();
@@ -217,6 +220,7 @@ const std::string DB_PASS = "password";
          return v;
      } catch (sql::SQLException &e) {
          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+         return v;
      }
  }
 
@@ -224,9 +228,9 @@ const std::string DB_PASS = "password";
   * Returns the highest level completed by the specified user
   */
  int getHighestLevelCompleted(int userID) {
+     int highestLevel = 0;
      try {
          unsigned int levels = 0;
-         int highestLevel = 0;
          pstmt = conn->prepareStatement("SELECT levelsCompleted FROM User WHERE userID = ?");
          pstmt->setInt(1, userID);
          rs = pstmt->executeQuery();
@@ -237,15 +241,16 @@ const std::string DB_PASS = "password";
              std::cout << "User Does Not Exist" << std::endl;
              return 0;
          }
-         for(unsigned int i = 128; i >= 0; i/2){
+         for(unsigned int i = 128; i > 0; i = i/2){
              if((i & levels) != 0){
-//                 highestLevel = log(i);
+                 highestLevel = log2(i);
              }
          }
          delete pstmt;
          return highestLevel;
      } catch (sql::SQLException &e) {
          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+         return highestLevel;
      }
  }
 
@@ -253,7 +258,7 @@ const std::string DB_PASS = "password";
   * Gets the average high score for the class with classID on the level with mapID.
   */
  int getClassLevelAverage(int classID, int mapID) {
-
+    return 0;
  }
 
 void printUsage(const std::string &progname) {

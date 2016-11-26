@@ -20,8 +20,16 @@ struct LoginResult {
     int userId;
     UserType userType;
 
-    // Returns whether the requested user exists (e.g. type != DNE). 
+    // Returns whether the requested user exists (i.e. type != DNE). 
     bool successful() const;
+};
+
+// A generic action result. This indicates success or failure
+// of an API action itself, not of the associated network
+// transaction (which is indicated by the returned Status). 
+struct ActionResult {
+    bool success;       // Whether the action succeeded. 
+    std::string reason; // Reason for failure, if any. 
 };
 
 typedef int LevelId; 
@@ -62,9 +70,6 @@ struct ClassStats {
 class LoqueClient {
  public:
 
-    // TODO: We need to return some record of success/failure for postgamestats,
-    // enableLevel, disableLevel, and addClassroom.
-
     LoqueClient(const std::string& address, int port);
 
     // Attempts to login the user, placing the result in the result parameter.
@@ -80,12 +85,14 @@ class LoqueClient {
                          UserType type, 
                          LoginResult& result);
 
-    // Adds the student with the given id to the given classroom. 
-    Status addClassroom(int userId, int classId);
+    // Adds the student with the given id to the given classroom.
+    // The output ActionResult indicates whether the action succeeded and,
+    // if not, why it failed (e.g. class DNE). 
+    Status addClassroom(int userId, int classId, ActionResult& res);
 
     // Adds a game record for the given user. This should be called
     // after each completed level. 
-    Status postGameStats(int userId, const GameStats& stats);
+    Status postGameStats(int userId, const GameStats& stats, ActionResult& res);
     
     // Retrieves the statistics for the given user. This should only
     // be called for the currently logged-in user. Prefer LoqueClient::getClassStats
@@ -93,10 +100,10 @@ class LoqueClient {
     Status getUserStats(int userId, UserStats& stats);
 
     // Enables a level for the given class. UserId must be an instructor id.
-    Status enableLevel(int userId, int classId, LevelId id);
+    Status enableLevel(int userId, int classId, LevelId id, ActionResult& res);
 
     // Disables a level for the given class. UserId must be an instructor id. 
-    Status disableLevel(int userId, int classId, LevelId id);
+    Status disableLevel(int userId, int classId, LevelId id, ActionResult& res);
 
     // Retrieves statistics for the given class. UserId must be an instructor id. 
     Status getClassStats(int userId, int classId, ClassStats& stats); 
@@ -107,7 +114,7 @@ class LoqueClient {
     const int port;
     sf::TcpSocket conn;
 
-    Status makeRequest(sf::Packet&, sf::Packet *);
+    Status makeRequest(sf::Packet&, sf::Packet&);
 };
 
 #endif

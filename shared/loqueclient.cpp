@@ -10,7 +10,7 @@ Status LoqueClient::attemptLogin(const std::string& username,
     sf::Packet toSend;
     toSend << ReqType::LOGIN << username << userpass;
     sf::Packet toReceive;
-    auto status = makeRequest(toSend, &toReceive);
+    auto status = makeRequest(toSend, toReceive);
     if (!ok(status)) {
         return status;
     }
@@ -25,7 +25,7 @@ Status LoqueClient::createAccount(const std::string& username,
     sf::Packet toSend;
     toSend << ReqType::CREATE_ACC << type << username << userpass;
     sf::Packet toReceive;
-    auto status = makeRequest(toSend, &toReceive);
+    auto status = makeRequest(toSend, toReceive);
     if (!ok(status)) {
         return status;
     }
@@ -33,46 +33,87 @@ Status LoqueClient::createAccount(const std::string& username,
     return status;
 }
 
-Status LoqueClient::addClassroom(int userId, int classId) {
-    // TODO: Impl.
-    return static_cast<Status>(1);
+Status LoqueClient::addClassroom(int userId, int classId, ActionResult& result) {
+    sf::Packet toSend;
+    toSend << ReqType::ADD_CLASS << userId << classId;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> result;
+    return status;
 }
 
-Status LoqueClient::postGameStats(int userId, const GameStats& stats) {
+Status LoqueClient::postGameStats(int userId, const GameStats& stats, ActionResult& result) {
     sf::Packet toSend;
     toSend << ReqType::POST_STATS << userId << stats;
-    return makeRequest(toSend, nullptr);
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> result;
+    return status;
 }
 
 Status LoqueClient::getUserStats(int userId, UserStats& stats) {
-    // TODO: Impl. 
-    return static_cast<Status>(1);
+    sf::Packet toSend;
+    toSend << ReqType::GET_USER_STATS << userId;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> stats;
+    return status;
 }
 
-Status LoqueClient::enableLevel(int userId, int classId, LevelId id) {
-    // TODO: IMPL.
-    return static_cast<Status>(1);
+Status LoqueClient::enableLevel(int userId, int classId, LevelId id, ActionResult& result) {
+    sf::Packet toSend;
+    toSend << ReqType::ENABLE_LEVEL << userId << classId << id;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> result;
+    return status;
 }
 
-Status LoqueClient::disableLevel(int userId, int classId, LevelId id) {
-    // TODO: IMPL.
-    return static_cast<Status>(1); 
+Status LoqueClient::disableLevel(int userId, int classId, LevelId id, ActionResult& result) {
+    sf::Packet toSend;
+    toSend << ReqType::DISABLE_LEVEL << userId << classId << id;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> result;
+    return status;
 }
 
 Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
-    // TODO: IMPL.
-    return static_cast<Status>(1); 
+    sf::Packet toSend;
+    toSend << ReqType::GET_CLASS_STATS << userId << classId;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> stats;
+    return status;
 }
 
-Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet *response) {
+Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet &response) {
     auto status = conn.connect(host, port);
     if (!ok(status)) {
         return status;
     }
     status = conn.send(request);
-    if (!status || response == nullptr) {
+    if (!ok(status)) {
         return status;
     }
-    status = conn.receive(*response);
+    status = conn.receive(response);
     return status;
 }

@@ -1,5 +1,4 @@
 
- 
 // Defines functions and types for serializing and deserializing 
 // Loque server requests and responses as sf::Packets. 
 //
@@ -17,7 +16,12 @@
 enum ReqType {
     LOGIN,
     CREATE_ACC,
-    POST_STATS
+    ADD_CLASS,
+    POST_STATS,
+    GET_USER_STATS,
+    ENABLE_LEVEL,
+    DISABLE_LEVEL,
+    GET_CLASS_STATS
 };
 
 inline sf::Packet& operator<<(sf::Packet& packet, const ReqType& t) {
@@ -46,18 +50,6 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserType& ut) {
     return packet;
 }
 
-/* LoginRequest */
-
-struct LoginRequest {
-    std::string username;
-    std::string userpass;
-};
-
-inline sf::Packet& operator>>(sf::Packet& packet, LoginRequest& r) {
-    packet >> r.username >> r.userpass;
-    return packet;
-}
-
 /* LoginResult */
 
 inline sf::Packet& operator<<(sf::Packet& packet, const LoginResult& res) {
@@ -70,16 +62,15 @@ inline sf::Packet& operator>>(sf::Packet& packet, LoginResult& res) {
     return packet;
 }
 
-/* CreateAccountRequest */
+/* ActionResult */
 
-struct CreateAccountRequest {
-    std::string username;
-    std::string userpass;
-    UserType type; 
-};
+inline sf::Packet& operator<<(sf::Packet& packet, const ActionResult& res) {
+    packet << res.success << res.reason;
+    return packet;
+}
 
-inline sf::Packet& operator>>(sf::Packet& packet, CreateAccountRequest& r) {
-    packet >> r.username >> r.userpass >> r.type;
+inline sf::Packet& operator>>(sf::Packet& packet, ActionResult& res) {
+    packet >> res.success >> res.reason;
     return packet;
 }
 
@@ -95,13 +86,87 @@ inline sf::Packet& operator>>(sf::Packet& packet, GameStats& stats) {
     return packet;
 }
 
-struct PostStatsRequest {
-    int userId;
-    GameStats stats;
-};
+/* UserStats */
 
-inline sf::Packet& operator>>(sf::Packet& packet, PostStatsRequest& req) {
-    packet >> req.userId >> req.stats;
+// EOF indicators for serialized userstats.
+namespace ustats {
+    const int TERM_SCORES = -1;
+    const int TERM_CLASSES = -1; 
+}
+
+inline sf::Packet& operator<<(sf::Packet& packet, const UserStats& stats) {
+    packet << stats.userId << stats.username << stats.totalSecPlayed << stats.totalScore;
+    for (auto& elem : stats.highScores) {
+        packet << elem.first << elem.second; 
+    }
+    packet << ustats::TERM_SCORES;
+    for (auto elem : stats.classIds) {
+        packet << elem;
+    }
+    packet << ustats::TERM_CLASSES;
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
+    packet >> stats.userId >> stats.username >> stats.totalSecPlayed >> stats.totalScore;
+    do {
+        int lid;
+        packet >> lid;
+        if (lid == ustats::TERM_SCORES) {
+            break;
+        }
+        int score;
+        packet >> score;
+        stats.highScores[lid] = score;
+    } while (true);
+    do {
+        int classId;
+        packet >> classId;
+        if (classId == ustats::TERM_CLASSES) {
+            break;
+        }
+        stats.classIds.push_back(classId); 
+    } while (true);
+    return packet;
+}
+
+/* ClassStats */
+
+// EOF indicator for serialized class stats.
+namespace cstats {
+    UserStats termUser() {
+        UserStats s;
+        s.userId = -1;
+        s.username = "";
+        s.totalSecPlayed = -1;
+        s.totalScore = -1;
+        return s;
+    }
+
+    bool isTermUser(const UserStats& s) {
+        return s.userId == -1; 
+    }
+}
+
+inline sf::Packet& operator<<(sf::Packet& packet, const ClassStats& stats) {
+    for (auto& ustats : stats.studentStats) {
+        packet << ustats;
+    }
+    packet << cstats::termUser();
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, ClassStats& stats) {
+    do {
+        UserStats s;
+        packet >> s;
+        if (cstats::isTermUser(s)) {
+            break;
+        }
+
+        // TODO: Pass-by-value copy bites us here a bit. Use unique_ptr? 
+        stats.studentStats.push_back(s); 
+    } while (true);
     return packet;
 }
 

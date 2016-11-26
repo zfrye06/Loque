@@ -29,6 +29,7 @@ set( source
          src/resource.cpp
          src/world.cpp
          src/player.cpp
+         src/dust.cpp
          src/map.cpp
          src/playerstate.cpp
          src/contactlistener.cpp

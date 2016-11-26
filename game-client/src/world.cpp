@@ -10,12 +10,21 @@ void World::addEntity( Entity* e ) {
     entities.push_back(e);
 }
 
+void World::bringToFront( Entity* e ) {
+    for( int i=0;i<entities.size();i++ ) {
+        if ( entities[i] == e ) {
+            std::swap( entities[i], entities[entities.size()-1] );
+        }
+    }
+}
+
 void World::removeEntity( Entity* e ) {
     for( int i=0;i<entities.size();i++ ) {
         if ( entities[i] == e ) {
             entities.erase( entities.begin() + i );
         }
     }
+    delete e;
 }
 
 void World::draw( sf::RenderWindow& window ) {

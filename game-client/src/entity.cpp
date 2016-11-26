@@ -53,7 +53,7 @@ void Background::update( double dt){
     glm::vec2 viewPos = toGLM(defaultView->getCenter());
     sf::IntRect hillUV = hills.getTextureRect();
     hillUV.left = viewPos.x/4;
-//    hillUV.top += viewPos.y/256;
+//    hillUV.top += viewPos.y/280;
     hills.setTextureRect(hillUV);
     sf::IntRect cloudsUV = clouds.getTextureRect();
     cloudsUV.left = viewPos.x/8;

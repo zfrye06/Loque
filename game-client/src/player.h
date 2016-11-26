@@ -12,6 +12,7 @@
 #include "playerstate.h"
 #include "Animation.hpp"
 #include "world.h"
+#include "dust.h"
 #include "AnimatedSprite.hpp"
 
 class GenericPlayerState;
@@ -46,6 +47,7 @@ public:
     glm::vec2 lastDirection;
     bool jumpButton;
     glm::vec2 direction;
+    glm::vec2 position;
     float dashingDirection;
     float dashTimer;
     float jumpSquatTimer;
@@ -59,6 +61,7 @@ public:
     bool onGround;
     int controllerID;
     glm::vec2 groundHitNormal;
+    float groundAngle;
     GenericPlayerState* currentState;
     GenericPlayerState* newState;
 

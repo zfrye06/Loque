@@ -23,6 +23,7 @@ inline glm::vec2 toGLM(const sf::Vector2f &v) {
 }
 
 #include "physicalworld.h"
+#include "AnimatedSprite.hpp"
 #include "DebugDraw.h"
 #include "resource.h"
 
@@ -43,6 +44,7 @@ public:
         PlayerSpawn,
         Laser,
         Trampoline,
+        Dust,
         None
     };
     virtual Type getType();

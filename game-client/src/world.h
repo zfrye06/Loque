@@ -16,6 +16,7 @@ private:
 public:
     bool setBackground(std::string fileName);
     void addEntity( Entity* e );
+    void bringToFront( Entity* e );
     void removeEntity( Entity* e );
     void draw( sf::RenderWindow& window );
     void update( double dt );

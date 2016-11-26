@@ -364,6 +364,7 @@ void Player::update( double dt ) {
     } else {
         sprite->setPosition( pos.x*64+48, pos.y*64-48 );
     }
+    position = glm::vec2((float)pos.x*64.f,(float)pos.y*64.f);
     sprite->setRotation( ang*180/3.149562 );
     vel = toGLM(myBody->GetLinearVelocity())*10.f;
     smoothCamera += (glm::vec2( (float)pos.x*64, (float)pos.y*64 )+vel-smoothCamera)*(float)dt*4.f;
@@ -400,7 +401,7 @@ void Player::detectGround() {
         input.maxFraction = 1;
         b2RayCastOutput output;
         float closestFrac = input.maxFraction+0.1;
-        glm::vec2 currentOutput = glm::vec2(0,-1);
+        glm::vec2 currentOutput = glm::vec2(0.f,-1.f);
         for ( b2Fixture* f : queryCallback2.hitFixtures ) {
             if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) && output.fraction < closestFrac ) {
                 closestFrac = output.fraction;
@@ -416,7 +417,7 @@ void Player::detectGround() {
             input.p2 += b2Vec2( .5, 0);
             input.maxFraction = 1;
             closestFrac = input.maxFraction+0.1;
-            currentOutput = glm::vec2(0,-1);
+            currentOutput = glm::vec2(0.f,-1.f);
             for ( b2Fixture* f : queryCallback2.hitFixtures ) {
                 if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) && output.fraction < closestFrac ) {
                     closestFrac = output.fraction;
@@ -443,7 +444,7 @@ void Player::detectGround() {
             input.p2 -= b2Vec2( .5, 0);
             input.maxFraction = 1;
             closestFrac = input.maxFraction+0.1;
-            currentOutput = glm::vec2(0,-1);
+            currentOutput = glm::vec2(0.f,-1.f);
             for ( b2Fixture* f : queryCallback2.hitFixtures ) {
                 if( f->RayCast(&output,input,0) && toGLM(output.normal) != glm::vec2(0,0) && output.fraction < closestFrac ) {
                     closestFrac = output.fraction;
@@ -466,10 +467,13 @@ void Player::detectGround() {
         }
     }
     if ( groundHitNormal.x > 0.9 ) {
-        groundHitNormal = glm::normalize(glm::vec2(1, -1));
+        groundHitNormal = glm::normalize(glm::vec2(1.f, -1.f));
     } else if (groundHitNormal.x < -0.9 ) {
-        groundHitNormal = glm::normalize(glm::vec2(-1, -1));
+        groundHitNormal = glm::normalize(glm::vec2(-1.f, -1.f));
     }
+
+    glm::vec2 up = glm::vec2(0.f,-1.f);
+    groundAngle = -acos(glm::dot(up,groundHitNormal))*180.f/M_PI;
 }
 
 void Player::detectWalls() {

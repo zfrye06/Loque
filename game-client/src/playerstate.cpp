@@ -102,6 +102,7 @@ DashingState::DashingState( Player* player, float dashingDirection ) {
 void DashingState::init() {
     player->sprite->play( player->dashAnimation );
     player->sprite->setFrameTime(sf::seconds(player->dashLength/(float)player->dashAnimation.getSize()));
+    player->dashSound.play();
     dashTimer = 0;
     walkTimer = 0;
 }
@@ -122,10 +123,12 @@ void DashingState::update( Player* player, double dt ) {
         dashTimer = 0;
         walkTimer = 0;
         dashingDirection = -1;
+        player->dashSound.play();
     } else if ( player->direction.x > 0.9 && dashingDirection == -1) {
         dashTimer = 0;
         walkTimer = 0;
         dashingDirection = 1;
+        player->dashSound.play();
     }
     dashTimer += dt;
     if ( dashTimer > player->dashLength ) {
@@ -196,9 +199,15 @@ void JumpingState::init() {
     player->fastFalling = false;
     player->sprite->setLooped(false);
     if ( wallJumpDirection == 0 ) {
+        if ( player->onGround ) {
+            player->jump1Sound.play();
+        } else {
+            player->jump2Sound.play();
+        }
         player->sprite->play( player->jumpingAnimation );
         player->sprite->setFrameTime(sf::seconds(0.16));
     } else {
+        player->wallJumpSound.play();
         player->sprite->play( player->wallJumpAnimation );
         player->sprite->setFrameTime(sf::seconds(0.1));
     }
@@ -318,7 +327,7 @@ void AirborneState::update( Player* player, double dt ) {
     // Hit ground
     player->myBody->SetLinearVelocity( toB2(newvel) );
     if ( player->onGround ) {
-        player->switchState( new IdleState(player) );
+        player->switchState( new LandingState(player) );
     }
     // Double jumping
     if ( player->jumpButton ) {
@@ -419,6 +428,7 @@ void AirDodgeState::init() {
     vel = glm::normalize(airDirection)*player->airDodgeVelocity;
     tweenX = tweeny::from(vel.x).to(0.f).during(player->airDodgeTime*1000).via(tweeny::easing::quadraticOut);
     tweenY = tweeny::from(vel.y).to(0.f).during(player->airDodgeTime*1000).via(tweeny::easing::quadraticOut);
+    player->airDodgeSound.play();
 }
 
 AirDodgeState::~AirDodgeState() {
@@ -435,7 +445,7 @@ void AirDodgeState::update( Player* player, double dt ) {
         player->switchState( new SpecialFallState(player) );
     }
     if ( player->onGround ) {
-        player->switchState( new IdleState(player) );
+        player->switchState( new LandingState(player) );
     }
 }
 
@@ -482,7 +492,7 @@ void SpecialFallState::update( Player* player, double dt ) {
     // Hit ground
     player->myBody->SetLinearVelocity( toB2(newvel) );
     if ( player->onGround ) {
-        player->switchState( new IdleState(player) );
+        player->switchState( new LandingState(player) );
     }
 }
 
@@ -513,5 +523,78 @@ void TurningState::update( Player* player, double dt ) {
     turnTimer += dt;
     if ( turnTimer > player->turnAroundTime ) {
         player->switchState( new DashingState(player,turnDirection) );
+    }
+}
+
+LandingState::LandingState( Player* player ) {
+    this->player = player;
+}
+
+void LandingState::init() {
+    bufferedState = nullptr;
+    landTimer = 0;
+    reset = false;
+    walkTimer = 0;
+    player->sprite->play( player->landingAnimation );
+    player->sprite->setFrameTime(sf::seconds(player->landLength/(float)player->landingAnimation.getSize()));
+}
+
+LandingState::~LandingState() {
+}
+
+PlayerState LandingState::getType() {
+    return PlayerState::Landing;
+}
+
+void LandingState::update( Player* player, double dt ) {
+    landTimer += dt;
+    if (landTimer > player->landLength ) {
+        if ( bufferedState ) {
+            player->switchState( bufferedState );
+        } else {
+            player->switchState( new IdleState(player) );
+        }
+    }
+    if ( player->direction.x != 0 && reset ) {
+        walkTimer += dt;
+    } else if (player->direction.x == 0 ) {
+        walkTimer = 0;
+        reset = true;
+    }
+    if ( walkTimer > player->walkLength ) {
+        if ( fabs(player->direction.x) > 0.9 ) {
+            if ( player->direction.x > 0 ) {
+                if ( bufferedState ) {
+                    delete bufferedState;
+                }
+                bufferedState =  new DashingState(player,1);
+            } else {
+                if ( bufferedState ) {
+                    delete bufferedState;
+                }
+                bufferedState =  new DashingState(player,-1);
+            }
+        } else {
+            if ( bufferedState ) {
+                delete bufferedState;
+            }
+            bufferedState =  new WalkingState(player);
+        }
+    }
+    if ( !player->onGround ) {
+        if ( bufferedState ) {
+            delete bufferedState;
+        }
+        player->switchState( new AirborneState(player) );
+    }
+    if ( player->jumpButton ) {
+        if ( player->releasedJump ) {
+            if ( bufferedState ) {
+                delete bufferedState;
+            }
+            bufferedState =  new JumpSquatState(player);
+        }
+    } else {
+        player->releasedJump = true;
     }
 }

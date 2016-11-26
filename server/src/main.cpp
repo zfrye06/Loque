@@ -43,12 +43,12 @@ bool login(std::string username, std::string password){
 /*
  * Adds a class with class name and associates the teacher with their class.
  */
-bool addClass(std::string username, std::string className){
+bool addClass(int userID, std::string className){
     bool success = false;
     try {
         pstmt = conn->prepareStatement(
-                "INSERT INTO ClassAssociations(username, className) VALUES(?, ?)");
-        pstmt->setString(1, username);
+                "INSERT INTO ClassAssociations(userID, className) VALUES(?, ?)");
+        pstmt->setInt(1, userID);
         pstmt->setString(2, className);
         success = pstmt->execute();
         return success;
@@ -334,49 +334,62 @@ void printUsage(const std::string &progname) {
 void handleLogin(sql::Connection& dbconn,
                  std::string username, std::string userpass,
                  LoginResult& res) {
-    return;
+    bool success = login(username, userpass);
 }
 
 void handleCreateAcc(sql::Connection& dbconn,
                      std::string username, std::string userpass, UserType type,
                      LoginResult& res) {
-    return;
+    if(type == Admin){
+        addUser(username, userpass, true);
+    } else if(type == Student){
+        addUser(username, userpass, false);
+    } else{
+        // Why do we have a DNE option in request?
+        return;
+    }
 }
 
 void handleAddClassroom(sql::Connection& dbconn,
-                        int userId, int classId,
+                        int userId, int classId, // Need className not classID. ClassID will be assigned on insertion (auto increment).
                         ActionResult& res) {
-    return;
+//    addClass(userId, className);
 }
 
 void handlePostStats(sql::Connection& dbconn,
                      int userId, const GameStats& stats,
                      ActionResult& res) {
-    return;
+    levelCompleted(userId, stats.levelId, stats.pointsScored, stats.secToComplete);
 }
 
 void handleGetUserStats(sql::Connection& dbconn,
                         int userId,
                         UserStats& stats) {
-    return;
+    // Not sure what I need to retrieve here.
 }
 
 void handleEnableLevel(sql::Connection& dbconn,
                        int userId, int classId, int levelId,
                        ActionResult& res) {
-    return;
+    // Currently can take in multiple level ids. Will change if not needed.
+    std::vector<int> v;
+    v.push_back(levelId);
+    toggleMaps(classId, v, true);
 }
 
 void handleDisableLevel(sql::Connection& dbconn,
                         int userId, int classId, int levelId,
                         ActionResult& res) {
-    return; 
+    // Currently can take in multiple level ids. Will change if not needed.
+    std::vector<int> v;
+    v.push_back(levelId);
+    toggleMaps(classId, v, false);
 }
 
 void handleGetClassStats(sql::Connection& dbconn,
                          int userId, int classId,
                          ClassStats& stats) {
-    return;
+    // Not sure what is wanted here.
 }
 
 void handleClient(std::unique_ptr<sf::TcpSocket> client,

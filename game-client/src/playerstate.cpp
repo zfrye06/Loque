@@ -278,11 +278,11 @@ void JumpingState::update( Player* player, double dt ) {
     if ( walkTimer > player->walkLength && canWallJump ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
-            player->flash(sf::Color(150,255,150,255),0.3,0.05);
+            //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player,1) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
-            player->flash(sf::Color(150,255,150,255),0.3,0.05);
+            //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player,-1) );
         }
         canWallJump = false;
@@ -362,11 +362,11 @@ void AirborneState::update( Player* player, double dt ) {
         canWallJump = false;
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
-            player->flash(sf::Color(150,255,150,255),0.3,0.05);
+            //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player, 1) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
-            player->flash(sf::Color(150,255,150,255),0.3,0.05);
+            //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player, -1) );
         }
     }
@@ -619,5 +619,102 @@ void LandingState::update( Player* player, double dt ) {
         }
     } else {
         player->releasedJump = true;
+    }
+}
+
+ShockedState::ShockedState( Player* player, glm::vec2 impulse ) {
+    this->player = player;
+    this->impulse = impulse;
+}
+
+void ShockedState::init() {
+    player->damageBoost();
+    shockTimer = 0;
+    player->myBody->SetAwake( false );
+    player->myBody->SetLinearVelocity( b2Vec2(0,0) );
+    player->sprite->play( player->shockedAnimation );
+    player->sprite->setFrameTime(sf::seconds(0.08));
+}
+
+ShockedState::~ShockedState() {
+    player->myBody->SetAwake( true );
+}
+
+PlayerState ShockedState::getType() {
+    return PlayerState::Shocked;
+}
+
+void ShockedState::update( Player* player, double dt ) {
+    shockTimer += dt;
+    player->myBody->SetAwake( false );
+    player->myBody->SetLinearVelocity( b2Vec2(0,0) );
+    if ( shockTimer > player->shockLength ) {
+        player->switchState( new KnockbackState(player, impulse) );
+    }
+}
+
+KnockbackState::KnockbackState( Player* player, glm::vec2 impulse ) {
+    this->player = player;
+    this->impulse = impulse;
+}
+
+void KnockbackState::init() {
+    player->myBody->SetLinearVelocity( toB2( impulse ) );
+    player->sprite->play( player->knockBackAnimation );
+    player->sprite->setLooped( false );
+    player->sprite->setFrameTime(sf::seconds(0.07));
+}
+
+KnockbackState::~KnockbackState() {
+    player->sprite->setLooped( true );
+}
+
+PlayerState KnockbackState::getType() {
+    return PlayerState::KnockBack;
+}
+
+void KnockbackState::update( Player* player, double dt ) {
+    if ( !player->sprite->isPlaying() ) {
+        if ( player->canDoubleJump && player->releasedJump && player->jumpButton && !player->onGround ) {
+            player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight*.5,-player->doubleJumpHeight) );
+            player->switchState( new JumpingState(player, 0) );
+            player->canDoubleJump = false;
+            player->releasedJump = false;
+        }
+        if ( player->direction.y < -0.9 || fabs(player->direction.x) || player->airDodgePressed ) {
+            player->switchState( new KnockbackRecoverState(player) );
+        }
+    }
+    if ( player->successfulTech ) {
+        player->switchState( new KnockbackRecoverState(player,true) );
+    }
+}
+
+KnockbackRecoverState::KnockbackRecoverState( Player* player, bool teched ) {
+    this->teched = teched;
+    this->player = player;
+}
+
+void KnockbackRecoverState::init() {
+    if ( teched ) {
+        player->sprite->play( player->tecAnimation );
+    } else {
+        player->sprite->play( player->knockBackRecoverAnimation );
+    }
+    player->sprite->setLooped( false );
+    player->sprite->setFrameTime(sf::seconds(0.08));
+}
+
+KnockbackRecoverState::~KnockbackRecoverState() {
+    player->sprite->setLooped( true );
+}
+
+PlayerState KnockbackRecoverState::getType() {
+    return PlayerState::KnockBackRecover;
+}
+
+void KnockbackRecoverState::update( Player* player, double dt ) {
+    if ( !player->sprite->isPlaying() ) {
+        player->switchState( new IdleState(player) );
     }
 }

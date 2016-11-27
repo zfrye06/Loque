@@ -7,8 +7,8 @@
 
 class Player;
 
-static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "SpecialFall", "Jumping", "AirDodge", "Turning", "Landing", "None" };
-enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, SpecialFall, Jumping, AirDodge, Turning, Landing, None };
+static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "SpecialFall", "Jumping", "AirDodge", "Turning", "Landing", "Shocked", "KnockBack", "KnockBackRecover", "None" };
+enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, SpecialFall, Jumping, AirDodge, Turning, Landing, Shocked, KnockBack, KnockBackRecover, None };
 
 class GenericPlayerState {
 public:
@@ -139,6 +139,37 @@ class TurningState : public GenericPlayerState {
 public:
     TurningState( Player* player, float direction);
     ~TurningState();
+    void init();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class ShockedState : public GenericPlayerState {
+public:
+    float shockTimer;
+    glm::vec2 impulse;
+    ShockedState( Player* player, glm::vec2 impulse);
+    ~ShockedState();
+    void init();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class KnockbackState : public GenericPlayerState {
+public:
+    glm::vec2 impulse;
+    KnockbackState( Player* player, glm::vec2 impulse);
+    ~KnockbackState();
+    void init();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class KnockbackRecoverState : public GenericPlayerState {
+public:
+    bool teched;
+    KnockbackRecoverState( Player* player, bool teched = false);
+    ~KnockbackRecoverState();
     void init();
     PlayerState getType();
     void update( Player* player, double dt );

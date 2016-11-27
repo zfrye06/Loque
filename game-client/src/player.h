@@ -21,6 +21,10 @@ class Player : public Entity {
 public:
 
     // Configurable variables
+    float techLength;
+    float frickedUpLength;
+    float damageBoostLength;
+    float shockLength;
     float walkLength;
     float airDodgeVelocity;
     float airDodgeTime;
@@ -41,6 +45,10 @@ public:
     float airControlMultiplier;
 
     // Control variables
+    bool successfulTech;
+    float techTimer;
+    float frickedUpTimer;
+    float damageBoostTimer;
     bool fastFalling;
     bool canDoubleJump;
     bool releasedJump;
@@ -68,6 +76,8 @@ public:
     // Helper functions
     void detectGround();
     void detectWalls();
+    bool isDamageBoosted();
+    void damageBoost();
     float flashPeriod;
     float flashLength;
     float flashTimer;

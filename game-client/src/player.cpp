@@ -1,7 +1,13 @@
 #include "player.h"
 
 Player::Player( std::string resource, sf::View& view ) {
-    jumpHelpAmount = 8;
+    successfulTech = false;
+    techLength = 20.f/60.f;
+    frickedUpLength = 40.f/60.f;
+    jumpHelpAmount = 8.f;
+    damageBoostLength = 1.f;
+    damageBoostTimer = 0;
+    shockLength = 0.8;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
@@ -258,6 +264,13 @@ void Player::draw( sf::RenderWindow& window ) {
 void Player::update( double dt ) {
     detectGround();
     detectWalls();
+    // Damage boosting
+    if ( damageBoostTimer > 0 ) {
+        damageBoostTimer -= dt;
+    } else {
+        damageBoostTimer = 0;
+    }
+    // Flashing
     if ( flashLength != -1 && flashLength > 0 ) {
         if ( fmod(flashLength,flashPeriod*2)<flashPeriod ) {
             sprite->setColor( flashColor );
@@ -275,6 +288,22 @@ void Player::update( double dt ) {
             sprite->setColor( sf::Color(255,255,255,255) );
         }
     }
+    // Teching logic
+    if ( airDodgePressed && !onGround && frickedUpTimer <= 0 && techTimer <= 0 ) {
+        techTimer = techLength;
+    }
+    if ( techTimer <= 0 ) {
+        successfulTech = false;
+    }
+    if ( (onGround || touchingWallLeft || touchingWallRight) && techTimer > 0 && frickedUpTimer <= 0 ) {
+        techTimer = 0;
+        successfulTech = true;
+    }
+    frickedUpTimer -= dt;
+    if ( techTimer > 0 && techTimer-dt < 0 ) {
+        frickedUpTimer = frickedUpLength;
+    }
+    techTimer -= dt;
     /*for (int i=0;i<sf::Joystick::getButtonCount(0);i++ ) {
         if (sf::Joystick::isButtonPressed(0,i)) {
             std::cout << i << std::endl;
@@ -512,12 +541,6 @@ void Player::detectWalls() {
 }
 
 void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
-    if(collider->getType() == Entity::Type::Laser){
-        ::Laser* laser = static_cast<::Laser*>( collider );
-        if(!laser->canBePassed){
-            std::cout<<"You died!"<<std::endl;
-        }
-    }
 }
 
 Entity::Type Player::getType(){
@@ -529,4 +552,14 @@ void Player::switchState( GenericPlayerState* state ) {
         delete newState;
     }
     newState = state;
+}
+
+void Player::damageBoost() {
+    if ( damageBoostTimer == 0 ) {
+        damageBoostTimer = damageBoostLength;
+    }
+}
+
+bool Player::isDamageBoosted() {
+    return damageBoostTimer != 0;
 }

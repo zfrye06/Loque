@@ -6,6 +6,7 @@
 
 #include "entity.h"
 #include "trampoline.h"
+#include "laser.h"
 #include "world.h"
 #include "SFMLOrthogonalLayer.hpp"
 

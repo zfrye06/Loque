@@ -32,6 +32,7 @@ set( source
          src/dust.cpp
          src/trampoline.cpp
          src/map.cpp
+         src/laser.cpp
          src/playerstate.cpp
          src/contactlistener.cpp
          src/physicalworld.cpp

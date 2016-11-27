@@ -8,6 +8,9 @@
 #include "entity.h"
 #include "player.h"
 #include "map.h"
+#include "random.h"
+
+RandomClass* Random = new RandomClass();
 
 int app() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
@@ -41,7 +44,6 @@ int app() {
         // Update world
         double dt = deltaClock.restart().asSeconds();
         world->update( dt );
-        physicalWorld->step( dt );
         //Pixel align view
         glm::vec2 center = toGLM(view.getCenter());
         view.setCenter( round( center.x ), round( center.y ) );

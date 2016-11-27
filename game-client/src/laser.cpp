@@ -1,7 +1,6 @@
 #include "laser.h"
 
 Laser::Laser(tmx::Object& obj){
-    pos = glm::vec2(obj.getPosition().x, obj.getPosition().y); 
 
     std::vector<tmx::Property> properties = obj.getProperties();
     for(int i = 0; i < properties.size(); i++) {
@@ -12,6 +11,7 @@ Laser::Laser(tmx::Object& obj){
     }
 
     tmx::FloatRect size = obj.getAABB();
+    pos = glm::vec2(obj.getPosition().x, obj.getPosition().y+size.height/2.f); 
     size.width = size.width / 64;
     size.height = size.height / 64;
     size.left = size.left / 64;
@@ -52,6 +52,9 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>( collider );
         if(!this->canBePassed && !p->isDamageBoosted()){
+            world->addEntity( new ShockDust( p->position ) );
+            world->stutter(0.4,0.1);
+            p->shake(10,0.8,0.1);
             glm::vec2 impulse = p->position - pos;
             impulse = glm::normalize( impulse );
             if ( impulse.x > 0 ) {
@@ -59,7 +62,7 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
             } else {
                 impulse.x = -1;
             }
-            impulse *= 10.f;
+            impulse *= 15.f;
 
             p->switchState( new ShockedState( p, impulse ) );
         }

@@ -3,6 +3,7 @@
 
 #include "entity.h"
 #include "player.h"
+#include "dust.h"
 
 class Laser : public Entity {
 public:

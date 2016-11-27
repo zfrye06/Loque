@@ -659,12 +659,14 @@ KnockbackState::KnockbackState( Player* player, glm::vec2 impulse ) {
 }
 
 void KnockbackState::init() {
+    player->hurtSound.play();
     glm::vec2 up = glm::vec2(0.f,-1.f);
     float strength = glm::length(impulse);
     float knockbackAngle = -acos(glm::dot(up,glm::normalize(impulse+(player->direction*player->directionalInfluence*strength))));
     player->myBody->SetLinearVelocity( toB2( glm::rotate(up*strength,knockbackAngle) ) );
     player->sprite->play( player->knockBackAnimation );
     player->sprite->setLooped( false );
+    player->flash(sf::Color(200,150,150,255),(player->knockBackAnimation.getSize()+5)*0.07,0.09);
     player->sprite->setFrameTime(sf::seconds(0.07));
 }
 
@@ -699,13 +701,19 @@ KnockbackRecoverState::KnockbackRecoverState( Player* player, bool teched ) {
 }
 
 void KnockbackRecoverState::init() {
+    world->addEntity( new LandingDust( player->position, player->groundAngle) );
+    player->myBody->SetLinearVelocity( b2Vec2(0,0) );
     if ( teched ) {
+        player->techSound.play();
+        player->flash(sf::Color(120,255,120,255),0.2,0.1);
         player->sprite->play( player->tecAnimation );
     } else {
+        player->sprite->scale(-1,1);
+        player->flipped = !player->flipped;
         player->sprite->play( player->knockBackRecoverAnimation );
     }
     player->sprite->setLooped( false );
-    player->sprite->setFrameTime(sf::seconds(0.08));
+    player->sprite->setFrameTime(sf::seconds(0.12));
 }
 
 KnockbackRecoverState::~KnockbackRecoverState() {

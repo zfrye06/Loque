@@ -34,6 +34,8 @@ Player::Player( std::string resource, sf::View& view ) {
     airControlMultiplier = 4;
     flashTimer = 0;
     flashLength = 0;
+    shakeLength = 0;
+    shakeStrength = 1;
     newState = nullptr;
     this->view = &view;
     direction = glm::vec2(0,0);
@@ -106,9 +108,9 @@ void Player::setUpSprite( std::string resource ) {
 	knockBackAnimation.addFrame(sf::IntRect(100,151,48,48));
 	knockBackAnimation.addFrame(sf::IntRect(150,151,48,48));
 	knockBackAnimation.addFrame(sf::IntRect(200,151,48,48));
-	knockBackAnimation.addFrame(sf::IntRect(250,151,48,48));
-	knockBackAnimation.addFrame(sf::IntRect(300,151,48,48));
-	knockBackAnimation.addFrame(sf::IntRect(350,151,48,48));
+	//knockBackAnimation.addFrame(sf::IntRect(250,151,48,48));
+	//knockBackAnimation.addFrame(sf::IntRect(300,151,48,48));
+	//knockBackAnimation.addFrame(sf::IntRect(350,151,48,48));
 
     knockBackRecoverAnimation.setSpriteSheet(*texture);
 	knockBackRecoverAnimation.addFrame(sf::IntRect(400,151,48,48));
@@ -202,6 +204,8 @@ void Player::setUpSounds() {
     dashSound = sf::Sound(*Resources->getSound( "assets/audio/effects/dash.ogg" ));
     jump1Sound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump.ogg" ));
     jump2Sound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump4.ogg" ));
+    techSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump5.ogg" ));
+    hurtSound = sf::Sound(*Resources->getSound( "assets/audio/effects/hurt.ogg" ));
     wallJumpSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump3.ogg" ));
     airDodgeSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump2.ogg" ));
 }
@@ -248,6 +252,12 @@ void Player::flash(sf::Color c, float length, float period) {
     flashLength = length;
     flashPeriod = period;
     flashColor = c;
+}
+
+void Player::shake(float strength, float length, float period) {
+    shakeLength = length;
+    shakeStrength = strength;
+    shakePeriod = period;
 }
 
 void Player::draw( sf::RenderWindow& window ) {
@@ -391,20 +401,33 @@ void Player::update( double dt ) {
         flipped = true;
     }
 
+    glm::vec2 shakeAmount(0,0);
+    glm::vec2 shakeAmount2(0,0);
+
+    if ( shakeLength > 0 && fmod(shakeLength,shakePeriod*2) < shakePeriod ) {
+        shakeAmount = glm::vec2(Random->f(-1.f, 1.f),Random->f(-1.f, 1.f) );
+        shakeAmount *= shakeStrength;
+        shakeAmount2 = glm::vec2(Random->f(-1.f, 1.f),Random->f(-1.f, 1.f) );
+        shakeAmount2 *= shakeStrength/2.f;
+    } 
+    if (shakeLength > 0 ) {
+        shakeLength -= dt;
+    }
+
     lastDirection = direction;
     b2Vec2 pos = myBody->GetWorldCenter();
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
     if ( !flipped ) {
-        sprite->setPosition( pos.x*64-48, pos.y*64-48 );
+        sprite->setPosition( pos.x*64-48+shakeAmount.x, pos.y*64-48+shakeAmount.y );
     } else {
-        sprite->setPosition( pos.x*64+48, pos.y*64-48 );
+        sprite->setPosition( pos.x*64+48+shakeAmount.x, pos.y*64-48+shakeAmount.y );
     }
     position = glm::vec2((float)pos.x*64.f,(float)pos.y*64.f);
     sprite->setRotation( ang*180/3.149562 );
     vel = toGLM(myBody->GetLinearVelocity())*10.f;
     smoothCamera += (glm::vec2( (float)pos.x*64, (float)pos.y*64 )+vel-smoothCamera)*(float)dt*4.f;
-    view->setCenter( toSFML(smoothCamera) );
+    view->setCenter( toSFML(smoothCamera+shakeAmount2) );
     sprite->update( sf::seconds(dt) );
     if ( newState ) {
         delete currentState;

@@ -8,9 +8,14 @@ World::~World() {
     }
 }
 
+World::World() {
+    stutterLength = 0;
+    stutterPeriod = 0;
+}
 
-bool World::setBackground(std::string fileName){
-    return background.loadFromFile(fileName);
+void World::stutter( double length, double period ) {
+    stutterLength = length;
+    stutterPeriod = period;
 }
 
 void World::addEntity( Entity* e ) {
@@ -41,6 +46,15 @@ void World::draw( sf::RenderWindow& window ) {
 }
 
 void World::update( double dt ) {
+    if ( stutterLength > 0 ) {
+        stutterLength-=dt;
+        if ( fmod(stutterLength,stutterPeriod*2) < stutterPeriod ) {
+            return;
+        }
+    } else {
+        stutterLength = 0;
+    }
+    physicalWorld->step( dt );
     for ( Entity* e : entities ) {
         e->update(dt);
     }

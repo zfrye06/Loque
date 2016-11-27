@@ -2,6 +2,7 @@
 #define LQ_PLAYER_H_
 
 #include <glm/glm.hpp>
+#include <SFML/Main.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -14,6 +15,7 @@
 #include "world.h"
 #include "dust.h"
 #include "AnimatedSprite.hpp"
+#include "random.h"
 
 class GenericPlayerState;
 
@@ -52,6 +54,9 @@ public:
     float damageBoostTimer;
     bool fastFalling;
     bool canDoubleJump;
+    float shakePeriod;
+    float shakeLength;
+    float shakeStrength;
     bool releasedJump;
     glm::vec2 lastDirection;
     bool jumpButton;
@@ -84,6 +89,7 @@ public:
     float flashTimer;
     sf::Color flashColor;
     void flash(sf::Color c, float length, float period);
+    void shake(float strength, float length, float period);
     void setUpBody();
     void setUpSounds();
     void setUpSprite( std::string resource );
@@ -115,11 +121,13 @@ public:
     Animation shockedAnimation;
     Animation tecAnimation;
 
+    sf::Sound hurtSound;
     sf::Sound dashSound;
     sf::Sound jump1Sound;
     sf::Sound jump2Sound;
     sf::Sound wallJumpSound;
     sf::Sound airDodgeSound;
+    sf::Sound techSound;
     Player( std::string resource, sf::View& view );
     ~Player();
     void update( double dt );

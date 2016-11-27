@@ -186,3 +186,55 @@ void LandingDust::draw(sf::RenderWindow& window){
 Entity::Type LandingDust::getType(){
     return Entity::Type::Dust;
 }
+
+ShockDust::ShockDust( glm::vec2 pos ) {
+    if ( Random->f(0,1) > 0.5 ) {
+        sound = sf::Sound( *Resources->getSound( "assets/audio/effects/shock1.ogg" ) );
+    } else {
+        sound = sf::Sound( *Resources->getSound( "assets/audio/effects/shock2.ogg" ) );
+    }
+    sound.play();
+    texture = Resources->getTexture("assets/images/lightning.png");
+    animation.setSpriteSheet(*texture);
+    float w = 96;
+    float h = 96;
+    int frames = 10;
+    int columns = 5;
+    int rows = 2;
+    int y = 0;
+    int curframe = 0;
+    for (int y=0;y<rows&&curframe < frames;y++ ) {
+        for (int x=0;x<columns&&curframe < frames;x++ ) {
+            animation.addFrame(sf::IntRect(x*w,y*h,w,h));
+            curframe++;
+        }
+    }
+
+    sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
+    sprite->setOrigin(w/2.f,h/2.f);
+    sprite->setPosition( pos.x, pos.y );
+    //sprite->setScale( 1, 1 );
+    sprite->play(animation);
+}
+
+ShockDust::~ShockDust() {
+    delete sprite;
+}
+
+void ShockDust::update(double dt) {
+    sprite->update( sf::seconds( dt ) );
+    if ( !sprite->isPlaying() ) {
+        world->removeEntity(this);
+    }
+}
+
+void ShockDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+}
+
+void ShockDust::draw(sf::RenderWindow& window){
+    window.draw(*sprite);
+}
+
+Entity::Type ShockDust::getType(){
+    return Entity::Type::Dust;
+}

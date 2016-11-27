@@ -42,6 +42,9 @@ int app() {
         double dt = deltaClock.restart().asSeconds();
         world->update( dt );
         physicalWorld->step( dt );
+        //Pixel align view
+        glm::vec2 center = toGLM(view.getCenter());
+        view.setCenter( round( center.x ), round( center.y ) );
         // Actually do rendering.
         window.pushGLStates();
         window.setView( view );

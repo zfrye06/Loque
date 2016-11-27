@@ -704,7 +704,6 @@ void KnockbackRecoverState::init() {
     world->addEntity( new LandingDust( player->position, player->groundAngle) );
     player->myBody->SetLinearVelocity( b2Vec2(0,0) );
     if ( teched ) {
-        player->techSound.play();
         player->flash(sf::Color(120,255,120,255),0.2,0.1);
         player->sprite->play( player->tecAnimation );
     } else {
@@ -712,6 +711,7 @@ void KnockbackRecoverState::init() {
         player->flipped = !player->flipped;
         player->sprite->play( player->knockBackRecoverAnimation );
     }
+    player->techSound.play();
     player->sprite->setLooped( false );
     player->sprite->setFrameTime(sf::seconds(0.12));
 }

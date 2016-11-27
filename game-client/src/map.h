@@ -5,6 +5,7 @@
 #include <SFML/Audio/Music.hpp>
 
 #include "entity.h"
+#include "trampoline.h"
 #include "world.h"
 #include "SFMLOrthogonalLayer.hpp"
 

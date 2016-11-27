@@ -1,7 +1,7 @@
 #include "player.h"
 
 Player::Player( std::string resource, sf::View& view ) {
-    jumpHelpAmount = 5;
+    jumpHelpAmount = 8;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
@@ -17,14 +17,14 @@ Player::Player( std::string resource, sf::View& view ) {
     playerSpeed = 5; // in meters per second
     dashingMultiplier = 2; // in percentage
     doubleJumpHeight = 12; // in meters per second
-    fullHopHeight = 15; // actually a force, in newtons
-    shortHopHeight = 8; // in newtons
+    fullHopHeight = 14; // actually a force, in newtons
+    shortHopHeight = 7; // in newtons
     canWallJumpLeft = false;
     canWallJumpRight = false;
     canDoubleJump = true;
     releasedJump = true;
     airDodgePressed = false;
-    airControlMultiplier = 6;
+    airControlMultiplier = 4;
     flashTimer = 0;
     flashLength = 0;
     newState = nullptr;
@@ -511,10 +511,6 @@ void Player::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
         if(!laser->canBePassed){
             std::cout<<"You died!"<<std::endl;
         }
-    }
-    else if(collider->getType() == Entity::Type::Trampoline){
-        //TODO Need to add functionality to propell player upwards.
-        myBody->SetLinearVelocity(b2Vec2(myBody->GetLinearVelocity().x, -20));
     }
 }
 

@@ -30,6 +30,7 @@ set( source
          src/world.cpp
          src/player.cpp
          src/dust.cpp
+         src/trampoline.cpp
          src/map.cpp
          src/playerstate.cpp
          src/contactlistener.cpp

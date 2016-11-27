@@ -235,7 +235,7 @@ void JumpingState::update( Player* player, double dt ) {
     if ( vel.y < 0 ) {
         // Resist gravity a tad if they are still holding the jump button.
         if ( player->jumpButton ) {
-            player->myBody->ApplyForceToCenter( b2Vec2(0,-player->jumpHelpAmount*dt), true );
+            player->myBody->ApplyForceToCenter( b2Vec2(0,-player->jumpHelpAmount), true );
         }
     } else {
         player->switchState( new AirborneState(player) );
@@ -484,10 +484,10 @@ void SpecialFallState::update( Player* player, double dt ) {
     glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
     glm::vec2 newvel;
     newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier*dt);
-    if ( newvel.x > player->playerSpeed*player->dashingMultiplier ) {
-        newvel.x = player->playerSpeed*player->dashingMultiplier;
-    } else if ( newvel.x < -player->playerSpeed*player->dashingMultiplier ) {
-        newvel.x = -player->playerSpeed*player->dashingMultiplier;
+    if ( newvel.x > player->playerSpeed ) {
+        newvel.x = player->playerSpeed;
+    } else if ( newvel.x < -player->playerSpeed ) {
+        newvel.x = -player->playerSpeed;
     }
     newvel.y = vel.y;
     if ( player->touchingWallRight && newvel.x > 0 ) {
@@ -565,8 +565,13 @@ void LandingState::update( Player* player, double dt ) {
         if ( bufferedState ) {
             player->switchState( bufferedState );
         } else {
-            player->switchState( new IdleState(player) );
+            if ( fabs(player->direction.x) > 0.9 ) {
+                player->switchState( new WalkingState(player) );
+            } else {
+                player->switchState( new IdleState(player) );
+            }
         }
+        return;
     }
     if ( player->direction.x != 0 && reset ) {
         walkTimer += dt;

@@ -228,6 +228,12 @@ void Player::setUpBody() {
 }
 
 Player::~Player() {
+    if ( currentState ) {
+        delete currentState;
+    }
+    if ( newState ) {
+        delete newState;
+    }
     delete sprite;
 }
 

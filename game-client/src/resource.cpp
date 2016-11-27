@@ -116,3 +116,9 @@ sf::SoundBuffer* ResourceManager::getSound( std::string name ) {
     resources.push_back( new SoundResource( name ) );
     return (sf::SoundBuffer*)((SoundResource*)resources.back())->get();
 }
+
+ResourceManager::~ResourceManager() {
+    for( Resource* r : resources ) {
+        delete r;
+    }
+}

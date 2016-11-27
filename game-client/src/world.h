@@ -14,6 +14,7 @@ private:
     std::vector<Entity*> entities;
     sf::Texture background;
 public:
+    ~World();
     bool setBackground(std::string fileName);
     void addEntity( Entity* e );
     void bringToFront( Entity* e );

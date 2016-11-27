@@ -63,6 +63,7 @@ class ResourceManager {
 private:
     std::vector<Resource*> resources;
 public:
+    ~ResourceManager();
     sf::SoundBuffer* getSound( std::string name );
     sf::Texture* getTexture( std::string name );
     sf::Font* getFont( std::string name );

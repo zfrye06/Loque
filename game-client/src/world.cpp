@@ -2,6 +2,13 @@
 
 World* world = new World();
 
+World::~World() {
+    for ( Entity* e : entities ) {
+        delete e;
+    }
+}
+
+
 bool World::setBackground(std::string fileName){
     return background.loadFromFile(fileName);
 }

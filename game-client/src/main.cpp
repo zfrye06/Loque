@@ -50,6 +50,9 @@ int app() {
         window.display();
         window.popGLStates();
     }
+    delete Resources;
+    delete world;
+    delete physicalWorld;
     return 0;
 }
 

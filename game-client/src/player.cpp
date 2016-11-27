@@ -2,6 +2,7 @@
 
 Player::Player( std::string resource, sf::View& view ) {
     successfulTech = false;
+    directionalInfluence = 1.f;
     techLength = 20.f/60.f;
     frickedUpLength = 40.f/60.f;
     jumpHelpAmount = 8.f;

@@ -659,7 +659,10 @@ KnockbackState::KnockbackState( Player* player, glm::vec2 impulse ) {
 }
 
 void KnockbackState::init() {
-    player->myBody->SetLinearVelocity( toB2( impulse ) );
+    glm::vec2 up = glm::vec2(0.f,-1.f);
+    float strength = glm::length(impulse);
+    float knockbackAngle = -acos(glm::dot(up,glm::normalize(impulse+(player->direction*player->directionalInfluence*strength))));
+    player->myBody->SetLinearVelocity( toB2( glm::rotate(up*strength,knockbackAngle) ) );
     player->sprite->play( player->knockBackAnimation );
     player->sprite->setLooped( false );
     player->sprite->setFrameTime(sf::seconds(0.07));

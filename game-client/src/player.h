@@ -21,6 +21,7 @@ class Player : public Entity {
 public:
 
     // Configurable variables
+    float directionalInfluence;
     float techLength;
     float frickedUpLength;
     float damageBoostLength;

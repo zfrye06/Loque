@@ -41,40 +41,6 @@ bool addClass(sql::Connection *conn, int userID, std::string className){
 }
 
  /*
-  * Enables/Disables maps for classes
-  */
- void toggleMaps(sql::Connection *conn, int classID, std::vector<int> mapIDs, bool enable) {
-     if (enable) {
-         // Not sure what the best way to insert only if entry does not already exist.
-         // Currently just catch exception and move on.
-         try {
-             for (int mapID : mapIDs) {
-                 pstmt = conn->prepareStatement(
-                         "INSERT INTO MapAssociations(classID, mapID) VALUES(?, ?)");
-                 pstmt->setInt(1, classID);
-                 pstmt->setInt(2, mapID);
-                 pstmt->execute();
-             }
-         } catch (sql::SQLException &e) {
-             std::cout << "Insert Map Failed: " << e.what() << std::endl;
-         }
-     } else {
-         // Delete does not throw an exception if there is nothing to delete.
-         try {
-             for (int mapID : mapIDs) {
-                 pstmt = conn->prepareStatement(
-                         "DELETE FROM MapAssociations WHERE classID = ? AND mapID = ?");
-                 pstmt->setInt(1, classID);
-                 pstmt->setInt(2, mapID);
-                 pstmt->execute();
-             }
-         } catch (sql::SQLException &e) {
-             std::cout << "Delete Map Failed: " << e.what() << std::endl;
-         }
-     }
-     delete pstmt;
- }
- /*
   * Updates levels completed flag, high score, and completion time for the level.
   */
  void levelCompleted(sql::Connection *conn, int userID, int mapID, int newScore, int newTime) {
@@ -345,13 +311,100 @@ void handleCreateAcc(sql::Connection& dbconn,
 void handleAddClassroom(sql::Connection& dbconn,
                         int userId, int classId, // Need className not classID. ClassID will be assigned on insertion (auto increment).
                         ActionResult& res) {
-//    addClass(&dbconn, userId, className);
+    res.success = false;
+    try {
+        std::string query = "INSERT INTO ClassAssociations(userId, classId) VALUES(?, ?)";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, userId);
+        pstmt->setInt(2, classId);
+        pstmt->execute();
+        res.success = true;
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleAddClassroom: " << e.what() << std::endl;
+        res.reason = e.what(); // TODO: Set user-friendly error string. 
+    }
 }
 
 void handlePostStats(sql::Connection& dbconn,
                      int userId, const GameStats& stats,
                      ActionResult& res) {
-    levelCompleted(&dbconn, userId, stats.levelId, stats.pointsScored, stats.secToComplete);
+    res.success = false;
+    try {
+
+        // Update total time played and total score
+        std::string query = "UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userID  = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, stats.secToComplete);
+        pstmt->setInt(2, stats.pointsScored);
+        pstmt->setInt(3, userId);
+        pstmt->execute();
+
+        // // Grab levelsCompleted flag
+        // query = "SELECT levelsCompleted FROM User WHERE userID = ?";
+        // pstmt.reset(dbconn.prepareStatement(query));
+        // pstmt->setInt(1, userId);
+        // std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery()); 
+        // if(rs->next()){
+        //     // Set the flag for the level just completed
+        //     unsigned int flag = rs->getInt(1);
+
+        //     // Wrong I think
+        //     // flag = flag | mapID;
+
+        //     query = "UPDATE User SET levelsCompleted = ? WHERE userID = ?";
+        //     pstmt.reset(dbconn.prepareStatement(query));
+        //     pstmt->setInt(1, flag);
+        //     pstmt->setInt(2, userID);
+
+        //     // See if they have completed this level before
+        //     pstmt = conn->prepareStatement("SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userID = ? AND mapID = ?");
+        //     pstmt->setInt(1, userID);
+        //     pstmt->setInt(2, mapID);
+        //     rs = pstmt->executeQuery();
+
+        //     //If they have ...
+        //     if(rs->next()){
+        //         //See if they have a new high score or a faster completion time
+        //         int oldScore = rs->getInt(1);
+        //         int oldTime = rs->getInt(2);
+        //         if(newScore > oldScore){
+        //             oldScore = newScore;
+        //             update = true;
+        //         }
+        //         if(newTime < oldTime){
+        //             oldTime = newTime;
+        //             update  = true;
+        //         }
+        //         if(update) {
+        //             // Update in the database
+        //             pstmt = conn->prepareStatement(
+        //                                            "UPDATE ScoreInfo SET levelHighScore = ?, completionTime = ? WHERE userID = ? AND mapID = ?");
+        //             pstmt->setInt(1, oldScore);
+        //             pstmt->setInt(2, oldTime);
+        //             pstmt->setInt(3, userID);
+        //             pstmt->setInt(4, mapID);
+        //             pstmt->execute();
+        //         }
+
+        //         //Otherwise just insert a new row
+        //     } else{
+        //         pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelHighScore, completionTime) VALUES(?, ?, ?, ?)");
+        //         pstmt->setInt(1, userID);
+        //         pstmt->setInt(2, mapID);
+        //         pstmt->setInt(3, newScore);
+        //         pstmt->setInt(4, newTime);
+        //         pstmt->execute();
+        //     }
+        // }
+        // else{
+        //     std::cout << "User does not exist." << std::endl;
+        //     return;
+        // }
+
+
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handlePostStats: " << e.what() << std::endl;
+    }
 }
 
 void handleGetUserStats(sql::Connection& dbconn,
@@ -363,25 +416,39 @@ void handleGetUserStats(sql::Connection& dbconn,
 void handleEnableLevel(sql::Connection& dbconn,
                        int userId, int classId, int levelId,
                        ActionResult& res) {
-    // Currently can take in multiple level ids. Will change if not needed.
-    std::vector<int> v;
-    v.push_back(levelId);
-    toggleMaps(&dbconn, classId, v, true);
+    res.success = false;
+    try {
+        std::string query = "INSERT INTO MapAssociations(classID, mapID) VALUES(?, ?)";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, classId);
+        pstmt->setInt(2, levelId);
+        pstmt->execute();
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleEnableLevel: " << e.what() << std::endl;
+        res.reason = "";        // TODO: set reason. 
+    }
 }
 
 void handleDisableLevel(sql::Connection& dbconn,
                         int userId, int classId, int levelId,
                         ActionResult& res) {
-    // Currently can take in multiple level ids. Will change if not needed.
-    std::vector<int> v;
-    v.push_back(levelId);
-    toggleMaps(&dbconn, classId, v, false);
+    res.success = false;
+    try {
+        std::string query = "DELETE FROM MapAssociations WHERE classID = ? AND mapID = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, classId);
+        pstmt->setInt(2, levelId);
+        pstmt->execute();
+    } catch (sql::SQLException &e) {
+        std::cerr << "ERROR: SQL Exception from handleDisableLevel: " << e.what() << std::endl;
+        res.reason = "";        // TODO: set reason.
+    }
 }
 
 void handleGetClassStats(sql::Connection& dbconn,
                          int userId, int classId,
                          ClassStats& stats) {
-    // Not sure what is wanted here.
+
 }
 
 void handleClient(std::unique_ptr<sf::TcpSocket> client,

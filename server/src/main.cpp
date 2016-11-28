@@ -95,6 +95,29 @@ void handleAddClassroom(sql::Connection& dbconn,
     }
 }
 
+void handleCreateClassroom(sql::Connection& dbconn,
+                           int userId, const std::string& className,
+                           ActionResult& res) {
+    res.success = false;
+    try {
+        std::string query = "INSERT INTO Class(className) VALUES(?)";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setString(1 , className);
+        pstmt->execute();
+
+        query = "SELECT LAST_INSERT_ID()";
+        pstmt.reset(dbconn.prepareStatement(query));
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        qRes->next();
+        int classId = qRes->getInt(1);
+
+        handleAddClassroom(dbconn, userId, classId, res); 
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleCreateClassroom: " << e.what() << std::endl;
+        res.reason = e.what(); // TODO: Set user-friendly error string. 
+    }
+}
+
 void handlePostStats(sql::Connection& dbconn,
                      int userId, const GameStats& stats,
                      ActionResult& res) {
@@ -274,6 +297,16 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         reqPacket >> userId >> classId;
         ActionResult res;
         handleAddClassroom(*dbconn, userId, classId, res);
+        respPacket << res;
+        break;
+    }
+    case CREATE_CLASS:
+    {
+        int userId;
+        std::string className;
+        reqPacket >> userId >> className;
+        ActionResult res;
+        handleCreateClassroom(*dbconn, userId, className, res);
         respPacket << res;
         break;
     }

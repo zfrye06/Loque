@@ -731,6 +731,7 @@ KnockbackRecoverState::KnockbackRecoverState( Player* player, bool teched ) {
 void KnockbackRecoverState::init() {
     world->addEntity( new LandingDust( player->position, player->groundAngle) );
     player->myBody->SetLinearVelocity( b2Vec2(0,0) );
+    player->myBody->SetAwake(false);
     if ( teched ) {
         player->flash(sf::Color(120,255,120,255),0.2,0.1);
         player->sprite->play( player->tecAnimation );
@@ -746,6 +747,7 @@ void KnockbackRecoverState::init() {
 
 KnockbackRecoverState::~KnockbackRecoverState() {
     player->sprite->setLooped( true );
+    player->myBody->SetAwake(true);
 }
 
 PlayerState KnockbackRecoverState::getType() {

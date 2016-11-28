@@ -36,6 +36,7 @@ set( source
          src/playerstate.cpp
          src/contactlistener.cpp
          src/physicalworld.cpp
+         src/spikes.cpp
          src/main.cpp )
 
 add_executable(${EXECUTABLE_NAME} ${source})

@@ -45,6 +45,7 @@ public:
         Laser,
         Trampoline,
         Dust,
+        Spikes,
         None
     };
     virtual Type getType();

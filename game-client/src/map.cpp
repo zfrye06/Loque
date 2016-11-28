@@ -250,4 +250,7 @@ void Map::spawnObject( tmx::Object& obj ) {
     else if( obj.getName() == "trampoline" ) {
         world->addEntity( new ::Trampoline(obj));
     }
+    else if( obj.getName() == "spikes") {
+        world->addEntity( new ::Spikes(obj));
+    }
 }

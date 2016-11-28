@@ -23,24 +23,6 @@ const std::string DB_PASS = "password";
 
 
 /*
- * Checks if user credentials are in the database
- */
-bool login(sql::Connection *conn, std::string username, std::string password){
-    bool success = false;
-    try {
-        pstmt = conn->prepareStatement(
-                "SELECT userID FROM User WHERE username = ? AND password = ?");
-        pstmt->setString(1, username);
-        pstmt->setString(2, password);
-        success = pstmt->execute();
-        return success;
-    } catch (sql::SQLException &e) {
-        std::cout << "Select User for Login Failed: " << e.what() << std::endl;
-        return success;
-    }
-}
-
-/*
  * Adds a class with class name and associates the teacher with their class.
  */
 bool addClass(sql::Connection *conn, int userID, std::string className){
@@ -333,8 +315,23 @@ void printUsage(const std::string &progname) {
 
 void handleLogin(sql::Connection& dbconn,
                  std::string username, std::string userpass,
-                 LoginResult& res) {
-    bool success = login(&dbconn, username, userpass);
+                 LoginResult& loginres) {
+    loginres.userType = DNE;
+    try {
+        std::string query = "SELECT userID, isAdmin FROM User WHERE username = ? AND password = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setString(1, username);
+        pstmt->setString(2, userpass);
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        if (qRes->next()) {
+            int id = qRes->getInt(1);
+            int isAdmin = qRes->getInt(2);
+            loginres.userId = id;
+            loginres.userType = isAdmin ? Admin : Student; 
+        }
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleLogin: " << e.what() << std::endl;
+    }
 }
 
 void handleCreateAcc(sql::Connection& dbconn,
@@ -518,6 +515,8 @@ int main(int argc, char **argv) {
                   "listen() returned status " << status << "." << std::endl;
         return 1;
     }
+    std::unique_ptr<sql::Connection> dbconn(driver->connect(DB_ADDR, DB_USER, DB_PASS));
+    dbconn->setSchema("3505");
     while (true) {
         std::unique_ptr<sf::TcpSocket> client(new sf::TcpSocket);
         int status = listener.accept(*client);

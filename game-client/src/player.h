@@ -131,7 +131,7 @@ public:
     sf::Sound wallJumpSound;
     sf::Sound airDodgeSound;
     sf::Sound techSound;
-    Player( std::string resource, sf::View& view );
+    Player( std::string resource, glm::vec2 pos, sf::View& view );
     ~Player();
     void update( double dt );
     void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );

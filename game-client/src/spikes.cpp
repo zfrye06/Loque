@@ -2,7 +2,6 @@
 
 Spikes::Spikes(tmx::Object& obj){
     pos = glm::vec2(obj.getPosition().x, obj.getPosition().y);
-    std::cout<<"Spawned Spikes"<<std::endl;
 
     tmx::FloatRect size = obj.getAABB();
     size.width = size.width / 64;

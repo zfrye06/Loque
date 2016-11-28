@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player( std::string resource, sf::View& view ) {
+Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     hitLength = 0.2;
     successfulTech = false;
     directionalInfluence = 1.f;
@@ -43,12 +43,8 @@ Player::Player( std::string resource, sf::View& view ) {
     setUpSprite( resource );
     setUpBody();
     setUpSounds();
-    std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
-    if (spawns.size() >= 1 ) {
-        ::PlayerSpawn* spawn = (::PlayerSpawn*)spawns[0];
-        myBody->SetTransform(toB2(spawn->pos),0);
-        smoothCamera = spawn->pos*64.f;
-    }
+    myBody->SetTransform(toB2(pos),0);
+    smoothCamera = pos*64.f;
     controllerID = 0;
     currentState = new IdleState(this);
     touchingCeiling = false;
@@ -251,6 +247,7 @@ Player::~Player() {
         delete newState;
     }
     delete sprite;
+    myBody->GetWorld()->DestroyBody(myBody);
 }
 
 void Player::flash(sf::Color c, float length, float period) {

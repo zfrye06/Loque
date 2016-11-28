@@ -30,6 +30,7 @@ set( source
          src/world.cpp
          src/player.cpp
          src/dust.cpp
+         src/respawn.cpp
          src/trampoline.cpp
          src/map.cpp
          src/laser.cpp

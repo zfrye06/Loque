@@ -11,7 +11,7 @@ Laser::Laser(tmx::Object& obj){
     }
 
     tmx::FloatRect size = obj.getAABB();
-    pos = glm::vec2(obj.getPosition().x, obj.getPosition().y+size.height/2.f); 
+    pos = glm::vec2(obj.getPosition().x+size.width/2.f, obj.getPosition().y+size.height/2.f); 
     size.width = size.width / 64;
     size.height = size.height / 64;
     size.left = size.left / 64;
@@ -56,12 +56,8 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
             world->stutter(0.4,0.1);
             p->shake(10,0.8,0.1);
             glm::vec2 impulse = p->position - pos;
+            impulse.y = 0;
             impulse = glm::normalize( impulse );
-            if ( impulse.x > 0 ) {
-                impulse.x = 1;
-            } else {
-                impulse.x = -1;
-            }
             impulse *= 15.f;
 
             p->switchState( new ShockedState( p, impulse ) );

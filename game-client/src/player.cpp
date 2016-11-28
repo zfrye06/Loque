@@ -25,7 +25,7 @@ Player::Player( std::string resource, sf::View& view ) {
     dashingMultiplier = 2; // in percentage
     doubleJumpHeight = 12; // in meters per second
     fullHopHeight = 14; // actually a force, in newtons
-    shortHopHeight = 7; // in newtons
+    shortHopHeight = 8; // in newtons
     canWallJumpLeft = false;
     canWallJumpRight = false;
     canDoubleJump = true;

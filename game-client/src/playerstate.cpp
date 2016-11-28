@@ -662,8 +662,31 @@ void KnockbackState::init() {
     player->hurtSound.play();
     glm::vec2 up = glm::vec2(0.f,-1.f);
     float strength = glm::length(impulse);
-    float knockbackAngle = -acos(glm::dot(up,glm::normalize(impulse+(player->direction*player->directionalInfluence*strength))));
-    player->myBody->SetLinearVelocity( toB2( glm::rotate(up*strength,knockbackAngle) ) );
+    glm::vec2 di = glm::normalize(player->direction*player->directionalInfluence*strength);
+    glm::vec2 newImpulse = glm::normalize(impulse);
+    // If it would make us face the wrong way entirely... Don't do any DI
+    if ( !isnan(di.x) && glm::dot(glm::normalize(impulse),di) > 0 ) {
+        newImpulse = glm::normalize(newImpulse+di);
+    } else if ( !isnan(di.x) ) {
+        // If we're pretty close to being the right way, snap the DI to the intended direction
+        if ( glm::dot(glm::normalize(impulse),di) > -0.5 ) {
+            if ( di.y > 0.8 ) {
+                di.y = 1;
+                di.x = 0;
+            } else if ( di.y < -0.8 ) {
+                di.y = -1;
+                di.x = 0;
+            } else if ( di.x < -0.8 ) {
+                di.x = -1;
+                di.y = 0;
+            } else if ( di.x > 0.8 ) {
+                di.x = 1;
+                di.y = 0;
+            }
+            newImpulse = glm::normalize(newImpulse+di);
+        }
+    }
+    player->myBody->SetLinearVelocity( toB2( newImpulse*strength ) );
     player->sprite->play( player->knockBackAnimation );
     player->sprite->setLooped( false );
     player->flash(sf::Color(200,150,150,255),(player->knockBackAnimation.getSize()+5)*0.07,0.09);

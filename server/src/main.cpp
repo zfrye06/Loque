@@ -16,237 +16,232 @@ const int DEFAULT_PORT = 5001;
 const std::string DB_ADDR = "tcp://bernardcosgriff.com:3306";
 const std::string DB_USER = "teamaccess";
 const std::string DB_PASS = "password";
- sql::Driver *driver = get_driver_instance();
-// sql::Connection *conn = driver->connect(DB_ADDR, DB_USER, DB_PASS);
- sql::PreparedStatement *pstmt;
- sql::ResultSet *rs;
+
+// /*
+//  * Adds a class with class name and associates the teacher with their class.
+//  */
+// bool addClass(sql::Connection *conn, int userID, std::string className){
+//     bool success = false;
+//     try {
+//         pstmt = conn->prepareStatement(
+//                 "INSERT INTO ClassAssociations(userID, className) VALUES(?, ?)");
+//         pstmt->setInt(1, userID);
+//         pstmt->setString(2, className);
+//         success = pstmt->execute();
+//         return success;
+//     } catch (sql::SQLException &e) {
+//         std::cout << "Insert New Class Failed: " << e.what() << std::endl;
+//         return success;
+//     }
+// }
+
+//  /*
+//   * Updates levels completed flag, high score, and completion time for the level.
+//   */
+//  void levelCompleted(sql::Connection *conn, int userID, int mapID, int newScore, int newTime) {
+//      try {
+//          bool update = false;
+
+//          // Update total time played and total score
+//          pstmt = conn->prepareStatement("UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userID  = ?");
+//          pstmt->setInt(1, newTime);
+//          pstmt->setInt(2, newScore);
+//          pstmt->setInt(3, userID);
+//          pstmt->execute();
+
+//          // Grab levelsCompleted flag
+//          pstmt = conn->prepareStatement(
+//                  "SELECT levelsCompleted FROM User WHERE userID = ?");
+//          pstmt->setInt(1, userID);
+//          rs = pstmt->executeQuery();
+//          if(rs->next()){
+//              // Set the flag for the level just completed
+//              unsigned int flag = rs->getInt(1);
+
+//              // Wrong I think
+//              // flag = flag | mapID;
+
+//              pstmt = conn->prepareStatement("UPDATE User SET levelsCompleted = ? WHERE userID = ?");
+//              pstmt->setInt(1, flag);
+//              pstmt->setInt(2, userID);
+
+//              // See if they have completed this level before
+//              pstmt = conn->prepareStatement("SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userID = ? AND mapID = ?");
+//              pstmt->setInt(1, userID);
+//              pstmt->setInt(2, mapID);
+//              rs = pstmt->executeQuery();
+
+//              //If they have ...
+//              if(rs->next()){
+//                  //See if they have a new high score or a faster completion time
+//                  int oldScore = rs->getInt(1);
+//                  int oldTime = rs->getInt(2);
+//                  if(newScore > oldScore){
+//                      oldScore = newScore;
+//                      update = true;
+//                  }
+//                  if(newTime < oldTime){
+//                      oldTime = newTime;
+//                      update  = true;
+//                  }
+//                  if(update) {
+//                      // Update in the database
+//                      pstmt = conn->prepareStatement(
+//                              "UPDATE ScoreInfo SET levelHighScore = ?, completionTime = ? WHERE userID = ? AND mapID = ?");
+//                      pstmt->setInt(1, oldScore);
+//                      pstmt->setInt(2, oldTime);
+//                      pstmt->setInt(3, userID);
+//                      pstmt->setInt(4, mapID);
+//                      pstmt->execute();
+//                  }
+
+//                  //Otherwise just insert a new row
+//              } else{
+//                  pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelHighScore, completionTime) VALUES(?, ?, ?, ?)");
+//                  pstmt->setInt(1, userID);
+//                  pstmt->setInt(2, mapID);
+//                  pstmt->setInt(3, newScore);
+//                  pstmt->setInt(4, newTime);
+//                  pstmt->execute();
+//              }
+//          }
+//          else{
+//              std::cout << "User does not exist." << std::endl;
+//              return;
+//          }
 
 
-/*
- * Adds a class with class name and associates the teacher with their class.
- */
-bool addClass(sql::Connection *conn, int userID, std::string className){
-    bool success = false;
-    try {
-        pstmt = conn->prepareStatement(
-                "INSERT INTO ClassAssociations(userID, className) VALUES(?, ?)");
-        pstmt->setInt(1, userID);
-        pstmt->setString(2, className);
-        success = pstmt->execute();
-        return success;
-    } catch (sql::SQLException &e) {
-        std::cout << "Insert New Class Failed: " << e.what() << std::endl;
-        return success;
-    }
-}
+//      } catch (sql::SQLException &e) {
+//          std::cout << "Level Completion Update Failed: " << e.what() << std::endl;
+//      }
+//  }
 
- /*
-  * Updates levels completed flag, high score, and completion time for the level.
-  */
- void levelCompleted(sql::Connection *conn, int userID, int mapID, int newScore, int newTime) {
-     try {
-         bool update = false;
+//  /*
+//   * Returns all maps enabled for the specified class.
+//   */
+//  std::vector<int> getEnabledMaps(sql::Connection *conn, int classID) {
+//      std::vector<int> v;
+//      try {
+//          pstmt = conn->prepareStatement(
+//                  "SELECT mapID FROM MapAssociations WHERE classID = ?");
+//          pstmt->setInt(1, classID);
+//          rs = pstmt->executeQuery();
+//          while (rs->next()) {
+//              v.push_back(rs->getInt(1));
+//          }
+//          delete pstmt;
+//          return v;
+//      } catch (sql::SQLException &e) {
+//          std::cout << "Select Failed: " << e.what() << std::endl;
+//          return v;
+//      }
+//  }
 
-         // Update total time played and total score
-         pstmt = conn->prepareStatement("UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userID  = ?");
-         pstmt->setInt(1, newTime);
-         pstmt->setInt(2, newScore);
-         pstmt->setInt(3, userID);
-         pstmt->execute();
+//  /*
+//   *
+//   */
+//  std::map<int, int> getTotalScores(sql::Connection *conn, int classID) {
+//      std::map<int, int> v;
+//      try {
+//          int user;
+//          int score;
+//          pstmt = conn->prepareStatement("SELECT userID, totalScore FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
+//          pstmt->setInt(1, classID);
+//          rs = pstmt->executeQuery();
+//          while(rs->next()){
+//              user = rs->getInt(1);
+//              score = rs->getInt(2);
+//              v[user] = score;
+//          }
+//          delete pstmt;
+//          return v;
+//      } catch (sql::SQLException &e) {
+//          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+//          return v;
+//      }
+//  }
 
-         // Grab levelsCompleted flag
-         pstmt = conn->prepareStatement(
-                 "SELECT levelsCompleted FROM User WHERE userID = ?");
-         pstmt->setInt(1, userID);
-         rs = pstmt->executeQuery();
-         if(rs->next()){
-             // Set the flag for the level just completed
-             unsigned int flag = rs->getInt(1);
+//  /*
+//   *
+//   */
+//  std::map<int, int> getTotalTimes(sql::Connection *conn, int classID) {
+//      std::map<int, int> v;
+//      try {
+//          int user;
+//          int time;
+//          pstmt = conn->prepareStatement("SELECT userID, totalTime FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
+//          pstmt->setInt(1, classID);
+//          rs = pstmt->executeQuery();
+//          while(rs->next()){
+//              user = rs->getInt(1);
+//              time = rs->getInt(2);
+//              v[user] = time;
+//          }
+//          delete pstmt;
+//          return v;
+//      } catch (sql::SQLException &e) {
+//          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+//          return v;
+//      }
+//  }
 
-             // Wrong I think
-             // flag = flag | mapID;
+//  /*
+//   * Returns the highest level completed by the specified user
+//   */
+//  int getHighestLevelCompleted(sql::Connection *conn, int userID) {
+//      int highestLevel = 0;
+//      try {
+//          unsigned int levels = 0;
+//          pstmt = conn->prepareStatement("SELECT levelsCompleted FROM User WHERE userID = ?");
+//          pstmt->setInt(1, userID);
+//          rs = pstmt->executeQuery();
+//          if(rs->next()){
+//              levels = rs->getInt(1);
+//          }
+//          else{
+//              std::cout << "User Does Not Exist" << std::endl;
+//              return 0;
+//          }
+//          for(unsigned int i = 128; i > 0; i = i/2){
+//              if((i & levels) != 0){
+//                  highestLevel = log2(i);
+//              }
+//          }
+//          delete pstmt;
+//          return highestLevel;
+//      } catch (sql::SQLException &e) {
+//          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
+//          return highestLevel;
+//      }
+//  }
 
-             pstmt = conn->prepareStatement("UPDATE User SET levelsCompleted = ? WHERE userID = ?");
-             pstmt->setInt(1, flag);
-             pstmt->setInt(2, userID);
+//  /*
+//   * Gets the average high score for the class with classID on the level with mapID.
+//   */
+//  int getClassLevelAverage(sql::Connection *conn, int classID, int mapID) {
+//      int total = 0;
+//      int entries = 0;
 
-             // See if they have completed this level before
-             pstmt = conn->prepareStatement("SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userID = ? AND mapID = ?");
-             pstmt->setInt(1, userID);
-             pstmt->setInt(2, mapID);
-             rs = pstmt->executeQuery();
-
-             //If they have ...
-             if(rs->next()){
-                 //See if they have a new high score or a faster completion time
-                 int oldScore = rs->getInt(1);
-                 int oldTime = rs->getInt(2);
-                 if(newScore > oldScore){
-                     oldScore = newScore;
-                     update = true;
-                 }
-                 if(newTime < oldTime){
-                     oldTime = newTime;
-                     update  = true;
-                 }
-                 if(update) {
-                     // Update in the database
-                     pstmt = conn->prepareStatement(
-                             "UPDATE ScoreInfo SET levelHighScore = ?, completionTime = ? WHERE userID = ? AND mapID = ?");
-                     pstmt->setInt(1, oldScore);
-                     pstmt->setInt(2, oldTime);
-                     pstmt->setInt(3, userID);
-                     pstmt->setInt(4, mapID);
-                     pstmt->execute();
-                 }
-
-                 //Otherwise just insert a new row
-             } else{
-                 pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelHighScore, completionTime) VALUES(?, ?, ?, ?)");
-                 pstmt->setInt(1, userID);
-                 pstmt->setInt(2, mapID);
-                 pstmt->setInt(3, newScore);
-                 pstmt->setInt(4, newTime);
-                 pstmt->execute();
-             }
-         }
-         else{
-             std::cout << "User does not exist." << std::endl;
-             return;
-         }
-
-
-     } catch (sql::SQLException &e) {
-         std::cout << "Level Completion Update Failed: " << e.what() << std::endl;
-     }
- }
-
- /*
-  * Returns all maps enabled for the specified class.
-  */
- std::vector<int> getEnabledMaps(sql::Connection *conn, int classID) {
-     std::vector<int> v;
-     try {
-         pstmt = conn->prepareStatement(
-                 "SELECT mapID FROM MapAssociations WHERE classID = ?");
-         pstmt->setInt(1, classID);
-         rs = pstmt->executeQuery();
-         while (rs->next()) {
-             v.push_back(rs->getInt(1));
-         }
-         delete pstmt;
-         return v;
-     } catch (sql::SQLException &e) {
-         std::cout << "Select Failed: " << e.what() << std::endl;
-         return v;
-     }
- }
-
- /*
-  *
-  */
- std::map<int, int> getTotalScores(sql::Connection *conn, int classID) {
-     std::map<int, int> v;
-     try {
-         int user;
-         int score;
-         pstmt = conn->prepareStatement("SELECT userID, totalScore FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
-         pstmt->setInt(1, classID);
-         rs = pstmt->executeQuery();
-         while(rs->next()){
-             user = rs->getInt(1);
-             score = rs->getInt(2);
-             v[user] = score;
-         }
-         delete pstmt;
-         return v;
-     } catch (sql::SQLException &e) {
-         std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
-         return v;
-     }
- }
-
- /*
-  *
-  */
- std::map<int, int> getTotalTimes(sql::Connection *conn, int classID) {
-     std::map<int, int> v;
-     try {
-         int user;
-         int time;
-         pstmt = conn->prepareStatement("SELECT userID, totalTime FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
-         pstmt->setInt(1, classID);
-         rs = pstmt->executeQuery();
-         while(rs->next()){
-             user = rs->getInt(1);
-             time = rs->getInt(2);
-             v[user] = time;
-         }
-         delete pstmt;
-         return v;
-     } catch (sql::SQLException &e) {
-         std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
-         return v;
-     }
- }
-
- /*
-  * Returns the highest level completed by the specified user
-  */
- int getHighestLevelCompleted(sql::Connection *conn, int userID) {
-     int highestLevel = 0;
-     try {
-         unsigned int levels = 0;
-         pstmt = conn->prepareStatement("SELECT levelsCompleted FROM User WHERE userID = ?");
-         pstmt->setInt(1, userID);
-         rs = pstmt->executeQuery();
-         if(rs->next()){
-             levels = rs->getInt(1);
-         }
-         else{
-             std::cout << "User Does Not Exist" << std::endl;
-             return 0;
-         }
-         for(unsigned int i = 128; i > 0; i = i/2){
-             if((i & levels) != 0){
-                 highestLevel = log2(i);
-             }
-         }
-         delete pstmt;
-         return highestLevel;
-     } catch (sql::SQLException &e) {
-         std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
-         return highestLevel;
-     }
- }
-
- /*
-  * Gets the average high score for the class with classID on the level with mapID.
-  */
- int getClassLevelAverage(sql::Connection *conn, int classID, int mapID) {
-     int total = 0;
-     int entries = 0;
-
-     try {
-         pstmt = conn->prepareStatement("SELECT levelHighScore FROM ScoreInfo WHERE mapID = ? AND userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
-         pstmt->setInt(1, mapID);
-         pstmt->setInt(2, classID);
-         rs = pstmt->executeQuery();
-         while(rs->next()) {
-             total = total + rs->getInt(1);
-             entries++;
-         }
-         delete pstmt;
-         if(entries == 0) {
-            return 0;
-         } else {
-             return total/entries;
-         }
-     } catch (sql::SQLException &e) {
-         std::cout << "Select Average Scores Failed: " << e.what() << std::endl;
-         return 0;
-     }
- }
+//      try {
+//          pstmt = conn->prepareStatement("SELECT levelHighScore FROM ScoreInfo WHERE mapID = ? AND userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
+//          pstmt->setInt(1, mapID);
+//          pstmt->setInt(2, classID);
+//          rs = pstmt->executeQuery();
+//          while(rs->next()) {
+//              total = total + rs->getInt(1);
+//              entries++;
+//          }
+//          delete pstmt;
+//          if(entries == 0) {
+//             return 0;
+//          } else {
+//              return total/entries;
+//          }
+//      } catch (sql::SQLException &e) {
+//          std::cout << "Select Average Scores Failed: " << e.what() << std::endl;
+//          return 0;
+//      }
+//  }
 
 void printUsage(const std::string &progname) {
     std::cout << std::endl;
@@ -264,7 +259,7 @@ void handleLogin(sql::Connection& dbconn,
                  LoginResult& loginres) {
     loginres.userType = DNE;
     try {
-        std::string query = "SELECT userID, isAdmin FROM User WHERE username = ? AND password = ?";
+        std::string query = "SELECT userId, isAdmin FROM User WHERE username = ? AND password = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setString(1, username);
         pstmt->setString(2, userpass);
@@ -332,7 +327,7 @@ void handlePostStats(sql::Connection& dbconn,
     try {
 
         // Update total time played and total score
-        std::string query = "UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userID  = ?";
+        std::string query = "UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userId  = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, stats.secToComplete);
         pstmt->setInt(2, stats.pointsScored);
@@ -418,7 +413,7 @@ void handleEnableLevel(sql::Connection& dbconn,
                        ActionResult& res) {
     res.success = false;
     try {
-        std::string query = "INSERT INTO MapAssociations(classID, mapID) VALUES(?, ?)";
+        std::string query = "INSERT INTO LevelAssociations(classId, levelId) VALUES(?, ?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, classId);
         pstmt->setInt(2, levelId);
@@ -434,7 +429,7 @@ void handleDisableLevel(sql::Connection& dbconn,
                         ActionResult& res) {
     res.success = false;
     try {
-        std::string query = "DELETE FROM MapAssociations WHERE classID = ? AND mapID = ?";
+        std::string query = "DELETE FROM LevelAssociations WHERE classId = ? AND levelId = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, classId);
         pstmt->setInt(2, levelId);

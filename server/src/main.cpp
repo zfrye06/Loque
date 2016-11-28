@@ -41,26 +41,6 @@ bool addClass(sql::Connection *conn, int userID, std::string className){
 }
 
  /*
-  * Returns true if user is succesfully added and false if not (i.e. username already in use).
-  */
- bool addUser(sql::Connection *conn, std::string username, std::string password, bool isAdmin) {
-     try {
-         pstmt = conn->prepareStatement(
-                 "INSERT INTO User(username, password, isAdmin, levelsCompleted, totalScore, totalTime) VALUES (?, ?, ?, ?, ?, ?)");
-         pstmt->setString(1, username);
-         pstmt->setString(2, password);
-         pstmt->setBoolean(3, isAdmin);
-         pstmt->setInt(4, 0);
-         pstmt->setInt(5, 0);
-         pstmt->setInt(6, 0);
-         pstmt->execute();
-         return true;
-     } catch (sql::SQLException &e) {
-         std::cout << "Insert User Failed: " << e.what() << std::endl;
-         return false;
-     }
- }
- /*
   * Enables/Disables maps for classes
   */
  void toggleMaps(sql::Connection *conn, int classID, std::vector<int> mapIDs, bool enable) {

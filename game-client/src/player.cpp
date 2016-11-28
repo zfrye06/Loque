@@ -5,7 +5,7 @@ Player::Player( std::string resource, sf::View& view ) {
     successfulTech = false;
     directionalInfluence = 1.f;
     techLength = 20.f/60.f;
-    frickedUpLength = 40.f/60.f;
+    frickedUpLength = 50.f/60.f;
     jumpHelpAmount = 8.f;
     damageBoostLength = 1.f;
     damageBoostTimer = 0;
@@ -233,7 +233,7 @@ void Player::setUpBody() {
     b2FixtureDef boxFixtureDef;
     boxFixtureDef.shape = &boxShape;
     boxFixtureDef.density = 1;
-    boxFixtureDef.friction = 3;
+    boxFixtureDef.friction = 2;
     boxFixtureDef.restitution = 0;
     myBody->CreateFixture(&boxFixtureDef);
     boxFixtureDef.shape = &circleShape;
@@ -314,6 +314,9 @@ void Player::update( double dt ) {
     if ( (onGround || touchingWallLeft || touchingWallRight || touchingCeiling) && techTimer > 0 && frickedUpTimer <= 0 ) {
         techTimer = 0;
         successfulTech = true;
+    }
+    if ( (onGround || touchingWallLeft || touchingWallRight || touchingCeiling) && techTimer <= 0 && frickedUpTimer <= 0 ) {
+        frickedUpTimer = frickedUpLength;
     }
     frickedUpTimer -= dt;
     if ( techTimer > 0 && techTimer-dt < 0 ) {

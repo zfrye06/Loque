@@ -764,7 +764,7 @@ void KnockbackRecoverState::init() {
     }
     player->techSound.play();
     player->sprite->setLooped( false );
-    player->sprite->setFrameTime(sf::seconds(0.12));
+    player->sprite->setFrameTime(sf::seconds(0.1));
 }
 
 KnockbackRecoverState::~KnockbackRecoverState() {

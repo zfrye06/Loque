@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cppconn/connection.h>
 #include <cppconn/driver.h>
 #include <cppconn/prepared_statement.h>
@@ -34,87 +35,6 @@ const std::string DB_PASS = "password";
 //         return success;
 //     }
 // }
-
-//  /*
-//   * Updates levels completed flag, high score, and completion time for the level.
-//   */
-//  void levelCompleted(sql::Connection *conn, int userID, int mapID, int newScore, int newTime) {
-//      try {
-//          bool update = false;
-
-//          // Update total time played and total score
-//          pstmt = conn->prepareStatement("UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userID  = ?");
-//          pstmt->setInt(1, newTime);
-//          pstmt->setInt(2, newScore);
-//          pstmt->setInt(3, userID);
-//          pstmt->execute();
-
-//          // Grab levelsCompleted flag
-//          pstmt = conn->prepareStatement(
-//                  "SELECT levelsCompleted FROM User WHERE userID = ?");
-//          pstmt->setInt(1, userID);
-//          rs = pstmt->executeQuery();
-//          if(rs->next()){
-//              // Set the flag for the level just completed
-//              unsigned int flag = rs->getInt(1);
-
-//              // Wrong I think
-//              // flag = flag | mapID;
-
-//              pstmt = conn->prepareStatement("UPDATE User SET levelsCompleted = ? WHERE userID = ?");
-//              pstmt->setInt(1, flag);
-//              pstmt->setInt(2, userID);
-
-//              // See if they have completed this level before
-//              pstmt = conn->prepareStatement("SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userID = ? AND mapID = ?");
-//              pstmt->setInt(1, userID);
-//              pstmt->setInt(2, mapID);
-//              rs = pstmt->executeQuery();
-
-//              //If they have ...
-//              if(rs->next()){
-//                  //See if they have a new high score or a faster completion time
-//                  int oldScore = rs->getInt(1);
-//                  int oldTime = rs->getInt(2);
-//                  if(newScore > oldScore){
-//                      oldScore = newScore;
-//                      update = true;
-//                  }
-//                  if(newTime < oldTime){
-//                      oldTime = newTime;
-//                      update  = true;
-//                  }
-//                  if(update) {
-//                      // Update in the database
-//                      pstmt = conn->prepareStatement(
-//                              "UPDATE ScoreInfo SET levelHighScore = ?, completionTime = ? WHERE userID = ? AND mapID = ?");
-//                      pstmt->setInt(1, oldScore);
-//                      pstmt->setInt(2, oldTime);
-//                      pstmt->setInt(3, userID);
-//                      pstmt->setInt(4, mapID);
-//                      pstmt->execute();
-//                  }
-
-//                  //Otherwise just insert a new row
-//              } else{
-//                  pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelHighScore, completionTime) VALUES(?, ?, ?, ?)");
-//                  pstmt->setInt(1, userID);
-//                  pstmt->setInt(2, mapID);
-//                  pstmt->setInt(3, newScore);
-//                  pstmt->setInt(4, newTime);
-//                  pstmt->execute();
-//              }
-//          }
-//          else{
-//              std::cout << "User does not exist." << std::endl;
-//              return;
-//          }
-
-
-//      } catch (sql::SQLException &e) {
-//          std::cout << "Level Completion Update Failed: " << e.what() << std::endl;
-//      }
-//  }
 
 //  /*
 //   * Returns all maps enabled for the specified class.
@@ -324,81 +244,50 @@ void handlePostStats(sql::Connection& dbconn,
                      int userId, const GameStats& stats,
                      ActionResult& res) {
     res.success = false;
-    try {
 
-        // Update total time played and total score
-        std::string query = "UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userId  = ?";
+    // TODO: We want to execute these queries atomically. 
+    try {
+        std::string query = "UPDATE User SET totalTime = totalTime + ?, totalScore = totalScore + ? WHERE userId = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, stats.secToComplete);
         pstmt->setInt(2, stats.pointsScored);
         pstmt->setInt(3, userId);
         pstmt->execute();
 
-        // // Grab levelsCompleted flag
-        // query = "SELECT levelsCompleted FROM User WHERE userID = ?";
-        // pstmt.reset(dbconn.prepareStatement(query));
-        // pstmt->setInt(1, userId);
-        // std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery()); 
-        // if(rs->next()){
-        //     // Set the flag for the level just completed
-        //     unsigned int flag = rs->getInt(1);
+        query = "SELECT levelHighScore, completionTime from ScoreInfo WHERE userId = ? AND levelId = ?";
+        pstmt.reset(dbconn.prepareStatement(query));
+        pstmt->setInt(1, userId);
+        pstmt->setInt(2, stats.levelId);
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
 
-        //     // Wrong I think
-        //     // flag = flag | mapID;
+        if (qRes->next()) {
+            int oldHighScore = qRes->getInt(1);
+            int oldCompletionTime = qRes->getInt(2);
+            if (stats.pointsScored > oldHighScore || stats.secToComplete < oldCompletionTime) {
+                int highScore = std::max(stats.pointsScored, oldHighScore);
+                int completionTime = std::min(stats.secToComplete, oldCompletionTime);
 
-        //     query = "UPDATE User SET levelsCompleted = ? WHERE userID = ?";
-        //     pstmt.reset(dbconn.prepareStatement(query));
-        //     pstmt->setInt(1, flag);
-        //     pstmt->setInt(2, userID);
-
-        //     // See if they have completed this level before
-        //     pstmt = conn->prepareStatement("SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userID = ? AND mapID = ?");
-        //     pstmt->setInt(1, userID);
-        //     pstmt->setInt(2, mapID);
-        //     rs = pstmt->executeQuery();
-
-        //     //If they have ...
-        //     if(rs->next()){
-        //         //See if they have a new high score or a faster completion time
-        //         int oldScore = rs->getInt(1);
-        //         int oldTime = rs->getInt(2);
-        //         if(newScore > oldScore){
-        //             oldScore = newScore;
-        //             update = true;
-        //         }
-        //         if(newTime < oldTime){
-        //             oldTime = newTime;
-        //             update  = true;
-        //         }
-        //         if(update) {
-        //             // Update in the database
-        //             pstmt = conn->prepareStatement(
-        //                                            "UPDATE ScoreInfo SET levelHighScore = ?, completionTime = ? WHERE userID = ? AND mapID = ?");
-        //             pstmt->setInt(1, oldScore);
-        //             pstmt->setInt(2, oldTime);
-        //             pstmt->setInt(3, userID);
-        //             pstmt->setInt(4, mapID);
-        //             pstmt->execute();
-        //         }
-
-        //         //Otherwise just insert a new row
-        //     } else{
-        //         pstmt = conn->prepareStatement("INSERT INTO ScoreInfo(userID, mapID, levelHighScore, completionTime) VALUES(?, ?, ?, ?)");
-        //         pstmt->setInt(1, userID);
-        //         pstmt->setInt(2, mapID);
-        //         pstmt->setInt(3, newScore);
-        //         pstmt->setInt(4, newTime);
-        //         pstmt->execute();
-        //     }
-        // }
-        // else{
-        //     std::cout << "User does not exist." << std::endl;
-        //     return;
-        // }
-
-
+                query = "UPDATE ScoreInfo SET levelHighScore = ?, completionTime = ? WHERE userId = ? AND levelId = ?";
+                pstmt.reset(dbconn.prepareStatement(query));
+                pstmt->setInt(1, highScore);
+                pstmt->setInt(2, completionTime);
+                pstmt->setInt(3, userId);
+                pstmt->setInt(4, stats.levelId);
+                pstmt->execute();
+            }
+        } else {
+            query = "INSERT INTO ScoreInfo(userId, levelId, levelHighScore, completionTime) VALUES(?, ?, ?, ?)";
+            pstmt.reset(dbconn.prepareStatement(query));
+            pstmt->setInt(1, userId);
+            pstmt->setInt(2, stats.levelId);
+            pstmt->setInt(3, stats.pointsScored);
+            pstmt->setInt(4, stats.secToComplete);
+            pstmt->execute();
+        }
+        res.success = true;
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handlePostStats: " << e.what() << std::endl;
+        res.reason = "";        // TODO: set reason
     }
 }
 

@@ -24,6 +24,7 @@ public:
 
     // Configurable variables
     float directionalInfluence;
+    float hitLength;
     float techLength;
     float frickedUpLength;
     float damageBoostLength;
@@ -121,6 +122,7 @@ public:
     Animation winAnimation;
     Animation shockedAnimation;
     Animation tecAnimation;
+    Animation hitAnimation;
 
     sf::Sound hurtSound;
     sf::Sound dashSound;

@@ -255,16 +255,16 @@ void JumpingState::update( Player* player, double dt ) {
     glm::vec2 newvel;
     newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier*dt);
     if ( newvel.x > player->playerSpeed*player->dashingMultiplier ) {
-        newvel.x = player->playerSpeed*player->dashingMultiplier;
+        newvel.x = vel.x;
     } else if ( newvel.x < -player->playerSpeed*player->dashingMultiplier ) {
-        newvel.x = -player->playerSpeed*player->dashingMultiplier;
+        newvel.x = vel.x;
     }
     newvel.y = vel.y;
     if ( player->touchingWallRight && newvel.x > 0 ) {
-        newvel.x = 0;
+        newvel.x = vel.x;
     }
     if ( player->touchingWallLeft && newvel.x < 0 ) {
-        newvel.x = 0;
+        newvel.x = vel.x;
     }
     player->myBody->SetLinearVelocity( toB2(newvel) );
 
@@ -320,16 +320,16 @@ void AirborneState::update( Player* player, double dt ) {
     glm::vec2 newvel;
     newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier*dt);
     if ( newvel.x > player->playerSpeed*player->dashingMultiplier ) {
-        newvel.x = player->playerSpeed*player->dashingMultiplier;
+        newvel.x = vel.x;
     } else if ( newvel.x < -player->playerSpeed*player->dashingMultiplier ) {
-        newvel.x = -player->playerSpeed*player->dashingMultiplier;
+        newvel.x = vel.x;
     }
     newvel.y = vel.y;
     if ( player->touchingWallRight && newvel.x > 0 ) {
-        newvel.x = 0;
+        newvel.x = vel.x;
     }
     if ( player->touchingWallLeft && newvel.x < 0 ) {
-        newvel.x = 0;
+        newvel.x = vel.x;
     }
     if ( player->direction.y > 0.9 && !player->fastFalling ) {
         newvel.y += player->fastFallSpeed;
@@ -489,16 +489,16 @@ void SpecialFallState::update( Player* player, double dt ) {
     glm::vec2 newvel;
     newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier*dt);
     if ( newvel.x > player->playerSpeed ) {
-        newvel.x = player->playerSpeed;
+        newvel.x = vel.x;
     } else if ( newvel.x < -player->playerSpeed ) {
-        newvel.x = -player->playerSpeed;
+        newvel.x = vel.x;
     }
     newvel.y = vel.y;
     if ( player->touchingWallRight && newvel.x > 0 ) {
-        newvel.x = 0;
+        newvel.x = vel.x;
     }
     if ( player->touchingWallLeft && newvel.x < 0 ) {
-        newvel.x = 0;
+        newvel.x = vel.x;
     }
     if ( player->direction.y > 0.9 && !player->fastFalling ) {
         newvel.y += player->fastFallSpeed;
@@ -626,7 +626,9 @@ void LandingState::update( Player* player, double dt ) {
     }
 }
 
-ShockedState::ShockedState( Player* player, glm::vec2 impulse ) {
+ShockedState::ShockedState( Player* player, glm::vec2 impulse, int type, float duration ) {
+    this->duration = duration;
+    this->type = type;
     this->player = player;
     this->impulse = impulse;
 }
@@ -636,7 +638,10 @@ void ShockedState::init() {
     shockTimer = 0;
     player->myBody->SetAwake( false );
     player->myBody->SetLinearVelocity( b2Vec2(0,0) );
-    player->sprite->play( player->shockedAnimation );
+    switch(type) {
+        case 0: { player->sprite->play( player->shockedAnimation ); break; }
+        case 1: { player->sprite->play( player->hitAnimation ); break; }
+    }
     player->sprite->setFrameTime(sf::seconds(0.08));
 }
 
@@ -652,7 +657,7 @@ void ShockedState::update( Player* player, double dt ) {
     shockTimer += dt;
     player->myBody->SetAwake( false );
     player->myBody->SetLinearVelocity( b2Vec2(0,0) );
-    if ( shockTimer > player->shockLength ) {
+    if ( shockTimer > duration ) {
         player->switchState( new KnockbackState(player, impulse) );
     }
 }
@@ -721,6 +726,23 @@ void KnockbackState::update( Player* player, double dt ) {
     if ( player->successfulTech ) {
         player->switchState( new KnockbackRecoverState(player,true) );
     }
+    // Air control
+    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
+    glm::vec2 newvel;
+    newvel.x = vel.x+(player->direction.x*player->playerSpeed*player->airControlMultiplier*dt);
+    if ( newvel.x > player->playerSpeed ) {
+        newvel.x = vel.x;
+    } else if ( newvel.x < -player->playerSpeed ) {
+        newvel.x = vel.x;
+    }
+    newvel.y = vel.y;
+    if ( player->touchingWallRight && newvel.x > 0 ) {
+        newvel.x = vel.x;
+    }
+    if ( player->touchingWallLeft && newvel.x < 0 ) {
+        newvel.x = vel.x;
+    }
+    player->myBody->SetLinearVelocity( toB2( newvel ) );
 }
 
 KnockbackRecoverState::KnockbackRecoverState( Player* player, bool teched ) {

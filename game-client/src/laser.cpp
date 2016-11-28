@@ -53,14 +53,14 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
         ::Player* p = static_cast< ::Player*>( collider );
         if(!this->canBePassed && !p->isDamageBoosted()){
             world->addEntity( new ShockDust( p->position ) );
-            world->stutter(0.4,0.1);
-            p->shake(10,0.8,0.1);
+            world->stutter(p->shockLength/2.f,0.1);
+            p->shake(10,p->shockLength,0.1);
             glm::vec2 impulse = p->position - pos;
             impulse.y = 0;
             impulse = glm::normalize( impulse );
             impulse *= 15.f;
 
-            p->switchState( new ShockedState( p, impulse ) );
+            p->switchState( new ShockedState( p, impulse, 0, p->shockLength) );
         }
     }
 }

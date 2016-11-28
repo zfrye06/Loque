@@ -1,6 +1,7 @@
 #include "player.h"
 
 Player::Player( std::string resource, sf::View& view ) {
+    hitLength = 0.2;
     successfulTech = false;
     directionalInfluence = 1.f;
     techLength = 20.f/60.f;
@@ -195,6 +196,9 @@ void Player::setUpSprite( std::string resource ) {
 	winAnimation.addFrame(sf::IntRect(201,451,48,48));
 	winAnimation.addFrame(sf::IntRect(251,451,48,48));
 	winAnimation.addFrame(sf::IntRect(301,451,48,48));
+
+    hitAnimation.setSpriteSheet(*texture);
+	hitAnimation.addFrame(sf::IntRect(151,101,48,48));
 
     sprite = new AnimatedSprite( sf::seconds(0.2), false, true );
     sprite->play(idleAnimation);

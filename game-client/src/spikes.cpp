@@ -44,9 +44,9 @@ void Spikes::update(double dt){
 void Spikes::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>(collider);
-        //world->stutter(0.4,0.1);
-        p->shake(10,0.4,0.1);
-        p->switchState( new KnockbackState( p, glm::vec2(0.f,-30.f) ) );
+        world->stutter(p->hitLength/2.f,0.1);
+        p->shake(10,p->hitLength,0.1);
+        p->switchState( new ShockedState( p, glm::vec2(0.f,-30.f), 1, p->hitLength) );
     }
 }
 

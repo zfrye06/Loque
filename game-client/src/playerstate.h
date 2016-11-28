@@ -146,9 +146,11 @@ public:
 
 class ShockedState : public GenericPlayerState {
 public:
+    float duration;
+    int type;
     float shockTimer;
     glm::vec2 impulse;
-    ShockedState( Player* player, glm::vec2 impulse);
+    ShockedState( Player* player, glm::vec2 impulse, int type=0, float duration=1);
     ~ShockedState();
     void init();
     PlayerState getType();

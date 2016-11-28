@@ -337,13 +337,28 @@ void handleLogin(sql::Connection& dbconn,
 void handleCreateAcc(sql::Connection& dbconn,
                      std::string username, std::string userpass, UserType type,
                      LoginResult& res) {
-    if(type == Admin){
-        addUser(&dbconn, username, userpass, true);
-    } else if(type == Student){
-        addUser(&dbconn, username, userpass, false);
-    } else{
-        // Why do we have a DNE option in request?
-        return;
+    res.userType = DNE;
+    try {
+        std::string query = "INSERT INTO User(username, password, isAdmin, levelsCompleted, totalScore, totalTime) VALUES (?, ?, ?, ?, ?, ?)";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setString(1, username);
+        pstmt->setString(2, userpass);
+        pstmt->setBoolean(3, type == Admin);
+        pstmt->setInt(4, 0);
+        pstmt->setInt(5, 0);
+        pstmt->setInt(6, 0);
+        pstmt->execute();
+        
+        // Retrieve the added ID.
+        query = "SELECT LAST_INSERT_ID()";
+        pstmt.reset(dbconn.prepareStatement(query));
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        if (qRes->next()) {
+            res.userId = qRes->getInt(1);
+            res.userType = type;
+        }
+    } catch (sql::SQLException &e) {
+        std::cerr << "ERROR: SQL Exception from handleCreateAcc: " << e.what() << std::endl;
     }
 }
 
@@ -515,8 +530,6 @@ int main(int argc, char **argv) {
                   "listen() returned status " << status << "." << std::endl;
         return 1;
     }
-    std::unique_ptr<sql::Connection> dbconn(driver->connect(DB_ADDR, DB_USER, DB_PASS));
-    dbconn->setSchema("3505");
     while (true) {
         std::unique_ptr<sf::TcpSocket> client(new sf::TcpSocket);
         int status = listener.accept(*client);

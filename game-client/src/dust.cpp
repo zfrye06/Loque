@@ -223,7 +223,7 @@ ShockDust::~ShockDust() {
 
 void ShockDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
-    if ( !sprite->isPlaying() ) {
+    if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
         world->removeEntity(this);
     }
 }
@@ -232,9 +232,49 @@ void ShockDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void ShockDust::draw(sf::RenderWindow& window){
-    window.draw(*sprite);
+    if ( sprite->isPlaying() ) {
+        window.draw(*sprite);
+    }
 }
 
 Entity::Type ShockDust::getType(){
+    return Entity::Type::Dust;
+}
+
+PokeDust::PokeDust( glm::vec2 pos ) {
+    sound = sf::Sound( *Resources->getSound( "assets/audio/effects/stab1.ogg" ) );
+    sound.play();
+    texture = Resources->getTexture("assets/images/shock_wave.png");
+    animation.setSpriteSheet(*texture);
+    animation.addFrame(sf::IntRect(0,0,127,136));
+    animation.addFrame(sf::IntRect(127,0,127,136));
+    animation.addFrame(sf::IntRect(127*2,0,127,136));
+
+    sprite = new AnimatedSprite( sf::seconds(0.05), false, false );
+    sprite->setOrigin(127.f/2.f,136.f/2.f);
+    sprite->setPosition( pos.x, pos.y );
+    sprite->setScale( 0.7, 0.7 );
+    sprite->play(animation);
+}
+
+PokeDust::~PokeDust() {
+    delete sprite;
+}
+
+void PokeDust::update(double dt) {
+    sprite->update( sf::seconds( dt ) );
+    if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
+        world->removeEntity(this);
+    }
+}
+
+void PokeDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+}
+
+void PokeDust::draw(sf::RenderWindow& window){
+    window.draw(*sprite);
+}
+
+Entity::Type PokeDust::getType(){
     return Entity::Type::Dust;
 }

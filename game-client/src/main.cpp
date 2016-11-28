@@ -24,7 +24,7 @@ int app() {
         ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
         world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y), view));
     }
-    //world->addEntity( new PhysicsDebug( window ) );
+    world->addEntity( new PhysicsDebug( window ) );
     sf::Clock deltaClock;
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);

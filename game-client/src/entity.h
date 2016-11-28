@@ -46,6 +46,7 @@ public:
         Trampoline,
         Dust,
         Spikes,
+        RespawnAnim,
         None
     };
     virtual Type getType();

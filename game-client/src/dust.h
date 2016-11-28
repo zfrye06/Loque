@@ -79,4 +79,19 @@ public:
     Entity::Type getType();
 };
 
+class PokeDust : public Entity {
+private:
+    sf::Sound sound;
+    sf::Texture* texture;
+    Animation animation;
+    AnimatedSprite* sprite;
+public:
+    PokeDust( glm::vec2 pos );
+    ~PokeDust();
+    void update(double dt);
+    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
+    void draw(sf::RenderWindow& window);
+    Entity::Type getType();
+};
+
 #endif

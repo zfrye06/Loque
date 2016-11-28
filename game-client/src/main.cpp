@@ -9,6 +9,7 @@
 #include "player.h"
 #include "map.h"
 #include "random.h"
+#include "respawn.h"
 
 RandomClass* Random = new RandomClass();
 
@@ -18,8 +19,12 @@ int app() {
     view.reset(sf::FloatRect(0,0,800,600));
     world->addEntity( new Background(&view, "assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ) );
     world->addEntity( new Map( "assets/Zapper_Level_1.tmx" ) );
-    world->addEntity( new Player( "assets/images/veemon.png", view ) );
-    //world->addEntity( new PhysicsDebug( window ) );
+    std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
+    if(spawns.size() >= 1){
+        ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
+        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y), view));
+    }
+    world->addEntity( new PhysicsDebug( window ) );
     sf::Clock deltaClock;
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);
@@ -40,6 +45,18 @@ int app() {
                     // RenderWindow uses its own matrix mumbojumbo...
                     //glViewport(0, 0, event.size.width, event.size.height);
                     break;
+                }
+                case sf::Event::KeyPressed: {
+                    if(event.key.code == sf::Keyboard::Escape){
+                        ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
+                        //delete all current respawn animations
+                        std::vector<Entity*> anims = world->getEntitiesByType(Entity::Type::RespawnAnim);
+                        for(int i = 0; i < anims.size(); i++){
+                            world->removeEntity(anims[i]);
+                        }
+                        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y), view));
+                        break;
+                    }
                 }
                 default: { break; }
             }

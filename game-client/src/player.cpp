@@ -1,12 +1,12 @@
 #include "player.h"
 
-Player::Player( std::string resource, sf::View& view ) {
+Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     hitLength = 0.2;
     successfulTech = false;
     directionalInfluence = 1.f;
     techLength = 20.f/60.f;
     frickedUpLength = 50.f/60.f;
-    jumpHelpAmount = 8.f;
+    jumpHelpAmount = 2.f;
     damageBoostLength = 1.f;
     damageBoostTimer = 0;
     shockLength = 0.8;
@@ -14,8 +14,8 @@ Player::Player( std::string resource, sf::View& view ) {
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
     dashLength = 0.30; // in seconds
-    playerWidth = .7; // in meters
-    playerHeight = .6; // in meters
+    playerWidth = .35; // in meters
+    playerHeight = .35; // in meters
     airDodgeVelocity = 18;
     airDodgeTime = 0.3;
     turnAroundTime = 0.4;
@@ -43,15 +43,13 @@ Player::Player( std::string resource, sf::View& view ) {
     setUpSprite( resource );
     setUpBody();
     setUpSounds();
-    std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
-    if (spawns.size() >= 1 ) {
-        ::PlayerSpawn* spawn = (::PlayerSpawn*)spawns[0];
-        myBody->SetTransform(toB2(spawn->pos),0);
-        smoothCamera = spawn->pos*64.f;
-    }
+    myBody->SetTransform(toB2(pos),0);
+    smoothCamera = pos*64.f;
     controllerID = 0;
     currentState = new IdleState(this);
     touchingCeiling = false;
+    touchingWallLeft = false;
+    touchingWallRight = false;
 }
 
 void Player::setUpSprite( std::string resource ) {
@@ -251,6 +249,7 @@ Player::~Player() {
         delete newState;
     }
     delete sprite;
+    myBody->GetWorld()->DestroyBody(myBody);
 }
 
 void Player::flash(sf::Color c, float length, float period) {
@@ -427,9 +426,9 @@ void Player::update( double dt ) {
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
     if ( !flipped ) {
-        sprite->setPosition( pos.x*64-48+shakeAmount.x, pos.y*64-48+shakeAmount.y );
+        sprite->setPosition( pos.x*64-48+shakeAmount.x, pos.y*64-74+shakeAmount.y );
     } else {
-        sprite->setPosition( pos.x*64+48+shakeAmount.x, pos.y*64-48+shakeAmount.y );
+        sprite->setPosition( pos.x*64+48+shakeAmount.x, pos.y*64-74+shakeAmount.y );
     }
     position = glm::vec2((float)pos.x*64.f,(float)pos.y*64.f);
     sprite->setRotation( ang*180/3.149562 );
@@ -448,20 +447,20 @@ void Player::update( double dt ) {
 void Player::detectGround() {
     b2AABB testAABB;
     b2Vec2 pos = myBody->GetWorldCenter();
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/3.f, pos.y);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/3.f, pos.y+playerHeight+0.1);
+    testAABB.lowerBound = b2Vec2(pos.x-0.001, pos.y);
+    testAABB.upperBound = b2Vec2(pos.x+0.001, pos.y+playerHeight+0.05);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     onGround = queryCallback.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/3.f, pos.y-playerHeight-0.1);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/3.f, pos.y);
+    testAABB.lowerBound = b2Vec2(pos.x-0.001, pos.y-playerHeight-0.05);
+    testAABB.upperBound = b2Vec2(pos.x+0.001, pos.y);
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     touchingCeiling = queryCallback.foundMap;
 
     b2AABB testAABB2;
-    testAABB2.lowerBound = b2Vec2(pos.x-2, pos.y-playerHeight-2);
-    testAABB2.upperBound = b2Vec2(pos.x+2, pos.y+playerHeight+2);
+    testAABB2.lowerBound = b2Vec2(pos.x-1, pos.y-playerHeight-1);
+    testAABB2.upperBound = b2Vec2(pos.x+1, pos.y+playerHeight+1);
     MapQueryCallback queryCallback2;
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB2 );
 
@@ -553,7 +552,7 @@ void Player::detectWalls() {
 
     b2AABB testAABB;
     testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.1, pos.y+playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.2, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
@@ -564,7 +563,7 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
     touchingWallRight = queryCallback2.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.1, pos.y-playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.2, pos.y-playerHeight/2.f);
     testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback3;
     physicalWorld->get().QueryAABB( &queryCallback3, testAABB );

@@ -45,6 +45,18 @@ Status LoqueClient::addClassroom(int userId, int classId, ActionResult& result) 
     return status;
 }
 
+Status LoqueClient::createClassroom(int userId, const std::string& className, ActionResult& result) {
+    sf::Packet toSend;
+    toSend << ReqType::CREATE_CLASS << userId << className;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, to Receive);
+    if (!ok(status)) {
+        return status;
+    }
+    toReceive >> result;
+    return status;
+}
+
 Status LoqueClient::postGameStats(int userId, const GameStats& stats, ActionResult& result) {
     sf::Packet toSend;
     toSend << ReqType::POST_STATS << userId << stats;
@@ -67,6 +79,18 @@ Status LoqueClient::getUserStats(int userId, UserStats& stats) {
     }
     toReceive >> stats;
     return status;
+}
+
+Status LoqueClient::getEnabledLevels(int userId, std::vector<int>& levelIds) {
+    sf::Packet toSend;
+    toSend << ReqType::GET_ENABLED_LEVELS << userId;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (!ok(status)) {
+        return status;
+    }
+    packet >> levelIds;
+    return status; 
 }
 
 Status LoqueClient::enableLevel(int userId, int classId, int levelId, ActionResult& result) {

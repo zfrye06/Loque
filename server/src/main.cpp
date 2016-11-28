@@ -29,6 +29,37 @@ void printUsage(const std::string &progname) {
     std::cout << "\t\tdisplay this help message" << std::endl;
 }
 
+/* Helpers */ 
+
+// Retrieves the classes a user is a member of. This will throw. 
+void getClassIds(sql::Connection& dbconn,
+                int userId,
+                std::vector<int>& classIds) {
+    std::string query = "SELECT classId FROM ClassAssociations WHERE userId = ?";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, userId);
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    while (qRes->next()) {
+        int classId = qRes->getInt(1);
+        classIds.push_back(classId);
+    }
+}
+
+void getEnabledLevelIds(sql::Connection& dbconn,
+                        int classId,
+                        std::vector<int>& levelIds) {
+    std::string query = "SELECT levelId FROM LevelAssociations WHERE classId = ?";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, classId);
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    while (qRes->next()) {
+        int levelId = qRes->getInt(1);
+        levelIds.push_back(levelId);
+    }
+}
+
+/* Request handlers */ 
+
 void handleLogin(sql::Connection& dbconn,
                  std::string username, std::string userpass,
                  LoginResult& loginres) {
@@ -193,16 +224,23 @@ void handleGetUserStats(sql::Connection& dbconn,
             stats.highScores[levelId] = levelHighScore; 
         }
 
-        query = "SELECT classId FROM ClassAssociations WHERE userId = ?";
-        pstmt.reset(dbconn.prepareStatement(query));
-        pstmt->setInt(1, userId);
-        qRes.reset(pstmt->executeQuery());
-        while (qRes->next()) {
-            int classId = qRes->getInt(1);
-            stats.classIds.push_back(classId);
-        }
+        getClassIds(dbconn, userId, stats.classIds); 
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserStats: " << e.what() << std::endl;
+    }
+}
+
+void handleGetEnabledLevels(sql::Connection& dbconn,
+                            int userId,
+                            std::vector<int>& levelIds) {
+    try {
+        std::vector<int> classIds;
+        getClassIds(dbconn, userId, classIds);
+        for (auto classId : classIds) {
+            getEnabledLevelIds(dbconn, classId, levelIds); 
+        }
+    } catch(sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleGetEnabledLevels: " << e.what() << std::endl;
     }
 }
 
@@ -327,6 +365,15 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         UserStats res;
         handleGetUserStats(*dbconn, userId, res);
         respPacket << res;
+        break;
+    }
+    case GET_ENABLED_LEVELS:
+    {
+        int userId;
+        reqPacket >> userId;
+        std::vector<int> levelIds;
+        handleGetEnabledLevels(*dbconn, userId, levelIds);
+        respPacket << levelIds;
         break;
     }
     case ENABLE_LEVEL:

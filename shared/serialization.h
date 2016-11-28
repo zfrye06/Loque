@@ -11,14 +11,39 @@
 #include <SFML/network.hpp>
 #include "loqueclient.h"
 
+// EOF indicators for serializing streams or compound data types.=. 
+namespace loque {
+namespace serialization {
+    const int TERM_SCORES = -1; // Indicates EOF when deserializing scores.
+    const int TERM_CLASSES = -1; // Indicates EOF when deserializing classes.
+    const int TERM_LEVELS = -1;  // Indicates EOF when deserializing level ids.
+
+    // Indicates EOF when deserializing UserStats. 
+    UserStats termUser() {
+        UserStats s;
+        s.userId = -1;
+        s.username = "";
+        s.totalSecPlayed = -1;
+        s.totalScore = -1;
+        return s;
+    }
+
+    bool isTermUser(const UserStats& s) {
+        return s.userId == -1; 
+    }
+}
+}
+
 /* ReqType */
 
 enum ReqType {
     LOGIN,
     CREATE_ACC,
     ADD_CLASS,
+    CREATE_CLASS, 
     POST_STATS,
     GET_USER_STATS,
+    GET_ENABLED_LEVELS,
     ENABLE_LEVEL,
     DISABLE_LEVEL,
     GET_CLASS_STATS
@@ -88,22 +113,16 @@ inline sf::Packet& operator>>(sf::Packet& packet, GameStats& stats) {
 
 /* UserStats */
 
-// EOF indicators for serialized userstats.
-namespace ustats {
-    const int TERM_SCORES = -1;
-    const int TERM_CLASSES = -1; 
-}
-
 inline sf::Packet& operator<<(sf::Packet& packet, const UserStats& stats) {
     packet << stats.userId << stats.username << stats.totalSecPlayed << stats.totalScore;
     for (auto& elem : stats.highScores) {
         packet << elem.first << elem.second; 
     }
-    packet << ustats::TERM_SCORES;
+    packet << loque::serialization::TERM_SCORES;
     for (auto elem : stats.classIds) {
         packet << elem;
     }
-    packet << ustats::TERM_CLASSES;
+    packet << loque::serialization::TERM_CLASSES;
     return packet;
 }
 
@@ -112,7 +131,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     do {
         int lid;
         packet >> lid;
-        if (lid == ustats::TERM_SCORES) {
+        if (lid == loque::serialization::TERM_SCORES) {
             break;
         }
         int score;
@@ -122,7 +141,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     do {
         int classId;
         packet >> classId;
-        if (classId == ustats::TERM_CLASSES) {
+        if (classId == loque::serialization::TERM_CLASSES) {
             break;
         }
         stats.classIds.push_back(classId); 
@@ -130,29 +149,35 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     return packet;
 }
 
-/* ClassStats */
+/* EnabledLevels */
 
-// EOF indicator for serialized class stats.
-namespace cstats {
-    UserStats termUser() {
-        UserStats s;
-        s.userId = -1;
-        s.username = "";
-        s.totalSecPlayed = -1;
-        s.totalScore = -1;
-        return s;
+inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<int>& levelIds) {
+    for (auto id : levelIds) {
+        packet << id;
     }
-
-    bool isTermUser(const UserStats& s) {
-        return s.userId == -1; 
-    }
+    packet << loque::serialization::TERM_LEVELS;
+    return packet;
 }
+
+inline sf::Packet& operator>>(sf::Packet& packet, std::vector<int>& levelIds) {
+    do {
+        int levelId;
+        packet >> levelId;
+        if (levelId == loque::serialization::TERM_LEVELS) {
+            break;
+        }
+        levelIds.push_back(levelId); 
+    } while (true);
+    return packet;
+}
+
+/* ClassStats */
 
 inline sf::Packet& operator<<(sf::Packet& packet, const ClassStats& stats) {
     for (auto& ustats : stats.studentStats) {
         packet << ustats;
     }
-    packet << cstats::termUser();
+    packet << loque::serialization::termUser();
     return packet;
 }
 
@@ -160,7 +185,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, ClassStats& stats) {
     do {
         UserStats s;
         packet >> s;
-        if (cstats::isTermUser(s)) {
+        if (loque::serialization::isTermUser(s)) {
             break;
         }
 

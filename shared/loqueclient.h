@@ -32,8 +32,6 @@ struct ActionResult {
     std::string reason; // Reason for failure, if any. 
 };
 
-
-
 // Information about a single completed game. 
 struct GameStats {
     int levelId;
@@ -43,12 +41,13 @@ struct GameStats {
 
 // Information about a single user (admin or student).
 struct UserStats {
-    // TODO: Add function to get list of completed levels.
     int userId;
     std::string username; 
     int totalSecPlayed;
     int totalScore;
-    std::unordered_map<int, int> highScores; // Maps level ids to scores.
+    
+    // Maps level ids to scores.
+    std::unordered_map<int, int> highScores; 
 
     // If the user is an instructor, these reflect the classes they manage.
     // If the user is a student, these reflect the classes they are a member of. 
@@ -57,16 +56,16 @@ struct UserStats {
 
 // Information about a class in aggregate. 
 struct ClassStats {
-    // TODO: What fields should we add here?
-    std::vector<UserStats> studentStats; 
+    std::vector<UserStats> studentStats;
 };
 
 // Use an instance of LoqueClient to make API
 // calls to a running Loque Server.
 //
 // All methods which make calls to the server block and
-// return an sf::Socket::Status value indicating sucess
-// or failure. 
+// return an sf::Socket::Status value indicating network success
+// or failure. A call's associated out-parameter indicates whether
+// the request's business logic and database interaction have succeeded on the server.
 class LoqueClient {
  public:
 
@@ -90,6 +89,10 @@ class LoqueClient {
     // if not, why it failed (e.g. class DNE). 
     Status addClassroom(int userId, int classId, ActionResult& res);
 
+    // Creates a classroom with the given namewhose sole member is the given user.
+    // The given userId should be that of an instructor. 
+    Status createClassroom(int userId, const std::string& className, ActionResult& res);
+
     // Adds a game record for the given user. This should be called
     // after each completed level. 
     Status postGameStats(int userId, const GameStats& stats, ActionResult& res);
@@ -98,6 +101,9 @@ class LoqueClient {
     // be called for the currently logged-in user. Prefer LoqueClient::getClassStats
     // to get classroom statistics.
     Status getUserStats(int userId, UserStats& stats);
+
+    // Retrieves the enabled levels for the given user, placing their IDs in levelIds. 
+    Status getEnabledLevels(int userId, std::vector<int>& levelIds); 
 
     // Enables a level for the given class. UserId must be an instructor id.
     Status enableLevel(int userId, int classId, int levelId, ActionResult& res);

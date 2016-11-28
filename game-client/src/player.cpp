@@ -7,7 +7,7 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     techLength = 20.f/60.f;
     frickedUpLength = 50.f/60.f;
     jumpHelpAmount = 2.f;
-    damageBoostLength = 1.f;
+    damageBoostLength = 0.3;
     damageBoostTimer = 0;
     shockLength = 0.8;
     deadZone = 0.25; // in percentage
@@ -35,6 +35,8 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     airControlMultiplier = 4;
     flashTimer = 0;
     flashLength = 0;
+    techTimer = 0;
+    frickedUpTimer = 0;
     shakeLength = 0;
     shakeStrength = 1;
     newState = nullptr;
@@ -47,6 +49,7 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     smoothCamera = pos*64.f;
     controllerID = 0;
     currentState = new IdleState(this);
+    onGround = false;
     touchingCeiling = false;
     touchingWallLeft = false;
     touchingWallRight = false;

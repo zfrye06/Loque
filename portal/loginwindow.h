@@ -16,6 +16,7 @@ public:
     ~LoginWindow();
 public slots:
     void sendUserInfo();
+    void createAccount();
 private:
     Ui::LoginWindow *ui;
 };

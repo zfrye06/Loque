@@ -18,6 +18,7 @@ Map::Map( std::string resource ) {
     for ( tmx::Property p : map->getProperties() ) {
         if ( p.getType() == tmx::Property::Type::String && p.getName() == "ambient" ) {
             ambient.openFromFile(p.getStringValue());
+            ambient.setLoop(true);
             ambient.play();
         }
     }

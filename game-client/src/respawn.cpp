@@ -1,6 +1,9 @@
 #include "respawn.h"
 
 Respawn::Respawn(glm::vec2 pos, sf::View& viewTemp){
+    sound = sf::Sound( *Resources->getSound( "assets/audio/effects/teleport.ogg" ));
+    sound.play();
+
     position = pos;
     view = &viewTemp;
     view->setCenter(pos.x*64, pos.y*64);
@@ -26,10 +29,9 @@ Respawn::Respawn(glm::vec2 pos, sf::View& viewTemp){
         }
     }
 
-    sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
+    sprite = new AnimatedSprite( sf::seconds(0.085), false, false );
     sprite->setOrigin(w/2.f,h/2.f);
     sprite->setPosition( pos.x*64, pos.y*64 );
-    //sprite->setScale( 1, 1 );
     sprite->play(animation);
 }
 
@@ -40,7 +42,7 @@ Respawn::~Respawn(){
 void Respawn::update(double dt){
     view->setCenter(position.x*64, position.y*64);
     sprite->update( sf::seconds(dt) );
-    if( !sprite->isPlaying() ){
+    if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
         world->addEntity(new ::Player("assets/images/veemon.png",position, *view));
         world->removeEntity(this);
     }

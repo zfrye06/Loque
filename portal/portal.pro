@@ -15,15 +15,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     loginwindow.cpp \
-    ../shared/loqueclient.cpp
+    ../shared/loqueclient.cpp \
+    adminwindow.cpp
 
 HEADERS  += mainwindow.h \
     loginwindow.h \
-    ../shared/loqueclient.h
+    ../shared/loqueclient.h \
+    adminwindow.h
 
 
 FORMS    += mainwindow.ui \
-    loginwindow.ui
+    loginwindow.ui \
+    adminwindow.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

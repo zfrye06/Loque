@@ -15,7 +15,7 @@ DashDust::DashDust( glm::vec2 pos, bool flipped, float angle) {
     animation.addFrame(sf::IntRect(280,280,140,140));
 
     sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
-    sprite->setOrigin(0,76.f);
+    sprite->setOrigin(0,100.f);
     sprite->setPosition( pos.x, pos.y );
     sprite->setRotation( angle );
 
@@ -67,7 +67,7 @@ JumpDust::JumpDust( glm::vec2 pos, float angle, bool doub ) {
     animation.addFrame(sf::IntRect(256,256,128,128));
 
     sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
-    sprite->setOrigin(64,24.f);
+    sprite->setOrigin(64,64.f);
     sprite->setPosition( pos.x, pos.y );
     sprite->setRotation( angle );
     sprite->setScale( 0.5, 0.5 );
@@ -158,7 +158,7 @@ LandingDust::LandingDust( glm::vec2 pos, float angle ) {
     animation.addFrame(sf::IntRect(256,256,128,128));
 
     sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
-    sprite->setOrigin(64,38.f);
+    sprite->setOrigin(64,68.f);
     sprite->setPosition( pos.x, pos.y );
     sprite->setRotation( angle );
     sprite->setScale( 0.7, 0.7 );

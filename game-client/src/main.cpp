@@ -29,7 +29,6 @@ int app() {
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);
     while( window.isOpen() ) {
-        std::cout << world->entities.size() << "\n";
         // Catch events, probably should be in some sort of event handler.
         sf::Event event;
         while( window.pollEvent( event ) ) {

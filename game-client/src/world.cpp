@@ -33,15 +33,21 @@ void World::bringToFront( Entity* e ) {
 void World::removeEntity( Entity* e ) {
     for( int i=0;i<entities.size();i++ ) {
         if ( entities[i] == e ) {
-            entities.erase( entities.begin() + i );
+            entities[i] = nullptr;
+            break;
         }
     }
     delete e;
 }
 
 void World::draw( sf::RenderWindow& window ) {
-    for ( Entity* e : entities ) {
-        e->draw( window );
+    for( int i=0;i<entities.size();i++ ) {
+        if ( !entities[i] ) {
+            entities.erase( entities.begin() + i );
+            i--;
+        } else {
+            entities[i]->draw(window);
+        }
     }
 }
 
@@ -54,10 +60,15 @@ void World::update( double dt ) {
     } else {
         stutterLength = 0;
     }
-    physicalWorld->step( dt );
-    for ( Entity* e : entities ) {
-        e->update(dt);
+    for( int i=0;i<entities.size();i++ ) {
+        if ( !entities[i] ) {
+            entities.erase( entities.begin() + i );
+            i--;
+        } else {
+            entities[i]->update(dt);
+        }
     }
+    physicalWorld->step( dt );
 }
 
 std::vector<Entity*> World::getEntitiesByType( Entity::Type t ) {

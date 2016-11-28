@@ -17,7 +17,7 @@ const std::string DB_ADDR = "tcp://bernardcosgriff.com:3306";
 const std::string DB_USER = "teamaccess";
 const std::string DB_PASS = "password";
  sql::Driver *driver = get_driver_instance();
- sql::Connection *conn = driver->connect(DB_ADDR, DB_USER, DB_PASS);
+// sql::Connection *conn = driver->connect(DB_ADDR, DB_USER, DB_PASS);
  sql::PreparedStatement *pstmt;
  sql::ResultSet *rs;
 
@@ -25,7 +25,7 @@ const std::string DB_PASS = "password";
 /*
  * Checks if user credentials are in the database
  */
-bool login(std::string username, std::string password){
+bool login(sql::Connection *conn, std::string username, std::string password){
     bool success = false;
     try {
         pstmt = conn->prepareStatement(
@@ -43,7 +43,7 @@ bool login(std::string username, std::string password){
 /*
  * Adds a class with class name and associates the teacher with their class.
  */
-bool addClass(int userID, std::string className){
+bool addClass(sql::Connection *conn, int userID, std::string className){
     bool success = false;
     try {
         pstmt = conn->prepareStatement(
@@ -61,7 +61,7 @@ bool addClass(int userID, std::string className){
  /*
   * Returns true if user is succesfully added and false if not (i.e. username already in use).
   */
- bool addUser(std::string username, std::string password, bool isAdmin) {
+ bool addUser(sql::Connection *conn, std::string username, std::string password, bool isAdmin) {
      try {
          pstmt = conn->prepareStatement(
                  "INSERT INTO User(username, password, isAdmin, levelsCompleted, totalScore, totalTime) VALUES (?, ?, ?, ?, ?, ?)");
@@ -81,7 +81,7 @@ bool addClass(int userID, std::string className){
  /*
   * Enables/Disables maps for classes
   */
- void toggleMaps(int classID, std::vector<int> mapIDs, bool enable) {
+ void toggleMaps(sql::Connection *conn, int classID, std::vector<int> mapIDs, bool enable) {
      if (enable) {
          // Not sure what the best way to insert only if entry does not already exist.
          // Currently just catch exception and move on.
@@ -115,7 +115,7 @@ bool addClass(int userID, std::string className){
  /*
   * Updates levels completed flag, high score, and completion time for the level.
   */
- void levelCompleted(int userID, int mapID, int newScore, int newTime) {
+ void levelCompleted(sql::Connection *conn, int userID, int mapID, int newScore, int newTime) {
      try {
          bool update = false;
 
@@ -196,7 +196,7 @@ bool addClass(int userID, std::string className){
  /*
   * Returns all maps enabled for the specified class.
   */
- std::vector<int> getEnabledMaps(int classID) {
+ std::vector<int> getEnabledMaps(sql::Connection *conn, int classID) {
      std::vector<int> v;
      try {
          pstmt = conn->prepareStatement(
@@ -217,7 +217,7 @@ bool addClass(int userID, std::string className){
  /*
   *
   */
- std::map<int, int> getTotalScores(int classID) {
+ std::map<int, int> getTotalScores(sql::Connection *conn, int classID) {
      std::map<int, int> v;
      try {
          int user;
@@ -241,7 +241,7 @@ bool addClass(int userID, std::string className){
  /*
   *
   */
- std::map<int, int> getTotalTimes(int classID) {
+ std::map<int, int> getTotalTimes(sql::Connection *conn, int classID) {
      std::map<int, int> v;
      try {
          int user;
@@ -265,7 +265,7 @@ bool addClass(int userID, std::string className){
  /*
   * Returns the highest level completed by the specified user
   */
- int getHighestLevelCompleted(int userID) {
+ int getHighestLevelCompleted(sql::Connection *conn, int userID) {
      int highestLevel = 0;
      try {
          unsigned int levels = 0;
@@ -295,7 +295,7 @@ bool addClass(int userID, std::string className){
  /*
   * Gets the average high score for the class with classID on the level with mapID.
   */
- int getClassLevelAverage(int classID, int mapID) {
+ int getClassLevelAverage(sql::Connection *conn, int classID, int mapID) {
      int total = 0;
      int entries = 0;
 
@@ -334,16 +334,16 @@ void printUsage(const std::string &progname) {
 void handleLogin(sql::Connection& dbconn,
                  std::string username, std::string userpass,
                  LoginResult& res) {
-    bool success = login(username, userpass);
+    bool success = login(&dbconn, username, userpass);
 }
 
 void handleCreateAcc(sql::Connection& dbconn,
                      std::string username, std::string userpass, UserType type,
                      LoginResult& res) {
     if(type == Admin){
-        addUser(username, userpass, true);
+        addUser(&dbconn, username, userpass, true);
     } else if(type == Student){
-        addUser(username, userpass, false);
+        addUser(&dbconn, username, userpass, false);
     } else{
         // Why do we have a DNE option in request?
         return;
@@ -353,13 +353,13 @@ void handleCreateAcc(sql::Connection& dbconn,
 void handleAddClassroom(sql::Connection& dbconn,
                         int userId, int classId, // Need className not classID. ClassID will be assigned on insertion (auto increment).
                         ActionResult& res) {
-//    addClass(userId, className);
+//    addClass(&dbconn, userId, className);
 }
 
 void handlePostStats(sql::Connection& dbconn,
                      int userId, const GameStats& stats,
                      ActionResult& res) {
-    levelCompleted(userId, stats.levelId, stats.pointsScored, stats.secToComplete);
+    levelCompleted(&dbconn, userId, stats.levelId, stats.pointsScored, stats.secToComplete);
 }
 
 void handleGetUserStats(sql::Connection& dbconn,
@@ -374,7 +374,7 @@ void handleEnableLevel(sql::Connection& dbconn,
     // Currently can take in multiple level ids. Will change if not needed.
     std::vector<int> v;
     v.push_back(levelId);
-    toggleMaps(classId, v, true);
+    toggleMaps(&dbconn, classId, v, true);
 }
 
 void handleDisableLevel(sql::Connection& dbconn,
@@ -383,7 +383,7 @@ void handleDisableLevel(sql::Connection& dbconn,
     // Currently can take in multiple level ids. Will change if not needed.
     std::vector<int> v;
     v.push_back(levelId);
-    toggleMaps(classId, v, false);
+    toggleMaps(&dbconn, classId, v, false);
 }
 
 void handleGetClassStats(sql::Connection& dbconn,
@@ -495,7 +495,6 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
 }
 
 int main(int argc, char **argv) {
-    conn->setSchema("3505");
     int port = DEFAULT_PORT;
     if (argc > 1) {
         for (int i = 1; i < argc; i += 2) {

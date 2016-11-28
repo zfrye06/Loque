@@ -52,6 +52,7 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>( collider );
         if(!this->canBePassed && !p->isDamageBoosted()){
+            p->damageBoost();
             world->addEntity( new ShockDust( p->position ) );
             world->stutter(p->shockLength/2.f,0.1);
             p->shake(10,p->shockLength,0.1);

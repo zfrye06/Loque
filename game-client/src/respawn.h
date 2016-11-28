@@ -1,6 +1,8 @@
 #ifndef LQ_RESPAWN_H_
 #define LQ_RESPAWN_H_
 
+#include <SFML/Audio/Sound.hpp>
+
 #include "AnimatedSprite.hpp"
 #include "entity.h"
 #include "world.h"
@@ -8,6 +10,7 @@
 
 class Respawn : public Entity{
 private:
+    sf::Sound sound;
     glm::vec2 position;
     sf::Texture* texture;
     Animation animation;

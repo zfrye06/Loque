@@ -294,7 +294,38 @@ void handlePostStats(sql::Connection& dbconn,
 void handleGetUserStats(sql::Connection& dbconn,
                         int userId,
                         UserStats& stats) {
-    // Not sure what I need to retrieve here.
+    try {
+        std::string query = "SELECT username, totalScore, totalTime FROM User where userId = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, userId);
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        qRes->next();
+        stats.userId = userId; 
+        stats.username = qRes->getString(1);
+        stats.totalScore = qRes->getInt(2);
+        stats.totalSecPlayed = qRes->getInt(3);
+
+        query = "SELECT levelId, levelHighScore FROM ScoreInfo WHERE userId = ?";
+        pstmt.reset(dbconn.prepareStatement(query));
+        pstmt->setInt(1, userId);
+        qRes.reset(pstmt->executeQuery());
+        while (qRes->next()) {
+            int levelId = qRes->getInt(1);
+            int levelHighScore = qRes->getInt(2);
+            stats.highScores[levelId] = levelHighScore; 
+        }
+
+        query = "SELECT classId FROM ClassAssociations WHERE userId = ?";
+        pstmt.reset(dbconn.prepareStatement(query));
+        pstmt->setInt(1, userId);
+        qRes.reset(pstmt->executeQuery());
+        while (qRes->next()) {
+            int classId = qRes->getInt(1);
+            stats.classIds.push_back(classId);
+        }
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleGetUserStats: " << e.what() << std::endl;
+    }
 }
 
 void handleEnableLevel(sql::Connection& dbconn,

@@ -437,6 +437,10 @@ void AirDodgeState::init() {
     player->sprite->play( player->airDodgeAnimation );
     player->sprite->setFrameTime(sf::seconds(player->airDodgeTime/player->airDodgeAnimation.getSize()));
     vel = glm::normalize(airDirection)*player->airDodgeVelocity;
+    if ( isnan(vel.x ) ) {
+        vel.x = 0;
+        vel.y = 0;
+    }
     tweenX = tweeny::from(vel.x).to(0.f).during(player->airDodgeTime*1000).via(tweeny::easing::quadraticOut);
     tweenY = tweeny::from(vel.y).to(0.f).during(player->airDodgeTime*1000).via(tweeny::easing::quadraticOut);
     player->airDodgeSound.play();
@@ -691,6 +695,7 @@ void KnockbackState::init() {
     player->sprite->setLooped( false );
     player->flash(sf::Color(200,150,150,255),(player->knockBackAnimation.getSize()+5)*0.07,0.09);
     player->sprite->setFrameTime(sf::seconds(0.07));
+    player->sprite->setFrame(0,true);
 }
 
 KnockbackState::~KnockbackState() {
@@ -709,7 +714,7 @@ void KnockbackState::update( Player* player, double dt ) {
             player->canDoubleJump = false;
             player->releasedJump = false;
         }
-        if ( player->direction.y < -0.9 || fabs(player->direction.x) || player->airDodgePressed ) {
+        if ( (player->direction.y < -0.9 || fabs(player->direction.x) || player->airDodgePressed) && player->onGround ) {
             player->switchState( new KnockbackRecoverState(player) );
         }
     }

@@ -44,7 +44,9 @@ void Spikes::update(double dt){
 void Spikes::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>(collider);
-        std::cout<<"hit spikes"<<std::endl;
+        //world->stutter(0.4,0.1);
+        p->shake(10,0.4,0.1);
+        p->switchState( new KnockbackState( p, glm::vec2(0.f,-30.f) ) );
     }
 }
 

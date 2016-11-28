@@ -50,6 +50,7 @@ Player::Player( std::string resource, sf::View& view ) {
     }
     controllerID = 0;
     currentState = new IdleState(this);
+    touchingCeiling = false;
 }
 
 void Player::setUpSprite( std::string resource ) {
@@ -306,7 +307,7 @@ void Player::update( double dt ) {
     if ( techTimer <= 0 ) {
         successfulTech = false;
     }
-    if ( (onGround || touchingWallLeft || touchingWallRight) && techTimer > 0 && frickedUpTimer <= 0 ) {
+    if ( (onGround || touchingWallLeft || touchingWallRight || touchingCeiling) && techTimer > 0 && frickedUpTimer <= 0 ) {
         techTimer = 0;
         successfulTech = true;
     }
@@ -445,6 +446,11 @@ void Player::detectGround() {
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     onGround = queryCallback.foundMap;
+
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/3.f, pos.y-playerHeight-0.1);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/3.f, pos.y);
+    physicalWorld->get().QueryAABB( &queryCallback, testAABB );
+    touchingCeiling = queryCallback.foundMap;
 
     b2AABB testAABB2;
     testAABB2.lowerBound = b2Vec2(pos.x-2, pos.y-playerHeight-2);

@@ -71,6 +71,7 @@ public:
     bool canWallJumpLeft;
     bool canWallJumpRight;
     bool touchingWallLeft;
+    bool touchingCeiling;
     bool touchingWallRight;
     bool onGround;
     int controllerID;

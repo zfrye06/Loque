@@ -33,6 +33,9 @@ int app() {
                     break;
                 }
                 case sf::Event::Resized: {
+                    if ( event.size.height % 2 == 1 ) {
+                        event.size.height--;
+                    }
                     view.reset(sf::FloatRect(0,0,event.size.width,event.size.height ));
                     // RenderWindow uses its own matrix mumbojumbo...
                     //glViewport(0, 0, event.size.width, event.size.height);

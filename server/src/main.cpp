@@ -18,151 +18,6 @@ const std::string DB_ADDR = "tcp://bernardcosgriff.com:3306";
 const std::string DB_USER = "teamaccess";
 const std::string DB_PASS = "password";
 
-// /*
-//  * Adds a class with class name and associates the teacher with their class.
-//  */
-// bool addClass(sql::Connection *conn, int userID, std::string className){
-//     bool success = false;
-//     try {
-//         pstmt = conn->prepareStatement(
-//                 "INSERT INTO ClassAssociations(userID, className) VALUES(?, ?)");
-//         pstmt->setInt(1, userID);
-//         pstmt->setString(2, className);
-//         success = pstmt->execute();
-//         return success;
-//     } catch (sql::SQLException &e) {
-//         std::cout << "Insert New Class Failed: " << e.what() << std::endl;
-//         return success;
-//     }
-// }
-
-//  /*
-//   * Returns all maps enabled for the specified class.
-//   */
-//  std::vector<int> getEnabledMaps(sql::Connection *conn, int classID) {
-//      std::vector<int> v;
-//      try {
-//          pstmt = conn->prepareStatement(
-//                  "SELECT mapID FROM MapAssociations WHERE classID = ?");
-//          pstmt->setInt(1, classID);
-//          rs = pstmt->executeQuery();
-//          while (rs->next()) {
-//              v.push_back(rs->getInt(1));
-//          }
-//          delete pstmt;
-//          return v;
-//      } catch (sql::SQLException &e) {
-//          std::cout << "Select Failed: " << e.what() << std::endl;
-//          return v;
-//      }
-//  }
-
-//  /*
-//   *
-//   */
-//  std::map<int, int> getTotalScores(sql::Connection *conn, int classID) {
-//      std::map<int, int> v;
-//      try {
-//          int user;
-//          int score;
-//          pstmt = conn->prepareStatement("SELECT userID, totalScore FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
-//          pstmt->setInt(1, classID);
-//          rs = pstmt->executeQuery();
-//          while(rs->next()){
-//              user = rs->getInt(1);
-//              score = rs->getInt(2);
-//              v[user] = score;
-//          }
-//          delete pstmt;
-//          return v;
-//      } catch (sql::SQLException &e) {
-//          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
-//          return v;
-//      }
-//  }
-
-//  /*
-//   *
-//   */
-//  std::map<int, int> getTotalTimes(sql::Connection *conn, int classID) {
-//      std::map<int, int> v;
-//      try {
-//          int user;
-//          int time;
-//          pstmt = conn->prepareStatement("SELECT userID, totalTime FROM User WHERE userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
-//          pstmt->setInt(1, classID);
-//          rs = pstmt->executeQuery();
-//          while(rs->next()){
-//              user = rs->getInt(1);
-//              time = rs->getInt(2);
-//              v[user] = time;
-//          }
-//          delete pstmt;
-//          return v;
-//      } catch (sql::SQLException &e) {
-//          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
-//          return v;
-//      }
-//  }
-
-//  /*
-//   * Returns the highest level completed by the specified user
-//   */
-//  int getHighestLevelCompleted(sql::Connection *conn, int userID) {
-//      int highestLevel = 0;
-//      try {
-//          unsigned int levels = 0;
-//          pstmt = conn->prepareStatement("SELECT levelsCompleted FROM User WHERE userID = ?");
-//          pstmt->setInt(1, userID);
-//          rs = pstmt->executeQuery();
-//          if(rs->next()){
-//              levels = rs->getInt(1);
-//          }
-//          else{
-//              std::cout << "User Does Not Exist" << std::endl;
-//              return 0;
-//          }
-//          for(unsigned int i = 128; i > 0; i = i/2){
-//              if((i & levels) != 0){
-//                  highestLevel = log2(i);
-//              }
-//          }
-//          delete pstmt;
-//          return highestLevel;
-//      } catch (sql::SQLException &e) {
-//          std::cout << "Select Total Scores Failed: " << e.what() << std::endl;
-//          return highestLevel;
-//      }
-//  }
-
-//  /*
-//   * Gets the average high score for the class with classID on the level with mapID.
-//   */
-//  int getClassLevelAverage(sql::Connection *conn, int classID, int mapID) {
-//      int total = 0;
-//      int entries = 0;
-
-//      try {
-//          pstmt = conn->prepareStatement("SELECT levelHighScore FROM ScoreInfo WHERE mapID = ? AND userID IN (SELECT userID FROM UserAssociations WHERE classID = ?)");
-//          pstmt->setInt(1, mapID);
-//          pstmt->setInt(2, classID);
-//          rs = pstmt->executeQuery();
-//          while(rs->next()) {
-//              total = total + rs->getInt(1);
-//              entries++;
-//          }
-//          delete pstmt;
-//          if(entries == 0) {
-//             return 0;
-//          } else {
-//              return total/entries;
-//          }
-//      } catch (sql::SQLException &e) {
-//          std::cout << "Select Average Scores Failed: " << e.what() << std::endl;
-//          return 0;
-//      }
-//  }
-
 void printUsage(const std::string &progname) {
     std::cout << std::endl;
     std::cout << progname << " - Run the loque game server." << std::endl;
@@ -354,7 +209,7 @@ void handleDisableLevel(sql::Connection& dbconn,
         pstmt->setInt(1, classId);
         pstmt->setInt(2, levelId);
         pstmt->execute();
-    } catch (sql::SQLException &e) {
+    } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleDisableLevel: " << e.what() << std::endl;
         res.reason = "";        // TODO: set reason.
     }
@@ -363,7 +218,20 @@ void handleDisableLevel(sql::Connection& dbconn,
 void handleGetClassStats(sql::Connection& dbconn,
                          int userId, int classId,
                          ClassStats& stats) {
-
+    try {
+        std::string query = "SELECT userId FROM ClassAssociations WHERE classId = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, classId);
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        while (qRes->next()) {
+            int userId = qRes->getInt(1);
+            UserStats userStats;
+            stats.studentStats.push_back(userStats);
+            handleGetUserStats(dbconn, userId, stats.studentStats.back()); 
+        }
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl; 
+    }
 }
 
 void handleClient(std::unique_ptr<sf::TcpSocket> client,

@@ -8,7 +8,7 @@
 #ifndef LOQUE_SERIALIZATION_H_
 #define LOQUE_SERIALIZATION_H_
 
-#include <SFML/network.hpp>
+#include <SFML/Network.hpp>
 #include "loqueclient.h"
 
 // EOF indicators for serializing streams or compound data types.=. 

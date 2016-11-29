@@ -27,6 +27,7 @@ public:
     float hitLength;
     float techLength;
     float frickedUpLength;
+    float frickedUpWallJumpLength;
     float damageBoostLength;
     float shockLength;
     float walkLength;

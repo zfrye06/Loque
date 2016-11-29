@@ -201,7 +201,11 @@ JumpingState::JumpingState( Player* player, float wallJumpDirection) {
 
 void JumpingState::init() {
     walkTimer = 0;
-    canWallJump = false;
+    if ( fabs(player->direction.x) <= 0.3 ) {
+        canWallJump = true;
+    } else {
+        canWallJump = false;
+    }
     player->fastFalling = false;
     player->sprite->setLooped(false);
     if ( wallJumpDirection == 0 ) {
@@ -269,23 +273,22 @@ void JumpingState::update( Player* player, double dt ) {
     player->myBody->SetLinearVelocity( toB2(newvel) );
 
     // Walljumping
-    if ( player->direction.x != 0 ) {
-        walkTimer += dt;
-    } else {
-        canWallJump = true;
-        walkTimer = 0;
-    }
-    if ( walkTimer > player->walkLength && canWallJump ) {
+    if ( canWallJump && fabs(player->direction.x) >= 0.9 ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
-            player->switchState( new JumpingState(player,1) );
+            //player->switchState( new JumpingState(player,1) );
+            init();
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
-            player->switchState( new JumpingState(player,-1) );
+            //layer->switchState( new JumpingState(player,-1) );
+            init();
         }
         canWallJump = false;
+    }
+    if ( fabs(player->direction.x) <= 0.3 ) {
+        canWallJump = true;
     }
     if ( player->airDodgePressed ) {
         player->switchState( new AirDodgeState(player, player->direction ) );
@@ -300,7 +303,11 @@ void AirborneState::init() {
     player->sprite->play( player->airborneAnimation );
     player->sprite->setFrameTime(sf::seconds(0.15));
     walkTimer = 0;
-    canWallJump = false;
+    if ( fabs(player->direction.x) <= 0.3 ) {
+        canWallJump = true;
+    } else {
+        canWallJump = false;
+    }
 }
 AirborneState::~AirborneState() {
     player->sprite->setLooped( true );
@@ -352,23 +359,20 @@ void AirborneState::update( Player* player, double dt ) {
         player->releasedJump = true;
     }
     // Walljumping
-    if ( player->direction.x != 0 ) {
-        walkTimer += dt;
-    } else {
-        walkTimer = 0;
-        canWallJump = true;
-    }
-    if ( walkTimer > player->walkLength && canWallJump ) {
-        canWallJump = false;
+    if ( canWallJump && fabs(player->direction.x) >= 0.9 ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
-            player->switchState( new JumpingState(player, 1) );
+            player->switchState( new JumpingState(player,1) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
-            player->switchState( new JumpingState(player, -1) );
+            player->switchState( new JumpingState(player,-1) );
         }
+        canWallJump = false;
+    }
+    if ( fabs(player->direction.x) <= 0.3 ) {
+        canWallJump = true;
     }
     if ( player->airDodgePressed ) {
         player->switchState( new AirDodgeState(player, player->direction ) );

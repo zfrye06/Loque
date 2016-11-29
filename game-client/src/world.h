@@ -9,10 +9,13 @@
 #include "physicalworld.h"
 #include "entity.h"
 
+#define TIMESTEP 1.f/60.f
+
 class World {
 private:
 // vector probably isn't the most efficient way to store the world...
     std::vector<Entity*> entities;
+    double timer;
     double stutterLength;
     double stutterPeriod;
 public:

@@ -7,9 +7,9 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     techLength = 20.f/60.f;
     frickedUpLength = 50.f/60.f;
     jumpHelpAmount = 2.f;
-    damageBoostLength = 0.3;
+    damageBoostLength = 0.8;
     damageBoostTimer = 0;
-    shockLength = 0.8;
+    shockLength = 0.4;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
@@ -397,6 +397,13 @@ void Player::update( double dt ) {
         direction = glm::vec2(0,0);
     }
 
+    if ( newState ) {
+        delete currentState;
+        currentState = newState;
+        //std::cout << StateString[currentState->getType()] << "\n";
+        currentState->init();
+        newState = nullptr;
+    }
     currentState->update(this, dt);
     if (onGround ) {
         canDoubleJump = true;
@@ -439,12 +446,6 @@ void Player::update( double dt ) {
     smoothCamera += (glm::vec2( (float)pos.x*64, (float)pos.y*64 )+vel-smoothCamera)*(float)dt*4.f;
     view->setCenter( toSFML(smoothCamera+shakeAmount2) );
     sprite->update( sf::seconds(dt) );
-    if ( newState ) {
-        delete currentState;
-        currentState = newState;
-        currentState->init();
-        newState = nullptr;
-    }
 }
 
 void Player::detectGround() {
@@ -555,7 +556,7 @@ void Player::detectWalls() {
 
     b2AABB testAABB;
     testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.2, pos.y+playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.3, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
@@ -566,7 +567,7 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
     touchingWallRight = queryCallback2.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.2, pos.y-playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.3, pos.y-playerHeight/2.f);
     testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback3;
     physicalWorld->get().QueryAABB( &queryCallback3, testAABB );

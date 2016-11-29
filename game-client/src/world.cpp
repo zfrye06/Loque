@@ -9,6 +9,7 @@ World::~World() {
 }
 
 World::World() {
+    timer = 0;
     stutterLength = 0;
     stutterPeriod = 0;
 }
@@ -26,6 +27,7 @@ void World::bringToFront( Entity* e ) {
     for( int i=0;i<entities.size();i++ ) {
         if ( entities[i] == e ) {
             std::swap( entities[i], entities[entities.size()-1] );
+            break;
         }
     }
 }
@@ -60,15 +62,19 @@ void World::update( double dt ) {
     } else {
         stutterLength = 0;
     }
-    for( int i=0;i<entities.size();i++ ) {
-        if ( !entities[i] ) {
-            entities.erase( entities.begin() + i );
-            i--;
-        } else {
-            entities[i]->update(dt);
+    timer += dt;
+    while ( timer >= TIMESTEP ) {
+        for( int i=0;i<entities.size();i++ ) {
+            if ( !entities[i] ) {
+                entities.erase( entities.begin() + i );
+                i--;
+            } else {
+                entities[i]->update(TIMESTEP);
+            }
         }
+        physicalWorld->step( TIMESTEP );
+        timer -= TIMESTEP;
     }
-    physicalWorld->step( dt );
 }
 
 std::vector<Entity*> World::getEntitiesByType( Entity::Type t ) {

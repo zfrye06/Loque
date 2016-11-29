@@ -1,6 +1,6 @@
 #include "resource.h"
 
-ResourceManager* Resources = new ResourceManager();
+ResourceManager* Resources;
 
 Resource::Resource( std::string name ) {
     this->name = name;

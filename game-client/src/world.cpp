@@ -1,6 +1,6 @@
 #include "world.h"
 
-World* world = new World();
+World* world;
 
 World::~World() {
     for ( Entity* e : entities ) {
@@ -72,6 +72,7 @@ void World::update( double dt ) {
                 entities[i]->update(TIMESTEP);
             }
         }
+        playerStats->update( TIMESTEP );
         physicalWorld->step( TIMESTEP );
         timer -= TIMESTEP;
     }

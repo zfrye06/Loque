@@ -1,6 +1,6 @@
 #include "physicalworld.h"
 
-PhysicalWorld* physicalWorld = new PhysicalWorld();
+PhysicalWorld* physicalWorld;
 
 PhysicalWorld::PhysicalWorld() {
     //timer = 0;

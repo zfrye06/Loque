@@ -8,6 +8,7 @@
 #include <string>
 #include "physicalworld.h"
 #include "entity.h"
+#include "playerstats.h"
 
 #define TIMESTEP 1.f/60.f
 

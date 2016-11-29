@@ -49,7 +49,7 @@ Status LoqueClient::createClassroom(int userId, const std::string& className, Ac
     sf::Packet toSend;
     toSend << ReqType::CREATE_CLASS << userId << className;
     sf::Packet toReceive;
-    auto status = makeRequest(toSend, to Receive);
+    auto status = makeRequest(toSend, toReceive);
     if (!ok(status)) {
         return status;
     }
@@ -89,7 +89,7 @@ Status LoqueClient::getEnabledLevels(int userId, std::vector<int>& levelIds) {
     if (!ok(status)) {
         return status;
     }
-    packet >> levelIds;
+    toReceive >> levelIds;
     return status; 
 }
 

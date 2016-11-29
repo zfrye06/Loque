@@ -10,6 +10,7 @@ public:
     b2Body* body;
     Laser(tmx::Object& obj);
     glm::vec2 pos;
+    glm::vec2 impulse;
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderWindow& window);

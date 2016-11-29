@@ -16,7 +16,7 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     dashLength = 0.30; // in seconds
     playerWidth = .35; // in meters
     playerHeight = .35; // in meters
-    airDodgeVelocity = 18;
+    airDodgeVelocity = 19;
     airDodgeTime = 0.3;
     turnAroundTime = 0.4;
     fastFallSpeed = 10;

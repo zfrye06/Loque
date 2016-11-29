@@ -277,10 +277,12 @@ void JumpingState::update( Player* player, double dt ) {
     if ( canWallJump && fabs(player->direction.x) >= 0.9 ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
             player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
+            wallJumpDirection = 1;
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             //player->switchState( new JumpingState(player,1) );
             init();
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
+            wallJumpDirection = -1;
             player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             //layer->switchState( new JumpingState(player,-1) );

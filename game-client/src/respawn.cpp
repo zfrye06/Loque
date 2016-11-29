@@ -28,7 +28,7 @@ Respawn::Respawn(glm::vec2 pos, sf::View& viewTemp){
         }
     }
 
-    sprite = new AnimatedSprite( sf::seconds(0.085), false, false );
+    sprite = new AnimatedSprite( sf::seconds(0.09), false, false );
     sprite->setOrigin(w/2.f,h/2.f);
     sprite->setPosition( pos.x*64, pos.y*64 );
     sprite->play(animation);

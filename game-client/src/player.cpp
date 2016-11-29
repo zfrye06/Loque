@@ -7,7 +7,7 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     techLength = 20.f/60.f;
     frickedUpLength = 40.f/60.f;
     jumpHelpAmount = 2.f;
-    damageBoostLength = 0.8;
+    damageBoostLength = 0.45;
     damageBoostTimer = 0;
     shockLength = 0.4;
     deadZone = 0.25; // in percentage
@@ -17,7 +17,7 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     playerWidth = .35; // in meters
     playerHeight = .35; // in meters
     airDodgeVelocity = 19;
-    airDodgeTime = 0.3;
+    airDodgeTime = 0.35;
     turnAroundTime = 0.4;
     fastFallSpeed = 10;
     landLength = 0.2;

@@ -7,8 +7,8 @@
 
 class Player;
 
-static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "SpecialFall", "Jumping", "AirDodge", "Turning", "Landing", "Shocked", "KnockBack", "KnockBackRecover", "None" };
-enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, SpecialFall, Jumping, AirDodge, Turning, Landing, Shocked, KnockBack, KnockBackRecover, None };
+static const std::string StateString[] = { "Idle", "Dashing", "Running", "Walking", "JumpSquat", "Airborne", "SpecialFall", "Jumping", "AirDodge", "Turning", "Landing", "Shocked", "KnockBack", "KnockBackRecover", "Win", "None" };
+enum PlayerState { Idle, Dashing, Running, Walking, JumpSquat, Airborne, SpecialFall, Jumping, AirDodge, Turning, Landing, Shocked, KnockBack, KnockBackRecover, Win, None };
 
 class GenericPlayerState {
 public:
@@ -172,6 +172,15 @@ public:
     bool teched;
     KnockbackRecoverState( Player* player, bool teched = false);
     ~KnockbackRecoverState();
+    void init();
+    PlayerState getType();
+    void update( Player* player, double dt );
+};
+
+class WinState : public GenericPlayerState {
+public:
+    WinState( Player* player );
+    ~WinState();
     void init();
     PlayerState getType();
     void update( Player* player, double dt );

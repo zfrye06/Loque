@@ -787,3 +787,28 @@ void KnockbackRecoverState::update( Player* player, double dt ) {
         player->switchState( new IdleState(player) );
     }
 }
+
+WinState::WinState( Player* player ) {
+    this->player = player;
+}
+
+void WinState::init() {
+    player->sprite->play( player->winAnimation );
+    player->sprite->setLooped( false );
+    player->sprite->setFrameTime(sf::seconds(0.1));
+}
+
+WinState::~WinState() {
+    player->sprite->setLooped( true );
+}
+
+PlayerState WinState::getType() {
+    return PlayerState::Win;
+}
+
+void WinState::update( Player* player, double dt ) {
+    if ( !player->sprite->isPlaying() ) {
+        player->sprite->setLooped( true );
+        player->sprite->play( player->winRepeatAnimation );
+    }
+}

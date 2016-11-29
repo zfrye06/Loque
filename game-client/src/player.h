@@ -121,6 +121,7 @@ public:
     Animation knockBackRecoverAnimation;
     Animation loseAnimation;
     Animation winAnimation;
+    Animation winRepeatAnimation;
     Animation shockedAnimation;
     Animation tecAnimation;
     Animation hitAnimation;

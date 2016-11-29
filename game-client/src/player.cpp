@@ -197,6 +197,13 @@ void Player::setUpSprite( std::string resource ) {
 	winAnimation.addFrame(sf::IntRect(201,451,48,48));
 	winAnimation.addFrame(sf::IntRect(251,451,48,48));
 	winAnimation.addFrame(sf::IntRect(301,451,48,48));
+	winAnimation.addFrame(sf::IntRect(301,451,48,48));
+
+    winRepeatAnimation.setSpriteSheet(*texture);
+	winRepeatAnimation.addFrame(sf::IntRect(151,451,48,48));
+	winRepeatAnimation.addFrame(sf::IntRect(201,451,48,48));
+	winRepeatAnimation.addFrame(sf::IntRect(251,451,48,48));
+	winRepeatAnimation.addFrame(sf::IntRect(301,451,48,48));
 
     hitAnimation.setSpriteSheet(*texture);
 	hitAnimation.addFrame(sf::IntRect(151,101,48,48));

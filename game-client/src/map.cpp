@@ -244,14 +244,13 @@ Entity::Type Map::getType(){
 void Map::spawnObject( tmx::Object& obj ) {
     if ( obj.getName() == "playerSpawn" ) {
         world->addEntity(new ::PlayerSpawn(obj));
-    }
-    else if( obj.getName() == "laser" ) {
+    } else if( obj.getName() == "laser" ) {
         world->addEntity( new ::Laser(obj));
-    }
-    else if( obj.getName() == "trampoline" ) {
+    } else if( obj.getName() == "trampoline" ) {
         world->addEntity( new ::Trampoline(obj));
-    }
-    else if( obj.getName() == "spikes") {
+    } else if( obj.getName() == "spikes") {
         world->addEntity( new ::Spikes(obj));
+    } else if( obj.getName() == "exit") {
+        world->addEntity( new ::Exit(obj));
     }
 }

@@ -292,7 +292,7 @@ private:
             for (auto x = posX; x < posX + width + 2; ++x)
             {
                 auto idx = y * int(m_chunkCount.x) + x;
-                if (idx >= 0 && idx < m_chunks.size() && !m_chunks[idx]->empty())
+                if (idx >= 0 && (uint)idx < m_chunks.size() && !m_chunks[idx]->empty())
                 {
                     visible.push_back(m_chunks[idx].get());
                 }

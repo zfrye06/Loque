@@ -1,18 +1,18 @@
 #include "player.h"
 
 Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
-    hitLength = 0.2;
+    hitLength = 0.2f;
     successfulTech = false;
     directionalInfluence = 1.f;
     techLength = 20.f/60.f;
-    frickedUpLength = 50.f/60.f;
+    frickedUpLength = 40.f/60.f;
     jumpHelpAmount = 2.f;
     damageBoostLength = 0.8;
     damageBoostTimer = 0;
     shockLength = 0.4;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
-    jumpSquatLength = 0.08; // Time in seconds to wait for button release for a short hop.
+    jumpSquatLength = 6.f/60.f; // Time in seconds to wait for button release for a short hop.
     dashLength = 0.30; // in seconds
     playerWidth = .35; // in meters
     playerHeight = .35; // in meters
@@ -397,7 +397,7 @@ void Player::update( double dt ) {
                 airDodgePressed = false;
             }
     } else {
-        if (sf::Keyboard::isKeyPressed( sf::Keyboard::R ) ) {
+        if (sf::Keyboard::isKeyPressed( sf::Keyboard::LControl ) ) {
             airDodgePressed = true;
         } else {
             airDodgePressed = false;

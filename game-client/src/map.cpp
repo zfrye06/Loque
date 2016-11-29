@@ -33,7 +33,7 @@ Map::Map( std::string resource ) {
     // First grab physical layer
     tmx::TileLayer* tileSet;
     //for( auto l : map->getLayers() ) {
-    for ( int i=0;i<map->getLayers().size();i++ ) {
+    for ( uint i=0;i<map->getLayers().size();i++ ) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {
             case tmx::Layer::Type::Tile: {
@@ -61,7 +61,7 @@ Map::Map( std::string resource ) {
     }
     int x = 0;
     int y = 0;
-    for (int i = 0; i < mapSize.x*mapSize.y; i++ ) {
+    for (uint i = 0; i < mapSize.x*mapSize.y; i++ ) {
         if ( tiles[i].ID != 0) {
             switch(tiles[i].ID){
                 //Right slope
@@ -212,7 +212,7 @@ Map::Map( std::string resource ) {
             }
         }
         x++;
-        if ( x >= mapSize.x ) {
+        if ( (uint)x >= mapSize.x ) {
             y++;
             x=0;
         }

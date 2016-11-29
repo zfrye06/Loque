@@ -8,6 +8,21 @@ Spikes::Spikes(tmx::Object& obj){
     size.height = size.height / 64;
     size.left = size.left / 64;
     size.top = size.top / 64;
+    if ( size.width > size.height ) {
+        impulse = glm::vec2(0.f,-30.f);
+    }
+    if ( size.height > size.width ) {
+        b2AABB testAABB;
+        testAABB.lowerBound = b2Vec2(pos.x, pos.y-size.width/2.f);
+        testAABB.upperBound = b2Vec2(pos.x+size.width/2.f+0.3, pos.y+size.height/2.f);
+        MapQueryCallback queryCallback;
+        physicalWorld->get().QueryAABB( &queryCallback, testAABB );
+        if( queryCallback.foundMap ) {
+            impulse = glm::vec2(30.f,0.f);
+        } else {
+            impulse = glm::vec2(0.f,30.f);
+        }
+    }
 
     b2Vec2 topLeft(size.left, size.top);
     b2Vec2 topRight(size.left + size.width, size.top);

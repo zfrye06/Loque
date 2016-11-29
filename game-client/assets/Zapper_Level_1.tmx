@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="128" height="32" tilewidth="64" tileheight="64" nextobjectid="13">
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="128" height="32" tilewidth="64" tileheight="64" nextobjectid="25">
  <properties>
   <property name="ambient" value="assets/audio/music/cosmos.ogg"/>
  </properties>
@@ -25,7 +25,7 @@
  </layer>
  <layer name="Physical" width="128" height="32" opacity="0.47">
   <data encoding="base64" compression="zlib">
-   eJztmguOxCAIhmcuNW139/7n2jQbE8MiAoLQ6J+YtJ2K1M8HdPp6/enz5hdLSdqd7dtK4vadB/+MtlbT5r+2Nv+1tfmvrc2/b9sqxswY13rxn/l8Xv0EfbyPz6pInwHWP0FdaPfp/C10IXaOCfPktvnz/n8Nnn8QZvW1FmtKmrGllQd/z7X9cO6T0u+QPUenMbMs/Dljccaa5cW+9l3D3UuZ+Pd+91qDS/Gc95HcqX7LwL/HtuxxVr5ExMFZ88do/hz2T9vvItuNiqE1bXDn/cjch7F9BH/JGB71j1u/zgO9RfGn6lis+Vg+1brPYx8o9mbxlyqKv4a9ho+EP2yD+36JE1NE7v8Z4z+JTyNzs2WrHNfvUG55vBubmfeN9rWHKJ/qPR5bK7UsLsRWba/nr2S95pRZud9T4j+MK5yLI/5J913MN+59VrmphW5/vgT+RPHHWHu0OYO/pSzif4mNyPjfWheybljEDNjvXmN3df7SfB/+Twfb1Dwf5YNVztxqw4I/tJsx/rPQAbhb8ZfKOlfQ6rvhB7yGrZOe8mijZn8G8f8gPljYtBaWA3m212ufEvbdRatA2x78e2tnj/uM70h6ysx/tH+k/HvjCbtXqwP4MyNPxL79ysBf0u9S29Qx9ewcH29J8umiCPYtZeA/w/YI/14bmlLqStiXenAecwtlEzvf/P2kHWvefmRb/0cL9VyS/X/VsrW1tWWtX9MhhZc=
+   eJztmg2OhCAMhWcuNeru3v9cG7MhIW8LtKUtEngJiY7SVj5+iuPr9afPm18sJfEbHdtK4radB/8n2lpNm//a2vzX1ua/tp7EX+vDk79ljvnEvNaLf+TzebUTxngfn1mRPgPWP6E+2p2dv4Uuws4RME5umz/v/7/h+Ydglv9WYl2Tpm9p5cHfc20/nNsktTuyp2JBSRhzY/EWxwenL0bMWV7s89gp7p6qtdeT+LeuW7Avza938Rz3I7jnvjXXIvyn660YT8M8bkQeHLV/lO55RvPnsJ9tvevxaz2/efvr8cEd9z1jH3P7EfwlfTiKv3S/0KMa/1odintv/271Rev2SPai+EttjuKvZe/JH33UcgVuafltxWuhGfnjuXZslmyl4/wdyi2Pd2OR+75Z8j9kcAKX/D4Ni4uwldtrxSsZr5wStfebiT+2M47Fnvik6y4VG/c+yzzKIv/7EtgYxZ9iza0r8RnB31IW/CU2Rub/1rqIecOafz5vWb2TQvu99bk5r4U/jiQ+pPt9/J8OfWqerxZDaa6X+in5sOCPdmfiL9EB3K34S2W9V9Dqm9k3qXnSUz0+SnVz9ucg/h5rQcT+X/NewtJ/TdR3F6WCtj34l8Y2l7v0O5LV+Pd+ZyPl3+pP1L1aHRCPR76Iwm+/ku9cI/hL2l1qu3bMzYVrsUn200la9quNf0vbPfxbPjQl1ZWM+1QPxzG31GxS55u/n7R9zTuOp83/vaX2XJL1f9WytbW1Za1fLMmLLQ==
   </data>
  </layer>
  <objectgroup name="Objects">
@@ -53,5 +53,52 @@
   <object id="10" name="trampoline" x="4612" y="1303" width="58" height="38"/>
   <object id="11" name="trampoline" x="4422" y="1495" width="56" height="39"/>
   <object id="12" name="spikes" x="2817.12" y="1632.41" width="253.96" height="31.6795"/>
+  <object id="13" name="spikes" x="4161.63" y="1824.49" width="766.734" height="30.2216"/>
+  <object id="14" name="spikes" x="4989.93" y="1828.97" width="1280" height="26.8637"/>
+  <object id="15" name="laser" x="3265.05" y="1559.21" width="255.205" height="11.1932">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="17" name="laser" x="3073.65" y="1305.13" width="321.245" height="11.1932">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="18" name="laser" x="3797.85" y="1217.82" width="14.5512" height="124.244">
+   <properties>
+    <property name="canBePassed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="19" name="laser" x="4952.99" y="1026.42" width="13.4318" height="124.244">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="20" name="laser" x="4949.63" y="1603.98" width="12.3125" height="58.2046">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="21" name="laser" x="4949.63" y="580.927" width="13.4318" height="184.688">
+   <properties>
+    <property name="canBePassed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="22" name="laser" x="6295.05" y="448.847" width="13.4318" height="125.364">
+   <properties>
+    <property name="canBePassed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="23" name="laser" x="6292.81" y="771.211" width="14.5512" height="124.244">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="24" name="laser" x="6293.93" y="1152.9" width="13.4318" height="128.722">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

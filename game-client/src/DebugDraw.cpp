@@ -71,10 +71,10 @@ void DebugDraw::DrawPoint(const b2Vec2& p, float32 size, const b2Color& color)
 
 void DebugDraw::DrawTransform(const b2Transform& xf)
 {
-    float x,y, lineSize, lineProportion;
-    x = xf.p.x * RATIO;
-    y = xf.p.y * RATIO;
-    lineProportion = 0.15; // 0.15 ~ 10 pixels
+    //float x,y, lineSize
+    float lineProportion = 0.15; // 0.15 ~ 10 pixels
+    //x = xf.p.x * RATIO;
+    //y = xf.p.y * RATIO;
     b2Vec2 p1 = xf.p, p2;
 
 	//red (X axis)

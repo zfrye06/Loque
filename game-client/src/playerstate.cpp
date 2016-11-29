@@ -244,9 +244,10 @@ void JumpingState::update( Player* player, double dt ) {
     } else {
         player->switchState( new AirborneState(player) );
     }
+    // Double jumping
     if ( player->jumpButton ) {
         if ( player->canDoubleJump && player->releasedJump ) {
-            player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight*.5,-player->doubleJumpHeight) );
+            player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player, 0) );
             player->canDoubleJump = false;
             player->releasedJump = false;
@@ -275,12 +276,12 @@ void JumpingState::update( Player* player, double dt ) {
     // Walljumping
     if ( canWallJump && fabs(player->direction.x) >= 0.9 ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
-            player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             //player->switchState( new JumpingState(player,1) );
             init();
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
-            player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             //layer->switchState( new JumpingState(player,-1) );
             init();
@@ -350,7 +351,7 @@ void AirborneState::update( Player* player, double dt ) {
     // Double jumping
     if ( player->jumpButton ) {
         if ( player->canDoubleJump && player->releasedJump ) {
-            player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight*.5,-player->doubleJumpHeight) );
+            player->myBody->SetLinearVelocity( b2Vec2(player->direction.x*player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             player->switchState( new JumpingState(player) );
             player->canDoubleJump = false;
             player->releasedJump = false;
@@ -361,11 +362,11 @@ void AirborneState::update( Player* player, double dt ) {
     // Walljumping
     if ( canWallJump && fabs(player->direction.x) >= 0.9 ) {
         if ( player->direction.x > 0.9 && player->canWallJumpRight ) {
-            player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->myBody->SetLinearVelocity( b2Vec2(player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player,1) );
         } else if ( player->direction.x < -0.9 && player->canWallJumpLeft ) {
-            player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight,-player->doubleJumpHeight) );
+            player->myBody->SetLinearVelocity( b2Vec2(-player->doubleJumpHeight/sqrt(2),-player->doubleJumpHeight) );
             //player->flash(sf::Color(150,255,150,255),0.3,0.05);
             player->switchState( new JumpingState(player,-1) );
         }
@@ -673,7 +674,6 @@ KnockbackState::KnockbackState( Player* player, glm::vec2 impulse ) {
 
 void KnockbackState::init() {
     player->hurtSound.play();
-    glm::vec2 up = glm::vec2(0.f,-1.f);
     float strength = glm::length(impulse);
     glm::vec2 di = glm::normalize(player->direction*player->directionalInfluence*strength);
     glm::vec2 newImpulse = glm::normalize(impulse);

@@ -51,7 +51,7 @@ int app() {
                         ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
                         //delete all current respawn animations
                         std::vector<Entity*> anims = world->getEntitiesByType(Entity::Type::RespawnAnim);
-                        for(int i = 0; i < anims.size(); i++){
+                        for(uint i = 0; i < anims.size(); i++){
                             world->removeEntity(anims[i]);
                         }
                         world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y), view));

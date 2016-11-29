@@ -9,7 +9,7 @@ Respawn::Respawn(glm::vec2 pos, sf::View& viewTemp){
     view->setCenter(pos.x*64, pos.y*64);
     //delete all players
     std::vector<Entity*> players = world->getEntitiesByType(Entity::Type::Player);
-    for(int i = 0; i < players.size(); i++){
+    for(uint i = 0; i < players.size(); i++){
         world->removeEntity(players[i]);
     }
 
@@ -20,7 +20,6 @@ Respawn::Respawn(glm::vec2 pos, sf::View& viewTemp){
     int frames = 20;
     int columns = 5;
     int rows = 4;
-    int y = 0;
     int curframe = 0;
     for (int y=0;y<rows&&curframe < frames;y++ ) {
         for (int x=0;x<columns&&curframe < frames;x++ ) {

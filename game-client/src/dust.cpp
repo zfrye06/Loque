@@ -201,7 +201,6 @@ ShockDust::ShockDust( glm::vec2 pos ) {
     int frames = 10;
     int columns = 5;
     int rows = 2;
-    int y = 0;
     int curframe = 0;
     for (int y=0;y<rows&&curframe < frames;y++ ) {
         for (int x=0;x<columns&&curframe < frames;x++ ) {

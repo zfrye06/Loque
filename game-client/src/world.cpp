@@ -24,7 +24,7 @@ void World::addEntity( Entity* e ) {
 }
 
 void World::bringToFront( Entity* e ) {
-    for( int i=0;i<entities.size();i++ ) {
+    for( uint i=0;i<entities.size();i++ ) {
         if ( entities[i] == e ) {
             std::swap( entities[i], entities[entities.size()-1] );
             break;
@@ -33,7 +33,7 @@ void World::bringToFront( Entity* e ) {
 }
 
 void World::removeEntity( Entity* e ) {
-    for( int i=0;i<entities.size();i++ ) {
+    for( uint i=0;i<entities.size();i++ ) {
         if ( entities[i] == e ) {
             entities[i] = nullptr;
             break;
@@ -43,7 +43,7 @@ void World::removeEntity( Entity* e ) {
 }
 
 void World::draw( sf::RenderWindow& window ) {
-    for( int i=0;i<entities.size();i++ ) {
+    for( uint i=0;i<entities.size();i++ ) {
         if ( !entities[i] ) {
             entities.erase( entities.begin() + i );
             i--;
@@ -64,7 +64,7 @@ void World::update( double dt ) {
     }
     timer += dt;
     while ( timer >= TIMESTEP ) {
-        for( int i=0;i<entities.size();i++ ) {
+        for( uint i=0;i<entities.size();i++ ) {
             if ( !entities[i] ) {
                 entities.erase( entities.begin() + i );
                 i--;

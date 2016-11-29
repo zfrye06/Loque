@@ -34,6 +34,6 @@ INCLUDEPATH += /usr/local/include/SFML
 INCLUDEPATH += /usr/include/SFML
 }
 macx:  {
-LIBS += -L/usr/local/Cellar/sfml/2.3.2/lib -lsfml-network -lsfml-system
-INCLUDEPATH += /usr/local/Cellar/sfml/2.3.2/include
+LIBS += -L/usr/local/Cellar/sfml/2.3.2/lib -L/usr/local/Cellar/sfml/2.4.0/lib -lsfml-network -lsfml-system
+INCLUDEPATH += /usr/local/Cellar/sfml/2.3.2/include /usr/local/Cellar/sfml/2.4.0/include
 }

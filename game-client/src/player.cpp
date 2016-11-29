@@ -362,10 +362,10 @@ void Player::update( double dt ) {
 			direction += glm::vec2(-1,0);
 		}
 		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Up ) || sf::Keyboard::isKeyPressed( sf::Keyboard::W ) ) {
-			direction += glm::vec2(0,1);
+			direction += glm::vec2(0,-1);
 		}
 		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) || sf::Keyboard::isKeyPressed( sf::Keyboard::S ) ) {
-			direction += glm::vec2(0,-1);
+			direction += glm::vec2(0,1);
 		}
 		if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) ) {
             direction *= .8;

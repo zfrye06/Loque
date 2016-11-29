@@ -329,7 +329,15 @@ void Player::update( double dt ) {
         if (sf::Joystick::isButtonPressed(0,i)) {
             std::cout << i << std::endl;
         }
-    }*/
+    }
+    std::cout << "X: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::X) << "\n";
+    std::cout << "Y: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Y) << "\n";
+    std::cout << "Z: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Z) << "\n";
+    std::cout << "R: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R) << "\n";
+    std::cout << "U: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::U) << "\n";
+    std::cout << "V: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::V) << "\n";
+    std::cout << "PovX: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::PovX) << "\n";
+    std::cout << "PovX: " << sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::PovY) << "\n\n";*/
 
     bool controllerFound = false;
     // Scan for an Xbox controller...
@@ -379,7 +387,11 @@ void Player::update( double dt ) {
     if ( sf::Joystick::isConnected( controllerID ) && controllerFound && sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::Z) ) {
             float check = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Z);
             float check2 = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R);
+#ifdef WIN32
+            if( check > 90 || check < -90 ) {
+#else
             if( check > 90 || check2 > 90 ) {
+#endif
                 airDodgePressed = true;
             } else {
                 airDodgePressed = false;
@@ -400,7 +412,6 @@ void Player::update( double dt ) {
     if ( newState ) {
         delete currentState;
         currentState = newState;
-        //std::cout << StateString[currentState->getType()] << "\n";
         currentState->init();
         newState = nullptr;
     }

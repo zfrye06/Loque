@@ -1,44 +1,33 @@
 #include "playerstats.h"
 
-PlayerStats* playerStats;
+PlayerStats *playerStats;
 
-PlayerStats::PlayerStats(int userId, int mapId) {
-    client = new LoqueClient();
-    time = 0;
-    score = 0;
-    this->mapId = mapId;
-    this->userId = mapId;
-}
-
-PlayerStats::~PlayerStats() {
-    delete client;
+PlayerStats::PlayerStats(int userId, int levelId) : userId(userId) {
+    stats.secToComplete = 0;
+    stats.levelId = levelId;
+    stats.pointsScored = 0;
 }
 
 void PlayerStats::startTime() {
-    time = 0;
-    score = 10;
+    stats.secToComplete = 0;
+    stats.pointsScored = 10;
 }
 
 void PlayerStats::setScore(double s) {
-    score = s;
+    stats.pointsScored = s;
 }
 
 double PlayerStats::getScore() {
-    return score;
+    return stats.pointsScored;
 }
 
 void PlayerStats::sendStats() {
-    GameStats stats;
-    stats.pointsScored = score;
-    stats.levelId = mapId;
-    stats.secToComplete = time;
-    //ActionResult r;
-    //client->postGameStats(userId,stats,r);
-    //if (!r.success) {
-    //    throw std::runtime_error(r.reason);
-    //}
+    auto status = client.postGameStats(userId, stats);
+    if (status != Status::OK) {
+        std::cerr << "ERROR: Unable to post player stats: " << status << std::endl;
+    }
 }
 
-void PlayerStats::update( double dt ) {
-    time += dt;
+void PlayerStats::update(double dt) {
+    stats.secToComplete += dt;
 }

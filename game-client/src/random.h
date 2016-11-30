@@ -1,9 +1,9 @@
 #ifndef LQ_RANDOM_H_
 #define LQ_RANDOM_H_
 
+#include <cmath>
 #include <stdlib.h>
 #include <time.h>
-#include <cmath>
 
 class RandomClass {
 public:

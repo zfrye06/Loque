@@ -1,21 +1,21 @@
 #ifndef LQ_PLAYER_H_
 #define LQ_PLAYER_H_
 
-#include <glm/glm.hpp>
-#include <SFML/Main.hpp>
+#include <Box2D/Box2D.h>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Main.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include <Box2D/Box2D.h>
 
+#include "AnimatedSprite.hpp"
+#include "Animation.hpp"
+#include "dust.h"
 #include "entity.h"
 #include "playerstate.h"
-#include "Animation.hpp"
-#include "world.h"
-#include "dust.h"
-#include "AnimatedSprite.hpp"
 #include "random.h"
+#include "world.h"
 
 class GenericPlayerState;
 

@@ -1,14 +1,13 @@
 #ifndef LQ_RESOURCE_H_
 #define LQ_RESOURCE_H_
 
-#include <iostream>
-
-#include <tmxlite/Map.hpp>
-#include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/Font.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
-#include <vector>
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Texture.hpp>
+#include <iostream>
 #include <string>
+#include <tmxlite/Map.hpp>
+#include <vector>
 
 class Resource {
 public:

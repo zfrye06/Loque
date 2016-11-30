@@ -74,7 +74,7 @@ Status handleLogin(sql::Connection& dbconn,
             int id = qRes->getInt(1);
             int isAdmin = qRes->getInt(2);
             loginres.userId = id;
-            loginres.userType = isAdmin ? Admin : Student; 
+            loginres.userType = isAdmin ? UserType::ADMIN : UserType::STUDENT; 
         }
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleLogin: " << e.what() << std::endl;
@@ -88,14 +88,13 @@ Status handleCreateAcc(sql::Connection& dbconn,
                      LoginResult& res) {
     res.userType = DNE;
     try {
-        std::string query = "INSERT INTO User(username, password, isAdmin, levelsCompleted, totalScore, totalTime) VALUES (?, ?, ?, ?, ?, ?)";
+        std::string query = "INSERT INTO User(username, password, isAdmin, totalScore, totalTime) VALUES (?, ?, ?, ?, ?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setString(1, username);
         pstmt->setString(2, userpass);
-        pstmt->setBoolean(3, type == Admin);
+        pstmt->setBoolean(3, type == UserType::ADMIN);
         pstmt->setInt(4, 0);
         pstmt->setInt(5, 0);
-        pstmt->setInt(6, 0);
         pstmt->execute();
         
         // Retrieve the added ID.

@@ -4,22 +4,35 @@
 
 std::ostream& operator<<(std::ostream& out, Status s) {
     switch (s) {
-    case OK:
-        out << "OK";
+    case Status::OK:
+        out << "Status<OK>";
         break;
-    case NETWORK_ERR:
-        out << "NETWORK_ERR: Unable to access server.";
+    case Status::NETWORK_ERR:
+        out << "Status<NETWORK_ERR>";
         break;
-    case DB_ERR:
-        out << "DB_ERR: Unable to complete requested query." <<
-            " Try checking the server logs for more information.";
+    case Status::DB_ERR:
+        out << "Status<DB_ERR>";
         break;
     }
     return out;
 }
 
-LoqueClient::LoqueClient() : host("192.168.0.1"), port(5001) {}
+std::ostream& operator<<(std::ostream& out, UserType t) {
+    switch (t) {
+    case UserType::ADMIN:
+        out << "UserType<ADMIN>";
+        break;
+    case UserType::STUDENT:
+        out << "UserType<STUDENT>";
+        break;
+    case UserType::DNE:
+        out << "UserType<DNE>";
+        break;
+    }
+    return out;
+}
 
+LoqueClient::LoqueClient() : host("127.0.0.1"), port(5001) {}
 
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
 
@@ -148,8 +161,9 @@ Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
     return status;
 }
 
-Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet &response) {
-    auto status = conn.connect(host, port);
+Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet& response) {
+    sf::TcpSocket conn;
+    auto status = conn.connect(host, port, sf::seconds(2));
     if (status != sf::Socket::Done) {
         return NETWORK_ERR; 
     }

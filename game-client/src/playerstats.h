@@ -7,21 +7,18 @@
 
 class PlayerStats {
 private:
-    double time;
-    double score;
-    int mapId;
     int userId;
-    LoqueClient* client;
+    GameStats stats;
+    LoqueClient client;
 public:
     void startTime();
-    PlayerStats( int userId, int mapId );
-    ~PlayerStats();
+    PlayerStats(int userId, int mapId);
     void sendStats();
     void setScore(double s);
     void update(double dt);
     double getScore();
 };
 
-extern PlayerStats* playerStats;
+extern PlayerStats *playerStats;
 
 #endif

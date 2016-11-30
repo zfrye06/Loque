@@ -11,13 +11,14 @@ enum Status {
     NETWORK_ERR,
     DB_ERR
 };
-std::ostream& operator<<(std::ostream&, Status s); 
+std::ostream& operator<<(std::ostream&, Status); 
 
 enum UserType {
-    Admin,
-    Student,
+    ADMIN,
+    STUDENT,
     DNE
 };
+std::ostream& operator<<(std::ostream&, UserType);
 
 // The result of an attempted login or account creation.
 struct LoginResult {
@@ -112,7 +113,6 @@ class LoqueClient {
     
     const std::string host;
     const int port;
-    sf::TcpSocket conn;
 
     Status makeRequest(sf::Packet&, sf::Packet&);
 };

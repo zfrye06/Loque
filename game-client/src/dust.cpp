@@ -41,7 +41,7 @@ void DashDust::update(double dt) {
 void DashDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void DashDust::draw(sf::RenderWindow& window){
+void DashDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
 
@@ -88,7 +88,7 @@ void JumpDust::update(double dt) {
 void JumpDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void JumpDust::draw(sf::RenderWindow& window){
+void JumpDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
 
@@ -136,7 +136,7 @@ void WallJumpDust::update(double dt) {
 void WallJumpDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void WallJumpDust::draw(sf::RenderWindow& window){
+void WallJumpDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
 
@@ -179,7 +179,7 @@ void LandingDust::update(double dt) {
 void LandingDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void LandingDust::draw(sf::RenderWindow& window){
+void LandingDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
 
@@ -230,7 +230,7 @@ void ShockDust::update(double dt) {
 void ShockDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void ShockDust::draw(sf::RenderWindow& window){
+void ShockDust::draw(sf::RenderTarget& window){
     if ( sprite->isPlaying() ) {
         window.draw(*sprite);
     }
@@ -270,7 +270,7 @@ void PokeDust::update(double dt) {
 void PokeDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void PokeDust::draw(sf::RenderWindow& window){
+void PokeDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
 

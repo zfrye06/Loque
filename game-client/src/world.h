@@ -14,14 +14,20 @@
 
 class World {
 private:
+<<<<<<< HEAD
+// vector probably isn't the most efficient way to store the world...
+    std::vector<std::vector<Entity*>> entities;
+=======
     std::vector<Entity*> entities;
+>>>>>>> a1faef30130a8a922ca7de5e08b9f75345fa82d2
     double timer;
     double stutterLength;
     double stutterPeriod;
 public:
+    enum Layer { Background, Midground, Foreground, Lavaground };
     World();
     ~World();
-    void addEntity( Entity* e );
+    void addEntity( Entity* e, int layer );
     void bringToFront( Entity* e );
     void removeEntity( Entity* e );
     void draw( sf::RenderWindow& window );

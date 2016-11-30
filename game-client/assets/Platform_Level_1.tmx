@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="256" tilewidth="64" tileheight="64" nextobjectid="12">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="256" tilewidth="64" tileheight="64" nextobjectid="43">
  <tileset firstgid="1" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
   <image source="images/candylandTiles.png" width="896" height="448"/>
  </tileset>
@@ -9,32 +9,122 @@
  <tileset firstgid="255" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
   <image source="images/PhysicsTileset.png" width="256" height="256"/>
  </tileset>
- <tileset firstgid="271" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="25" columns="5">
-  <image source="images/LevelHazards.png" width="320" height="320"/>
+ <tileset firstgid="271" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="30" columns="6">
+  <image source="images/LevelHazards.png" width="384" height="320"/>
  </tileset>
- <tileset firstgid="296" name="MathSpritesheet" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+ <tileset firstgid="301" name="MathSpritesheet" tilewidth="64" tileheight="64" tilecount="30" columns="5">
   <image source="images/MathSpritesheet.png" width="320" height="384"/>
  </tileset>
  <layer name="CandyGraphics" width="128" height="256">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <objectgroup name="Objects">
   <object id="1" name="playerSpawn" x="196" y="15942" width="54" height="52"/>
-  <object id="3" name="spikes" x="580" y="15746" width="121" height="33"/>
-  <object id="4" name="spikes" x="710" y="14978" width="182" height="32"/>
-  <object id="5" name="trampoline" x="712" y="15260" width="49" height="35"/>
-  <object id="6" name="trampoline" x="262" y="15125" width="54" height="42"/>
-  <object id="7" name="trampoline" x="1158" y="13528" width="56" height="39"/>
-  <object id="8" name="spikes" x="835" y="13442" width="121" height="32"/>
-  <object id="9" name="trampoline" x="2762" y="12824" width="49" height="39"/>
-  <object id="10" name="spikes" x="6471" y="14531" width="181" height="31"/>
-  <object id="11" name="spikes" x="6467" y="15047" width="185" height="27"/>
+  <object id="3" name="spikes" x="771" y="15682" width="121" height="33">
+   <properties>
+    <property name="ImpulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="4" name="spikes" x="899" y="14267" width="182" height="32">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="5" name="trampoline" x="583" y="15004" width="49" height="35"/>
+  <object id="6" name="trampoline" x="259" y="14550" width="54" height="42"/>
+  <object id="7" name="trampoline" x="962" y="12368" width="56" height="39"/>
+  <object id="8" name="spikes" x="1215" y="11842" width="121" height="32">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="9" name="trampoline" x="3462" y="11344" width="49" height="39"/>
+  <object id="10" name="spikes" x="7683.12" y="14273.4" width="181" height="31">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="11" name="spikes" x="7362.15" y="14403.4" width="185" height="27">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="17" name="laser" x="8084.85" y="14263.6" width="18.1818" height="2060.61">
+   <properties>
+    <property name="canBePassed" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="18" name="spikes" x="7492" y="12808" width="116" height="24">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="20" name="spikes" x="7814" y="12806" width="118" height="22">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="21" name="trampoline" x="7556" y="13322" width="58" height="54"/>
+  <object id="22" name="trampoline" x="6854" y="12114" width="56" height="42"/>
+  <object id="23" name="spikes" x="6596" y="11524" width="120" height="30">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="24" name="spikes" x="7112" y="11526" width="112" height="26">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="25" name="trampoline" x="6602" y="10766" width="48" height="46"/>
+  <object id="26" name="spikes" x="6466" y="10180" width="120" height="26">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="27" name="spikes" x="6790" y="10178" width="120" height="34">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="30" name="trampoline" x="4350" y="9684" width="62" height="40"/>
+  <object id="31" name="trampoline" x="3388" y="9674" width="70" height="52"/>
+  <object id="36" name="spikes" x="1915.15" y="4593.94" width="66.6667" height="75.7576">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="0"/>
+   </properties>
+  </object>
+  <object id="38" name="spikes" x="1975.76" y="4531.82" width="66.6667" height="75.7576">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="39" name="spikes" x="2033.33" y="4468.18" width="66.6667" height="75.7576">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="40" name="spikes" x="2751.52" y="3759.09" width="66.6667" height="75.7576">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="41" name="spikes" x="2812.12" y="3698.48" width="66.6667" height="75.7576">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
+  <object id="42" name="spikes" x="2866.67" y="3628.79" width="66.6667" height="75.7576">
+   <properties>
+    <property name="impulseMultiplier" type="float" value="-1"/>
+   </properties>
+  </object>
  </objectgroup>
- <layer name="Physical" width="128" height="256">
+ <layer name="Physical" width="128" height="256" opacity="0.39">
   <data encoding="base64" compression="zlib">
-   eJzt20FOwzAQBdAUtmy65f73BKqqUilOHFOikPnvSV5Wqmc8E8d1pwkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYw8fCoD45z6Pms8l5HjWfTc6zLNW7/NdxOl0HAFBba//2Yg8QzR4Qcuj32ZzhZHt83usH2fSDbPb/OfT6bHp9NvnPNves91zIpi9kk/8crV7vHTCHWv8bb1/jfe8v8Qvy31f5rqteP67yevDuV8vtXvfaOq+6ru+tqd/RGh+N894S/tNRbT6Qqvc/tC17mD5Cz1Hf/xNcave1sS+rUNcV5rC1S3zOU3sNLH1GXGu45XF0DRydNXx1H4O0NcDPGrAGsrR6YKU1UP0c71lzsRg9UxgZRzkHTjCX//OGg/9DL8xWMf9H+q1xbxXzz3pp+XeH57u0/KfNtyctHmnz7UmLR9p8eyrHI+Ee37PEIpv8Z5P/bNXy/wnk/Zbm
+   eJzt3dFO2zAAQNF27P9/mQlt3cbWQAI0TnzPkXibqirXuI7rsMsFAAAAAAAAgFWuo98Aw2jfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpX2X9l3ad2nfpT0AzM/nfZf2Xdp3ad+lfZf2Xdp3ad+lfZf2ADA/n/dd2ndp36V9l/Zd2ndpD5DxZM5Pe74YA8BfzAdd15+fCQDMzdq/zf1f2/VqDAB3mBO67AN0/Wp/9fsPMDX3fm3u/9vsAQH/MR902f/psv8DAABTsufXZt+3zd4/xgDGAMYAxgDGAMYAAAC/WRN2ORfa5Vxol/Zd2ndp36V9l/YAANOqnPF4vti7vsc5nz+KY8RZL4wBjAGMgWXFtcHsNAWA+543/kCB8Q4wN/M8wNf77Nxqbgb2Zt4BAICGlzOSnosGAAAAmJvnIAAAuLm3/rMmBKDMfgl8zhn2HY/+/vbgnCCz83sOczvDegMAAGAk903AUZhzAMZbWgPuvTb85vvpNOcTeI85os19Q5vPiK9z1DOB5vg2c3zbEeckjsFnQ5vPhjb926wNYLxHrcOs7/a15m8HLn03+Kj3w/GN7G+OGO9R/des78wRY32/jm2g/3gjG7gHHM/vYJv+bXv3t+Y/lr37m2+OY+36/3a+aMt6zTOK24y6Nnq06d+mf9fo/T/G039fW9d5j14X6t+mf5v+83tr/8b/KbXN2nNWZ7mOZ3iPvO+j403/Nv3b9G/T/xh8/8cIa/qf5V6G7XTd7uWaPU1yjk3/7W7XbIYxoP92f1+zs48B/bf795qdeQy89feCz7aXvZd71+KsY0DX7Zau2RnHgP7bLV2zrd8Nbvl51LOS+m830zMzt9c+6t+QPaIZ+7Oe/m36t9X6e2b7tVp/c8RrR+v/keez17722n9TcrT+j35t/V87W/+39vCXzv/b/192tv6jXntW+rfp3zZb/x/uTSkr
   </data>
  </layer>
 </map>

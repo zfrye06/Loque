@@ -80,7 +80,7 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
     }
 }
 
-void Laser::draw( sf::RenderWindow& window ){
+void Laser::draw( sf::RenderTarget& window ){
 }
 
 Entity::Type Laser::getType(){

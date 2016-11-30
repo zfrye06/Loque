@@ -1,6 +1,12 @@
-#include "spikes.h"
+#include "lava.h"
 
-Spikes::Spikes(tmx::Object& obj){
+Lava::Lava(tmx::Object& obj){
+    // Initialize/load shader
+
+    using Tile = std::array<sf::Vertex, 4u>;
+    std::vector<sf::Vertex> verticies;
+    sf::Vertex(tileOffset, vertColour, tileIndex),
+        
     pos = glm::vec2(obj.getPosition().x, obj.getPosition().y);
 
     tmx::FloatRect size = obj.getAABB();
@@ -8,24 +14,8 @@ Spikes::Spikes(tmx::Object& obj){
     size.height = size.height / 64;
     size.left = size.left / 64;
     size.top = size.top / 64;
-    if ( size.width > size.height ) {
-        impulse = glm::vec2(0.f,-30.f);
-    }
-    if ( size.height > size.width ) {
-        b2AABB testAABB;
-        std::cout<<pos.x/64<<" "<<pos.x/64.f+size.width/2.f+.3<<std::endl;
-        std::cout<<pos.y/64<<" "<<pos.y/64.f-size.height/2.f<<std::endl;
-        testAABB.lowerBound = b2Vec2(pos.x/64.f, pos.y/64.f-size.height/2.f);
-        testAABB.upperBound = b2Vec2(pos.x/64.f+size.width/2.f+0.3, pos.y/64.f+size.height/2.f);
-        MapQueryCallback queryCallback;
-        physicalWorld->get().QueryAABB( &queryCallback, testAABB );
-        if( queryCallback.foundMap ) {
-            impulse = glm::vec2(30.f,0.f);
-        } else {
-            impulse = glm::vec2(-30.f,0.f);
-        }
-    }
 
+    impulse = glm::vec2(0.f, -30.f);
     b2Vec2 topLeft(size.left, size.top);
     b2Vec2 topRight(size.left + size.width, size.top);
     b2Vec2 bottomRight(size.left + size.width, size.top + size.height);
@@ -53,10 +43,11 @@ Spikes::Spikes(tmx::Object& obj){
     body->SetUserData( this );
 }
 
-void Spikes::update(double dt){
+void Lava::update(double dt){
+    // Send shader time variable
 }
 
-void Spikes::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+void Lava::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>(collider);
         if ( !p->isDamageBoosted() ) {
@@ -71,9 +62,14 @@ void Spikes::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     }
 }
 
-void Spikes::draw(sf::RenderTarget& window){
+void Lava::draw(sf::RenderTarget& window){
+    // send the shader a render texture of the main framebuffer, something like window->getRenderTexture
+    // may need to send matrix from renderwindow
+    // enable the shader
+    // draw all the lava as boxes, shader should manipulate the fragments to be wobbily
+    // disable the shader
 }
 
-Entity::Type Spikes::getType(){
-    return Entity::Type::Spikes;
+Entity::Type Lava::getType(){
+    return Entity::Type::Lava;
 }

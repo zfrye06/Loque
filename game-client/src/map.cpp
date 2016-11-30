@@ -233,7 +233,7 @@ Map::~Map() {
     }
 }
 
-void Map::draw( sf::RenderWindow& window ) {
+void Map::draw( sf::RenderTarget& window ) {
     for ( auto i : layers ) {
         window.draw(*i);
     }

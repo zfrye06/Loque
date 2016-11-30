@@ -2,8 +2,8 @@
 #define LQ_LASER_H_
 
 #include "entity.h"
-#include "player.h"
 #include "dust.h"
+#include "player.h"
 
 class Laser : public Entity {
 public:

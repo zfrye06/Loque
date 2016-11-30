@@ -1,14 +1,14 @@
 #ifndef LQ_WORLD_H_
 #define LQ_WORLD_H_
 
-#include <SFML/Window.hpp>
-#include <SFML/OpenGL.hpp>
-#include <SFML/Graphics.hpp>
-#include <vector>
-#include <string>
-#include "physicalworld.h"
 #include "entity.h"
+#include "physicalworld.h"
 #include "playerstats.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/OpenGL.hpp>
+#include <SFML/Window.hpp>
+#include <string>
+#include <vector>
 
 #define TIMESTEP 1.f/60.f
 

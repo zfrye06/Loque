@@ -5,12 +5,12 @@
 #include <SFML/Audio/Music.hpp>
 
 #include "entity.h"
-#include "trampoline.h"
-#include "laser.h"
-#include "spikes.h"
 #include "exit.h"
-#include "world.h"
+#include "laser.h"
 #include "SFMLOrthogonalLayer.hpp"
+#include "spikes.h"
+#include "trampoline.h"
+#include "world.h"
 
 class Map : public Entity {
 private:

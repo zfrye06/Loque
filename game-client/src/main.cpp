@@ -1,16 +1,16 @@
-#include <SFML/Window.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
+#include <SFML/Window.hpp>
 #include <string>
 
-#include "physicalworld.h"
-#include "world.h"
 #include "entity.h"
-#include "player.h"
 #include "map.h"
+#include "physicalworld.h"
+#include "player.h"
+#include "playerstats.h"
 #include "random.h"
 #include "respawn.h"
-#include "playerstats.h"
+#include "world.h"
 
 int app() {
     Resources = new ResourceManager();

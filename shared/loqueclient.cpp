@@ -4,13 +4,13 @@
 
 std::ostream& operator<<(std::ostream& out, Status s) {
     switch (s) {
-    case OK:
+    case Status::OK:
         out << "OK";
         break;
-    case NETWORK_ERR:
+    case Status::NETWORK_ERR:
         out << "NETWORK_ERR: Unable to access server.";
         break;
-    case DB_ERR:
+    case Status::DB_ERR:
         out << "DB_ERR: Unable to complete requested query." <<
             " Try checking the server logs for more information.";
         break;
@@ -18,8 +18,22 @@ std::ostream& operator<<(std::ostream& out, Status s) {
     return out;
 }
 
-LoqueClient::LoqueClient() : host("192.168.0.1"), port(5001) {}
+std::ostream& operator<<(std::ostream& out, UserType t) {
+    switch (t) {
+    case UserType::ADMIN:
+        out << "UserType<Admin>";
+        break;
+    case UserType::STUDENT:
+        out << "UserType<Student>";
+        break;
+    case UserType::DNE:
+        out << "UserType<DNE>";
+        break;
+    }
+    return out;
+}
 
+LoqueClient::LoqueClient() : host("192.168.0.1"), port(5001) {}
 
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
 

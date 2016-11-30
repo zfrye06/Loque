@@ -33,24 +33,26 @@ Map::Map( std::string resource ) {
     // First grab physical layer
     tmx::TileLayer* tileSet;
     //for( auto l : map->getLayers() ) {
-    for ( uint i=0;i<map->getLayers().size();i++ ) {
+    for (uint i=0 ;i < map->getLayers().size(); i++) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {
-            case tmx::Layer::Type::Tile: {
-                if ( l->getName() == "physical" || l->getName() == "Physical" ) {
-                    tileSet = (tmx::TileLayer*)l;
-                } else {
-                    layers.push_back( new MapLayer( *map, i ) );
-                }
-                break;
-                                         }
-            case tmx::Layer::Type::Object: {
-                for ( auto i : ((tmx::ObjectGroup*)l)->getObjects() ) {
-                    spawnObject( i );
-                }
-                break;
-                                           }
-            default: {}
+        case tmx::Layer::Type::Tile:
+        {
+            if ( l->getName() == "physical" || l->getName() == "Physical" ) {
+                tileSet = (tmx::TileLayer*)l;
+            } else {
+                layers.push_back( new MapLayer( *map, i ) );
+            }
+            break;
+        }
+        case tmx::Layer::Type::Object:
+        {
+            for ( auto i : ((tmx::ObjectGroup*)l)->getObjects() ) {
+                spawnObject( i );
+            }
+            break;
+        }
+        default: {}
         }
     }
     // Then loop through the tiles, placing 1x1 boxes where there's tiles.

@@ -22,7 +22,10 @@ double PlayerStats::getScore() {
 }
 
 void PlayerStats::sendStats() {
-    client.postGameStats(userId, stats);
+    auto status = client.postGameStats(userId, stats);
+    if (status != Status::OK) {
+        std::cerr << "ERROR: Unable to post player stats: " << status << std::endl;
+    }
 }
 
 void PlayerStats::update(double dt) {

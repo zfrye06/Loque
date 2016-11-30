@@ -33,10 +33,10 @@ void MainWindow::handleLogin()
     }
 }
 
-void MainWindow::displayLoginMessage(const char *loginMessage, const char *color)
+void MainWindow::displayLoginMessage(const char *loginMessage, std::string color)
 {
     ui->registrationMessage->setText(QString(loginMessage));
-    ui->registrationMessage->setStyleSheet("QLabel { color : " + color + " }");
+    ui->registrationMessage->setStyleSheet(("QLabel { color : " + color + " }").c_str());
     ui->registrationMessage->setMaximumSize(10000, 10000);
 }
 
@@ -80,7 +80,7 @@ void MainWindow::handleRegistration()
         else
         {
             ui->worldTreeWidget->setCurrentIndex(0);
-            displayLoginMessage("Account was created successfully.");
+            displayLoginMessage("Account was created successfully.", "green");
         }
     }
 }

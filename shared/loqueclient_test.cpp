@@ -45,6 +45,8 @@ void testLogin() {
 }
 
 int main() {
+    std::cout << "Starting Test" << std::endl;
     testLogin();
+    std::cout << "PASS" << std::endl;
     return 0; 
 }

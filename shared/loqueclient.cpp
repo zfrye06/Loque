@@ -33,7 +33,7 @@ std::ostream& operator<<(std::ostream& out, UserType t) {
     return out;
 }
 
-LoqueClient::LoqueClient() : host("192.168.0.1"), port(5001) {}
+LoqueClient::LoqueClient() : host("127.0.0.1"), port(5001) {}
 
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
 
@@ -162,8 +162,9 @@ Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
     return status;
 }
 
-Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet &response) {
-    auto status = conn.connect(host, port, sf::seconds(3));
+Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet& response) {
+    sf::TcpSocket conn;
+    auto status = conn.connect(host, port, sf::seconds(2));
     if (status != sf::Socket::Done) {
         return NETWORK_ERR; 
     }

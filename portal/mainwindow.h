@@ -20,7 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     void handleLogin();
-    void displayLoginMessage(const char *loginMessage, const char *color);
+    void displayLoginMessage(const char *loginMessage, std::string color);
     void resetLoginMessage();
     void handleRegistration();
     void displayRegistrationErrorMessage(const char *errorMessage);

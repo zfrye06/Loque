@@ -2,6 +2,7 @@
 #define LQ_PLAYERSTATS_H_
 
 #include <exception>
+#include <iostream>
 
 #include "../shared/loqueclient.h"
 

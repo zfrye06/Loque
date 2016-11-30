@@ -163,7 +163,7 @@ Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
 }
 
 Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet &response) {
-    auto status = conn.connect(host, port);
+    auto status = conn.connect(host, port, sf::seconds(3));
     if (status != sf::Socket::Done) {
         return NETWORK_ERR; 
     }

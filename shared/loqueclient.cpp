@@ -18,6 +18,9 @@ std::ostream& operator<<(std::ostream& out, Status s) {
     return out;
 }
 
+LoqueClient::LoqueClient() : host("192.168.0.1"), port(5001) {}
+
+
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
 
 Status LoqueClient::attemptLogin(const std::string& username,

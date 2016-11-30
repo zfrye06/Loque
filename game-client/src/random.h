@@ -3,17 +3,12 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <cmath>
 
 class RandomClass {
 public:
-    RandomClass() {
-        srand(time(NULL));
-    }
-    float f( float lower, float upper ) {
-        float d = upper-lower;
-        return lower+(float)(fmod(rand(),d))/(float)d;
-    }
-    
+    RandomClass();
+    float f( float lower, float upper );
 };
 
 extern RandomClass* Random;

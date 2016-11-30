@@ -810,5 +810,6 @@ void WinState::update( Player* player, double dt ) {
     if ( !player->sprite->isPlaying() ) {
         player->sprite->setLooped( true );
         player->sprite->play( player->winRepeatAnimation );
+        playerStats->sendStats();
     }
 }

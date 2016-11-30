@@ -10,10 +10,15 @@
 #include "map.h"
 #include "random.h"
 #include "respawn.h"
-
-RandomClass* Random = new RandomClass();
+#include "playerstats.h"
 
 int app() {
+    Resources = new ResourceManager();
+    Random = new RandomClass();
+    physicalWorld = new PhysicalWorld();
+    world = new World();
+    playerStats = new PlayerStats( 0, 0 );
+    
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     sf::View view;
     view.reset(sf::FloatRect(0,0,800,600));
@@ -78,6 +83,7 @@ int app() {
     delete Resources;
     delete world;
     delete physicalWorld;
+    delete Random;
     return 0;
 }
 

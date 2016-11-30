@@ -59,6 +59,7 @@ void Spikes::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>(collider);
         if ( !p->isDamageBoosted() ) {
+            playerStats->setScore(playerStats->getScore()-1);
             p->damageBoost();
             p->canDoubleJump = true;
             world->addEntity( new PokeDust( p->position + glm::vec2(0.f,32.f)) );

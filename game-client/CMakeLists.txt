@@ -38,6 +38,8 @@ set( source
          src/playerstate.cpp
          src/contactlistener.cpp
          src/physicalworld.cpp
+         src/random.cpp
+         src/playerstats.cpp
          src/spikes.cpp
          src/main.cpp
          ../shared/loqueclient.cpp)

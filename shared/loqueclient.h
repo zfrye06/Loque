@@ -63,6 +63,7 @@ struct ClassStats {
 class LoqueClient {
  public:
 
+    LoqueClient();
     LoqueClient(const std::string& address, int port);
 
     // Attempts to login the user, placing the result in the result parameter.

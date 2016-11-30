@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="256" tilewidth="64" tileheight="64" nextobjectid="12">
+ <tileset firstgid="1" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="images/candylandTiles.png" width="896" height="448"/>
+ </tileset>
+ <tileset firstgid="99" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="156" columns="12">
+  <image source="images/DungeonTiles.png" width="768" height="832"/>
+ </tileset>
+ <tileset firstgid="255" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
+  <image source="images/PhysicsTileset.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="271" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="25" columns="5">
+  <image source="images/LevelHazards.png" width="320" height="320"/>
+ </tileset>
+ <tileset firstgid="296" name="MathSpritesheet" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+  <image source="images/MathSpritesheet.png" width="320" height="384"/>
+ </tileset>
+ <layer name="CandyGraphics" width="128" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt3Etv00AUBtAgIVaAqMQGhBBi1UBb2g0bHoIdb3a8///vYKzYSmLZjSPZHs/MOdLdZFFd+OZlO85qBQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQMru7BRlaWduDJSjL2tjIH+HMjYG8iVbhjBO8nPvRuwOmMOtUDc76v6Rf8cakKYqt587Rf7GmvNt1oA03A31a6fI31RznjQ8CvV7p6ZiD5jXWbhOO++4Vuub7+Z8fGNmcxrq5ajdsSTPe+b3ktkDxmN+0+bebNked3z2efYurmcPmNe/2A0As/keuwGi+ha7gQGcAabT3u+/RumCpfgSuwGi+hO7AWbj7Fe2FM5+DWfA8aWUP+P72/P50u4BM69PsRsgKvmX42PHZ0t9BrTkM2D13Zp1qGeJPVP/ELuBjDwI9TB2E0eSf9nc78vbut6XzgbuS6+mbSdb1f5/esT/81xur7r3pWpMvAj1pj6zXIZ6F+pHhB6PseQzYEr7v/e4ytCs/+uFrUtjuAr/ptf1ew0X9frFvr71PzVPQz0ZWJezdrZR7ftX9TikTLHmmfc4ylWd45zZrncSu4GIrA2b/EscA9aGjZNVuWOA/fxzHAPNc8fqHf+39XWIa+Gtdv65jYGue3nW/a2u/HMbA/QbI3/jJ119+U9ZU7uonzf2OU/w936mkmP+h37Px+/9bOWYP8OVlr93uPeVlr93uPfJv2w559/c+2u+B1Pd96vyfz9jD0uXc/6+x3dYzvlzmPyBXPwHHYQwng==
+  </data>
+ </layer>
+ <objectgroup name="Objects">
+  <object id="1" name="playerSpawn" x="196" y="15942" width="54" height="52"/>
+  <object id="3" name="spikes" x="580" y="15746" width="121" height="33"/>
+  <object id="4" name="spikes" x="710" y="14978" width="182" height="32"/>
+  <object id="5" name="trampoline" x="712" y="15260" width="49" height="35"/>
+  <object id="6" name="trampoline" x="262" y="15125" width="54" height="42"/>
+  <object id="7" name="trampoline" x="1158" y="13528" width="56" height="39"/>
+  <object id="8" name="spikes" x="835" y="13442" width="121" height="32"/>
+  <object id="9" name="trampoline" x="2762" y="12824" width="49" height="39"/>
+  <object id="10" name="spikes" x="6471" y="14531" width="181" height="31"/>
+  <object id="11" name="spikes" x="6467" y="15047" width="185" height="27"/>
+ </objectgroup>
+ <layer name="Physical" width="128" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt20FOwzAQBdAUtmy65f73BKqqUilOHFOikPnvSV5Wqmc8E8d1pwkAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADYw8fCoD45z6Pms8l5HjWfTc6zLNW7/NdxOl0HAFBba//2Yg8QzR4Qcuj32ZzhZHt83usH2fSDbPb/OfT6bHp9NvnPNves91zIpi9kk/8crV7vHTCHWv8bb1/jfe8v8Qvy31f5rqteP67yevDuV8vtXvfaOq+6ru+tqd/RGh+N894S/tNRbT6Qqvc/tC17mD5Cz1Hf/xNcave1sS+rUNcV5rC1S3zOU3sNLH1GXGu45XF0DRydNXx1H4O0NcDPGrAGsrR6YKU1UP0c71lzsRg9UxgZRzkHTjCX//OGg/9DL8xWMf9H+q1xbxXzz3pp+XeH57u0/KfNtyctHmnz7UmLR9p8eyrHI+Ee37PEIpv8Z5P/bNXy/wnk/Zbm
+  </data>
+ </layer>
+</map>

@@ -2,12 +2,16 @@
 #define LQ_LOQUECLIENT_H_
 
 #include <SFML/Network.hpp>
+#include <ostream>
 #include <unordered_map>
 #include <vector>
 
-typedef sf::Socket::Status Status;
-
-inline bool ok(Status s) { return s == sf::Socket::Done; }
+enum Status {
+    OK,
+    NETWORK_ERR,
+    DB_ERR
+};
+std::ostream& operator<<(std::ostream&, Status s); 
 
 enum UserType {
     Admin,
@@ -22,14 +26,6 @@ struct LoginResult {
 
     // Returns whether the requested user exists (i.e. type != DNE). 
     bool successful() const;
-};
-
-// A generic action result. This indicates success or failure
-// of an API action itself, not of the associated network
-// transaction (which is indicated by the returned Status). 
-struct ActionResult {
-    bool success;       // Whether the action succeeded. 
-    std::string reason; // Reason for failure, if any. 
 };
 
 // Information about a single completed game. 
@@ -47,7 +43,7 @@ struct UserStats {
     int totalScore;
     
     // Maps level ids to scores.
-    std::unordered_map<int, int> highScores; 
+    std::unordered_map<int, int> highScores;
 
     // If the user is an instructor, these reflect the classes they manage.
     // If the user is a student, these reflect the classes they are a member of. 
@@ -62,16 +58,15 @@ struct ClassStats {
 // Use an instance of LoqueClient to make API
 // calls to a running Loque Server.
 //
-// All methods which make calls to the server block and
-// return an sf::Socket::Status value indicating network success
-// or failure. A call's associated out-parameter indicates whether
-// the request's business logic and database interaction have succeeded on the server.
+// All methods which make calls to the server block and return a Status
+// indicating success or failure of the network and database interactions.
 class LoqueClient {
  public:
 
     LoqueClient(const std::string& address, int port);
 
     // Attempts to login the user, placing the result in the result parameter.
+    // Upon a failed login, result.UserType is set to DNE. 
     Status attemptLogin(const std::string& username,
                         const std::string& userpass,
                         LoginResult& result);
@@ -85,17 +80,15 @@ class LoqueClient {
                          LoginResult& result);
 
     // Adds the student with the given id to the given classroom.
-    // The output ActionResult indicates whether the action succeeded and,
-    // if not, why it failed (e.g. class DNE). 
-    Status addClassroom(int userId, int classId, ActionResult& res);
+    Status addClassroom(int userId, int classId);
 
     // Creates a classroom with the given namewhose sole member is the given user.
     // The given userId should be that of an instructor. 
-    Status createClassroom(int userId, const std::string& className, ActionResult& res);
+    Status createClassroom(int userId, const std::string& className);
 
     // Adds a game record for the given user. This should be called
     // after each completed level. 
-    Status postGameStats(int userId, const GameStats& stats, ActionResult& res);
+    Status postGameStats(int userId, const GameStats& stats);
     
     // Retrieves the statistics for the given user. This should only
     // be called for the currently logged-in user. Prefer LoqueClient::getClassStats
@@ -106,10 +99,10 @@ class LoqueClient {
     Status getEnabledLevels(int userId, std::vector<int>& levelIds); 
 
     // Enables a level for the given class. UserId must be an instructor id.
-    Status enableLevel(int userId, int classId, int levelId, ActionResult& res);
+    Status enableLevel(int userId, int classId, int levelId);
 
     // Disables a level for the given class. UserId must be an instructor id. 
-    Status disableLevel(int userId, int classId, int levelId, ActionResult& res);
+    Status disableLevel(int userId, int classId, int levelId);
 
     // Retrieves statistics for the given class. UserId must be an instructor id. 
     Status getClassStats(int userId, int classId, ClassStats& stats); 

@@ -34,6 +34,15 @@ namespace serialization {
 }
 }
 
+/* Status */
+
+inline sf::Packet& operator>>(sf::Packet& packet, Status& s) {
+    int i;
+    packet >> i;
+    s = static_cast<Status>(i);
+    return packet;
+}
+
 /* ReqType */
 
 enum ReqType {
@@ -84,18 +93,6 @@ inline sf::Packet& operator<<(sf::Packet& packet, const LoginResult& res) {
 
 inline sf::Packet& operator>>(sf::Packet& packet, LoginResult& res) {
     packet >> res.userId >> res.userType;
-    return packet;
-}
-
-/* ActionResult */
-
-inline sf::Packet& operator<<(sf::Packet& packet, const ActionResult& res) {
-    packet << res.success << res.reason;
-    return packet;
-}
-
-inline sf::Packet& operator>>(sf::Packet& packet, ActionResult& res) {
-    packet >> res.success >> res.reason;
     return packet;
 }
 

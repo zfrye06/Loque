@@ -5,14 +5,13 @@
 std::ostream& operator<<(std::ostream& out, Status s) {
     switch (s) {
     case Status::OK:
-        out << "OK";
+        out << "Status<OK>";
         break;
     case Status::NETWORK_ERR:
-        out << "NETWORK_ERR: Unable to access server.";
+        out << "Status<NETWORK_ERR>";
         break;
     case Status::DB_ERR:
-        out << "DB_ERR: Unable to complete requested query." <<
-            " Try checking the server logs for more information.";
+        out << "Status<DB_ERR>";
         break;
     }
     return out;
@@ -21,10 +20,10 @@ std::ostream& operator<<(std::ostream& out, Status s) {
 std::ostream& operator<<(std::ostream& out, UserType t) {
     switch (t) {
     case UserType::ADMIN:
-        out << "UserType<Admin>";
+        out << "UserType<ADMIN>";
         break;
     case UserType::STUDENT:
-        out << "UserType<Student>";
+        out << "UserType<STUDENT>";
         break;
     case UserType::DNE:
         out << "UserType<DNE>";

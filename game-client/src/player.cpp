@@ -274,7 +274,7 @@ void Player::shake(float strength, float length, float period) {
     shakePeriod = period;
 }
 
-void Player::draw( sf::RenderWindow& window ) {
+void Player::draw( sf::RenderTarget& window ) {
     sf::Text stateText;
     stateText.setFont( *Resources->getFont( "assets/fonts/arial.ttf" ) );
     stateText.setString( StateString[currentState->getType()] );

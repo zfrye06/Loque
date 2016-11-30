@@ -51,7 +51,7 @@ void Exit::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     }
 }
 
-void Exit::draw(sf::RenderWindow& window){
+void Exit::draw(sf::RenderTarget& window){
 }
 
 Entity::Type Exit::getType(){

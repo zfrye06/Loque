@@ -50,7 +50,7 @@ void Trampoline::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     }
 }
 
-void Trampoline::draw(sf::RenderWindow& window){
+void Trampoline::draw(sf::RenderTarget& window){
 }
 
 Entity::Type Trampoline::getType(){

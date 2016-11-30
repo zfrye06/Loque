@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="64" height="64" tilewidth="64" tileheight="64" nextobjectid="45">
+ <properties>
+  <property name="ambient" value="assets/audio/music/cosmos.ogg"/>
+ </properties>
+ <tileset firstgid="1" name="Math" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+  <image source="images/MathSpritesheet.png" width="320" height="384"/>
+ </tileset>
+ <tileset firstgid="31" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="images/sheet.png" width="896" height="448"/>
+ </tileset>
+ <tileset firstgid="129" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="30" columns="6">
+  <image source="images/LevelHazards.png" width="384" height="320"/>
+ </tileset>
+ <tileset firstgid="159" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="156" columns="12">
+  <image source="images/DungeonTiles.png" width="768" height="832"/>
+ </tileset>
+ <tileset firstgid="315" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
+  <image source="images/PhysicsTileset.png" width="256" height="256"/>
+ </tileset>
+ <layer name="CandyGraphics" width="64" height="64">
+  <data encoding="base64" compression="zlib">
+   eJztmttO5DAMhvMoMAtzCdIOz8Q7cM3hYpc7dkcCXpaG3UiRJ/EhtpMG+kvWqE2T+HMTN00nhE2tuna2Naqnj2uJzdruy4j4r1Gevq2ZO5eHj1L2v4s9FOxo79qJRvPvF/tZKbsIeA671Ln5KWt+6F+8t78KFu9tZL8RtpnbYbFdwSRx8eSP/mH3lsNeaxuz2C83Bp78I5/v3BhY+jhynVGLAaeepw8WOUrjA/d6j76lc9FK0vFnNV6lebrVajlVy6ONATc/S03jx6i63oxcP7RttPbbg7OkPegv5p57YFxJ/B3FmyutJ6nc47E26s0bWSEXZNeOQym/pyCvhHVm/sSt5YXGyQOj+Uvz2cp2jP6l/NbrPO0Y/kO0SY0BKT/nfUMi7fx9I9qNY+CJ6F8iyzkAn+Mtz1SKP9oa+bF5L1GNP4QyP5wPI/ipnCfRC1IG+Z8XuwXHI/hbc17cT5O8K87IL1Up/8N+ZuFv0Sujnx78krE5O792DTQ7v3YNZMUeJc3/Z0HHn9rVqIW99C7Myf/w29TdYr8za/n+aJkDOWpdL8SyH+DcGTg+F/iRt9trv5vzflgTN8bS8WiRA7ii1koW/FR/tet6jIHe/Nz6aQx4x2Akf2oDK/OMAfZ+vAb+VG797Uu6/4n5pp2n3HzY0q6VUX0cwmks9sg5eNyLw4s/t/TcukHOweOvxH9dKYPnQqDbp/qQ1rFkp3zz4NfKiptqr1QWwmnbEn5PYXs8mLCY1fiT9pV6tT489d5Yr8ZeWleE7BeWc/rwlJT/KvxbP0AG7DtjAL8z8ydRcx4b/2vix/Z4MLXwX1bqUn1I17bUmrS2n8r9f1juW/rv+TGU2WP54//ytF+UX+shyXuTNv+n7+AwJ5TKS9d6iRsD7BsfJu95aSFODLj8cI90Bv4oKgYc/nyfcEZhMaDy/+zsSa37KD2ewZs2bdr0HfUBEF3nIg==
+  </data>
+ </layer>
+ <layer name="Physical" width="64" height="64" opacity="0.47">
+  <data encoding="base64" compression="zlib">
+   eJztmuuKxCAMhWefawsz+/4vtesPQaTR3E6MXT8oA2MxOWmNifT1Olj4/sJdWYnyMVNsMj2XSD+yaL4j4v3LDspHybzUvRHxW63/+rvvh7j3M8nvbwffkTF+D9Z++f9i5oZRDrHGBf2OzZ6tBMkexo3BDjmKYhYLTgx21t9yFwfu2kLikaMktHoy6C+sigFXW0Rt6tnXUDm1tdX+SnxchWevotXf+4Egoh+z6O/n8PAlsve7Ohva3KP1dWWf3WunfELVRpF6L8MakuwL3nNq6fVa2Ek/t0eSsIt+aj23NqWXxF+pJu86b2Rf679kb1yd/0Y9v8e8s3lW6h/tZVa4eXSVfqT2dq6M+kc5z9MfznnBCv3anEedlVK94m76LX0gNbaLfkRtEalf8m7urL9grYF21+/dm6DOMDLrl9SohbteWJP/7+6R4lmfcdDWC6jnX4g67+b0h5oxK8i5JXY4z1/aN3OJeAes+tGgY5BdfwEVg9naL2TQX215X1y7mrGncPTrxtB47jMzO5oxBFyNHnFB1bZaPGviiNzoCdqOdv6n6NfyX/V/lDlFSzb9lafoz77+qy3JNesZZt9Fz74Pqz5lBv39bnb9BWT/vIP+glcMLN8LrcYaA85ZQXaoGMye4xO0V1DnJIfD4XCQ8wvGxHAD
+  </data>
+ </layer>
+ <objectgroup name="Objects">
+  <object id="30" name="spikes" x="2625" y="1120.5" width="254.5" height="32"/>
+  <object id="31" name="spikes" x="2944.5" y="1375" width="63.5" height="33.5"/>
+  <object id="32" name="spikes" x="3008" y="1501.5" width="63" height="35.5"/>
+  <object id="35" name="spikes" x="3072" y="1538" width="30" height="634"/>
+  <object id="39" name="spikes" x="3231" y="1730" width="33" height="447"/>
+  <object id="40" name="spikes" x="3266" y="1699" width="60" height="33"/>
+  <object id="42" name="spikes" x="3328" y="1729" width="30" height="444"/>
+  <object id="43" name="spikes" x="3490" y="1729" width="32" height="442"/>
+  <object id="44" name="playerSpawn" x="2136.36" y="375.758" width="51.5152" height="45.4545"/>
+ </objectgroup>
+</map>

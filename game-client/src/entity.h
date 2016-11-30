@@ -37,7 +37,7 @@ public:
     virtual ~Entity();
     virtual void update( double dt );
     virtual void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
-    virtual void draw( sf::RenderWindow& window );
+    virtual void draw( sf::RenderTarget& window );
     enum Type {
         Map,
         Player,
@@ -57,7 +57,7 @@ class PhysicsDebug : public Entity {
 private:
     DebugDraw* drawer;
 public:
-    PhysicsDebug( sf::RenderWindow& window );
+    PhysicsDebug( sf::RenderTarget& window );
     ~PhysicsDebug();
     void update( double dt );
     void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
@@ -75,7 +75,7 @@ public:
     Background(sf::View* view, std::string skyFile, std::string cloudsFile, std::string hillsFile);
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 
@@ -85,7 +85,7 @@ public:
     PlayerSpawn(tmx::Object& obj);
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 

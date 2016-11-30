@@ -32,11 +32,11 @@ void PlayerStats::sendStats() {
     stats.pointsScored = score;
     stats.levelId = mapId;
     stats.secToComplete = time;
-    ActionResult r;
-    client->postGameStats(userId,stats,r);
-    if (!r.success) {
-        throw std::runtime_error(r.reason);
-    }
+    //ActionResult r;
+    //client->postGameStats(userId,stats,r);
+    //if (!r.success) {
+    //    throw std::runtime_error(r.reason);
+    //}
 }
 
 void PlayerStats::update( double dt ) {

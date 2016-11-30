@@ -43,13 +43,15 @@ void World::removeEntity( Entity* e ) {
 }
 
 void World::draw( sf::RenderWindow& window ) {
+    sf::RenderTexture blah;
     for( uint i=0;i<entities.size();i++ ) {
         if ( !entities[i] ) {
             entities.erase( entities.begin() + i );
             i--;
         } else {
-            entities[i]->draw(window);
+            entities[i]->draw(blah);
         }
+        window.draw(blah, &mycoolLavalShader);
     }
 }
 

@@ -13,6 +13,8 @@ World::~World() {
 }
 
 World::World( sf::View v ) {
+    wobble = Resources->getShader("assets/shaders/wobble");
+    globalTimer = 0;
     view = v;
     outOfDate = true;
     timer = 0;
@@ -66,6 +68,15 @@ void World::draw( sf::RenderWindow& window ) {
         // Finally depending on the layer, we draw it to the main window.
         switch(l) {
             case World::Layer::None: { break; }
+            case World::Layer::Background: {
+                         sf::Sprite sprite(framebuffer.getTexture());
+                         wobble->setUniform("width",(int)window.getSize().x);
+                         wobble->setUniform("height",(int)window.getSize().y);
+                         wobble->setUniform("texture", sf::Shader::CurrentTexture);
+                         wobble->setUniform("time",(float)globalTimer);
+                         window.draw( sprite, wobble );
+                         break;
+            }
             default: {
                          sf::Sprite sprite(framebuffer.getTexture());
                          window.draw( sprite );
@@ -84,6 +95,7 @@ void World::update( double dt ) {
     } else {
         stutterLength = 0;
     }
+    globalTimer += dt;
     timer += dt;
     while ( timer >= TIMESTEP ) {
         for( uint l=0;l<LAYERCOUNT;l++ ) {

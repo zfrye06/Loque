@@ -117,6 +117,33 @@ sf::SoundBuffer* ResourceManager::getSound( std::string name ) {
     return (sf::SoundBuffer*)((SoundResource*)resources.back())->get();
 }
 
+
+ShaderResource::ShaderResource( std::string basename) {
+    std::string vert = basename+".vert";
+    std::string frag = basename+".frag";
+    this->name = basename;
+    shader = new sf::Shader();
+    shader->loadFromFile(vert.c_str(), frag.c_str());
+}
+
+ShaderResource::~ShaderResource() {
+    delete shader;
+}
+
+void* ShaderResource::get() {
+    return shader;
+}
+
+sf::Shader* ResourceManager::getShader( std::string name ) {
+    for( Resource* r : resources ) {
+        if ( r->name == name ) {
+            return (sf::Shader*)((ShaderResource*)r)->get();
+        }
+    }
+    resources.push_back( new ShaderResource( name ) );
+    return (sf::Shader*)((ShaderResource*)resources.back())->get();
+}
+
 ResourceManager::~ResourceManager() {
     for( Resource* r : resources ) {
         delete r;

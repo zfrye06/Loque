@@ -18,9 +18,11 @@ private:
 // vector probably isn't the most efficient way to store the world...
     std::vector<Entity*> entities[LAYERCOUNT];
     double timer;
+    double globalTimer;
     double stutterLength;
     double stutterPeriod;
     bool outOfDate;
+    sf::Shader* wobble;
 public:
     sf::View view;
     sf::RenderTexture framebuffer;

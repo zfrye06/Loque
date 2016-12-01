@@ -4,6 +4,7 @@
 #include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Graphics/Font.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Shader.hpp>
 #include <iostream>
 #include <string>
 #include <tmxlite/Map.hpp>
@@ -58,11 +59,22 @@ public:
     void* get();
 };
 
+class ShaderResource : public Resource {
+private:
+    sf::Shader* shader;
+public:
+    ShaderResource( std::string basename );
+    virtual ~ShaderResource();
+    void load();
+    void* get();
+};
+
 class ResourceManager {
 private:
     std::vector<Resource*> resources;
 public:
     ~ResourceManager();
+    sf::Shader* getShader( std::string name );
     sf::SoundBuffer* getSound( std::string name );
     sf::Texture* getTexture( std::string name );
     sf::Font* getFont( std::string name );

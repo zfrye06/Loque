@@ -16,10 +16,19 @@ World::World( sf::View v ) {
     wobble = Resources->getShader("assets/shaders/wobble");
     globalTimer = 0;
     view = v;
-    outOfDate = true;
+    windowView = v;
     timer = 0;
     stutterLength = 0;
     stutterPeriod = 0;
+}
+
+void World::updateView( sf::FloatRect r ) {
+    if ( (int)r.height % 2 == 1 ) {
+        r.height--;
+    }
+    framebuffer.create( (int)r.width, (int)r.height );
+    windowView.reset(r);
+    view.reset(r);
 }
 
 void World::stutter( double length, double period ) {
@@ -46,11 +55,8 @@ void World::removeEntity( Entity* e, World::Layer l ) {
 }
 
 void World::draw( sf::RenderWindow& window ) {
-    if ( outOfDate ) {
-        framebuffer.create( window.getSize().x, window.getSize().y );
-        outOfDate = false;
-    }
     framebuffer.setView(view);
+    window.setView(windowView);
     //window.setView(view);
     // For each layer, clear, then draw to the frame buffer.
     for( unsigned int l=0;l<LAYERCOUNT;l++ ) {

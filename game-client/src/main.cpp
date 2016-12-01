@@ -47,7 +47,7 @@ int app() {
                     if ( event.size.height % 2 == 1 ) {
                         event.size.height--;
                     }
-                    world->view.reset(sf::FloatRect(0,0,event.size.width,event.size.height ));
+                    world->updateView(sf::FloatRect(0,0,event.size.width,event.size.height ));
                     // RenderWindow uses its own matrix mumbojumbo...
                     //glViewport(0, 0, event.size.width, event.size.height);
                     break;

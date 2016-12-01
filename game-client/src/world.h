@@ -21,9 +21,9 @@ private:
     double globalTimer;
     double stutterLength;
     double stutterPeriod;
-    bool outOfDate;
     sf::Shader* wobble;
 public:
+    sf::View windowView;
     sf::View view;
     sf::RenderTexture framebuffer;
     enum Layer { None, Background, Lavaground, Midground, Foreground };
@@ -31,6 +31,7 @@ public:
     ~World();
     void addEntity( Entity* e, World::Layer layer );
     void removeEntity( Entity* e, World::Layer layer );
+    void updateView( sf::FloatRect r );
     void draw( sf::RenderWindow& window );
     void update( double dt );
     void stutter( double length, double period );

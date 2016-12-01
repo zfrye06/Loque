@@ -11,7 +11,7 @@ void main()
     // Higher strength means bigger wobble
     float strength = 4;
     // Higher speed means faster wobble
-    float flatness = 2;
+    float flatness = 4;
     float speed = 2;
     float variation = cos(time);
 

@@ -642,6 +642,7 @@ void ShockedState::init() {
     switch(type) {
         case 0: { player->sprite->play( player->shockedAnimation ); break; }
         case 1: { player->sprite->play( player->hitAnimation ); break; }
+        case 2: { player->sprite->play( player->hitAnimation ); break; }
     }
     player->sprite->setFrameTime(sf::seconds(0.08));
 }

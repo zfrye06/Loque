@@ -4,8 +4,6 @@ project(portal)
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES
-    loginwindow.cpp
-    loginwindow.h
     main.cpp
     mainwindow.cpp
     mainwindow.h)

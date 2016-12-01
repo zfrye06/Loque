@@ -3,7 +3,7 @@
 Laser::Laser(tmx::Object& obj){
 
     std::vector<tmx::Property> properties = obj.getProperties();
-    for(uint i = 0; i < properties.size(); i++) {
+    for(unsigned int i = 0; i < properties.size(); i++) {
         tmx::Property temp = properties[i];
         if(temp.getName() == "canBePassed"){
             canBePassed = temp.getBoolValue();

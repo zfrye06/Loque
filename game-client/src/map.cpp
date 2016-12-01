@@ -39,7 +39,7 @@ Map::Map( std::string resource ) {
     // First grab physical layer
     tmx::TileLayer* tileSet;
     const tmx::Tileset* realTileSet = nullptr;
-    for (uint i=0 ;i < map->getTilesets().size(); i++) {
+    for (unsigned int i=0 ;i < map->getTilesets().size(); i++) {
         auto l = map->getTilesets()[i];
         if ( l.getName() == "PhysicsTileset" ) {
             realTileSet = &(map->getTilesets()[i]);
@@ -49,7 +49,7 @@ Map::Map( std::string resource ) {
         throw std::runtime_error("Couldn't find physics tileset inside map");
     }
     //for( auto l : map->getLayers() ) {
-    for (uint i=0 ;i < map->getLayers().size(); i++) {
+    for (unsigned int i=0 ;i < map->getLayers().size(); i++) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {
         case tmx::Layer::Type::Tile:
@@ -79,9 +79,9 @@ Map::Map( std::string resource ) {
     }
     int x = 0;
     int y = 0;
-    for (uint i = 0; i < mapSize.x*mapSize.y; i++ ) {
+    for (unsigned int i = 0; i < mapSize.x*mapSize.y; i++ ) {
         if ( tiles[i].ID != 0) {
-            const uint offset = realTileSet->getFirstGID();
+            const unsigned int offset = realTileSet->getFirstGID();
             // Box
             if ( tiles[i].ID == offset ) {
                 b2PolygonShape boxShape;
@@ -215,7 +215,7 @@ Map::Map( std::string resource ) {
             }
         }
         x++;
-        if ( (uint)x >= mapSize.x ) {
+        if ( (unsigned int)x >= mapSize.x ) {
             y++;
             x=0;
         }

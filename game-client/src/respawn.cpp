@@ -9,7 +9,7 @@ Respawn::Respawn(glm::vec2 pos){
 
     //delete all players
     std::vector<Entity*> players = world->getEntitiesByType(Entity::Type::Player);
-    for(uint i = 0; i < players.size(); i++){
+    for(unsigned int i = 0; i < players.size(); i++){
         world->removeEntity(players[i], World::Layer::Foreground);
     }
 

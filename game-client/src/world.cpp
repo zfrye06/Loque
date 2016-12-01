@@ -3,8 +3,8 @@
 World* world;
 
 World::~World() {
-    for( uint l=0;l<LAYERCOUNT;l++ ) {
-        for( uint i=0;i<entities[l].size();i++ ) {
+    for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
+        for( unsigned int i=0;i<entities[l].size();i++ ) {
             if ( !entities[l][i] ) {
                 delete entities[l][i];
             }
@@ -35,7 +35,7 @@ void World::addEntity( Entity* e, World::Layer l ) {
 }
 
 void World::removeEntity( Entity* e, World::Layer l ) {
-    for( uint i=0;i<entities[l].size();i++ ) {
+    for( unsigned int i=0;i<entities[l].size();i++ ) {
         if ( entities[l][i] == e ) {
             entities[l][i] = nullptr;
             delete e;
@@ -53,9 +53,9 @@ void World::draw( sf::RenderWindow& window ) {
     framebuffer.setView(view);
     //window.setView(view);
     // For each layer, clear, then draw to the frame buffer.
-    for( uint l=0;l<LAYERCOUNT;l++ ) {
+    for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
         framebuffer.clear( sf::Color::Transparent );
-        for( uint i=0;i<entities[l].size();i++ ) {
+        for( unsigned int i=0;i<entities[l].size();i++ ) {
             if ( !entities[l][i] ) {
                 entities[l].erase( entities[l].begin() + i );
                 i--;
@@ -99,8 +99,8 @@ void World::update( double dt ) {
     globalTimer += dt;
     timer += dt;
     while ( timer >= TIMESTEP ) {
-        for( uint l=0;l<LAYERCOUNT;l++ ) {
-            for( uint i=0;i<entities[l].size();i++ ) {
+        for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
+            for( unsigned int i=0;i<entities[l].size();i++ ) {
                 if ( !entities[l][i] ) {
                     entities[l].erase( entities[l].begin() + i );
                     i--;
@@ -117,8 +117,8 @@ void World::update( double dt ) {
 
 std::vector<Entity*> World::getEntitiesByType( Entity::Type t ) {
     std::vector<Entity*> foo;
-    for( uint l=0;l<LAYERCOUNT;l++ ) {
-        for( uint i=0;i<entities[l].size();i++ ) {
+    for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
+        for( unsigned int i=0;i<entities[l].size();i++ ) {
             if ( !entities[l][i] ) {
                 entities[l].erase( entities[l].begin() + i );
                 i--;

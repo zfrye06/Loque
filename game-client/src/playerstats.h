@@ -4,7 +4,11 @@
 #include <exception>
 #include <iostream>
 
+#ifdef WIN32
+#include "../../shared/loqueclient.h"
+#else
 #include "../shared/loqueclient.h"
+#endif
 
 class PlayerStats {
 private:

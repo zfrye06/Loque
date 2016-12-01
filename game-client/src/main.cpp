@@ -58,7 +58,7 @@ int app() {
                         //delete all current respawn animations
                         std::vector<Entity*> anims = world->getEntitiesByType(Entity::Type::RespawnAnim);
                         for(unsigned int i = 0; i < anims.size(); i++){
-                            world->removeEntity(anims[i],World::Layer::Background);
+                            world->removeEntity(anims[i],World::Layer::Midground);
                         }
                         world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Midground);
                         break;

@@ -277,3 +277,53 @@ void PokeDust::draw(sf::RenderTarget& window){
 Entity::Type PokeDust::getType(){
     return Entity::Type::Dust;
 }
+
+LavaDust::LavaDust( glm::vec2 pos ) {
+    sound = sf::Sound( *Resources->getSound( "assets/audio/effects/fire1.ogg" ) );
+    sound.play();
+    texture = Resources->getTexture("assets/images/explosion.png");
+    animation.setSpriteSheet(*texture);
+    animation.addFrame(sf::IntRect(0,0,96,96));
+    animation.addFrame(sf::IntRect(96,0,96,96));
+    animation.addFrame(sf::IntRect(96*2,0,96,96));
+    animation.addFrame(sf::IntRect(96*3,0,96,96));
+    animation.addFrame(sf::IntRect(96*4,0,96,96));
+    animation.addFrame(sf::IntRect(0,96,96,96));
+    animation.addFrame(sf::IntRect(96,96,96,96));
+    animation.addFrame(sf::IntRect(96*2,96,96,96));
+    animation.addFrame(sf::IntRect(96*3,96,96,96));
+    animation.addFrame(sf::IntRect(96*4,96,96,96));
+    animation.addFrame(sf::IntRect(0,96*2,96,96));
+    animation.addFrame(sf::IntRect(96,96*2,96,96));
+    animation.addFrame(sf::IntRect(96*2,96*2,96,96));
+    animation.addFrame(sf::IntRect(96*3,96*2,96,96));
+    animation.addFrame(sf::IntRect(96*4,96*2,96,96));
+
+    sprite = new AnimatedSprite( sf::seconds(0.05), false, false );
+    sprite->setOrigin(96.f/2.f,96.f/2.f);
+    sprite->setPosition( pos.x, pos.y );
+    //sprite->setScale( 0.7, 0.7 );
+    sprite->play(animation);
+}
+
+LavaDust::~LavaDust() {
+    delete sprite;
+}
+
+void LavaDust::update(double dt) {
+    sprite->update( sf::seconds( dt ) );
+    if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
+        world->removeEntity(this, World::Layer::Foreground);
+    }
+}
+
+void LavaDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+}
+
+void LavaDust::draw(sf::RenderTarget& window){
+    window.draw(*sprite);
+}
+
+Entity::Type LavaDust::getType(){
+    return Entity::Type::Dust;
+}

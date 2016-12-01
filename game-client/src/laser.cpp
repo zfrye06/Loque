@@ -43,7 +43,9 @@ Laser::Laser(tmx::Object& obj){
     boxDef.position.Set(0,0);
     body = physicalWorld->get().CreateBody( &boxDef );
     b2Fixture* fixture = body->CreateFixture( &fixDef );
-    fixture->SetSensor(true);
+    if ( canBePassed ) {
+        fixture->SetSensor(true);
+    }
     body->SetUserData( this );
 }
 

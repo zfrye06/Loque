@@ -7,7 +7,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     techLength = 20.f/60.f;
     frickedUpLength = 40.f/60.f;
     jumpHelpAmount = 2.f;
-    damageBoostLength = 0.45;
+    damageBoostLength = 0.25;
     damageBoostTimer = 0;
     shockLength = 0.4;
     deadZone = 0.25; // in percentage

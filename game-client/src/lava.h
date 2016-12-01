@@ -8,6 +8,11 @@
 #include "player.h"
 
 class Lava : public Entity{
+private:
+    tmx::FloatRect rect;
+    Animation animation;
+    AnimatedSprite* sprite;
+    sf::Texture* texture;
 public:
     b2Body* body;
     std::array<sf::Vertex, 4u> verticies;

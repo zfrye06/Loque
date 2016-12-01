@@ -4,14 +4,26 @@ Lava::Lava(tmx::Object& obj){
         
     pos = glm::vec2(obj.getPosition().x, obj.getPosition().y);
 
+    texture = Resources->getTexture("assets/images/lava.png");
+    animation.setSpriteSheet(*texture);
+    animation.addFrame(sf::IntRect(0,0,128,128));
+    animation.addFrame(sf::IntRect(128,0,128,128));
+    animation.addFrame(sf::IntRect(128*2,0,128,128));
+    animation.addFrame(sf::IntRect(128*3,0,128,128));
+    animation.addFrame(sf::IntRect(128*4,0,128,128));
+    animation.addFrame(sf::IntRect(128*5,0,128,128));
+    animation.addFrame(sf::IntRect(128*6,0,128,128));
+    animation.addFrame(sf::IntRect(0,128,128,128));
+    animation.addFrame(sf::IntRect(128,128,128,128));
+    animation.addFrame(sf::IntRect(128*2,128,128,128));
+    animation.addFrame(sf::IntRect(128*3,128,128,128));
+
+    rect = obj.getAABB();
+
     tmx::FloatRect size = obj.getAABB();
 
-    verticies = {
-        sf::Vertex(sf::Vector2f(size.left,size.top), sf::Color::Red, sf::Vector2f(0,0)),
-        sf::Vertex(sf::Vector2f(size.left+size.width,size.top), sf::Color::Red, sf::Vector2f(1,0)),
-        sf::Vertex(sf::Vector2f(size.left+size.width,size.top+size.height), sf::Color::Yellow, sf::Vector2f(1,1)),
-        sf::Vertex(sf::Vector2f(size.left,size.top+size.height), sf::Color::Yellow, sf::Vector2f(0,1))
-    };
+    sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
+    sprite->play( animation );
 
     size.width = size.width / 64;
     size.height = size.height / 64;
@@ -47,6 +59,7 @@ Lava::Lava(tmx::Object& obj){
 }
 
 void Lava::update(double dt){
+    sprite->update( sf::seconds( dt ) );
 }
 
 void Lava::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
@@ -65,7 +78,22 @@ void Lava::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void Lava::draw(sf::RenderTarget& window){
-    window.draw(verticies.data(), verticies.size(), sf::Quads);
+    //window.draw(verticies.data(), verticies.size(), sf::Quads);
+    for ( float x = rect.left;x<rect.left+rect.width;x+=128 ) {
+        for ( float y = rect.top;y<rect.top+rect.height;y+=128 ) {
+            float w = 1;
+            float h = 1;
+            if ( rect.top+rect.height - y < 128 ) {
+                h = (rect.top+rect.height - y)/128.f;
+            }
+            if ( rect.left+rect.width - x < 128 ) {
+                w = (rect.top+rect.height - y)/128.f;
+            }
+            sprite->setPosition( x, y );
+            sprite->setScale( w, h );
+            window.draw(*sprite);
+        }
+    }
 }
 
 Entity::Type Lava::getType(){

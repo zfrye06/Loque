@@ -29,7 +29,7 @@
   </data>
  </layer>
  <objectgroup name="Objects">
-  <object id="1" name="playerSpawn" x="261.256" y="1350.75" width="58.3658" height="52.8071"/>
+  <object id="1" name="playerSpawn" x="5465.52" y="1630.5" width="58.3658" height="52.8071"/>
   <object id="3" name="laser" x="1111.17" y="1280.77" width="15.319" height="190.94">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>

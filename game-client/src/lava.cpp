@@ -9,8 +9,8 @@ Lava::Lava(tmx::Object& obj){
     verticies = {
         sf::Vertex(sf::Vector2f(size.left,size.top), sf::Color::Red, sf::Vector2f(0,0)),
         sf::Vertex(sf::Vector2f(size.left+size.width,size.top), sf::Color::Red, sf::Vector2f(1,0)),
-        sf::Vertex(sf::Vector2f(size.left+size.width,size.top+size.height), sf::Color::Red, sf::Vector2f(1,1)),
-        sf::Vertex(sf::Vector2f(size.left,size.top+size.height), sf::Color::Red, sf::Vector2f(0,1))
+        sf::Vertex(sf::Vector2f(size.left+size.width,size.top+size.height), sf::Color::Yellow, sf::Vector2f(1,1)),
+        sf::Vertex(sf::Vector2f(size.left,size.top+size.height), sf::Color::Yellow, sf::Vector2f(0,1))
     };
 
     size.width = size.width / 64;
@@ -42,7 +42,6 @@ Lava::Lava(tmx::Object& obj){
     fixDef.restitution = 0;
     boxDef.position.Set(0,0);
     body = physicalWorld->get().CreateBody( &boxDef );
-    b2Fixture* fixture = body->CreateFixture( &fixDef );
     body->SetUserData( this );
 }
 

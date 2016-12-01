@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="64" height="64" tilewidth="64" tileheight="64" nextobjectid="45">
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="64" height="64" tilewidth="64" tileheight="64" nextobjectid="46">
  <properties>
   <property name="ambient" value="assets/audio/music/cosmos.ogg"/>
  </properties>
@@ -38,5 +38,6 @@
   <object id="42" name="spikes" x="3328" y="1729" width="30" height="444"/>
   <object id="43" name="spikes" x="3490" y="1729" width="32" height="442"/>
   <object id="44" name="playerSpawn" x="2136.36" y="375.758" width="51.5152" height="45.4545"/>
+  <object id="45" name="lava" x="1541" y="405" width="377" height="36"/>
  </objectgroup>
 </map>

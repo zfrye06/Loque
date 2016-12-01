@@ -29,7 +29,7 @@
 
 class DebugDraw : public b2Draw {
     public:
-        DebugDraw(sf::RenderWindow &window);
+        DebugDraw(sf::RenderTarget &window);
         virtual ~DebugDraw();
 
         void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
@@ -45,7 +45,7 @@ class DebugDraw : public b2Draw {
         void DrawMouseJoint(b2Vec2& p1, b2Vec2& p2, const b2Color &boxColor, const b2Color &lineColor);
 
     private:
-        sf::RenderWindow *window;
+        sf::RenderTarget *window;
 };
 
 #endif // DEBUGDRAW_H

@@ -101,7 +101,6 @@ public:
     bool flipped;
 
     glm::vec2 smoothCamera;
-    sf::View* view;
     sf::Texture* texture;
     b2Body* myBody;
     AnimatedSprite* sprite;
@@ -133,7 +132,7 @@ public:
     sf::Sound wallJumpSound;
     sf::Sound airDodgeSound;
     sf::Sound techSound;
-    Player( std::string resource, glm::vec2 pos, sf::View& view );
+    Player( std::string resource, glm::vec2 pos );
     ~Player();
     void update( double dt );
     void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );

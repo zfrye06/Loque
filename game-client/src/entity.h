@@ -61,24 +61,9 @@ public:
     ~PhysicsDebug();
     void update( double dt );
     void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
-    void draw( sf::RenderWindow& window );
+    void draw( sf::RenderTarget& window );
     Entity::Type getType();
 };
-
-class Background : public Entity {
-private:
-    sf::Sprite sky;
-    sf::Sprite clouds;
-    sf::Sprite hills;
-    sf::View* defaultView;
-public:
-    Background(sf::View* view, std::string skyFile, std::string cloudsFile, std::string hillsFile);
-    void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderTarget& window);
-    Entity::Type getType();
-};
-
 class PlayerSpawn : public Entity {
 public:
     glm::vec2 pos;

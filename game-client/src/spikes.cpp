@@ -49,7 +49,7 @@ Spikes::Spikes(tmx::Object& obj){
     fixDef.restitution = 0;
     boxDef.position.Set(0,0);
     body = physicalWorld->get().CreateBody( &boxDef );
-    b2Fixture* fixture = body->CreateFixture( &fixDef );
+    body->CreateFixture( &fixDef );
     body->SetUserData( this );
 }
 
@@ -63,7 +63,7 @@ void Spikes::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
             playerStats->setScore(playerStats->getScore()-1);
             p->damageBoost();
             p->canDoubleJump = true;
-            world->addEntity( new PokeDust( p->position + glm::vec2(0.f,32.f)) );
+            world->addEntity( new PokeDust( p->position + glm::vec2(0.f,32.f)), World::Layer::Foreground );
             world->stutter(p->hitLength/2.f,0.1);
             p->shake(10,p->hitLength,0.1);
             p->switchState( new ShockedState( p, impulse, 1, p->hitLength) );

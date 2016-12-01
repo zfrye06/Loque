@@ -46,7 +46,7 @@ public:
     ~LandingDust();
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 
@@ -60,7 +60,7 @@ public:
     ~WallJumpDust();
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 
@@ -75,7 +75,7 @@ public:
     ~ShockDust();
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 
@@ -90,7 +90,7 @@ public:
     ~PokeDust();
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 

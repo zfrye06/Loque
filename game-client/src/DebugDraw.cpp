@@ -18,7 +18,7 @@
 
 #include "DebugDraw.h"
 
-DebugDraw::DebugDraw(sf::RenderWindow &window)
+DebugDraw::DebugDraw(sf::RenderTarget &window)
 {
     this->window = &window;
 }

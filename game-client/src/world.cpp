@@ -3,12 +3,18 @@
 World* world;
 
 World::~World() {
-    for ( Entity* e : entities ) {
-        delete e;
+    for( uint l=0;l<LAYERCOUNT;l++ ) {
+        for( uint i=0;i<entities[l].size();i++ ) {
+            if ( !entities[l][i] ) {
+                delete entities[l][i];
+            }
+        }
     }
 }
 
-World::World() {
+World::World( sf::View v ) {
+    view = v;
+    outOfDate = true;
     timer = 0;
     stutterLength = 0;
     stutterPeriod = 0;
@@ -19,39 +25,53 @@ void World::stutter( double length, double period ) {
     stutterPeriod = period;
 }
 
-void World::addEntity( Entity* e ) {
-    entities.push_back(e);
+void World::addEntity( Entity* e, World::Layer l ) {
+    if ( l < 0 || l >= LAYERCOUNT ) {
+        throw std::runtime_error( "Something tried to add itself to a non-existant layer! frick!\n" );
+    }
+    entities[l].push_back(e);
 }
 
-void World::bringToFront( Entity* e ) {
-    for( uint i=0;i<entities.size();i++ ) {
-        if ( entities[i] == e ) {
-            std::swap( entities[i], entities[entities.size()-1] );
-            break;
+void World::removeEntity( Entity* e, World::Layer l ) {
+    for( uint i=0;i<entities[l].size();i++ ) {
+        if ( entities[l][i] == e ) {
+            entities[l][i] = nullptr;
+            delete e;
+            return;
         }
     }
-}
-
-void World::removeEntity( Entity* e ) {
-    for( uint i=0;i<entities.size();i++ ) {
-        if ( entities[i] == e ) {
-            entities[i] = nullptr;
-            break;
-        }
-    }
-    delete e;
+    throw std::runtime_error( "Couldn't find entity to delete..." );
 }
 
 void World::draw( sf::RenderWindow& window ) {
-    sf::RenderTexture blah;
-    for( uint i=0;i<entities.size();i++ ) {
-        if ( !entities[i] ) {
-            entities.erase( entities.begin() + i );
-            i--;
-        } else {
-            entities[i]->draw(blah);
+    if ( outOfDate ) {
+        framebuffer.create( window.getSize().x, window.getSize().y );
+        outOfDate = false;
+    }
+    framebuffer.setView(view);
+    //window.setView(view);
+    // For each layer, clear, then draw to the frame buffer.
+    for( uint l=0;l<LAYERCOUNT;l++ ) {
+        framebuffer.clear( sf::Color::Transparent );
+        for( uint i=0;i<entities[l].size();i++ ) {
+            if ( !entities[l][i] ) {
+                entities[l].erase( entities[l].begin() + i );
+                i--;
+            } else {
+                entities[l][i]->draw(framebuffer);
+            }
         }
-        window.draw(blah, &mycoolLavalShader);
+        // This flushes the framebuffer, drawing everything to it.
+        framebuffer.display();
+        // Finally depending on the layer, we draw it to the main window.
+        switch(l) {
+            case World::Layer::None: { break; }
+            default: {
+                         sf::Sprite sprite(framebuffer.getTexture());
+                         window.draw( sprite );
+                         break;
+                     }
+        }
     }
 }
 
@@ -66,12 +86,14 @@ void World::update( double dt ) {
     }
     timer += dt;
     while ( timer >= TIMESTEP ) {
-        for( uint i=0;i<entities.size();i++ ) {
-            if ( !entities[i] ) {
-                entities.erase( entities.begin() + i );
-                i--;
-            } else {
-                entities[i]->update(TIMESTEP);
+        for( uint l=0;l<LAYERCOUNT;l++ ) {
+            for( uint i=0;i<entities[l].size();i++ ) {
+                if ( !entities[l][i] ) {
+                    entities[l].erase( entities[l].begin() + i );
+                    i--;
+                } else {
+                    entities[l][i]->update(TIMESTEP);
+                }
             }
         }
         playerStats->update( TIMESTEP );
@@ -82,12 +104,14 @@ void World::update( double dt ) {
 
 std::vector<Entity*> World::getEntitiesByType( Entity::Type t ) {
     std::vector<Entity*> foo;
-    for( auto e : entities ) {
-        if ( !e ) {
-            continue;
-        }
-        if ( e->getType() == t ) {
-            foo.push_back(e);
+    for( uint l=0;l<LAYERCOUNT;l++ ) {
+        for( uint i=0;i<entities[l].size();i++ ) {
+            if ( !entities[l][i] ) {
+                entities[l].erase( entities[l].begin() + i );
+                i--;
+            } else if ( entities[l][i]->getType() == t ) {
+                foo.push_back(entities[l][i]);
+            }
         }
     }
     return foo;

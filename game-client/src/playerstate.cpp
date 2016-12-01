@@ -103,8 +103,7 @@ void DashingState::init() {
     player->sprite->play( player->dashAnimation );
     player->sprite->setFrameTime(sf::seconds(player->dashLength/(float)player->dashAnimation.getSize()));
     player->dashSound.play();
-    world->addEntity( new DashDust( player->position, dashingDirection == -1, player->groundAngle ) );
-    world->bringToFront( player );
+    world->addEntity( new DashDust( player->position, dashingDirection == -1, player->groundAngle ), World::Layer::Background );
     dashTimer = 0;
     walkTimer = 0;
 }
@@ -125,15 +124,13 @@ void DashingState::update( Player* player, double dt ) {
         dashTimer = 0;
         walkTimer = 0;
         dashingDirection = -1;
-        world->addEntity( new DashDust( player->position, dashingDirection == -1, player->groundAngle ) );
-        world->bringToFront( player );
+        world->addEntity( new DashDust( player->position, dashingDirection == -1, player->groundAngle ), World::Layer::Background );
         player->dashSound.play();
     } else if ( player->direction.x > 0.9 && dashingDirection == -1) {
         dashTimer = 0;
         walkTimer = 0;
         dashingDirection = 1;
-        world->addEntity( new DashDust( player->position, dashingDirection == -1, player->groundAngle ) );
-        world->bringToFront( player );
+        world->addEntity( new DashDust( player->position, dashingDirection == -1, player->groundAngle ), World::Layer::Background );
         player->dashSound.play();
     }
     dashTimer += dt;
@@ -214,14 +211,12 @@ void JumpingState::init() {
         } else {
             player->jump2Sound.play();
         }
-        world->addEntity( new JumpDust( player->position, player->groundAngle, !player->onGround ) );
-        world->bringToFront( player );
+        world->addEntity( new JumpDust( player->position, player->groundAngle, !player->onGround ), World::Layer::Background );
         player->sprite->play( player->jumpingAnimation );
         player->sprite->setFrameTime(sf::seconds(0.16));
     } else {
         glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
-        world->addEntity( new WallJumpDust( player->position, vel.x < 0, player->groundAngle ) );
-        world->bringToFront( player );
+        world->addEntity( new WallJumpDust( player->position, vel.x < 0, player->groundAngle ), World::Layer::Background );
         player->wallJumpSound.play();
         player->sprite->play( player->wallJumpAnimation );
         player->sprite->setFrameTime(sf::seconds(0.1));
@@ -557,8 +552,7 @@ void LandingState::init() {
     landTimer = 0;
     reset = false;
     walkTimer = 0;
-    world->addEntity( new LandingDust( player->position, player->groundAngle) );
-    world->bringToFront( player );
+    world->addEntity( new LandingDust( player->position, player->groundAngle), World::Layer::Background );
     player->sprite->play( player->landingAnimation );
     player->sprite->setFrameTime(sf::seconds(player->landLength/(float)player->landingAnimation.getSize()));
 }
@@ -757,7 +751,7 @@ KnockbackRecoverState::KnockbackRecoverState( Player* player, bool teched ) {
 }
 
 void KnockbackRecoverState::init() {
-    world->addEntity( new LandingDust( player->position, player->groundAngle) );
+    world->addEntity( new LandingDust( player->position, player->groundAngle), World::Layer::Background );
     player->myBody->SetLinearVelocity( b2Vec2(0,0) );
     player->myBody->SetAwake(false);
     if ( teched ) {

@@ -61,7 +61,7 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
             playerStats->setScore(playerStats->getScore()-1);
             p->canDoubleJump = true;
             p->damageBoost();
-            world->addEntity( new ShockDust( p->position ) );
+            world->addEntity( new ShockDust( p->position ), World::Layer::Foreground );
             world->stutter(p->shockLength/2.f,0.1);
             p->shake(10,p->shockLength,0.1);
             glm::vec2 check = p->position - pos;

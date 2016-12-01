@@ -1,16 +1,16 @@
 #include "respawn.h"
 
-Respawn::Respawn(glm::vec2 pos, sf::View& viewTemp){
+Respawn::Respawn(glm::vec2 pos){
     sound = sf::Sound( *Resources->getSound( "assets/audio/effects/teleport.ogg" ));
     sound.play();
 
     position = pos;
-    view = &viewTemp;
-    view->setCenter(pos.x*64, pos.y*64);
+    world->view.setCenter(pos.x*64,pos.y*64);
+
     //delete all players
     std::vector<Entity*> players = world->getEntitiesByType(Entity::Type::Player);
     for(uint i = 0; i < players.size(); i++){
-        world->removeEntity(players[i]);
+        world->removeEntity(players[i], World::Layer::Midground);
     }
 
     texture = Resources->getTexture("assets/images/respawn.png");
@@ -39,18 +39,18 @@ Respawn::~Respawn(){
 }
 
 void Respawn::update(double dt){
-    view->setCenter(position.x*64, position.y*64);
+    world->view.setCenter(position.x*64,position.y*64);
     sprite->update( sf::seconds(dt) );
     if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
-        world->addEntity(new ::Player("assets/images/veemon.png",position, *view));
-        world->removeEntity(this);
+        world->addEntity(new ::Player("assets/images/veemon.png",position), World::Layer::Midground);
+        world->removeEntity(this, World::Layer::Background);
     }
 }
 
 void Respawn::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
-void Respawn::draw(sf::RenderWindow& window){
+void Respawn::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
 

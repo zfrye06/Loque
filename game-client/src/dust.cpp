@@ -34,7 +34,7 @@ DashDust::~DashDust() {
 void DashDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this);
+        world->removeEntity(this,World::Layer::Background);
     }
 }
 
@@ -81,7 +81,7 @@ JumpDust::~JumpDust() {
 void JumpDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this);
+        world->removeEntity(this, World::Layer::Background);
     }
 }
 
@@ -129,7 +129,7 @@ WallJumpDust::~WallJumpDust() {
 void WallJumpDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this);
+        world->removeEntity(this, World::Layer::Background);
     }
 }
 
@@ -172,7 +172,7 @@ LandingDust::~LandingDust() {
 void LandingDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this);
+        world->removeEntity(this, World::Layer::Background);
     }
 }
 
@@ -223,7 +223,7 @@ ShockDust::~ShockDust() {
 void ShockDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
-        world->removeEntity(this);
+        world->removeEntity(this, World::Layer::Foreground);
     }
 }
 
@@ -263,7 +263,7 @@ PokeDust::~PokeDust() {
 void PokeDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
-        world->removeEntity(this);
+        world->removeEntity(this, World::Layer::Foreground);
     }
 }
 

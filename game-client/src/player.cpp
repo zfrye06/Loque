@@ -1,6 +1,6 @@
 #include "player.h"
 
-Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
+Player::Player( std::string resource, glm::vec2 pos) {
     hitLength = 0.2f;
     successfulTech = false;
     directionalInfluence = 1.f;
@@ -40,7 +40,6 @@ Player::Player( std::string resource, glm::vec2 pos, sf::View& view ) {
     shakeLength = 0;
     shakeStrength = 1;
     newState = nullptr;
-    this->view = &view;
     direction = glm::vec2(0,0);
     setUpSprite( resource );
     setUpBody();
@@ -462,7 +461,7 @@ void Player::update( double dt ) {
     sprite->setRotation( ang*180/3.149562 );
     vel = toGLM(myBody->GetLinearVelocity())*10.f;
     smoothCamera += (glm::vec2( (float)pos.x*64, (float)pos.y*64 )+vel-smoothCamera)*(float)dt*4.f;
-    view->setCenter( toSFML(smoothCamera+shakeAmount2) );
+    world->view.setCenter( toSFML(smoothCamera+shakeAmount2) );
     sprite->update( sf::seconds(dt) );
 }
 

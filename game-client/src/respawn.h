@@ -15,13 +15,12 @@ private:
     sf::Texture* texture;
     Animation animation;
     AnimatedSprite* sprite;
-    sf::View* view;
 public:
-    Respawn(glm::vec2 pos, sf::View& view);
+    Respawn(glm::vec2 pos);
     ~Respawn();
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
 #endif

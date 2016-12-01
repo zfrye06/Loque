@@ -10,7 +10,7 @@ Respawn::Respawn(glm::vec2 pos){
     //delete all players
     std::vector<Entity*> players = world->getEntitiesByType(Entity::Type::Player);
     for(uint i = 0; i < players.size(); i++){
-        world->removeEntity(players[i], World::Layer::Midground);
+        world->removeEntity(players[i], World::Layer::Foreground);
     }
 
     texture = Resources->getTexture("assets/images/respawn.png");
@@ -42,8 +42,8 @@ void Respawn::update(double dt){
     world->view.setCenter(position.x*64,position.y*64);
     sprite->update( sf::seconds(dt) );
     if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
-        world->addEntity(new ::Player("assets/images/veemon.png",position), World::Layer::Midground);
-        world->removeEntity(this, World::Layer::Background);
+        world->addEntity(new ::Player("assets/images/veemon.png",position), World::Layer::Foreground);
+        world->removeEntity(this, World::Layer::Midground);
     }
 }
 

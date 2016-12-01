@@ -46,6 +46,7 @@ public:
         Trampoline,
         Dust,
         Spikes,
+        Lava,
         Exit,
         RespawnAnim,
         None

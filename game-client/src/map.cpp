@@ -253,6 +253,8 @@ void Map::spawnObject( tmx::Object& obj ) {
         world->addEntity( new ::Trampoline(obj), World::Layer::Background);
     } else if( obj.getName() == "spikes") {
         world->addEntity( new ::Spikes(obj), World::Layer::Background);
+    } else if( obj.getName() == "lava") {
+        world->addEntity( new ::Lava(obj), World::Layer::Lavaground);
     } else if( obj.getName() == "exit") {
         world->addEntity( new ::Exit(obj), World::Layer::Background);
     }

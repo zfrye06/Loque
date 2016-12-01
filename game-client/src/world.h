@@ -26,7 +26,7 @@ private:
 public:
     sf::View view;
     sf::RenderTexture framebuffer;
-    enum Layer { None, Background, Midground, Foreground, Lavaground };
+    enum Layer { None, Background, Lavaground, Midground, Foreground };
     World( sf::View v);
     ~World();
     void addEntity( Entity* e, World::Layer layer );

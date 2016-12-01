@@ -68,12 +68,13 @@ void World::draw( sf::RenderWindow& window ) {
         // Finally depending on the layer, we draw it to the main window.
         switch(l) {
             case World::Layer::None: { break; }
-            case World::Layer::Background: {
+            case World::Layer::Lavaground: {
                          sf::Sprite sprite(framebuffer.getTexture());
                          wobble->setUniform("width",(int)window.getSize().x);
                          wobble->setUniform("height",(int)window.getSize().y);
                          wobble->setUniform("texture", sf::Shader::CurrentTexture);
                          wobble->setUniform("time",(float)globalTimer);
+                         wobble->setUniform("pos",sf::Glsl::Vec2(sf::Vector2f((float)view.getCenter().x,(float)view.getCenter().y)));
                          window.draw( sprite, wobble );
                          break;
             }

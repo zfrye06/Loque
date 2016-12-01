@@ -34,7 +34,7 @@ DashDust::~DashDust() {
 void DashDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this,World::Layer::Background);
+        world->removeEntity(this,World::Layer::Midground);
     }
 }
 
@@ -81,7 +81,7 @@ JumpDust::~JumpDust() {
 void JumpDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this, World::Layer::Background);
+        world->removeEntity(this, World::Layer::Midground);
     }
 }
 
@@ -129,7 +129,7 @@ WallJumpDust::~WallJumpDust() {
 void WallJumpDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this, World::Layer::Background);
+        world->removeEntity(this, World::Layer::Midground);
     }
 }
 
@@ -172,7 +172,7 @@ LandingDust::~LandingDust() {
 void LandingDust::update(double dt) {
     sprite->update( sf::seconds( dt ) );
     if ( !sprite->isPlaying() ) {
-        world->removeEntity(this, World::Layer::Background);
+        world->removeEntity(this, World::Layer::Midground);
     }
 }
 

@@ -42,6 +42,7 @@ set( source
          src/random.cpp
          src/playerstats.cpp
          src/spikes.cpp
+         src/lava.cpp
          src/main.cpp
          ../shared/loqueclient.cpp)
 

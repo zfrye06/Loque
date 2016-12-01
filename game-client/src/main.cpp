@@ -24,11 +24,11 @@ int app() {
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     world->addEntity( new Background("assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ), World::Layer::Background );
-    world->addEntity( new Map( "assets/Zapper_Level_1.tmx" ), World::Layer::Background );
+    world->addEntity( new Map( "assets/Zapper_Level_1.tmx" ), World::Layer::Midground );
     std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
     if(spawns.size() >= 1){
         ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
-        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Background);
+        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Midground);
     }
     //world->addEntity( new PhysicsDebug( world->framebuffer ), World::Layer::Foreground );
     sf::Clock deltaClock;
@@ -91,6 +91,8 @@ int main( int argc, char** argv ) {
         return app();
     } catch( std::exception e ) {
         std::cout << "ERROR: " << e.what() << "\n";
+        throw e;
         return 1;
     }
+    return 1;
 }

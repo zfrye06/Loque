@@ -18,13 +18,14 @@ public:
     ~MainWindow();
 
 private:
+
     Ui::MainWindow *ui;
     void handleLogin();
     void displayLoginMessage(const char *loginMessage, std::string color);
-    void resetLoginMessage();
+    void resetLogin();
     void handleRegistration();
     void displayRegistrationErrorMessage(const char *errorMessage);
-    void resetRegistrationErrorMessage();
+    void resetRegistration();
 };
 
 #endif // MAINWINDOW_H

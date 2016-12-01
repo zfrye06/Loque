@@ -55,6 +55,7 @@ void World::removeEntity( Entity* e, World::Layer l ) {
 }
 
 void World::draw( sf::RenderWindow& window ) {
+    view.setCenter( sf::Vector2f( round(view.getCenter().x), round(view.getCenter().y) ));
     framebuffer.setView(view);
     window.setView(windowView);
     //window.setView(view);

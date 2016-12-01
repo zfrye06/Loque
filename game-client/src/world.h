@@ -10,7 +10,7 @@
 #include "physicalworld.h"
 #include "playerstats.h"
 
-#define TIMESTEP 1.f/60.f
+#define TIMESTEP 1.f/75.f
 #define LAYERCOUNT 5
 
 class World {

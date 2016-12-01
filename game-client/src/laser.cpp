@@ -10,6 +10,7 @@ Laser::Laser(tmx::Object& obj){
         }
     }
 
+    impulseMultiplier = 30.f;
 
     tmx::FloatRect size = obj.getAABB();
     pos = glm::vec2(obj.getPosition().x+size.width/2.f, obj.getPosition().y+size.height/2.f); 
@@ -17,11 +18,6 @@ Laser::Laser(tmx::Object& obj){
     size.height = size.height / 64;
     size.left = size.left / 64;
     size.top = size.top / 64;
-    if ( size.width > size.height ) {
-        impulse = glm::vec2(0.f,30.f);
-    } else {
-        impulse = glm::vec2(30.f,0.f);
-    }
 
     b2Vec2 topLeft(size.left, size.top);
     b2Vec2 topRight(size.left + size.width, size.top);
@@ -64,18 +60,7 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
             world->addEntity( new ShockDust( p->position ), World::Layer::Foreground );
             world->stutter(p->shockLength/2.f,0.1);
             p->shake(10,p->shockLength,0.1);
-            glm::vec2 check = p->position - pos;
-            float checkaxis;
-            if ( impulse.x != 0 ) {
-                checkaxis = check.x;
-            } else {
-                checkaxis = check.y;
-            }
-            if ( checkaxis > 0 ) {
-                p->switchState( new ShockedState( p, impulse, 0, p->shockLength) );
-            } else {
-                p->switchState( new ShockedState( p, -impulse, 0, p->shockLength) );
-            }
+            p->switchState( new ShockedState( p, glm::normalize(toGLM(hitnormal))*impulseMultiplier, 0, p->shockLength) );
         }
     }
 }

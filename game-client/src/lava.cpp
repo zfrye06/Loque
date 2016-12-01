@@ -44,7 +44,7 @@ Lava::Lava(tmx::Object& obj){
     size.left = size.left / 64;
     size.top = size.top / 64;
 
-    impulse = glm::vec2(0.f, -30.f);
+    impulseMultiplier = 30.f;
     b2Vec2 topLeft(size.left, size.top);
     b2Vec2 topRight(size.left + size.width, size.top);
     b2Vec2 bottomRight(size.left + size.width, size.top + size.height);
@@ -92,7 +92,7 @@ void Lava::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
             world->addEntity( new PokeDust( p->position + glm::vec2(0.f,32.f)), World::Layer::Foreground );
             world->stutter(p->hitLength/2.f,0.1);
             p->shake(10,p->hitLength,0.1);
-            p->switchState( new ShockedState( p, impulse, 1, p->hitLength) );
+            p->switchState( new ShockedState( p, toGLM(hitnormal)*impulseMultiplier, 1, p->hitLength) );
         }
     }
 }

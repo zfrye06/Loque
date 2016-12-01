@@ -60,7 +60,7 @@ int app() {
                         for(unsigned int i = 0; i < anims.size(); i++){
                             world->removeEntity(anims[i],World::Layer::Background);
                         }
-                        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Background);
+                        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Midground);
                         break;
                     }
                 }

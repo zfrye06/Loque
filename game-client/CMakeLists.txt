@@ -31,6 +31,7 @@ set( source
          src/player.cpp
          src/dust.cpp
          src/exit.cpp
+         src/hud.cpp
          src/background.cpp
          src/respawn.cpp
          src/trampoline.cpp

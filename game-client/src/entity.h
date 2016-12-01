@@ -49,6 +49,7 @@ public:
         Lava,
         Exit,
         RespawnAnim,
+        HUD,
         None
     };
     virtual Type getType();

@@ -12,6 +12,7 @@
 #include "background.h"
 #include "respawn.h"
 #include "world.h"
+#include "hud.h"
 
 int app() {
     Resources = new ResourceManager();
@@ -25,6 +26,7 @@ int app() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     world->addEntity( new Background("assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ), World::Layer::Background );
     world->addEntity( new Map( "assets/Zapper_Level_1.tmx" ), World::Layer::Midground );
+    world->addEntity( new HUD(), World::Layer::Foreground );
     std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
     if(spawns.size() >= 1){
         ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);

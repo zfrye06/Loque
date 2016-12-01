@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>669</width>
+    <height>903</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item>
      <widget class="QStackedWidget" name="worldTreeWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="loginPage">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
@@ -386,8 +386,11 @@
        <layout class="QHBoxLayout" name="horizontalLayout_14">
         <item>
          <widget class="QTabWidget" name="portalManager">
+          <property name="tabPosition">
+           <enum>QTabWidget::North</enum>
+          </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="playTab">
            <attribute name="title">
@@ -409,6 +412,43 @@
            <attribute name="title">
             <string>Statistics</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
+              <item>
+               <widget class="QLabel" name="totalTimeLabel">
+                <property name="text">
+                 <string>Total time played:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="totalScoreLabel">
+                <property name="text">
+                 <string>Total score:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="statsWidget" native="true">
+                <widget class="QScrollBar" name="verticalScrollBar">
+                 <property name="geometry">
+                  <rect>
+                   <x>100</x>
+                   <y>0</y>
+                   <width>16</width>
+                   <height>160</height>
+                  </rect>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="classesTab">
            <attribute name="title">
@@ -428,7 +468,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>669</width>
      <height>19</height>
     </rect>
    </property>

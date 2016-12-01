@@ -42,6 +42,7 @@ Lava::Lava(tmx::Object& obj){
     fixDef.restitution = 0;
     boxDef.position.Set(0,0);
     body = physicalWorld->get().CreateBody( &boxDef );
+    body->CreateFixture(&fixDef);
     body->SetUserData( this );
 }
 

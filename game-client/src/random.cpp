@@ -8,5 +8,7 @@ RandomClass::RandomClass() {
 
 float RandomClass::f( float lower, float upper ) {
     float d = upper-lower;
-    return lower+(float)(fmod(rand(),d))/(float)d;
+    int r = rand()%RAND_MAX;
+    float scale = (float)r/(float)RAND_MAX;
+    return lower+d*scale;
 }

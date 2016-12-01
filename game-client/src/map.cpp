@@ -18,7 +18,7 @@ Map::Map( std::string resource ) {
     for ( tmx::Property p : map->getProperties() ) {
         if ( p.getType() == tmx::Property::Type::String && p.getName() == "ambient" ) {
             if ( p.getStringValue() == "candy" ) {
-                if ( Random->f(0,1) > 0.5 ) {
+                if ( Random->f(0.f,1.f) > 0.5 ) {
                     ambient.openFromFile("assets/audio/music/cosmos.ogg");
                 } else {
                     ambient.openFromFile("assets/audio/music/flower_fields.ogg");

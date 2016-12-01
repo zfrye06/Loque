@@ -18,11 +18,25 @@ Lava::Lava(tmx::Object& obj){
     animation.addFrame(sf::IntRect(128*2,128,128,128));
     animation.addFrame(sf::IntRect(128*3,128,128,128));
 
+    surfaceTexture= Resources->getTexture("assets/images/lava_surface.png");
+    surfaceAnimation.setSpriteSheet(*surfaceTexture);
+    surfaceAnimation.addFrame(sf::IntRect(0,0,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*2,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*3,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*4,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*5,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*6,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*7,128,12));
+    surfaceAnimation.addFrame(sf::IntRect(0,12*8,128,12));
+
     rect = obj.getAABB();
 
     tmx::FloatRect size = obj.getAABB();
 
-    sprite = new AnimatedSprite( sf::seconds(0.07), false, false );
+    surfaceSprite = new AnimatedSprite( sf::seconds(0.15), false, true );
+    surfaceSprite->play( surfaceAnimation );
+    sprite = new AnimatedSprite( sf::seconds(0.15), false, true );
     sprite->play( animation );
 
     size.width = size.width / 64;
@@ -58,8 +72,14 @@ Lava::Lava(tmx::Object& obj){
     body->SetUserData( this );
 }
 
+Lava::~Lava() {
+    delete surfaceSprite;
+    delete sprite;
+}
+
 void Lava::update(double dt){
     sprite->update( sf::seconds( dt ) );
+    surfaceSprite->update( sf::seconds( dt ) );
 }
 
 void Lava::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
@@ -80,6 +100,15 @@ void Lava::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 void Lava::draw(sf::RenderTarget& window){
     //window.draw(verticies.data(), verticies.size(), sf::Quads);
     for ( float x = rect.left;x<rect.left+rect.width;x+=128 ) {
+        float w = 1;
+        if ( rect.left+rect.width - x < 128 ) {
+            w = (rect.left+rect.width - x)/128.f;
+        }
+        surfaceSprite->setPosition( x, rect.top-12 );
+        surfaceSprite->setScale( w, 1 );
+        window.draw(*surfaceSprite);
+    }
+    for ( float x = rect.left;x<rect.left+rect.width;x+=128 ) {
         for ( float y = rect.top;y<rect.top+rect.height;y+=128 ) {
             float w = 1;
             float h = 1;
@@ -87,7 +116,7 @@ void Lava::draw(sf::RenderTarget& window){
                 h = (rect.top+rect.height - y)/128.f;
             }
             if ( rect.left+rect.width - x < 128 ) {
-                w = (rect.top+rect.height - y)/128.f;
+                w = (rect.left+rect.width - x)/128.f;
             }
             sprite->setPosition( x, y );
             sprite->setScale( w, h );

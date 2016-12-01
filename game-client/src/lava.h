@@ -13,10 +13,14 @@ private:
     Animation animation;
     AnimatedSprite* sprite;
     sf::Texture* texture;
+    Animation surfaceAnimation;
+    AnimatedSprite* surfaceSprite;
+    sf::Texture* surfaceTexture;
 public:
     b2Body* body;
     std::array<sf::Vertex, 4u> verticies;
     Lava(tmx::Object& obj);
+    ~Lava();
     glm::vec2 pos;
     glm::vec2 impulse;
     void update(double dt);

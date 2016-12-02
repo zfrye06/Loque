@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="256" height="256" tilewidth="64" tileheight="64" nextobjectid="36">
+ <properties>
+  <property name="ambient" value="dungeon"/>
+ </properties>
+ <tileset firstgid="1" name="Math" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+  <image source="images/MathSpritesheet.png" width="320" height="384"/>
+ </tileset>
+ <tileset firstgid="31" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="images/sheet.png" width="896" height="448"/>
+ </tileset>
+ <tileset firstgid="129" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="30" columns="6">
+  <image source="images/LevelHazards.png" width="384" height="320"/>
+ </tileset>
+ <tileset firstgid="159" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="160" columns="20">
+  <image source="images/DungeonTiles.png" width="1280" height="512"/>
+ </tileset>
+ <tileset firstgid="319" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
+  <image source="images/PhysicsTileset.png" width="256" height="256"/>
+ </tileset>
+ <layer name="Dungeon" width="256" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt202q01AYx+GI6BLch/t0pM4ceFU6EFHchaA4cewCnN0tmHBbKKHf95z8W97ngZfQJpBMfqefGQYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArtH7rQFq0j/UpX+oS/9Ql/6hLv1DXfqHuvQPdekf6tI/1KV/qEv/UFfL/t1PALelR//nDpDRqr9L29c/5Dym21YDZKTb1z/kpNvXP+Sk29c/5KTb1z/kpNvXP+Sk29c/5KTb1z/kpNvXP+Sk29c/5KTb1z/kpNvXP+Sk29c/5KTb1z/kpNvXP+Sk29c/5KTb1z/kpNvXP+TMW3y9NW9nj3sNsKzP46yGw6/D7xa9ImBJH8b5ODy0/3fHfv3D9Vnt2V7i0Odv/cN1md637/oO7UvDczxbb/UP1+eS79CfrrcvZo8POdb/q3FePnkYYBlL/YZ2Sv9+w4NlPab/+zOOfXNkv/5hGf/WM7m0//vhtP6/jvNta77vOU7/0N+fcX43nF+Nrkv/sIwfDefn0GYN0D8so2X/mzXg055zPT/xmqb/D+kf+mvd/zR3w/414Jjt/w7qH/rq0f/U7d1w/howb1//0Fev/jdrwGrHbMyfn7evf+irZ//H7st3Dz9k6R/q0j/UpX+oS/9Ql/6hLv1DXfqHuvQPdekf6tI/1KV/qEv/UJf+oa4e/QO3Qf9Ql/6hLv1DXfqHunr0bx2A26B5qEvXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQDX/AcSmPVM=
+  </data>
+ </layer>
+ <layer name="Decoration" width="256" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt2TEKgDAQBED//0ax0MYfqJ0JaCMWFsEjyQwsBKtrNnBxGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4Oj6cAQAAgLrZ/wEAAKB9dn4AAABon50fAAD6NkYPAISZogcAwug/9EPfoV/6D/Uo/c9e/6Ee9/t8qXtA/6Eeua97yhI9CPCLOWW9kvu/Xd/XlwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA7TsBDDQdaA==
+  </data>
+ </layer>
+ <layer name="Physical" width="256" height="256" opacity="0.47">
+  <data encoding="base64" compression="zlib">
+   eJzt20tqw0AQQEH7ZHFI7n+m4F1IIARrxprxq4JeeCO0ea0P8uUCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAmd6uZ58BcBb9Q5f+oUv/0KV/6Pqrf7sBXtu98VkDrG1Wp/qH9ekfuvQPXfqHLv1Dl/6hS//QpX/o0j906R+69A9d+ocu/UOX/qFL/9Clf+jSP3TpH7r0D136hy79Q5f+oUv/0KV/6NI/dOkfuvQPXfqHLv1Dl/6hS//QpX/oelb/999HBhjvGf3rF9Y0us3PH9ds7cO6ZvR5c98OW/D+D7p0Cl2r9u/5AeZbtTH9w3yjGhvdqv5hvhGN/bfV9+vvOXpM4HFHv8v7Ph8De9U/7GXkDtA/7GfEDrhpH7Z1ZAdoH/b3yA7QPrwO//MFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgIYv4vIxqA==
+  </data>
+ </layer>
+ <objectgroup name="Objects">
+  <object id="29" name="lava" x="3394.73" y="9547.24" width="1120.35" height="162.47"/>
+  <object id="30" name="playerSpawn" x="2299.79" y="9087.55" width="62.3701" height="62.3701"/>
+  <object id="31" name="lava" x="3882.33" y="9709.71" width="167.668" height="773.273"/>
+  <object id="34" name="spikes" x="4452.75" y="9084.11" width="26.999" height="386.293"/>
+  <object id="35" name="spikes" x="3710.84" y="8763.05" width="1850.07" height="42.838"/>
+ </objectgroup>
+</map>

@@ -14,7 +14,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 6.f/60.f; // Time in seconds to wait for button release for a short hop.
     dashLength = 0.30; // in seconds
-    playerWidth = .4; // in meters
+    playerWidth = .35; // in meters
     playerHeight = .35; // in meters
     airDodgeVelocity = 19;
     airDodgeTime = 0.35;
@@ -32,7 +32,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     canDoubleJump = true;
     releasedJump = true;
     airDodgePressed = false;
-    airControlMultiplier = 4;
+    airControlMultiplier = 3;
     flashTimer = 0;
     flashLength = 0;
     techTimer = 0;
@@ -453,9 +453,9 @@ void Player::update( double dt ) {
     float ang = myBody->GetAngle();
     // We'll assume 64 pixels is a meter
     if ( !flipped ) {
-        sprite->setPosition( pos.x*64-48+shakeAmount.x, pos.y*64-70+shakeAmount.y );
+        sprite->setPosition( pos.x*64-48+shakeAmount.x, pos.y*64-74+shakeAmount.y );
     } else {
-        sprite->setPosition( pos.x*64+48+shakeAmount.x, pos.y*64-70+shakeAmount.y );
+        sprite->setPosition( pos.x*64+48+shakeAmount.x, pos.y*64-74+shakeAmount.y );
     }
     position = glm::vec2((float)pos.x*64.f,(float)pos.y*64.f);
     sprite->setRotation( ang*180/3.149562 );

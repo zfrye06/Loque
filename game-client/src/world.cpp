@@ -15,6 +15,7 @@ World::~World() {
 World::World( sf::View v ) {
     wobble = Resources->getShader("assets/shaders/wobble");
     globalTimer = 0;
+    framebuffer.create( (int)v.getSize().x, (int)v.getSize().y );
     view = v;
     windowView = v;
     timer = 0;

@@ -15,12 +15,27 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     ../shared/loqueclient.cpp \
+    loginpane.cpp \
+    registerpane.cpp \
+    studentplaypane.cpp \
+    adminplaypane.cpp \
+    adminpane.cpp
 
 HEADERS  += mainwindow.h \
     ../shared/loqueclient.h \
+    loginpane.h \
+    registerpane.h \
+    studentplaypane.h \
+    adminplaypane.h \
+    adminpane.h
 
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    loginpane.ui \
+    registerpane.ui \
+    studentplaypane.ui \
+    adminplaypane.ui \
+    adminpane.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

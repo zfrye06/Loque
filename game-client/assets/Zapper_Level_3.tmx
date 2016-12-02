@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="128" height="128" tilewidth="64" tileheight="64" nextobjectid="49">
+ <properties>
+  <property name="ambient" value="dungeon"/>
+ </properties>
+ <tileset firstgid="1" name="Math" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+  <image source="images/MathSpritesheet.png" width="320" height="384"/>
+ </tileset>
+ <tileset firstgid="31" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="images/sheet.png" width="896" height="448"/>
+ </tileset>
+ <tileset firstgid="129" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="30" columns="6">
+  <image source="images/LevelHazards.png" width="384" height="320"/>
+ </tileset>
+ <tileset firstgid="159" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="160" columns="20">
+  <image source="images/DungeonTiles.png" width="1280" height="512"/>
+ </tileset>
+ <tileset firstgid="319" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
+  <image source="images/PhysicsTileset.png" width="256" height="256"/>
+ </tileset>
+ <layer name="CandyGraphics" width="128" height="128">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoADwAB
+  </data>
+ </layer>
+ <layer name="Physical" width="128" height="128" opacity="0.47">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoADwAB
+  </data>
+ </layer>
+ <objectgroup name="Objects"/>
+</map>

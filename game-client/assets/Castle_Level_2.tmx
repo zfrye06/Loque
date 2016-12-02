@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="256" height="256" tilewidth="64" tileheight="64" nextobjectid="57">
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="256" height="256" tilewidth="64" tileheight="64" nextobjectid="63">
  <properties>
   <property name="ambient" value="dungeon"/>
  </properties>
@@ -23,6 +23,7 @@
  </tileset>
  <layer name="BackgroundTower2" width="256" height="256">
   <properties>
+   <property name="darkness" type="int" value="160"/>
    <property name="lava" type="bool" value="false"/>
   </properties>
   <data encoding="base64" compression="zlib">
@@ -31,42 +32,29 @@
  </layer>
  <layer name="BackgroundTower2Decor" width="256" height="256">
   <properties>
+   <property name="darkness" type="int" value="160"/>
    <property name="lava" type="bool" value="false"/>
   </properties>
   <data encoding="base64" compression="zlib">
    eJztxrERACAIBDD2X1OXoGOC79FLqlQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANvccADgXx0OAAAAALzvhAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbDfk5wWB
   </data>
  </layer>
- <layer name="Shadow2" width="256" height="256" opacity="0.15">
-  <properties>
-   <property name="lava" type="bool" value="false"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJztwzENAAAMA6BOYf276TsRkNBLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr6DpYtBLE=
-  </data>
- </layer>
  <layer name="BackgroundLayer" width="256" height="256">
   <properties>
+   <property name="darkness" type="int" value="192"/>
    <property name="lava" type="bool" value="false"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt2WFqwkAUhdFxFbaWrt3lWFu6pyoYmkqqATXjzD0HHiL+UITvTYylAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANb2uSnk/zNuq9icBlnRs/+Uw68Ns7ACIMrS/Hu0AIMe4fyCL/iGX/iGX/iHTZqV/SKd/eA67hd/P+Q/PYen2j/QP9e2K/iFRrfaBenZnA+TQPuTSP+Ry/Q+5zvu3AyDHVP92AWS41n/yDtgX3wP06Ps0XxOv7U+vfRTdQ6+ObX+W310wzNC9cx/6Nuf3jx0A/dI+5NqWv72fPwf6Ne5+GNcAkGHc/NQj0K9x61O7AOjbf9cAzn/o3/bCAH3TP+TSP+TSPmRy9kM2/UMm5z/k0j9kutS+/qFN17qeO0BbtA957tW9/qE9Wodsuodc2odc2odsU51rH/rn/If+zOnYvT+o497/vS8xwO1qd6x/eJxL7dRuWP/wWPqHXPqHXC33D9ymxf6B+2ihf+Ax5vamVcimb8ilf8ilf8g15z4h0Cf37iGX/oEp+ods+odc+gcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKAlPzbP7TI=
+   eJzt2GFugkAQgNH1FG1tenaPY23TO1UTTakiEEWH3XkvmRjDD8Hk2wVKAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIr2tSvnYz/sq+kyAZzq0/7qfl/2srQGQyqn9l84aAOTR7R/IRf+Ql/4hL/1DTuuV/iE7/cMybJ/8e/Z/WIZnt3+gf4i3LfqHjKLaB+JszwbIQ/uQl/4hL/f/kNd5/9YAyKOvf2sB5DDWf+Y1YFf8D9Cin+N89xzbHY99Ft1Dqw5tf5W/teA0p+7t+9C2Kc8/1gBol/Yhr0353/v5d6Bd3e5P4x4Acug23/cJtKvbet9aALTt2j2A/R/atxkYoG36h7z0D3lpH3Ky98Ow1pvQP1zK0IX9H/pl6EL/0K/1Lobab+k64Ra1djHW9dSBzGrsQvtwv9oamav7JV4bPFONjWgd5ldTM7qHedXUjvZhXjU1pH2YR60d9Z3f0s8ZlmSo9yW3ZP+H+w21EtHRlI69+4PHG7u/rmWA21x7HqhpgHHRneof4kR3qn+IE92p/iFOdKcahzjRDese4kS3rHeIM7U9rUL7hnrWN7RN/5CX/iG3a8/yU94NAPUaatm7e2jTlHb1D+2Zo139Qx0etXfrH5Zv7B3/rd3qH+qkXchJ+5CX9iEv3QMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwKVfELJZ8g==
   </data>
  </layer>
  <layer name="TowerDecor" width="256" height="256">
   <properties>
+   <property name="darkness" type="int" value="192"/>
    <property name="lava" type="bool" value="false"/>
   </properties>
   <data encoding="base64" compression="zlib">
    eJzt2T0KgDAMBtDe/5SCvYSbuJYORYzR8N7S9VtS8tMaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEO3IDgAAALyiDy8AAAAAAAAAAAAAAAAAAAAAAAAAAABQ154dAAAAAHiceR8AAAAAapnt/OwBoQa1DKzYsgMA4Xp2ACCMnh8AAAAAarPjBwAu7oLwHSs9upoFRuZ7YMbfAP+izwcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOCOE/5MEBE=
-  </data>
- </layer>
- <layer name="Shadow" width="256" height="256" opacity="0.15">
-  <properties>
-   <property name="lava" type="bool" value="false"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJztwzENAAAMA6BOYf276TsRkNBLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr6DpYtBLE=
   </data>
  </layer>
  <layer name="CandyGraphics" width="256" height="256">
@@ -74,7 +62,7 @@
    <property name="lava" type="bool" value="true"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   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
+   eJzt3c2O20QAwHHnKcqH8gY8ZCUOFCEuULhwaLbVPgB9CaQiLog7j9DD3lfEIla9rsfjsWfWX7+fNKrWyTrZKP+ZSTYsVQUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOzR39fxV2cAn3T7+GfZu5PdH51hHoBPHXT72KvQPGB/wNH0dV+y/S9PVfX1af515ur7mcfMC7AHoTU/1n7d5rnVZ+zr7vd+cR1fDfQdu86c2+8zZh4Ys1doP56wRt3n6ZR1v27zxa3P82n469D3hi4fc505tx+SOgfEBqzNUPMpz9kXp/Fj6PvH3EaJ2w/RP3vSty/N8XzVv/5ZVuw1aKz3uc/VOe01l59vo605NvYcudpv6J+1mtJ2yefp1PZa13tZj/PpSfcvW6PI7ccs/bhCV869aa7n6JT+7qqn7UdG9S7z7Y+xhscW2rbWf1+3dftvq7T+L1X4XPrnKNbWfm2ov0v1tNum/TdVWv/19UPnWnP/PitETmvrP7b+Nt3e30bT/pT+Q+dK3X+kWMvjDLU19T9m/W267Y6e9/gGx3ngXCn7j1RreJyhkbv/Pyfej559fFL/CWv/Z3uAlP77Xjek0D9rkrv/D1X6HNBufwv9r2EOgFxKzAGxzxDd72ykzAX6ZwtyzwvtEVp7tzou1fg5QP9sQcn2jzwHaJ8tKNX93ueA0o8rPIeS+/+9vg548wyPKzwH+//19Q/PpeR6f/T1f+gy7bMGJdb8PXffjNh7gFpmC0qs93tvvx6XyOM6Zo8AS/O6f/oYon+2wN4/f/93kcthLaz9+ft/G7kc1iJ3/0caIbHLYU20r3+OS/v659hytv++5/y/B6671TFE/2xNznU/ZOlm9Q/9cu73Q5Zu9jnab/+csDU5XuuHLN3t3K7HaH73r3+2bur7fCFL9126/Vr7bxzCXuRoaenGS7ffXvv1z16k9hT6b+OW7jxX/3XnfX8ftL326589mNpU3xyw1t8Bpmj+jjkcQe62lm59Tv/a52hyt7XGPcAv1/FDa/waOJa6V4Atm9pT3+f/cpy31Ljv3L/7wDE4kjntd4+/m3nekiPl8YCjmNpSrLOle5/Sfvu+wxGUam1Kg6+v46fMYwr9cwQl19opa+9vE3+O3PTPESyxtx4y1P83p+HvjV2eQv8cQY72X93+/THD/fk5wzly0D9HMaf/HM23ve58PWZNz7nu1+7yng5WLcfe/1WVx5jX/znmhNBn+5vP98NRzO3/+4z3pfT7f033Gof/zem/+bzPv9fxXYb7Ur/+/zbzsLZD2Jz+L9Xn++dG+1gzTwztu5uR43cSJX9HAXtSqrW+4yXa1j9Mt6X+gbz0D8elfzi2XO2/HzgnsE652+87Z+jvhZb0sMBtwtbkbr/vnJcq/Du/uXPD43V87Bx7uB0H4uZ03/3/4XT/Rn5sXBLuZ1/Tdevd/ps5oXsc6Den+7nv88X2AI+dfxsfq/71vz7WNy8Aw3LtBVL3AEOvCx6q/j19s8Y/do6Frg/EpbY/tfvUOaFvhDRzg/cBId2S7TevJYDlxBot1b7+YX1Kta5/2C79AwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQNh/r/ZhDA==
   </data>
  </layer>
  <layer name="DecorLayer" width="256" height="256">
@@ -94,6 +82,8 @@
   <object id="49" name="playerSpawn" x="3690.91" y="5003.03" width="96.9697" height="33.3333"/>
   <object id="53" name="spikes" x="5349.69" y="7392" width="1330" height="81.3333"/>
   <object id="54" name="spikes" x="5374.67" y="6908" width="1280" height="34.6667"/>
-  <object id="56" name="lava" x="3818" y="6002" width="676" height="2384"/>
+  <object id="56" name="lava" x="4339.21" y="6502" width="151.758" height="1235.52"/>
+  <object id="58" name="lava" x="3796.97" y="6051.52" width="575.758" height="866.667"/>
+  <object id="62" name="lava" x="3856" y="7681.33" width="710.667" height="665.333"/>
  </objectgroup>
 </map>

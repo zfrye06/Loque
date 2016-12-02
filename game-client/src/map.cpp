@@ -52,6 +52,7 @@ Map::Map( std::string resource ) {
     }
     //for( auto l : map->getLayers() ) {
     bool aboveLava;
+    int darkness;
     for (unsigned int i=0 ;i < map->getLayers().size(); i++) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {
@@ -60,16 +61,19 @@ Map::Map( std::string resource ) {
             if ( l->getName() == "physical" || l->getName() == "Physical" ) {
                 tileSet = (tmx::TileLayer*)l;
             } else {
+                darkness = 255;
                 for(tmx::Property p : l->getProperties()){
                     if(p.getName() == "lava"){
                         aboveLava = p.getBoolValue();
+                    }else if(p.getName() == "darkness"){
+                        darkness = p.getIntValue();         
                     }
                 }
                 if(aboveLava){
-                    world->addEntity( new ::Layer(new MapLayer( *map, i)), World::Layer::AboveLava);
+                    world->addEntity( new ::Layer(new MapLayer( *map, i, sf::Color(darkness, darkness, darkness, 255))), World::Layer::AboveLava);
                 }
                 else{
-                    world->addEntity( new ::Layer(new MapLayer( *map, i)), World::Layer::Background);
+                    world->addEntity( new ::Layer(new MapLayer( *map, i, sf::Color(darkness, darkness, darkness, 255))), World::Layer::Background);
                 }
             }
             break;

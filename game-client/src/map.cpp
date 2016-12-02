@@ -191,7 +191,7 @@ Map::Map( std::string resource ) {
                 shapeFixDef.restitution = 0;
                 mapBody->CreateFixture(&shapeFixDef);
             // Half lower
-            } else if ( tiles[i].ID == offset+8 ) {
+            } else if ( tiles[i].ID == offset+7 ) {
                 b2PolygonShape shape;
                 b2Vec2 vertices[] = {
                     b2Vec2(x, y-0.5+0.5),
@@ -205,6 +205,36 @@ Map::Map( std::string resource ) {
                 shapeFixDef.density = 500;
                 shapeFixDef.restitution = 0;
                 mapBody->CreateFixture(&shapeFixDef);
+            // upsidedown left slope
+            } else if ( tiles[i].ID == offset+8 ) {
+                b2PolygonShape slopeRight;
+                b2Vec2 vertices[] = {
+                    b2Vec2(x+0.5+.5, y+0.5-.5),
+                    b2Vec2(x+0.5-.5, y+0.5+.5),
+                    b2Vec2(x+0.5-.5, y+0.5-.5)
+                };
+                slopeRight.Set(vertices, 3);
+                b2FixtureDef slopeRightFixureDef;
+                slopeRightFixureDef.shape = &slopeRight;
+                slopeRightFixureDef.density = 500;
+                slopeRightFixureDef.restitution = 0;
+                boxDef.position.Set(x+0.5, y+0.5);
+                mapBody->CreateFixture(&slopeRightFixureDef);
+            // upsidedown backwards left slope
+            } else if ( tiles[i].ID == offset+9 ) {
+                b2PolygonShape slopeRight;
+                b2Vec2 vertices[] = {
+                    b2Vec2(x+0.5-.5, y+0.5-.5),
+                    b2Vec2(x+0.5+.5, y+0.5-.5),
+                    b2Vec2(x+0.5+.5, y+0.5+.5)
+                };
+                slopeRight.Set(vertices, 3);
+                b2FixtureDef slopeRightFixureDef;
+                slopeRightFixureDef.shape = &slopeRight;
+                slopeRightFixureDef.density = 500;
+                slopeRightFixureDef.restitution = 0;
+                boxDef.position.Set(x+0.5, y+0.5);
+                mapBody->CreateFixture(&slopeRightFixureDef);
             } else {
                 std::cout << "PHYSICS TILE NOT FOUND: " << tiles[i].ID << "\n";
                 b2PolygonShape boxShape;

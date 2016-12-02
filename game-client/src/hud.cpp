@@ -12,7 +12,7 @@ void HUD::draw(sf::RenderTarget& window){
     posY = view.getCenter().y - (view.getSize().y / 2);
     std::vector<Entity*> players = world->getEntitiesByType(Entity::Type::Player);
     if(players.size() > 0){
-        int score = abs(playerStats->getScore());
+        int score = playerStats->getScore();
         sf::Text scoreText;
         scoreText.setFont( *Resources->getFont( "assets/fonts/arial.ttf" ) );
         std::ostringstream s;

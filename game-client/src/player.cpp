@@ -577,7 +577,7 @@ void Player::detectWalls() {
 
     b2AABB testAABB;
     testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.3, pos.y+playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.4, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
@@ -588,7 +588,7 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
     touchingWallRight = queryCallback2.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.3, pos.y-playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.4, pos.y-playerHeight/2.f);
     testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback3;
     physicalWorld->get().QueryAABB( &queryCallback3, testAABB );

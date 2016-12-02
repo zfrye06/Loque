@@ -12,37 +12,39 @@ TARGET = portal
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
+SOURCES += src/main.cpp\
+        src/mainwindow.cpp \
     ../shared/loqueclient.cpp \
-    loginpane.cpp \
-    registerpane.cpp \
-    studentplaypane.cpp \
-    adminplaypane.cpp \
-    adminpane.cpp
+    src/loginpane.cpp \
+    src/registerpane.cpp \
+    src/studentplaypane.cpp \
+    src/adminplaypane.cpp \
+    src/adminpane.cpp
 
-HEADERS  += mainwindow.h \
+HEADERS  += include/mainwindow.h \
     ../shared/loqueclient.h \
-    loginpane.h \
-    registerpane.h \
-    studentplaypane.h \
-    adminplaypane.h \
-    adminpane.h
+    include/loginpane.h \
+    include/registerpane.h \
+    include/studentplaypane.h \
+    include/adminplaypane.h \
+    include/adminpane.h
 
 
-FORMS    += mainwindow.ui \
-    loginpane.ui \
-    registerpane.ui \
-    studentplaypane.ui \
-    adminplaypane.ui \
-    adminpane.ui
+FORMS    += src/mainwindow.ui \
+    src/loginpane.ui \
+    src/registerpane.ui \
+    src/studentplaypane.ui \
+    src/adminplaypane.ui \
+    src/adminpane.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system
 INCLUDEPATH += /usr/local/include/SFML
 INCLUDEPATH += /usr/include/SFML
+INCLUDEPATH += ./include
 }
 macx:  {
 LIBS += -L/usr/local/Cellar/sfml/2.3.2/lib -L/usr/local/Cellar/sfml/2.4.0/lib -lsfml-network -lsfml-system
 INCLUDEPATH += /usr/local/Cellar/sfml/2.3.2/include /usr/local/Cellar/sfml/2.4.0/include
+INCLUDEPATH += ./include
 }

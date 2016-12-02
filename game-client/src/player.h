@@ -16,6 +16,7 @@
 #include "playerstate.h"
 #include "random.h"
 #include "world.h"
+#include "respawn.h"
 
 class GenericPlayerState;
 
@@ -104,6 +105,7 @@ public:
 
     bool flipped;
 
+    glm::vec2 spawnLoc;
     glm::vec2 smoothCamera;
     sf::Texture* texture;
     b2Body* myBody;

@@ -47,6 +47,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     setUpSprite( resource );
     setUpBody();
     setUpSounds();
+    spawnLoc = pos;
     myBody->SetTransform(toB2(pos),0);
     smoothCamera = pos*64.f;
     controllerID = 0;
@@ -387,6 +388,10 @@ void Player::update( double dt ) {
             direction = glm::vec2( sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Y) );
             direction /= 100.f;
         }
+        if ( sf::Joystick::isButtonPressed(controllerID, 6) ){
+            world->addEntity(new Respawn(glm::vec2(spawnLoc.x, spawnLoc.y)), World::Layer::Midground);
+            return;
+        }
     } else {
 		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right) || sf::Keyboard::isKeyPressed( sf::Keyboard::D ) ) {
 			direction += glm::vec2(1,0);
@@ -402,6 +407,10 @@ void Player::update( double dt ) {
 		}
 		if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) ) {
             direction *= .8;
+        }
+        if( sf::Keyboard::isKeyPressed( sf::Keyboard::Escape ) ){
+            world->addEntity(new Respawn(glm::vec2(spawnLoc.x, spawnLoc.y)), World::Layer::Midground);
+            return;
         }
     }
     if ( sf::Joystick::isConnected( controllerID ) && controllerFound ) {

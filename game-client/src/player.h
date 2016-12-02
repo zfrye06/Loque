@@ -50,8 +50,12 @@ public:
     float airControlMultiplier;
 
     // Control variables
+    bool successfulWallJump;
+    float wallJumpDirection;
+    bool resetToNeutral;
     bool successfulTech;
     float techTimer;
+    float wallJumpTimer;
     float frickedUpTimer;
     float damageBoostTimer;
     bool fastFalling;

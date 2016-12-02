@@ -27,6 +27,7 @@ set( source
          src/AnimatedSprite.cpp
          src/DebugDraw.cpp
          src/resource.cpp
+         src/layer.cpp
          src/world.cpp
          src/player.cpp
          src/dust.cpp

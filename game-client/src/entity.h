@@ -50,6 +50,7 @@ public:
         Exit,
         RespawnAnim,
         HUD,
+        Layer,
         None
     };
     virtual Type getType();

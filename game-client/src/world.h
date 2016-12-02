@@ -11,7 +11,7 @@
 #include "playerstats.h"
 
 #define TIMESTEP 1.f/75.f
-#define LAYERCOUNT 5
+#define LAYERCOUNT 6
 
 class World {
 private:
@@ -26,7 +26,7 @@ public:
     sf::View windowView;
     sf::View view;
     sf::RenderTexture framebuffer;
-    enum Layer { None, Background, Lavaground, Midground, Foreground };
+    enum Layer { None, Background, Lavaground, AboveLava, Midground, Foreground };
     World( sf::View v);
     ~World();
     void addEntity( Entity* e, World::Layer layer );

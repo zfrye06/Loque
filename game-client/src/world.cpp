@@ -52,6 +52,7 @@ void World::removeEntity( Entity* e, World::Layer l ) {
             return;
         }
     }
+    std::cerr<<"Couldn't find entity to delete..."<<std::endl;
     throw std::runtime_error( "Couldn't find entity to delete..." );
 }
 

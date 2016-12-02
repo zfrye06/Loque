@@ -51,6 +51,7 @@ Map::Map( std::string resource ) {
         throw std::runtime_error("Couldn't find physics tileset inside map");
     }
     //for( auto l : map->getLayers() ) {
+    bool aboveLava;
     for (unsigned int i=0 ;i < map->getLayers().size(); i++) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {
@@ -59,7 +60,17 @@ Map::Map( std::string resource ) {
             if ( l->getName() == "physical" || l->getName() == "Physical" ) {
                 tileSet = (tmx::TileLayer*)l;
             } else {
-                layers.push_back( new MapLayer( *map, i ) );
+                for(tmx::Property p : l->getProperties()){
+                    if(p.getName() == "lava"){
+                        aboveLava = p.getBoolValue();
+                    }
+                }
+                if(aboveLava){
+                    world->addEntity( new ::Layer(new MapLayer( *map, i)), World::Layer::AboveLava);
+                }
+                else{
+                    world->addEntity( new ::Layer(new MapLayer( *map, i)), World::Layer::Background);
+                }
             }
             break;
         }
@@ -225,15 +236,9 @@ Map::Map( std::string resource ) {
 }
 Map::~Map() {
     ambient.stop();
-    for ( auto i : layers ) {
-        delete i;
-    }
 }
 
 void Map::draw( sf::RenderTarget& window ) {
-    for ( auto i : layers ) {
-        window.draw(*i);
-    }
 }
 
 void Map::update( double dt ) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="128" height="128" tilewidth="64" tileheight="64" nextobjectid="49">
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="256" height="256" tilewidth="64" tileheight="64" nextobjectid="56">
  <properties>
   <property name="ambient" value="dungeon"/>
  </properties>
@@ -18,15 +18,57 @@
  <tileset firstgid="319" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
   <image source="images/PhysicsTileset.png" width="256" height="256"/>
  </tileset>
- <layer name="CandyGraphics" width="128" height="128">
+ <tileset firstgid="335" name="SolidColors" tilewidth="64" tileheight="64" tilecount="1" columns="1">
+  <image source="images/blackTile.png" width="64" height="64"/>
+ </tileset>
+ <layer name="BackgroundTower2" width="256" height="256">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoADwAB
+   eJzt1jEKhEAUBcHxFDvu3v+eKhiIbC7YVTD5JM1/YwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAb7AuY/yWp38BPGHu7X/1DznH7f+czwaAlnnp3waAjuvttwGgZf7p3waAjnv/QIf+oUv/0KV/6NI/dOkfuvQPXfqHLv1Dl/6hS//QpX/o0j8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPB2G/WNBz8=
   </data>
  </layer>
- <layer name="Physical" width="128" height="128" opacity="0.47">
+ <layer name="BackgroundTower2Decor" width="256" height="256">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgJD+r+4ICgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoADwAB
+   eJztxrERACAIBDD2X1OXoGOC79FLqlQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANvccADgXx0OAAAAALzvhAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbDfk5wWB
   </data>
  </layer>
- <objectgroup name="Objects"/>
+ <layer name="Shadow2" width="256" height="256" opacity="0.15">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6BOYf276TsRkNBLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr6DpYtBLE=
+  </data>
+ </layer>
+ <layer name="BackgroundTower1" width="256" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt2VFqwlAQhtHrKmwtXbvLsbZ0TyoYmkqqPlgnuf85MIjkQRG+uVFbAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKr2uWns/ztuq+p0Az3Rq/+U46+Ns7ACIMrS/Hu0AIMe4fyCL/iGX/iGX/iHTZqV/SKd/mIfdk1/P+Q/z8Oz2T/QP9XZN/5Coqn2gzu5igBzah1z6h1zu/yHXZf92AOSY6t8ugAy3+k/eAfvmc4AefZ/na+La/nzto+keenVq+7P97IJhhu6d+9C3e77/2AHQL+1Drm373fvlc6Bf4+6HcQ8AGcbNTz0C/Rq3PrULgL79dQ/g/If+ba8M0Df9Qy79Qy7tQyZnP2TTP2Ry/kMu/UOma+3rH5bpVtf3DrAs2oc8j+pe/7A8Wodsuodc2odc2odsU51rH/rn/If+3NOx3/5g/h79P73//GA5qrvXP9Sp7l7/UKe6e/1Dneru9Q91NA65dA+59A4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAfzkANZhyOA==
+  </data>
+ </layer>
+ <layer name="TowerDecor" width="256" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt2T0KgDAMBtDe/5SCvYSbuJYORYzR8N7S9VtS8tMaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEO3IDgAAALyiDy8AAAAAAAAAAAAAAAAAAAAAAAAAAABQ154dAAAAAHiceR8AAAAAapnt/OwBoQa1DKzYsgMA4Xp2ACCMnh8AAAAAarPjBwAu7oLwHSs9upoFRuZ7YMbfAP+izwcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOCOE/5MEBE=
+  </data>
+ </layer>
+ <layer name="Shadow" width="256" height="256" opacity="0.15">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMA6BOYf276TsRkNBLqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr6DpYtBLE=
+  </data>
+ </layer>
+ <layer name="CandyGraphics" width="256" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt3Etu2kAAgGFzivQh7pp9d23aTRchqVj3GJVadVP1QI0lRnIonoexYTx8nzQLsLERyj82jkXXAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc3i76br3m/PXAab7HRl/I6/r29wO+kw9Pn7tm5fxLtJ3ap1z9g+3bNj4j5GR0rd5d+hzu4k/Hnvt2PKcdc7ZP9yqWPM53Qd3m/wRe33OPpbYf/Cni58DwZod/z3P0X6vlf6Dsc/EXECtYsetnN6nth+c015Yvj2MofBc7jbObT9IfUbmAK5tSttLtB9MbW+w3n0/tptX3d8PxiL7j0nNAb4jcA1z9T5X+70p/T11r9tPjO7bzPvPUfIZmge4hLX1f6rbvv3nrqz/XTe+rRr6d62AS6it/V6sv133utvQ/mNX1n+//ti2aurfXMCSaus/dfwN3e4PI7Q/pf+xbZWef5So5XOGXk395xx/Q7fH48Q1vujYRrZVcv5RqobPGYK5+/818X2cOI8v6r/g2P/fOUBJ/6e+N5TQPzWZu/+fXfkcMGx/Df3XMAfAXJaYA1L3EO0bGyVzgf6hLbsufw7QP7Rn1+XNAdqHNu0y1tE/tOkxYx39Q5uW7h+oV27/sWXah3Xq+09dA9QytCncG5RaB2hTqm/9Q7tifT8llgPrFuv7ObEcWLdY34+J5cC66R9ul/7hNuVc+9c/tEn/0Jax3wk6NXK3BdRvzl7D//71D/Wbu9XhbxwCdZuz0+GxX/9Qt6md9p2f+n3Q4bFf/1C3KZ2G3zEH1q+kf+1DW/r+P7+MD4PxZeQ55/TQlr7p/dFz+5HngLaUHNMd/+E6Su7Pm/NevlPvA7ish5fxceYxhf7h8r5e+w0c6B8uL9b/98RrU8tL6B8u79O138CB/uHyHo4e5xzT5zzu955m3h6QJ+f7/xxzwti9/eH+fuDylr7+F7rXONRnie//ju2wDkvcf+taHqxDLff/AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQvn9vpq0I
+  </data>
+ </layer>
+ <layer name="DecorLayer" width="256" height="256">
+  <data encoding="base64" compression="zlib">
+   eJzt2UsKgCAQANDuf8V2fQ7RrlVEwZBSadJ7G0EcRhd+GLsOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/mUM+qdC+aM80bwAgLqu3gjucAD4riVoc2JT+5/ODwDU4+6GNp3rdKl1u22vR/GpZ8G5jljq7xHYzY3HA0dDxtj+Zq6343PWAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPBFK2F9HVo=
+  </data>
+ </layer>
+ <layer name="Physical" width="256" height="256" opacity="0.47">
+  <data encoding="base64" compression="zlib">
+   eJzt3d1Kw0AQgNH0yRrRvv8rSRBvqtmfsE03M+eAV4Kky347bQy6LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABDb/bYsj9u7rwI409b9XfeQTsbuv5x3kL6B7K+fvOz9Hz77kI39/pc1IQP7fJ+1ITp7fJ+1ITL7u8z6EJn9XWeNiMrerrNGRPZpfxfpn+icAWXOAKL7fe4ly1fPmad/iKf1DNA/xNRyBugfYmppW/8Qk/4hL/1DXvqH3Gr3APUPcdX61j/EpX/Iq9T3qn0IrdS/2Q+x6R/y0j/kpX/Iyb1/yEv/EE/r3wFp+TnAdYxq1u/+4VpGzmuzH65jZK9mP1zLkf7Xg/cFgLn0dmvGQxw9/Wsf4nk+A/57P+/9PcSkf8ipp2tnALzHq/6n15HrAM41S3ezXAdwPv3DXD4qTda+30P/cL5ZupvlOiCT5+5aZvrIub/x/A/Ma8SZsPdsv7kPca0ah2m9ok2zHQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIDNN9E6NLk=
+  </data>
+ </layer>
+ <objectgroup name="Objects">
+  <object id="49" name="playerSpawn" x="3690.91" y="5003.03" width="96.9697" height="33.3333"/>
+  <object id="53" name="lava" x="5349.69" y="7424" width="1330" height="81.3333"/>
+  <object id="54" name="spikes" x="5374.67" y="6908" width="1280" height="34.6667"/>
+ </objectgroup>
 </map>

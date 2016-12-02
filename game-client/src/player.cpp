@@ -565,7 +565,11 @@ void Player::detectGround() {
     }
 
     glm::vec2 up = glm::vec2(0.f,-1.f);
-    groundAngle = -acos(glm::dot(up,groundHitNormal))*180.f/M_PI;
+    if ( groundHitNormal.x > 0 ) {
+        groundAngle = acos(glm::dot(up,groundHitNormal))*180.f/M_PI;
+    } else {
+        groundAngle = -acos(glm::dot(up,groundHitNormal))*180.f/M_PI;
+    }
 }
 
 void Player::detectWalls() {

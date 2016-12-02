@@ -3,9 +3,7 @@
 
 #include <QWidget>
 #include <QTabWidget>
-#include <QListWidget>
-#include <QVBoxLayout>
-#include <QLabel>
+#include <QHBoxLayout>
 #include <QPushButton>
 
 namespace Ui {
@@ -22,30 +20,12 @@ public:
 
 private:
     Ui::AdminPane *ui;
-    QTabWidget tabs;
-    QListWidget userStatsList;
-    QListWidget levelStatsList;
-    QVBoxLayout summaryBoxLayout;
-    QPushButton addClassButton;
+    QHBoxLayout *mainLayout;
+    QTabWidget *tabs;
+    QPushButton *addClassButton;
+    QIcon addClassIcon = QIcon(QPixmap(":/assets/add"));
 
-
-    QLabel classSummaryLabel;
-//    QLabel classNameLabel = QLabel("Class Name :");
-//    QLabel classPointsLabel = QLabel("Total Points: ");
-//    QLabel classTimeLabel = QLabel("Total Time Played");
-//    QLabel enabledLevelsLabel = QLabel("Enabled Levels: ");
-//    QLabel userLabel = QLabel("User");
-//    QLabel totalScoreLabel = QLabel("Total Score");
-//    QLabel totalTimeLabel = QLabel("Total Time Played");
-//    QLabel lvl1Label = QLabel("Level 1");
-//    QLabel lvl2Label = QLabel("Level 2");
-//    QLabel lvl3Label = QLabel("Level 3");
-//    QLabel mapUserLabel = QLabel("User");
-//    QLabel levelLabel = QLabel("Level");
-//    QLabel levelNameLabel = QLabel("Level Name");
-//    QLabel levelScoreLabel = QLabel("Score");
-//    QLabel completionTimeLabel = QLabel("Completion Time");
-
+    void initWidgets();
     void initConnections();
 
 };

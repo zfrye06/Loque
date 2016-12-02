@@ -3,12 +3,16 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QSizePolicy>
+#include "adminpane.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->hide();
+    AdminPane *ap = new AdminPane;
+    setCentralWidget(ap);
 
 //     ui->worldTreeWidget->setCurrentIndex(0);
 //     connect(ui->createAccountButton, &QPushButton::pressed, this, [this] { resetRegistration(); ui->worldTreeWidget->setCurrentIndex(1); });

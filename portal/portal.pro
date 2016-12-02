@@ -19,7 +19,8 @@ SOURCES += src/main.cpp\
     src/registerpane.cpp \
     src/studentplaypane.cpp \
     src/adminplaypane.cpp \
-    src/adminpane.cpp
+    src/adminpane.cpp \
+    src/classtab.cpp
 
 HEADERS  += include/mainwindow.h \
     ../shared/loqueclient.h \
@@ -27,7 +28,8 @@ HEADERS  += include/mainwindow.h \
     include/registerpane.h \
     include/studentplaypane.h \
     include/adminplaypane.h \
-    include/adminpane.h
+    include/adminpane.h \
+    include/classtab.h
 
 
 FORMS    += src/mainwindow.ui \
@@ -35,7 +37,8 @@ FORMS    += src/mainwindow.ui \
     src/registerpane.ui \
     src/studentplaypane.ui \
     src/adminplaypane.ui \
-    src/adminpane.ui
+    src/adminpane.ui \
+    src/classtab.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system
@@ -48,3 +51,6 @@ LIBS += -L/usr/local/Cellar/sfml/2.3.2/lib -L/usr/local/Cellar/sfml/2.4.0/lib -l
 INCLUDEPATH += /usr/local/Cellar/sfml/2.3.2/include /usr/local/Cellar/sfml/2.4.0/include
 INCLUDEPATH += ./include
 }
+
+RESOURCES += \
+    resources.qrc

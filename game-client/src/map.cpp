@@ -23,6 +23,8 @@ Map::Map( std::string resource ) {
                 } else {
                     ambient.openFromFile("assets/audio/music/flower_fields.ogg");
                 }
+            } else if ( p.getStringValue() == "dungeon" ) {
+                ambient.openFromFile("assets/audio/music/metamorphis.ogg");
             }
             ambient.setLoop(true);
             ambient.play();

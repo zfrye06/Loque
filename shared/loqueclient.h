@@ -36,6 +36,13 @@ struct GameStats {
     int pointsScored;
 };
 
+// Information about a single level. 
+struct LevelInfo {
+    int id;
+    std::string name;
+    std::string description;
+};
+
 // Information about a single user (admin or student).
 struct UserStats {
     int userId;
@@ -54,7 +61,19 @@ struct UserStats {
 // Information about a class in aggregate. 
 struct ClassStats {
     std::vector<UserStats> studentStats;
+    std::vector<LevelInfo> enabledLevels; 
 };
+
+// Provides a record of a user's best performance on a particular level. 
+struct LevelRecord {
+    int highScore; // -1 if the user has not completed the level. 
+    int bestCompletionTimeSecs; // -1 if the user has not completed the level. 
+    LevelInfo level; 
+};
+
+typedef int LevelId;
+
+typedef std::unordered_map<LevelId, LevelRecord> UserLevelInfo; 
 
 // Use an instance of LoqueClient to make API
 // calls to a running Loque Server.
@@ -84,7 +103,7 @@ class LoqueClient {
     // Adds the student with the given id to the given classroom.
     Status addClassroom(int userId, int classId);
 
-    // Creates a classroom with the given namewhose sole member is the given user.
+    // Creates a classroom with the given name whose sole member is the given user.
     // The given userId should be that of an instructor. 
     Status createClassroom(int userId, const std::string& className);
 
@@ -97,8 +116,12 @@ class LoqueClient {
     // to get classroom statistics.
     Status getUserStats(int userId, UserStats& stats);
 
-    // Retrieves the enabled levels for the given user, placing their IDs in levelIds. 
-    Status getEnabledLevels(int userId, std::vector<int>& levelIds); 
+    // Retrieves a list of enabled level IDs for the given user. 
+    Status getEnabledLevels(int userId, std::vector<int>& levels);
+
+    // Retrieves information about the levels enabled for the given user, keyed
+    // by the class for which they are enabled.
+    Status getUserLevelInfo(int userId, UserLevelInfo& out); 
 
     // Enables a level for the given class. UserId must be an instructor id.
     Status enableLevel(int userId, int classId, int levelId);
@@ -107,7 +130,10 @@ class LoqueClient {
     Status disableLevel(int userId, int classId, int levelId);
 
     // Retrieves statistics for the given class. UserId must be an instructor id. 
-    Status getClassStats(int userId, int classId, ClassStats& stats); 
+    Status getClassStats(int userId, int classId, ClassStats& stats);
+
+    // Retrieves information about every loque level. 
+    Status getAllLevels(std::vector<LevelInfo>& out); 
     
  private:
     

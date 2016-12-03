@@ -25,6 +25,7 @@ public:
 signals:
 
     void onLogin(LoginInfo);
+    void onSignupRequested();
 
 private:
     

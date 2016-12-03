@@ -28,6 +28,11 @@ MainWindow::MainWindow(QWidget *parent) :
         paneContainer->setCurrentWidget(studentPlayPane);
     });
 
+    connect(loginPane, &LoginPane::onSignupRequested,
+            this, [this] {
+        paneContainer->setCurrentWidget(registerPane);
+    });
+
 
 //     ui->worldTreeWidget->setCurrentIndex(0);
 //     connect(ui->createAccountButton, &QPushButton::pressed, this, [this] { resetRegistration(); ui->worldTreeWidget->setCurrentIndex(1); });

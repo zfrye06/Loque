@@ -157,14 +157,14 @@ inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<LevelInfo>& 
 }
 
 inline sf::Packet& operator>>(sf::Packet& packet, std::vector<LevelInfo>& infos) {
-    do {
+    while (true) {
         LevelInfo info;
         packet >> info;
         if (loque::serialization::isTermLevelInfo(info)) {
             break;
         }
         infos.push_back(info); 
-    } while (true);
+    }
     return packet;
 }
 
@@ -185,7 +185,7 @@ inline sf::Packet& operator<<(sf::Packet& packet, const UserStats& stats) {
 
 inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     packet >> stats.userId >> stats.username >> stats.totalSecPlayed >> stats.totalScore;
-    do {
+    while (true) {
         int lid;
         packet >> lid;
         if (lid == loque::serialization::TERM_SCORE) {
@@ -194,15 +194,15 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
         int score;
         packet >> score;
         stats.highScores[lid] = score;
-    } while (true);
-    do {
+    } 
+    while (true) {
         int classId;
         packet >> classId;
         if (classId == loque::serialization::TERM_CLASSID) {
             break;
         }
         stats.classIds.push_back(classId); 
-    } while (true);
+    }
     return packet;
 }
 
@@ -233,7 +233,7 @@ inline sf::Packet& operator<<(sf::Packet& packet, const UserLevelInfo& info) {
 }
 
 inline sf::Packet& operator>>(sf::Packet& packet, UserLevelInfo& info) {
-    do {
+    while (true) {
         ClassId classId; 
         packet >> classId;
         if (classId == loque::serialization::TERM_CLASSID) {
@@ -247,7 +247,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserLevelInfo& info) {
             }
             info[classId].push_back(record);
         }
-    } while (true); 
+    }
     return packet;
 }
 
@@ -263,14 +263,14 @@ inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<int>& levelI
 }
 
 inline sf::Packet& operator>>(sf::Packet& packet, std::vector<int>& levelIds) {
-    do {
+    while (true) {
         int levelId;
         packet >> levelId;
         if (levelId == loque::serialization::TERM_LEVELID) {
             break;
         }
         levelIds.push_back(levelId); 
-    } while (true);
+    } 
     return packet;
 }
 

@@ -16,6 +16,7 @@ public:
     ~LoginPane();
 
 private:
+    
     Ui::LoginPane *ui;
 };
 

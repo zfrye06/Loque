@@ -23,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(adminPlayPane);
     setCentralWidget(paneContainer);
 
+    //TODO: delete when commiting
+    paneContainer->setCurrentWidget(adminPane);
+
     connect(loginPane, &LoginPane::onLogin,
             this, [this] (LoginInfo info) {
         paneContainer->setCurrentWidget(studentPlayPane);

@@ -7,6 +7,7 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include "../../shared/loqueclient.h"
 
 
 namespace Ui {
@@ -56,6 +57,7 @@ private:
     void setSummaryBox();
     void setUserTable();
     void setMapTable();
+    QColor getLevelColor(UserStats user, int levelID);
 };
 
 #endif // CLASSTAB_H

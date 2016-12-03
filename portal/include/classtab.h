@@ -18,11 +18,12 @@ class ClassTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ClassTab(int classID, QWidget *parent = 0);
+    explicit ClassTab(int classID, int teacherID, QWidget *parent = 0);
     ~ClassTab();
 
 private:
     int classID;
+    int teacherID;
 
     Ui::ClassTab *ui;
     QTableWidget *userStatsTable;

@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->hide();
-    AdminPane *ap = new AdminPane;
+    AdminPane *ap = new AdminPane(31);
     setCentralWidget(ap);
 
 //     ui->worldTreeWidget->setCurrentIndex(0);

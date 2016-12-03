@@ -15,10 +15,12 @@ class AdminPane : public QWidget
     Q_OBJECT
 
 public:
-    explicit AdminPane(QWidget *parent = 0);
+    explicit AdminPane(int teacherID, QWidget *parent = 0);
     ~AdminPane();
 
 private:
+    int teacherID;
+
     Ui::AdminPane *ui;
     QHBoxLayout *mainLayout;
     QTabWidget *tabs;

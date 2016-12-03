@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loginPane(new LoginPane),
     registerPane(new RegisterPane),
     studentPlayPane(new StudentPlayPane),
-    adminPane(new AdminPane),
+    adminPane(new AdminPane(31)),
     adminPlayPane(new AdminPlayPane)
 {
     ui->setupUi(this);
@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this, [this] {
         paneContainer->setCurrentWidget(registerPane);
     });
-
 
 //     ui->worldTreeWidget->setCurrentIndex(0);
 //     connect(ui->createAccountButton, &QPushButton::pressed, this, [this] { resetRegistration(); ui->worldTreeWidget->setCurrentIndex(1); });

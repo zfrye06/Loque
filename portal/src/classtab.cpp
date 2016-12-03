@@ -1,9 +1,10 @@
+#include <iostream>
 #include "classtab.h"
 #include "ui_classtab.h"
 #include "../../shared/loqueclient.h"
 
-ClassTab::ClassTab(int classID, QWidget *parent) :
-    classID(classID), QWidget(parent), ui(new Ui::ClassTab)
+ClassTab::ClassTab(int classID, int teacherID, QWidget *parent) :
+    classID(classID), teacherID(teacherID), QWidget(parent), ui(new Ui::ClassTab)
 {
     ui->setupUi(this);
     initWidgets();
@@ -67,7 +68,42 @@ void ClassTab::setSummaryBox(){
 }
 
 void ClassTab::setUserTable(){
+    LoqueClient client;
+    ClassStats stats;
+    client.getClassStats(teacherID, classID, stats);
 
+    QStringList headers;
+    headers.append("Student");
+    headers.append("Total Score");
+    headers.append("Time Played");
+    headers.append("Level 1");
+    headers.append("Level 2");
+    headers.append("Level 3");
+
+    userStatsTable->setRowCount(stats.studentStats.size());
+    userStatsTable->setColumnCount(6);
+    userStatsTable->setHorizontalHeaderLabels(headers);
+    userStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    int row = 0;
+    for(UserStats user : stats.studentStats){
+        std::cout << user.totalScore << std::endl;
+        QTableWidgetItem *nameCell = new QTableWidgetItem(QString::fromStdString(user.username));
+        QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(user.totalScore));
+        QTableWidgetItem *timeCell = new QTableWidgetItem(QString::number(user.totalSecPlayed));
+//        QTableWidgetItem *lvl1Cell = new QTableWidgetItem();
+//        QTableWidgetItem *lvl2Cell = new QTableWidgetItem();
+//        QTableWidgetItem *lvl3Cell = new QTableWidgetItem();
+        userStatsTable->setItem(row, 0, nameCell);
+        userStatsTable->setItem(row, 1, scoreCell);
+        userStatsTable->setItem(row++, 2, timeCell);
+    }
+
+    for(int row = 0; row < userStatsTable->rowCount(); row++){
+        for(int col = 0; col < userStatsTable->columnCount(); col++){
+//            userStatsTable->itemAt(row, col)->setTextAlignment(Qt::AlignCenter);
+        }
+    }
 }
 
 void ClassTab::setMapTable(){

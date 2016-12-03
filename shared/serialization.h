@@ -11,12 +11,41 @@
 #include <SFML/Network.hpp>
 #include "loqueclient.h"
 
+/* ReqType */
+
+enum ReqType {
+    LOGIN,
+    CREATE_ACC,
+    ADD_CLASS,
+    CREATE_CLASS, 
+    POST_STATS,
+    GET_USER_STATS,
+    GET_USER_LEVEL_INFO,
+    GET_ENABLED_LEVELS,
+    ENABLE_LEVEL,
+    DISABLE_LEVEL,
+    GET_CLASS_STATS,
+    GET_ALL_LEVELS,
+};
+
+inline sf::Packet& operator<<(sf::Packet& packet, const ReqType& t) {
+    packet << static_cast<int>(t);
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, ReqType& t) {
+    int i;
+    packet >> i;
+    t = static_cast<ReqType>(i);
+    return packet;
+}
+
 // EOF indicators for serializing streams or compound data types.=. 
 namespace loque {
 namespace serialization {
-    const int TERM_SCORES = -1; // Indicates EOF when deserializing scores.
-    const int TERM_CLASSES = -1; // Indicates EOF when deserializing classes.
-    const int TERM_LEVELS = -1;  // Indicates EOF when deserializing level ids.
+    const int TERM_SCORE = -2; // Indicates EOF when deserializing high scores.
+    const int TERM_CLASSID = -3; // Indicates EOF when deserializing class IDs.
+    const int TERM_LEVELID = -4;  // Indicates EOF when deserializing level IDs.
 
     // Indicates EOF when deserializing UserStats. 
     UserStats termUser() {
@@ -31,6 +60,30 @@ namespace serialization {
     bool isTermUser(const UserStats& s) {
         return s.userId == -1; 
     }
+
+    LevelInfo termLevelInfo() {
+        LevelInfo info;
+        info.id = -1;
+        info.name = "";
+        info.description = "";
+        return info;
+    }
+
+    bool isTermLevelInfo(const LevelInfo& info) {
+        return info.id == -1;
+    }
+
+    LevelRecord termLevelRecord() {
+        LevelRecord record;
+        record.highScore = -2;
+        record.bestCompletionTimeSecs = -2;
+        record.level = termLevelInfo();
+        return record;
+    }
+
+    bool isTermLevelRecord(const LevelRecord& record) {
+        return record.highScore == -2; 
+    }
 }
 }
 
@@ -40,33 +93,6 @@ inline sf::Packet& operator>>(sf::Packet& packet, Status& s) {
     int i;
     packet >> i;
     s = static_cast<Status>(i);
-    return packet;
-}
-
-/* ReqType */
-
-enum ReqType {
-    LOGIN,
-    CREATE_ACC,
-    ADD_CLASS,
-    CREATE_CLASS, 
-    POST_STATS,
-    GET_USER_STATS,
-    GET_ENABLED_LEVELS,
-    ENABLE_LEVEL,
-    DISABLE_LEVEL,
-    GET_CLASS_STATS
-};
-
-inline sf::Packet& operator<<(sf::Packet& packet, const ReqType& t) {
-    packet << static_cast<int>(t);
-    return packet;
-}
-
-inline sf::Packet& operator>>(sf::Packet& packet, ReqType& t) {
-    int i;
-    packet >> i;
-    t = static_cast<ReqType>(i);
     return packet;
 }
 
@@ -108,6 +134,38 @@ inline sf::Packet& operator>>(sf::Packet& packet, GameStats& stats) {
     return packet;
 }
 
+/* LevelInfo */
+
+inline sf::Packet& operator<<(sf::Packet& packet, const LevelInfo& info) {
+    packet << info.id << info.name << info.description;
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, LevelInfo& info) {
+    packet >> info.id >> info.name >> info.description;
+    return packet; 
+}
+
+inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<LevelInfo>& infos) {
+    for (auto& info : infos) {
+        packet << info; 
+    }
+    packet << loque::serialization::termLevelInfo();
+    return packet; 
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, std::vector<LevelInfo>& infos) {
+    do {
+        LevelInfo info;
+        packet >> info;
+        if (loque::serialization::isTermLevelInfo(info)) {
+            break;
+        }
+        infos.push_back(info); 
+    } while (true);
+    return packet;
+}
+
 /* UserStats */
 
 inline sf::Packet& operator<<(sf::Packet& packet, const UserStats& stats) {
@@ -115,11 +173,11 @@ inline sf::Packet& operator<<(sf::Packet& packet, const UserStats& stats) {
     for (auto& elem : stats.highScores) {
         packet << elem.first << elem.second; 
     }
-    packet << loque::serialization::TERM_SCORES;
+    packet << loque::serialization::TERM_SCORE;
     for (auto elem : stats.classIds) {
         packet << elem;
     }
-    packet << loque::serialization::TERM_CLASSES;
+    packet << loque::serialization::TERM_CLASSID;
     return packet;
 }
 
@@ -128,7 +186,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     do {
         int lid;
         packet >> lid;
-        if (lid == loque::serialization::TERM_SCORES) {
+        if (lid == loque::serialization::TERM_SCORE) {
             break;
         }
         int score;
@@ -138,7 +196,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     do {
         int classId;
         packet >> classId;
-        if (classId == loque::serialization::TERM_CLASSES) {
+        if (classId == loque::serialization::TERM_CLASSID) {
             break;
         }
         stats.classIds.push_back(classId); 
@@ -146,13 +204,59 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
     return packet;
 }
 
+/* LevelRecord */
+
+inline sf::Packet& operator<<(sf::Packet& packet, const LevelRecord& record) {
+    packet << record.highScore << record.bestCompletionTimeSecs << record.level;
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, LevelRecord& record) {
+    packet >> record.highScore >> record.bestCompletionTimeSecs >> record.level;
+    return packet;
+}
+
+/* UserLevelInfo */
+
+inline sf::Packet& operator<<(sf::Packet& packet, const UserLevelInfo& info) {
+    for (auto& entry : info) {
+        packet << entry.first; // Write the classId.
+        for (auto& record : entry.second) {
+            packet << record; 
+        }
+        packet << loque::serialization::termLevelRecord(); 
+    }
+    packet << loque::serialization::TERM_CLASSID; 
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, UserLevelInfo& info) {
+    do {
+        ClassId classId; 
+        packet >> classId;
+        if (classId == loque::serialization::TERM_CLASSID) {
+            break;
+        }
+        while (true) {
+            LevelRecord record;
+            packet >> record;
+            if (loque::serialization::isTermLevelRecord(record)) {
+                break; 
+            }
+            info[classId].push_back(record);
+        }
+    } while (true); 
+    return packet;
+}
+
+
 /* EnabledLevels */
 
 inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<int>& levelIds) {
     for (auto id : levelIds) {
         packet << id;
     }
-    packet << loque::serialization::TERM_LEVELS;
+    packet << loque::serialization::TERM_LEVELID;
     return packet;
 }
 
@@ -160,7 +264,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, std::vector<int>& levelIds) {
     do {
         int levelId;
         packet >> levelId;
-        if (levelId == loque::serialization::TERM_LEVELS) {
+        if (levelId == loque::serialization::TERM_LEVELID) {
             break;
         }
         levelIds.push_back(levelId); 
@@ -175,20 +279,30 @@ inline sf::Packet& operator<<(sf::Packet& packet, const ClassStats& stats) {
         packet << ustats;
     }
     packet << loque::serialization::termUser();
+    for (auto& info : stats.enabledLevels) {
+        packet << info; 
+    }
+    packet << loque::serialization::termLevelInfo();
     return packet;
 }
 
 inline sf::Packet& operator>>(sf::Packet& packet, ClassStats& stats) {
-    do {
+    while (true) {
         UserStats s;
         packet >> s;
         if (loque::serialization::isTermUser(s)) {
             break;
         }
-
-        // TODO: Pass-by-value copy bites us here a bit. Use unique_ptr? 
         stats.studentStats.push_back(s); 
-    } while (true);
+    }
+    while (true) {
+        LevelInfo info;
+        packet >> info;
+        if (loque::serialization::isTermLevelInfo(info)) {
+            break;
+        }
+        stats.enabledLevels.push_back(info); 
+    }
     return packet;
 }
 

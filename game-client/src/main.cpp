@@ -25,7 +25,7 @@ int app() {
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     world->addEntity( new Background("assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ), World::Layer::Background );
-    world->addEntity( new Map( "assets/Castle_Level_1.tmx" ), World::Layer::Midground );
+    world->addEntity( new Map( "assets/Castle_Level_2.tmx" ), World::Layer::Midground );
     world->addEntity( new HUD(), World::Layer::Foreground );
     std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
     if(spawns.size() >= 1){
@@ -53,18 +53,6 @@ int app() {
                     // RenderWindow uses its own matrix mumbojumbo...
                     //glViewport(0, 0, event.size.width, event.size.height);
                     break;
-                }
-                case sf::Event::KeyPressed: {
-                    if(event.key.code == sf::Keyboard::Escape){
-                        ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
-                        //delete all current respawn animations
-                        std::vector<Entity*> anims = world->getEntitiesByType(Entity::Type::RespawnAnim);
-                        for(unsigned int i = 0; i < anims.size(); i++){
-                            world->removeEntity(anims[i],World::Layer::Midground);
-                        }
-                        world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Midground);
-                        break;
-                    }
                 }
                 default: { break; }
             }

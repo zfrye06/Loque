@@ -12,12 +12,12 @@
 #include "spikes.h"
 #include "trampoline.h"
 #include "world.h"
+#include "layer.h"
 
 class Map : public Entity {
 private:
     sf::Music ambient;
     tmx::Map* map;
-    std::vector<MapLayer*> layers;
     bool isPowerOfTwo( int x );
     void spawnObject( tmx::Object& object );
 public:

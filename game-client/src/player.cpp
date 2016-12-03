@@ -1,8 +1,11 @@
 #include "player.h"
 
 Player::Player( std::string resource, glm::vec2 pos) {
+    resetToNeutral = false;
+    wallJumpDirection = 0;
     hitLength = 0.2f;
     successfulTech = false;
+    wallJumpTimer = 0;
     directionalInfluence = 1.f;
     techLength = 20.f/60.f;
     frickedUpLength = 40.f/60.f;
@@ -32,7 +35,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     canDoubleJump = true;
     releasedJump = true;
     airDodgePressed = false;
-    airControlMultiplier = 3;
+    airControlMultiplier = 2.5;
     flashTimer = 0;
     flashLength = 0;
     techTimer = 0;
@@ -44,6 +47,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     setUpSprite( resource );
     setUpBody();
     setUpSounds();
+    spawnLoc = pos;
     myBody->SetTransform(toB2(pos),0);
     smoothCamera = pos*64.f;
     controllerID = 0;
@@ -331,6 +335,30 @@ void Player::update( double dt ) {
         frickedUpTimer = frickedUpLength;
     }
     techTimer -= dt;
+    // Wall Jump Logic
+    if (!onGround && wallJumpTimer <= 0 && resetToNeutral ) {
+        if ( direction.x > 0.9 ) {
+            resetToNeutral = false;
+            wallJumpTimer = techLength;
+            wallJumpDirection = 1;
+        } else if ( direction.x < -0.9 ) {
+            wallJumpDirection = -1;
+            resetToNeutral = false;
+            wallJumpTimer = techLength;
+        }
+
+    }
+    if ( direction.x == 0 ) {
+        resetToNeutral = true;
+    }
+    if ( wallJumpTimer <= 0 ) {
+        successfulWallJump = false;
+    }
+    if ( ((touchingWallLeft && wallJumpDirection == 1) || (touchingWallRight && wallJumpDirection == -1)) && wallJumpTimer > 0 ) {
+        wallJumpTimer = 0;
+        successfulWallJump = true;
+    }
+    wallJumpTimer -= dt;
     /*for (int i=0;i<sf::Joystick::getButtonCount(0);i++ ) {
         if (sf::Joystick::isButtonPressed(0,i)) {
             std::cout << i << std::endl;
@@ -360,6 +388,10 @@ void Player::update( double dt ) {
             direction = glm::vec2( sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::X), sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Y) );
             direction /= 100.f;
         }
+        if ( sf::Joystick::isButtonPressed(controllerID, 6) ){
+            world->addEntity(new Respawn(glm::vec2(spawnLoc.x, spawnLoc.y)), World::Layer::Midground);
+            return;
+        }
     } else {
 		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Right) || sf::Keyboard::isKeyPressed( sf::Keyboard::D ) ) {
 			direction += glm::vec2(1,0);
@@ -375,6 +407,10 @@ void Player::update( double dt ) {
 		}
 		if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) ) {
             direction *= .8;
+        }
+        if( sf::Keyboard::isKeyPressed( sf::Keyboard::Escape ) ){
+            world->addEntity(new Respawn(glm::vec2(spawnLoc.x, spawnLoc.y)), World::Layer::Midground);
+            return;
         }
     }
     if ( sf::Joystick::isConnected( controllerID ) && controllerFound ) {
@@ -577,7 +613,7 @@ void Player::detectWalls() {
 
     b2AABB testAABB;
     testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.3, pos.y+playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.5, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     canWallJumpLeft = queryCallback.foundMap;
@@ -588,7 +624,7 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
     touchingWallRight = queryCallback2.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.3, pos.y-playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.5, pos.y-playerHeight/2.f);
     testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback3;
     physicalWorld->get().QueryAABB( &queryCallback3, testAABB );

@@ -60,8 +60,9 @@ class MapLayer final : public sf::Drawable
 public:
 
 
-    MapLayer(const tmx::Map& map, std::size_t idx)
+    MapLayer(const tmx::Map& map, std::size_t idx, sf::Color c)
     {
+        color = c;
         const auto& layers = map.getLayers();
         if (map.getOrientation() == tmx::Orientation::Orthogonal &&
             idx < layers.size() && layers[idx]->getType() == tmx::Layer::Type::Tile)
@@ -92,6 +93,7 @@ public:
 
 private:
 
+    sf::Color color;
     sf::Vector2f m_chunkSize = sf::Vector2f(1024.f, 1024.f);
     sf::Vector2u m_chunkCount;
     sf::FloatRect m_globalBounds;
@@ -105,10 +107,10 @@ private:
         using Ptr = std::unique_ptr<Chunk>;
         using Tile = std::array<sf::Vertex, 4u>;
         Chunk(const tmx::TileLayer& layer, std::vector<const tmx::Tileset*> tilesets,
-            const sf::Vector2f& position, const sf::Vector2f& tileCount, std::size_t rowSize,  TextureResource& tr)
+            const sf::Vector2f& position, const sf::Vector2f& tileCount, std::size_t rowSize,  TextureResource& tr, sf::Color color)
         {
             auto opacity = static_cast<sf::Uint8>(layer.getOpacity() /  1.f * 255.f);
-            sf::Color vertColour = sf::Color::White;
+            sf::Color vertColour = color;
             vertColour.a = opacity;
 
             auto offset = layer.getOffset();
@@ -271,7 +273,7 @@ private:
             for (auto x = 0u; x < m_chunkCount.x; ++x)
             {
                 m_chunks.emplace_back(std::make_unique<Chunk>(layer, usedTileSets,
-                    sf::Vector2f(x * m_chunkSize.x, y * m_chunkSize.y), tileCount, map.getTileCount().x, m_textureResource));
+                    sf::Vector2f(x * m_chunkSize.x, y * m_chunkSize.y), tileCount, map.getTileCount().x, m_textureResource, color));
             }
         }
     }

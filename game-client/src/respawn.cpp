@@ -6,6 +6,10 @@ Respawn::Respawn(glm::vec2 pos){
 
     position = pos;
     world->view.setCenter(pos.x*64,pos.y*64);
+    std::vector<Entity*> anims = world->getEntitiesByType(Entity::Type::RespawnAnim);
+    for(unsigned int i = 0; i < anims.size(); i++){
+        world->removeEntity(anims[i], World::Layer::Midground);
+    }
 
     //delete all players
     std::vector<Entity*> players = world->getEntitiesByType(Entity::Type::Player);

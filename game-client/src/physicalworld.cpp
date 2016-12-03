@@ -23,7 +23,7 @@ void PhysicalWorld::step( double dt ) {
     // Physics will run at 60fps.
     //double step = 1.f/60.f;
     //while ( timer > step ) {
-        world->Step(dt,8,8);
+        world->Step(dt,3,3);
         //timer -= step;
     //}
 }

@@ -51,6 +51,8 @@ Map::Map( std::string resource ) {
         throw std::runtime_error("Couldn't find physics tileset inside map");
     }
     //for( auto l : map->getLayers() ) {
+    bool aboveLava;
+    int darkness;
     for (unsigned int i=0 ;i < map->getLayers().size(); i++) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {
@@ -59,7 +61,20 @@ Map::Map( std::string resource ) {
             if ( l->getName() == "physical" || l->getName() == "Physical" ) {
                 tileSet = (tmx::TileLayer*)l;
             } else {
-                layers.push_back( new MapLayer( *map, i ) );
+                darkness = 255;
+                for(tmx::Property p : l->getProperties()){
+                    if(p.getName() == "lava"){
+                        aboveLava = p.getBoolValue();
+                    }else if(p.getName() == "darkness"){
+                        darkness = p.getIntValue();         
+                    }
+                }
+                if(aboveLava){
+                    world->addEntity( new ::Layer(new MapLayer( *map, i, sf::Color(darkness, darkness, darkness, 255))), World::Layer::AboveLava);
+                }
+                else{
+                    world->addEntity( new ::Layer(new MapLayer( *map, i, sf::Color(darkness, darkness, darkness, 255))), World::Layer::Background);
+                }
             }
             break;
         }
@@ -191,7 +206,7 @@ Map::Map( std::string resource ) {
                 shapeFixDef.restitution = 0;
                 mapBody->CreateFixture(&shapeFixDef);
             // Half lower
-            } else if ( tiles[i].ID == offset+8 ) {
+            } else if ( tiles[i].ID == offset+7 ) {
                 b2PolygonShape shape;
                 b2Vec2 vertices[] = {
                     b2Vec2(x, y-0.5+0.5),
@@ -205,6 +220,36 @@ Map::Map( std::string resource ) {
                 shapeFixDef.density = 500;
                 shapeFixDef.restitution = 0;
                 mapBody->CreateFixture(&shapeFixDef);
+            // upsidedown left slope
+            } else if ( tiles[i].ID == offset+8 ) {
+                b2PolygonShape slopeRight;
+                b2Vec2 vertices[] = {
+                    b2Vec2(x+0.5+.5, y+0.5-.5),
+                    b2Vec2(x+0.5-.5, y+0.5+.5),
+                    b2Vec2(x+0.5-.5, y+0.5-.5)
+                };
+                slopeRight.Set(vertices, 3);
+                b2FixtureDef slopeRightFixureDef;
+                slopeRightFixureDef.shape = &slopeRight;
+                slopeRightFixureDef.density = 500;
+                slopeRightFixureDef.restitution = 0;
+                boxDef.position.Set(x+0.5, y+0.5);
+                mapBody->CreateFixture(&slopeRightFixureDef);
+            // upsidedown backwards left slope
+            } else if ( tiles[i].ID == offset+9 ) {
+                b2PolygonShape slopeRight;
+                b2Vec2 vertices[] = {
+                    b2Vec2(x+0.5-.5, y+0.5-.5),
+                    b2Vec2(x+0.5+.5, y+0.5-.5),
+                    b2Vec2(x+0.5+.5, y+0.5+.5)
+                };
+                slopeRight.Set(vertices, 3);
+                b2FixtureDef slopeRightFixureDef;
+                slopeRightFixureDef.shape = &slopeRight;
+                slopeRightFixureDef.density = 500;
+                slopeRightFixureDef.restitution = 0;
+                boxDef.position.Set(x+0.5, y+0.5);
+                mapBody->CreateFixture(&slopeRightFixureDef);
             } else {
                 std::cout << "PHYSICS TILE NOT FOUND: " << tiles[i].ID << "\n";
                 b2PolygonShape boxShape;
@@ -225,15 +270,9 @@ Map::Map( std::string resource ) {
 }
 Map::~Map() {
     ambient.stop();
-    for ( auto i : layers ) {
-        delete i;
-    }
 }
 
 void Map::draw( sf::RenderTarget& window ) {
-    for ( auto i : layers ) {
-        window.draw(*i);
-    }
 }
 
 void Map::update( double dt ) {

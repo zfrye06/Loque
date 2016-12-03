@@ -16,6 +16,7 @@
 #include "playerstate.h"
 #include "random.h"
 #include "world.h"
+#include "respawn.h"
 
 class GenericPlayerState;
 
@@ -50,8 +51,12 @@ public:
     float airControlMultiplier;
 
     // Control variables
+    bool successfulWallJump;
+    float wallJumpDirection;
+    bool resetToNeutral;
     bool successfulTech;
     float techTimer;
+    float wallJumpTimer;
     float frickedUpTimer;
     float damageBoostTimer;
     bool fastFalling;
@@ -100,6 +105,7 @@ public:
 
     bool flipped;
 
+    glm::vec2 spawnLoc;
     glm::vec2 smoothCamera;
     sf::Texture* texture;
     b2Body* myBody;

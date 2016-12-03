@@ -18,10 +18,12 @@ class ClassTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ClassTab(QWidget *parent = 0);
+    explicit ClassTab(int classID, QWidget *parent = 0);
     ~ClassTab();
 
 private:
+    int classID;
+
     Ui::ClassTab *ui;
     QTableWidget *userStatsTable;
     QTableWidget *levelStatsTable;
@@ -50,6 +52,9 @@ private:
 
     void initWidgets();
     void initConnections();
+    void setSummaryBox();
+    void setUserTable();
+    void setMapTable();
 };
 
 #endif // CLASSTAB_H

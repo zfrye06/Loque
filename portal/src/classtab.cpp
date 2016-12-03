@@ -1,12 +1,15 @@
 #include "classtab.h"
 #include "ui_classtab.h"
+#include "../../shared/loqueclient.h"
 
-ClassTab::ClassTab(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::ClassTab)
+ClassTab::ClassTab(int classID, QWidget *parent) :
+    classID(classID), QWidget(parent), ui(new Ui::ClassTab)
 {
     ui->setupUi(this);
     initWidgets();
+    setSummaryBox();
+    setUserTable();
+    setMapTable();
 }
 
 ClassTab::~ClassTab()
@@ -40,13 +43,14 @@ void ClassTab::initWidgets(){
     levelStatsTable = new QTableWidget;
     mainLayout = new QVBoxLayout(this);
 
-    summaryLayout->addWidget(classNameLabel);
-    summaryLayout->addWidget(classPointsLabel);
-    summaryLayout->addWidget(classTimeLabel);
-    summaryLayout->addWidget(enabledLevelsLabel);
+    summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);
+    summaryLayout->addWidget(classPointsLabel, 0, Qt::AlignCenter);
+    summaryLayout->addWidget(classTimeLabel, 0, Qt::AlignCenter);
+    summaryLayout->addWidget(enabledLevelsLabel, 0, Qt::AlignCenter);
     summaryBox->setLayout(summaryLayout);
+    summaryBox->setFixedSize(300, 100);
 
-    mainLayout->addWidget(summaryBox);
+    mainLayout->addWidget(summaryBox, 0, Qt::AlignCenter);
     mainLayout->addWidget(userStatsLabel);
     mainLayout->addWidget(userStatsTable);
     mainLayout->addWidget(mapStatsLabel);
@@ -55,5 +59,17 @@ void ClassTab::initWidgets(){
 }
 
 void ClassTab::initConnections(){
+
+}
+
+void ClassTab::setSummaryBox(){
+
+}
+
+void ClassTab::setUserTable(){
+
+}
+
+void ClassTab::setMapTable(){
 
 }

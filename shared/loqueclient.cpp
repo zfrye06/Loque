@@ -166,7 +166,15 @@ Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
 }
 
 Status LoqueClient::getAllLevels(std::vector<LevelInfo>& out) {
-    return Status::OK;  
+    sf::Packet toSend;
+    toSend << ReqType::GET_ALL_LEVELS;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (status != OK) {
+        return status;
+    }
+    toReceive >> status >> out; 
+    return status;
 }
 
 Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet& response) {

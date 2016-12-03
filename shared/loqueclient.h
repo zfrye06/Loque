@@ -58,12 +58,6 @@ struct UserStats {
     std::vector<int> classIds;
 };
 
-// Information about a class in aggregate. 
-struct ClassStats {
-    std::vector<UserStats> studentStats;
-    std::vector<LevelInfo> enabledLevels; 
-};
-
 // Provides a record of a user's best performance on a particular level. 
 struct LevelRecord {
     int highScore; // -1 if the user has not completed the level. 
@@ -71,9 +65,14 @@ struct LevelRecord {
     LevelInfo level; 
 };
 
-typedef int LevelId;
+typedef int ClassId;
+typedef std::unordered_map<ClassId, std::vector<LevelRecord>> UserLevelInfo;
 
-typedef std::unordered_map<LevelId, LevelRecord> UserLevelInfo; 
+// Information about a class in aggregate. 
+struct ClassStats {
+    std::vector<UserStats> studentStats;
+    std::vector<LevelInfo> enabledLevels; 
+};
 
 // Use an instance of LoqueClient to make API
 // calls to a running Loque Server.
@@ -116,12 +115,12 @@ class LoqueClient {
     // to get classroom statistics.
     Status getUserStats(int userId, UserStats& stats);
 
-    // Retrieves a list of enabled level IDs for the given user. 
-    Status getEnabledLevels(int userId, std::vector<int>& levels);
-
     // Retrieves information about the levels enabled for the given user, keyed
     // by the class for which they are enabled.
     Status getUserLevelInfo(int userId, UserLevelInfo& out); 
+
+    // Retrieves a list of enabled level IDs for the given user. 
+    Status getEnabledLevels(int userId, std::vector<int>& levels);
 
     // Enables a level for the given class. UserId must be an instructor id.
     Status enableLevel(int userId, int classId, int levelId);

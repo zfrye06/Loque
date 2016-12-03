@@ -31,7 +31,6 @@ void printUsage(const std::string &progname) {
 
 /* Helpers */ 
 
-// Retrieves the classes a user is a member of. This will throw. 
 void getClassIds(sql::Connection& dbconn,
                 int userId,
                 std::vector<int>& classIds) {
@@ -56,6 +55,36 @@ void getEnabledLevelIds(sql::Connection& dbconn,
         int levelId = qRes->getInt(1);
         levelIds.push_back(levelId);
     }
+}
+
+void getLevelInfo(sql::Connection& dbconn,
+                  int levelId,
+                  LevelInfo& info) {
+    std::string query = "SELECT levelId, levelName, levelDescription FROM Level WHERE levelId = ";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    qRes->next();
+    info.id = qRes->getInt(1);
+    info.name = qRes->getString(2);
+    info.description = qRes->getString(3);
+}
+
+void getUserLevelRecord(sql::Connection& dbconn,
+                        int userId, int levelId,
+                        LevelRecord& record) {
+    std::string query = "SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userId = ? AND levelId = ?";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, userId);
+    pstmt->setInt(2, levelId); 
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    if (qRes->next()) {
+        record.highScore = qRes->getInt(1);
+        record.bestCompletionTimeSecs = qRes->getInt(2); 
+    } else {
+        record.highScore = -1;
+        record.bestCompletionTimeSecs = -1;
+    }
+    getLevelInfo(dbconn, levelId, record.level); 
 }
 
 /* Request handlers */ 
@@ -198,8 +227,8 @@ Status handlePostStats(sql::Connection& dbconn,
 }
 
 Status handleGetUserStats(sql::Connection& dbconn,
-                        int userId,
-                        UserStats& stats) {
+                          int userId,
+                          UserStats& stats) {
     try {
         std::string query = "SELECT username, totalScore, totalTime FROM User where userId = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
@@ -224,6 +253,28 @@ Status handleGetUserStats(sql::Connection& dbconn,
         getClassIds(dbconn, userId, stats.classIds); 
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserStats: " << e.what() << std::endl;
+        return DB_ERR;
+    }
+    return OK;
+}
+
+Status handleGetUserLevelInfo(sql::Connection& dbconn,
+                              int userId,
+                              UserLevelInfo& info) {
+    try {
+        std::vector<int> classIds;
+        getClassIds(dbconn, userId, classIds);
+        for (auto classId : classIds) {
+            std::vector<int> levelIds;
+            getEnabledLevelIds(dbconn, classId, levelIds);
+            for (auto levelId : levelIds) {
+                LevelRecord record;
+                getUserLevelRecord(dbconn, userId, levelId, record);
+                info[classId].push_back(record); 
+            }
+        }
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleGetUserLevelInfo: " << e.what() << std::endl;
         return DB_ERR;
     }
     return OK;
@@ -276,8 +327,8 @@ Status handleDisableLevel(sql::Connection& dbconn,
 }
 
 Status handleGetClassStats(sql::Connection& dbconn,
-                         int userId, int classId,
-                         ClassStats& stats) {
+                           int userId, int classId,
+                           ClassStats& stats) {
     try {
         std::string query = "SELECT userId FROM ClassAssociations WHERE classId = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
@@ -294,6 +345,26 @@ Status handleGetClassStats(sql::Connection& dbconn,
         return DB_ERR; 
     }
     return OK;
+}
+
+Status handleGetAllLevels(sql::Connection& dbconn,
+                          std::vector<LevelInfo>& out) {
+    try {
+        std::string query = "SELECT levelId, levelName, levelDescription FROM Level";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        while (qRes->next()) {
+            LevelInfo info;
+            info.id = qRes->getInt(1);
+            info.name = qRes->getString(2);
+            info.description = qRes->getString(3);
+            out.push_back(info); 
+        }
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleGetAllLevels: " << e.what() << std::endl;
+        return DB_ERR;
+    }
+    return OK; 
 }
 
 void handleClient(std::unique_ptr<sf::TcpSocket> client,
@@ -365,6 +436,15 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         respPacket << status << res;
         break;
     }
+    case GET_USER_LEVEL_INFO:
+    {
+        int userId;
+        reqPacket >> userId;
+        UserLevelInfo info;
+        auto status = handleGetUserLevelInfo(*dbconn, userId, info);
+        reqPacket << status << info;
+        break;
+    }
     case GET_ENABLED_LEVELS:
     {
         int userId;
@@ -398,6 +478,13 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         auto status = handleGetClassStats(*dbconn, userId, classId, res);
         respPacket << status << res;
         break; 
+    }
+    case GET_ALL_LEVELS:
+    {
+        std::vector<LevelInfo> out;
+        auto status = handleGetAllLevels(*dbconn, out);
+        respPacket << status << out;
+        break;
     }
     default:
         std::cerr << "ERROR: Unrecognized request type " << static_cast<int>(rtype) << std::endl;

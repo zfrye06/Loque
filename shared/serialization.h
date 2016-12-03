@@ -40,14 +40,14 @@ inline sf::Packet& operator>>(sf::Packet& packet, ReqType& t) {
     return packet;
 }
 
-// EOF indicators for serializing streams or compound data types.=. 
+// EOF indicators for serializing streams or compound data types.
 namespace loque {
 namespace serialization {
     const int TERM_SCORE = -2; // Indicates EOF when deserializing high scores.
     const int TERM_CLASSID = -3; // Indicates EOF when deserializing class IDs.
     const int TERM_LEVELID = -4;  // Indicates EOF when deserializing level IDs.
 
-    // Indicates EOF when deserializing UserStats. 
+    // Indicates EOF when serializing UserStats. 
     UserStats termUser() {
         UserStats s;
         s.userId = -1;
@@ -61,6 +61,7 @@ namespace serialization {
         return s.userId == -1; 
     }
 
+    // Indicates EOF when serializing LevelInfo. 
     LevelInfo termLevelInfo() {
         LevelInfo info;
         info.id = -1;
@@ -73,6 +74,7 @@ namespace serialization {
         return info.id == -1;
     }
 
+    // Indicates EOF when serializing LevelRecord.
     LevelRecord termLevelRecord() {
         LevelRecord record;
         record.highScore = -2;

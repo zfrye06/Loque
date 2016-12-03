@@ -7,12 +7,31 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    paneContainer(new QStackedWidget()),
+    loginPane(new LoginPane),
+    registerPane(new RegisterPane),
+    studentPlayPane(new StudentPlayPane),
+    adminPane(new AdminPane(31)),
+    adminPlayPane(new AdminPlayPane)
 {
     ui->setupUi(this);
-    this->hide();
-    AdminPane *ap = new AdminPane(31);
-    setCentralWidget(ap);
+    paneContainer->addWidget(loginPane);
+    paneContainer->addWidget(registerPane);
+    paneContainer->addWidget(studentPlayPane);
+    paneContainer->addWidget(adminPane);
+    paneContainer->addWidget(adminPlayPane);
+    setCentralWidget(paneContainer);
+
+    connect(loginPane, &LoginPane::onLogin,
+            this, [this] (LoginInfo info) {
+        paneContainer->setCurrentWidget(studentPlayPane);
+    });
+
+    connect(loginPane, &LoginPane::onSignupRequested,
+            this, [this] {
+        paneContainer->setCurrentWidget(registerPane);
+    });
 
 //     ui->worldTreeWidget->setCurrentIndex(0);
 //     connect(ui->createAccountButton, &QPushButton::pressed, this, [this] { resetRegistration(); ui->worldTreeWidget->setCurrentIndex(1); });

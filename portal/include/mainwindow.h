@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "SFML/Network.hpp"
 #include <QDebug>
 #include <QMainWindow>
 #include <QStackedWidget>
@@ -11,6 +10,7 @@
 #include "studentplaypane.h"
 #include "registerpane.h"
 #include "../shared/loqueclient.h"
+#include "SFML/Network.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -26,13 +26,15 @@ public:
 
 private:
 
+    LoqueClient client;
+    
     Ui::MainWindow *ui;
     QStackedWidget *paneContainer;
+    LoginPane *loginPane;
+    RegisterPane *registerPane;
+    StudentPlayPane *studentPlayPane;
     AdminPane *adminPane;
     AdminPlayPane *adminPlayPane;
-    LoginPane *loginPane;
-    StudentPlayPane *StudentPlayPane;
-    RegisterPane *registerPane;
 
     void handleLogin();
     void displayLoginMessage(const char *loginMessage, std::string color);

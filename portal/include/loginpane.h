@@ -2,6 +2,13 @@
 #define LOGINPANE_H
 
 #include <QWidget>
+#include "../shared/loqueclient.h"
+
+struct LoginInfo {
+    std::string username;
+    int userId;
+    UserType type;
+};
 
 namespace Ui {
 class LoginPane;
@@ -15,8 +22,16 @@ public:
     explicit LoginPane(QWidget *parent = 0);
     ~LoginPane();
 
+signals:
+
+    void onLogin(LoginInfo);
+    void onSignupRequested();
+
 private:
+    
     Ui::LoginPane *ui;
+
+    void attemptLogin();
 };
 
 #endif // LOGINPANE_H

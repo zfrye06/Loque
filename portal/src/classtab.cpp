@@ -72,17 +72,20 @@ void ClassTab::setSummaryBox(ClassStats classStats){
 QString ClassTab::getFormattedTime(int seconds){
     QString hourString;
     int hours = seconds / 3600;
-    if(hours < 10){
-        hourString = QString::number(0) + QString::number(seconds / 3600);
+    if(hours == 0){
+        hourString = "";
+    }
+    else if(hours < 10){
+        hourString = QString::number(0) + QString::number(seconds / 3600) + ":";
     } else{
-        hourString = QString::number(seconds / 3600);
+        hourString = QString::number(seconds / 3600) + ":";
     }
     QString minuteString;
     int minutes = (seconds % 3600) / 60;
     if(minutes < 10){
-        minuteString = QString::number(0) + QString::number((seconds % 3600) / 60);
+        minuteString = QString::number(0) + QString::number((seconds % 3600) / 60) + ":";
     } else{
-        minuteString = QString::number((seconds % 3600) / 60);
+        minuteString = QString::number((seconds % 3600) / 60) + ":";
     }
 
     QString secString;
@@ -92,7 +95,7 @@ QString ClassTab::getFormattedTime(int seconds){
     } else{
         secString = QString::number((seconds % 3600) % 60);
     }
-    return  hourString + QString::fromStdString(":") + minuteString + QString::fromStdString(":") + secString;
+    return  hourString + minuteString + secString;
 }
 
 void ClassTab::setUserTable(ClassStats classStats){
@@ -120,18 +123,18 @@ void ClassTab::setUserTable(ClassStats classStats){
         lvl1Cell->setBackgroundColor(getLevelColor(user, 1));
         lvl2Cell->setBackgroundColor(getLevelColor(user, 2));
         lvl3Cell->setBackgroundColor(getLevelColor(user, 3));
+        nameCell->setTextAlignment(Qt::AlignCenter);
+        scoreCell->setTextAlignment(Qt::AlignCenter);
+        timeCell->setTextAlignment(Qt::AlignCenter);
+        lvl1Cell->setTextAlignment(Qt::AlignCenter);
+        lvl2Cell->setTextAlignment(Qt::AlignCenter);
+        lvl3Cell->setTextAlignment(Qt::AlignCenter);
         userStatsTable->setItem(row, 0, nameCell);
         userStatsTable->setItem(row, 1, scoreCell);
         userStatsTable->setItem(row, 2, timeCell);
         userStatsTable->setItem(row, 3, lvl1Cell);
         userStatsTable->setItem(row, 4, lvl2Cell);
         userStatsTable->setItem(row++, 5, lvl3Cell);
-    }
-
-    for(int row = 0; row < userStatsTable->rowCount(); row++){
-        for(int col = 0; col < userStatsTable->columnCount(); col++){
-//            userStatsTable->itemAt(row, col)->setTextAlignment(Qt::AlignCenter);
-        }
     }
     userStatsTable->sortByColumn(0, Qt::AscendingOrder);
     userStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
@@ -178,6 +181,11 @@ void ClassTab::setMapTable(ClassStats classStats){
             QTableWidgetItem *levelNameCell = new QTableWidgetItem(QString::fromStdString(levelMap.at(kv.first)));
             QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(kv.second));
             QTableWidgetItem *timeCell = new QTableWidgetItem(getFormattedTime(user.completionTimes.at(kv.first)));
+            studentNameCell->setTextAlignment(Qt::AlignCenter);
+            levIDCell->setTextAlignment(Qt::AlignCenter);
+            levelNameCell->setTextAlignment(Qt::AlignCenter);
+            scoreCell->setTextAlignment(Qt::AlignCenter);
+            timeCell->setTextAlignment(Qt::AlignCenter);
             levelStatsTable->setItem(row, 0, studentNameCell);
             levelStatsTable->setItem(row, 1, levIDCell);
             levelStatsTable->setItem(row, 2, levelNameCell);

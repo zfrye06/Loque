@@ -154,16 +154,36 @@ void ClassTab::setMapTable(ClassStats classStats){
     headers.append("Level Name");
     headers.append("Level Score");
     headers.append("Completion Time");
-
-    for(UserStats user : classStats.studentStats){
-        for(auto kv : user.highScores){
-            QTableWidgetItem *levIDCell = new QTableWidgetItem(QString::number(kv.first));
-            QTableWidgetItem *levICell = new QTableWidgetItem(QString::number(kv.first));
-        }
-    }
-
-    levelStatsTable->setRowCount(classStats.studentStats.size());
     levelStatsTable->setColumnCount(5);
     levelStatsTable->setHorizontalHeaderLabels(headers);
     levelStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    LoqueClient client;
+    std::vector<LevelInfo> levels;
+    client.getAllLevels(levels);
+    int row = levelStatsTable->rowCount();
+    std::map<int, std::string> levelMap;
+
+    for(LevelInfo info : levels){
+        levelMap[info.id] = info.name;
+    }
+
+    for(int i = 0; i < classStats.studentStats.size(); i++){
+        UserStats user = classStats.studentStats.at(i);
+        for(auto kv : user.highScores){
+            levelStatsTable->insertRow(row);
+            QTableWidgetItem *studentNameCell = new QTableWidgetItem(QString::fromStdString(user.username));
+            QTableWidgetItem *levIDCell = new QTableWidgetItem(QString::number(kv.first));
+            QTableWidgetItem *levelNameCell = new QTableWidgetItem(QString::fromStdString(levelMap.at(kv.first)));
+            QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(kv.second));
+            QTableWidgetItem *timeCell = new QTableWidgetItem(getFormattedTime(0));
+            levelStatsTable->setItem(row, 0, studentNameCell);
+            levelStatsTable->setItem(row, 1, levIDCell);
+            levelStatsTable->setItem(row, 2, levelNameCell);
+            levelStatsTable->setItem(row, 3, scoreCell);
+            levelStatsTable->setItem(row++, 4, timeCell);
+        }
+    }
+    levelStatsTable->sortByColumn(0, Qt::AscendingOrder);
+    levelStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
 }

@@ -59,6 +59,9 @@ struct UserStats {
     // Maps level ids to scores.
     std::unordered_map<int, int> highScores;
 
+    // Maps level ids to completion times
+    std::unordered_map<int, int> completionTimes;
+
     // If the user is an instructor, these reflect the classes they manage.
     // If the user is a student, these reflect the classes they are a member of. 
     std::vector<int> classIds;

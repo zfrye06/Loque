@@ -171,12 +171,13 @@ void ClassTab::setMapTable(ClassStats classStats){
     for(int i = 0; i < classStats.studentStats.size(); i++){
         UserStats user = classStats.studentStats.at(i);
         for(auto kv : user.highScores){
+            std::cout << user.completionTimes.size() << std::endl;
             levelStatsTable->insertRow(row);
             QTableWidgetItem *studentNameCell = new QTableWidgetItem(QString::fromStdString(user.username));
             QTableWidgetItem *levIDCell = new QTableWidgetItem(QString::number(kv.first));
             QTableWidgetItem *levelNameCell = new QTableWidgetItem(QString::fromStdString(levelMap.at(kv.first)));
             QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(kv.second));
-            QTableWidgetItem *timeCell = new QTableWidgetItem(getFormattedTime(0));
+            QTableWidgetItem *timeCell = new QTableWidgetItem(getFormattedTime(user.completionTimes.at(kv.first)));
             levelStatsTable->setItem(row, 0, studentNameCell);
             levelStatsTable->setItem(row, 1, levIDCell);
             levelStatsTable->setItem(row, 2, levelNameCell);

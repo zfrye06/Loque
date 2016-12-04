@@ -57,20 +57,22 @@ void getUserStats(sql::Connection& dbconn,
     stats.totalScore = qRes->getInt(2);
     stats.totalSecPlayed = qRes->getInt(3);
 
-    query = "SELECT levelId, levelHighScore FROM ScoreInfo WHERE userId = ?";
+    query = "SELECT levelId, levelHighScore, completionTime FROM ScoreInfo WHERE userId = ?";
     pstmt.reset(dbconn.prepareStatement(query));
     pstmt->setInt(1, userId);
     qRes.reset(pstmt->executeQuery());
     while (qRes->next()) {
         int levelId = qRes->getInt(1);
         int levelHighScore = qRes->getInt(2);
-        stats.highScores[levelId] = levelHighScore; 
+        int completionTime = qRes->getInt(3);
+        stats.highScores[levelId] = levelHighScore;
+        stats.completionTimes[levelId] = completionTime;
     }
 
     getClassIds(dbconn, userId, stats.classIds); 
 }
 
-void getClassStats(sql::Connection& dbconn,
+void  getClassStats(sql::Connection& dbconn,
                    int classId,
                    ClassStats& stats) {
     std::string query = "SELECT className FROM Class WHERE classId = ?";
@@ -89,7 +91,7 @@ void getClassStats(sql::Connection& dbconn,
         int userId = qRes->getInt(1);
         UserStats userStats;
         stats.studentStats.push_back(userStats);
-        getUserStats(dbconn, userId, stats.studentStats.back()); 
+        getUserStats(dbconn, userId, stats.studentStats.back());
     }
 }
 

@@ -47,6 +47,7 @@ namespace serialization {
     const int TERM_SCORE = -2; // Indicates EOF when deserializing high scores.
     const int TERM_CLASSID = -3; // Indicates EOF when deserializing class IDs.
     const int TERM_LEVELID = -4;  // Indicates EOF when deserializing level IDs.
+    const int TERM_TIME = -5; // Indicates EOF when deserializing level IDs.
 
     // Indicates EOF when serializing UserStats. 
     UserStats termUser() {
@@ -189,6 +190,10 @@ inline sf::Packet& operator<<(sf::Packet& packet, const UserStats& stats) {
         packet << elem.first << elem.second; 
     }
     packet << loque::serialization::TERM_SCORE;
+    for (auto& elem : stats.completionTimes) {
+        packet << elem.first << elem.second;
+    }
+    packet << loque::serialization::TERM_TIME;
     for (auto elem : stats.classIds) {
         packet << elem;
     }
@@ -207,7 +212,17 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserStats& stats) {
         int score;
         packet >> score;
         stats.highScores[lid] = score;
-    } 
+    }
+    while (true) {
+        int lid;
+        packet >> lid;
+        if (lid == loque::serialization::TERM_TIME) {
+            break;
+        }
+        int time;
+        packet >> time;
+        stats.completionTimes[lid] = time;
+    }
     while (true) {
         int classId;
         packet >> classId;

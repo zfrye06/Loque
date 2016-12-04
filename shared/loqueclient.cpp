@@ -174,7 +174,6 @@ Status LoqueClient::getAllClassStats(int userId, std::vector<ClassStats>& stats)
         return status;
     }
     toReceive >> status >> stats;
-    std::cout << stats.className << std::endl;
     return status;
 }
 

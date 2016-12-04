@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loginPane(new LoginPane),
     registerPane(new RegisterPane),
     studentPlayPane(new StudentPlayPane),
-    adminPane(new AdminPane(31)),
+    adminPane(new AdminPane(19)),
     adminPlayPane(new AdminPlayPane)
 {
     ui->setupUi(this);
@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(adminPane);
     paneContainer->addWidget(adminPlayPane);
     setCentralWidget(paneContainer);
+    paneContainer->setCurrentWidget(adminPane);
 
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin); 

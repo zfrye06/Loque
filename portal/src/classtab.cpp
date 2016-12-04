@@ -2,20 +2,14 @@
 #include "classtab.h"
 #include "ui_classtab.h"
 
-ClassTab::ClassTab(int classID, int teacherID, QWidget *parent) :
+ClassTab::ClassTab(ClassStats classStats, QWidget *parent) :
     QWidget(parent), ui(new Ui::ClassTab)
 {
-    this->classID = classID;
-    this->teacherID = teacherID;
     ui->setupUi(this);
     initWidgets();
-
-    LoqueClient client;
-    ClassStats stats;
-    client.getClassStats(classID, stats);
-    setSummaryBox(stats);
-    setUserTable(stats);
-    setMapTable(stats);
+    setSummaryBox(classStats);
+    setUserTable(classStats);
+    setMapTable(classStats);
 }
 
 ClassTab::~ClassTab()

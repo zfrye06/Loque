@@ -83,6 +83,7 @@ void getClassStats(sql::Connection& dbconn,
     
     query = "SELECT userId FROM ClassAssociations WHERE classId = ?";
     pstmt.reset(dbconn.prepareStatement(query));
+    pstmt->setInt(1, classId);
     qRes.reset(pstmt->executeQuery()); 
     while (qRes->next()) {
         int userId = qRes->getInt(1);
@@ -377,13 +378,6 @@ Status handleGetAllClassStats(sql::Connection& dbconn,
             ClassStats cstats;
             getClassStats(dbconn, classId, cstats);
             stats.push_back(cstats); 
-        }
-        query = "SELECT className FROM Class WHERE classId = ?";
-        std::unique_ptr<sql::PreparedStatement> stmt(dbconn.prepareStatement(query));
-        stmt->setInt(1, classId);
-        std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
-        if(res->next()){
-            stats.className = res->getString(1);
         }
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl;

@@ -8,7 +8,10 @@ AdminPane::AdminPane(int teacherID, QWidget *parent) :
     ui(new Ui::AdminPane)
 {
     ui->setupUi(this);
-    initWidgets();
+    LoqueClient client;
+    std::vector<ClassStats> classStats;
+    client.getAllClassStats(teacherID, classStats);
+    initWidgets(classStats);
 }
 
 AdminPane::~AdminPane()
@@ -16,11 +19,16 @@ AdminPane::~AdminPane()
     delete ui;
 }
 
-void AdminPane::initWidgets(){
+void AdminPane::initWidgets(std::vector<ClassStats> classStats){
     tabs = new QTabWidget(this);
     mainLayout = new QHBoxLayout;
+
+    //TODO: Add to layout somewhere
     addClassButton = new QPushButton(addClassIcon, "Add Class");
-    tabs->addTab(new ClassTab(2, teacherID), tr("Class 1"));
+
+    for(ClassStats cstats : classStats){
+        tabs->addTab(new ClassTab(cstats), QString::fromStdString(cstats.className));
+    }
     mainLayout->addWidget(tabs);
     setLayout(mainLayout);
 }

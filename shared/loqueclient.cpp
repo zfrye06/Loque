@@ -153,9 +153,9 @@ Status LoqueClient::disableLevel(int userId, int classId, int levelId) {
     return status;
 }
 
-Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
+Status LoqueClient::getClassStats(int userId, std::vector<ClassStats>& stats) {
     sf::Packet toSend;
-    toSend << ReqType::GET_CLASS_STATS << userId << classId;
+    toSend << ReqType::GET_CLASS_STATS << userId;
     sf::Packet toReceive;
     auto status = makeRequest(toSend, toReceive);
     if (status != OK) {

@@ -29,7 +29,7 @@ void printUsage(const std::string &progname) {
     std::cout << "\t\tdisplay this help message" << std::endl;
 }
 
-/* Helpers */ 
+/* Helpers */
 
 void getClassIds(sql::Connection& dbconn,
                 int userId,
@@ -41,6 +41,54 @@ void getClassIds(sql::Connection& dbconn,
     while (qRes->next()) {
         int classId = qRes->getInt(1);
         classIds.push_back(classId);
+    }
+}
+
+void getUserStats(sql::Connection& dbconn,
+                  int userId,
+                  UserStats& stats) {
+    std::string query = "SELECT username, totalScore, totalTime FROM User where userId = ?";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, userId);
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    qRes->next();
+    stats.userId = userId; 
+    stats.username = qRes->getString(1);
+    stats.totalScore = qRes->getInt(2);
+    stats.totalSecPlayed = qRes->getInt(3);
+
+    query = "SELECT levelId, levelHighScore FROM ScoreInfo WHERE userId = ?";
+    pstmt.reset(dbconn.prepareStatement(query));
+    pstmt->setInt(1, userId);
+    qRes.reset(pstmt->executeQuery());
+    while (qRes->next()) {
+        int levelId = qRes->getInt(1);
+        int levelHighScore = qRes->getInt(2);
+        stats.highScores[levelId] = levelHighScore; 
+    }
+
+    getClassIds(dbconn, userId, stats.classIds); 
+}
+
+void getClassStats(sql::Connection& dbconn,
+                   int classId,
+                   ClassStats& stats) {
+    std::string query = "SELECT className FROM Class WHERE classId = ?";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, classId);
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    qRes->next();
+    stats.classId = classId;
+    stats.className = qRes->getString(1);
+    
+    query = "SELECT userId FROM ClassAssociations WHERE classId = ?";
+    pstmt.reset(dbconn.prepareStatement(query));
+    qRes.reset(pstmt->executeQuery()); 
+    while (qRes->next()) {
+        int userId = qRes->getInt(1);
+        UserStats userStats;
+        stats.studentStats.push_back(userStats);
+        getUserStats(dbconn, userId, stats.studentStats.back()); 
     }
 }
 
@@ -230,27 +278,7 @@ Status handleGetUserStats(sql::Connection& dbconn,
                           int userId,
                           UserStats& stats) {
     try {
-        std::string query = "SELECT username, totalScore, totalTime FROM User where userId = ?";
-        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
-        pstmt->setInt(1, userId);
-        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
-        qRes->next();
-        stats.userId = userId; 
-        stats.username = qRes->getString(1);
-        stats.totalScore = qRes->getInt(2);
-        stats.totalSecPlayed = qRes->getInt(3);
-
-        query = "SELECT levelId, levelHighScore FROM ScoreInfo WHERE userId = ?";
-        pstmt.reset(dbconn.prepareStatement(query));
-        pstmt->setInt(1, userId);
-        qRes.reset(pstmt->executeQuery());
-        while (qRes->next()) {
-            int levelId = qRes->getInt(1);
-            int levelHighScore = qRes->getInt(2);
-            stats.highScores[levelId] = levelHighScore; 
-        }
-
-        getClassIds(dbconn, userId, stats.classIds); 
+        getUserStats(dbconn, userId, stats);
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserStats: " << e.what() << std::endl;
         return DB_ERR;
@@ -327,18 +355,15 @@ Status handleDisableLevel(sql::Connection& dbconn,
 }
 
 Status handleGetClassStats(sql::Connection& dbconn,
-                           int userId, int classId,
-                           ClassStats& stats) {
+                           int userId,
+                           std::vector<ClassStats>& stats) {
     try {
-        std::string query = "SELECT userId FROM ClassAssociations WHERE classId = ?";
-        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
-        pstmt->setInt(1, classId);
-        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
-        while (qRes->next()) {
-            int userId = qRes->getInt(1);
-            UserStats userStats;
-            stats.studentStats.push_back(userStats);
-            handleGetUserStats(dbconn, userId, stats.studentStats.back()); 
+        std::vector<int> classIds;
+        getClassIds(dbconn, userId, classIds);
+        for (auto classId : classIds) {
+            ClassStats cstats;
+            getClassStats(dbconn, classId, cstats);
+            stats.push_back(cstats); 
         }
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl;
@@ -472,10 +497,10 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     }
     case GET_CLASS_STATS:
     {
-        int userId, classId;
-        reqPacket >> userId >> classId;
-        ClassStats res;
-        auto status = handleGetClassStats(*dbconn, userId, classId, res);
+        int userId;
+        reqPacket >> userId; 
+        std::vector<ClassStats> res;
+        auto status = handleGetClassStats(*dbconn, userId, res);
         respPacket << status << res;
         break; 
     }

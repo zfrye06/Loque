@@ -43,6 +43,12 @@ struct LevelInfo {
     std::string description;
 };
 
+struct UserInfo {
+    std::string username;
+    int userId;
+    UserType type;
+};
+
 // Information about a single user (admin or student).
 struct UserStats {
     int userId;
@@ -70,6 +76,8 @@ typedef std::unordered_map<ClassId, std::vector<LevelRecord>> UserLevelInfo;
 
 // Information about a class in aggregate. 
 struct ClassStats {
+    int classId;
+    std::string className; 
     std::vector<UserStats> studentStats;
     std::vector<LevelInfo> enabledLevels; 
 };
@@ -129,7 +137,7 @@ class LoqueClient {
     Status disableLevel(int userId, int classId, int levelId);
 
     // Retrieves statistics for the given class. UserId must be an instructor id. 
-    Status getClassStats(int userId, int classId, ClassStats& stats);
+    Status getClassStats(int userId, std::vector<ClassStats>& stats);
 
     // Retrieves information about every loque level. 
     Status getAllLevels(std::vector<LevelInfo>& out); 

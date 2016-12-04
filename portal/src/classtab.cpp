@@ -3,13 +3,19 @@
 #include "ui_classtab.h"
 
 ClassTab::ClassTab(int classID, int teacherID, QWidget *parent) :
-    classID(classID), teacherID(teacherID), QWidget(parent), ui(new Ui::ClassTab)
+    QWidget(parent), ui(new Ui::ClassTab)
 {
+    this->classID = classID;
+    this->teacherID = teacherID;
     ui->setupUi(this);
     initWidgets();
-    setSummaryBox();
-    setUserTable();
-    setMapTable();
+
+    LoqueClient client;
+    ClassStats stats;
+    client.getClassStats(teacherID, classID, stats);
+    setSummaryBox(stats);
+    setUserTable(stats);
+    setMapTable(stats);
 }
 
 ClassTab::~ClassTab()
@@ -19,17 +25,11 @@ ClassTab::~ClassTab()
 
 void ClassTab::initWidgets(){
     classSummaryLabel = new QLabel("Class Summary");
-    classNameLabel = new QLabel("CS 3505");
-    classPointsLabel = new QLabel("Total Points: ");
-    classTimeLabel = new QLabel("Total Time Played: ");
+    classNameLabel = new QLabel;
+    classPointsLabel = new QLabel;
+    classTimeLabel = new QLabel;
     enabledLevelsLabel = new QLabel("Enabled Levels: ");
     userStatsLabel = new QLabel("Student Stats");
-    userLabel = new QLabel("Student");
-    totalScoreLabel = new QLabel("Total Score");
-    totalTimeLabel = new QLabel("Total Time Played");
-    lvl1Label = new QLabel("Level 1");
-    lvl2Label = new QLabel("Level 2");
-    lvl3Label = new QLabel("Level 3");
     mapStatsLabel = new QLabel("Map Stats");
     mapUserLabel = new QLabel("Student");
     levelLabel = new QLabel("Level");
@@ -62,31 +62,62 @@ void ClassTab::initConnections(){
 
 }
 
-void ClassTab::setSummaryBox(){
-
+void ClassTab::setSummaryBox(ClassStats classStats){
+    int totalPoints = 0;
+    int totalTime = 0;
+    for(UserStats user : classStats.studentStats){
+        totalPoints += user.totalScore;
+        totalTime += user.totalSecPlayed;
+    }
+    std::cout << classStats.className << std::endl;
+    classNameLabel->setText("Class Name: " + QString::fromStdString(classStats.className));
+    classPointsLabel->setText("Total Points: " + QString::number(totalPoints));
+    classTimeLabel->setText("Total Time Played: " + getFormattedTime(totalTime));
 }
 
-void ClassTab::setUserTable(){
-    LoqueClient client;
-    ClassStats stats;
-    client.getClassStats(teacherID, classID, stats);
+QString ClassTab::getFormattedTime(int seconds){
+    QString hourString;
+    int hours = seconds / 3600;
+    if(hours < 10){
+        hourString = QString::number(0) + QString::number(seconds / 3600);
+    } else{
+        hourString = QString::number(seconds / 3600);
+    }
 
+    QString minuteString;
+    int minutes = (seconds % 3600) / 60;
+    if(minutes < 10){
+        minuteString = QString::number(0) + QString::number((seconds % 3600) / 60);
+    } else{
+        minuteString = QString::number((seconds % 3600) / 60);
+    }
+
+    QString secString;
+    int secs = (seconds % 3600) % 60;
+    if(secs < 10){
+        secString = QString::number(0) + QString::number((seconds % 3600) % 60);
+    } else{
+        secString = QString::number((seconds % 3600) % 60);
+    }
+    return  hourString + QString::fromStdString(":") + minuteString + QString::fromStdString(":") + secString;
+}
+
+void ClassTab::setUserTable(ClassStats classStats){
     QStringList headers;
     headers.append("Student");
     headers.append("Total Score");
     headers.append("Time Played");
-    headers.append("Level 1");
-    headers.append("Level 2");
-    headers.append("Level 3");
+    headers.append("Level 1 Completed");
+    headers.append("Level 2 Completed");
+    headers.append("Level 3 Completed");
 
-    userStatsTable->setRowCount(stats.studentStats.size());
+    userStatsTable->setRowCount(classStats.studentStats.size());
     userStatsTable->setColumnCount(6);
     userStatsTable->setHorizontalHeaderLabels(headers);
     userStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     int row = 0;
-    for(UserStats user : stats.studentStats){
-        std::cout << user.totalScore << std::endl;
+    for(UserStats user : classStats.studentStats){
         QTableWidgetItem *nameCell = new QTableWidgetItem(QString::fromStdString(user.username));
         QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(user.totalScore));
         QTableWidgetItem *timeCell = new QTableWidgetItem(QString::number(user.totalSecPlayed));
@@ -109,20 +140,37 @@ void ClassTab::setUserTable(){
 //            userStatsTable->itemAt(row, col)->setTextAlignment(Qt::AlignCenter);
         }
     }
+    userStatsTable->sortByColumn(0, Qt::AscendingOrder);
+    userStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
 }
 
 QColor ClassTab::getLevelColor(UserStats user, int levelID){
     QColor color;
     if(user.highScores.find(levelID) == user.highScores.end() ||user.highScores.at(levelID) == 0){
-        color.setRgb(215, 0, 0, 100);
-        color.setAlpha(100);
+        color.setRgb(235, 16, 16);
     } else {
         color.setRgb(0, 186, 6);
-        color.setAlpha(100);
     }
     return color;
 }
 
-void ClassTab::setMapTable(){
+void ClassTab::setMapTable(ClassStats classStats){
+    QStringList headers;
+    headers.append("Student");
+    headers.append("Level ID");
+    headers.append("Level Name");
+    headers.append("Level Score");
+    headers.append("Completion Time");
 
+    for(UserStats user : classStats.studentStats){
+        for(auto kv : user.highScores){
+            QTableWidgetItem *levIDCell = new QTableWidgetItem(QString::number(kv.first));
+            QTableWidgetItem *levICell = new QTableWidgetItem(QString::number(kv.first));
+        }
+    }
+
+    levelStatsTable->setRowCount(classStats.studentStats.size());
+    levelStatsTable->setColumnCount(5);
+    levelStatsTable->setHorizontalHeaderLabels(headers);
+    levelStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }

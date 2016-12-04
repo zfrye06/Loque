@@ -70,6 +70,7 @@ typedef std::unordered_map<ClassId, std::vector<LevelRecord>> UserLevelInfo;
 
 // Information about a class in aggregate. 
 struct ClassStats {
+    std::string className;
     std::vector<UserStats> studentStats;
     std::vector<LevelInfo> enabledLevels; 
 };

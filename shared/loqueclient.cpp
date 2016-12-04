@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include "loqueclient.h"
 #include "serialization.h"
 
@@ -162,6 +162,7 @@ Status LoqueClient::getClassStats(int userId, int classId, ClassStats& stats) {
         return status;
     }
     toReceive >> status >> stats;
+    std::cout << stats.className << std::endl;
     return status;
 }
 

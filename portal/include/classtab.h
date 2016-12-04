@@ -39,12 +39,6 @@ private:
     QLabel *classTimeLabel;
     QLabel *enabledLevelsLabel;
     QLabel *userStatsLabel;
-    QLabel *userLabel;
-    QLabel *totalScoreLabel;
-    QLabel *totalTimeLabel;
-    QLabel *lvl1Label;
-    QLabel *lvl2Label;
-    QLabel *lvl3Label;
     QLabel *mapStatsLabel;
     QLabel *mapUserLabel;
     QLabel *levelLabel;
@@ -54,10 +48,11 @@ private:
 
     void initWidgets();
     void initConnections();
-    void setSummaryBox();
-    void setUserTable();
-    void setMapTable();
+    void setSummaryBox(ClassStats classStats);
+    void setUserTable(ClassStats classStats);
+    void setMapTable(ClassStats classStats);
     QColor getLevelColor(UserStats user, int levelID);
+    QString getFormattedTime(int seconds);
 };
 
 #endif // CLASSTAB_H

@@ -340,6 +340,13 @@ Status handleGetClassStats(sql::Connection& dbconn,
             stats.studentStats.push_back(userStats);
             handleGetUserStats(dbconn, userId, stats.studentStats.back()); 
         }
+        query = "SELECT className FROM Class WHERE classId = ?";
+        std::unique_ptr<sql::PreparedStatement> stmt(dbconn.prepareStatement(query));
+        stmt->setInt(1, classId);
+        std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
+        if(res->next()){
+            stats.className = res->getString(1);
+        }
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl;
         return DB_ERR; 

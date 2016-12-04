@@ -18,7 +18,7 @@ LoginPane::LoginPane(QWidget *parent) :
 }
 
 void LoginPane::attemptLogin() {
-    LoginInfo info;
+    UserInfo info;
     info.username = ui->usernameField->text().toStdString();
     info.userId = 12345;
     info.type = UserType::STUDENT;

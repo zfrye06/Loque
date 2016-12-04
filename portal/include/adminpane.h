@@ -5,6 +5,7 @@
 #include <QTabWidget>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include "../shared/loqueclient.h"
 
 namespace Ui {
 class AdminPane;
@@ -17,6 +18,9 @@ class AdminPane : public QWidget
 public:
     explicit AdminPane(int teacherID, QWidget *parent = 0);
     ~AdminPane();
+
+    void setUser(UserInfo);
+    void updateClassStats();
 
 private:
     int teacherID;

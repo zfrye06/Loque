@@ -26,8 +26,6 @@ public:
 
 private:
 
-    LoqueClient client;
-    
     Ui::MainWindow *ui;
     QStackedWidget *paneContainer;
     LoginPane *loginPane;
@@ -36,12 +34,7 @@ private:
     AdminPane *adminPane;
     AdminPlayPane *adminPlayPane;
 
-    void handleLogin();
-    void displayLoginMessage(const char *loginMessage, std::string color);
-    void resetLogin();
-    void handleRegistration();
-    void displayRegistrationErrorMessage(const char *errorMessage);
-    void resetRegistration();
+    void handleLogin(UserInfo);
 };
 
 #endif // MAINWINDOW_H

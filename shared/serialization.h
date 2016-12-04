@@ -26,6 +26,7 @@ enum ReqType {
     DISABLE_LEVEL,
     GET_CLASS_STATS,
     GET_ALL_LEVELS,
+    GET_ALL_CLASS_STATS,
 };
 
 inline sf::Packet& operator<<(sf::Packet& packet, const ReqType& t) {
@@ -85,6 +86,18 @@ namespace serialization {
 
     bool isTermLevelRecord(const LevelRecord& record) {
         return record.highScore == -2; 
+    }
+
+    // Indicates EOF when serializing ClassStats.
+    ClassStats termClassStats() {
+        ClassStats stats;
+        stats.classId = -1;
+        stats.className = "";
+        return stats;
+    }
+
+    bool isTermClassStats(const ClassStats& stats) {
+        return stats.classId == -1;
     }
 }
 }
@@ -277,6 +290,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, std::vector<int>& levelIds) {
 /* ClassStats */
 
 inline sf::Packet& operator<<(sf::Packet& packet, const ClassStats& stats) {
+    packet << stats.classId << stats.className; 
     for (auto& ustats : stats.studentStats) {
         packet << ustats;
     }
@@ -289,6 +303,7 @@ inline sf::Packet& operator<<(sf::Packet& packet, const ClassStats& stats) {
 }
 
 inline sf::Packet& operator>>(sf::Packet& packet, ClassStats& stats) {
+    packet >> stats.classId >> stats.className; 
     while (true) {
         UserStats s;
         packet >> s;
@@ -306,6 +321,26 @@ inline sf::Packet& operator>>(sf::Packet& packet, ClassStats& stats) {
         stats.enabledLevels.push_back(info); 
     }
     return packet;
+}
+
+inline sf::Packet& operator<<(sf::Packet& packet, std::vector<ClassStats>& stats) {
+    for (auto& cstats : stats) {
+        packet << cstats;
+    }
+    packet << loque::serialization::termClassStats();
+    return packet;
+}
+
+inline sf::Packet& operator>>(sf::Packet& packet, std::vector<ClassStats>& stats) {
+    while (true) {
+        ClassStats cStats;
+        packet >> cStats;
+        if (loque::serialization::isTermClassStats(cStats)) {
+            break;
+        }
+        stats.push_back(cStats); 
+    }
+    return packet; 
 }
 
 #endif

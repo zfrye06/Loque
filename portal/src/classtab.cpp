@@ -12,7 +12,7 @@ ClassTab::ClassTab(int classID, int teacherID, QWidget *parent) :
 
     LoqueClient client;
     ClassStats stats;
-    client.getClassStats(teacherID, classID, stats);
+    client.getClassStats(classID, stats);
     setSummaryBox(stats);
     setUserTable(stats);
     setMapTable(stats);
@@ -83,7 +83,6 @@ QString ClassTab::getFormattedTime(int seconds){
     } else{
         hourString = QString::number(seconds / 3600);
     }
-
     QString minuteString;
     int minutes = (seconds % 3600) / 60;
     if(minutes < 10){

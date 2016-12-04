@@ -28,3 +28,11 @@ void AdminPane::initWidgets(){
 void AdminPane::initConnections(){
 
 }
+
+void AdminPane::setUser(UserInfo user) {
+    
+}
+
+void AdminPane::updateClassStats() {
+    
+}

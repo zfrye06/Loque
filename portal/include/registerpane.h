@@ -2,6 +2,7 @@
 #define REGISTERPANE_H
 
 #include <QWidget>
+#include "../shared/loqueclient.h"
 
 namespace Ui {
 class RegisterPane;
@@ -14,6 +15,10 @@ class RegisterPane : public QWidget
 public:
     explicit RegisterPane(QWidget *parent = 0);
     ~RegisterPane();
+
+ signals:
+    
+    void onRegistration(UserInfo);
 
 private:
     Ui::RegisterPane *ui;

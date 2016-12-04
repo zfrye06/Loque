@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/assets">
         <file alias="add">assets/plus.png</file>
+        <file alias="pi">pi.jpg</file>
     </qresource>
 </RCC>

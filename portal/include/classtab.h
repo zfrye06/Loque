@@ -7,6 +7,7 @@
 #include <QTableWidget>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QScrollArea>
 #include "../../shared/loqueclient.h"
 
 
@@ -30,6 +31,7 @@ private:
     QVBoxLayout *mainLayout;
     QGroupBox *summaryBox;
     QVBoxLayout *summaryLayout;
+    QScrollArea *levelArea;
 
     QLabel *classSummaryLabel;
     QLabel *classNameLabel;
@@ -38,17 +40,13 @@ private:
     QLabel *enabledLevelsLabel;
     QLabel *userStatsLabel;
     QLabel *mapStatsLabel;
-    QLabel *mapUserLabel;
-    QLabel *levelLabel;
-    QLabel *levelNameLabel;
-    QLabel *levelScoreLabel;
-    QLabel *completionTimeLabel;
 
     void initWidgets();
     void initConnections();
     void setSummaryBox(ClassStats classStats);
     void setUserTable(ClassStats classStats);
     void setMapTable(ClassStats classStats);
+    void setEnabledLevels(int classID);
     QColor getLevelColor(UserStats user, int levelID);
     QString getFormattedTime(int seconds);
 };

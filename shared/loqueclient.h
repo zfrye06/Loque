@@ -133,6 +133,9 @@ class LoqueClient {
     // Retrieves a list of enabled level IDs for the given user. 
     Status getEnabledLevels(int userId, std::vector<int>& levels);
 
+    // Retrieves a list of enabled level IDs for the given class.
+    Status getEnabledClassLevels(int classId, std::vector<int>& levels);
+
     // Enables a level for the given class. UserId must be an instructor id.
     Status enableLevel(int userId, int classId, int levelId);
 

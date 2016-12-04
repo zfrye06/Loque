@@ -31,9 +31,9 @@ void printUsage(const std::string &progname) {
 
 /* Helpers */
 
-void getClassIds(sql::Connection& dbconn,
-                int userId,
-                std::vector<int>& classIds) {
+void getClassIds(sql::Connection &dbconn,
+                 int userId,
+                 std::vector<int> &classIds) {
     std::string query = "SELECT classId FROM ClassAssociations WHERE userId = ?";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
     pstmt->setInt(1, userId);
@@ -44,15 +44,15 @@ void getClassIds(sql::Connection& dbconn,
     }
 }
 
-void getUserStats(sql::Connection& dbconn,
+void getUserStats(sql::Connection &dbconn,
                   int userId,
-                  UserStats& stats) {
+                  UserStats &stats) {
     std::string query = "SELECT username, totalScore, totalTime FROM User where userId = ?";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
     pstmt->setInt(1, userId);
     std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
     qRes->next();
-    stats.userId = userId; 
+    stats.userId = userId;
     stats.username = qRes->getString(1);
     stats.totalScore = qRes->getInt(2);
     stats.totalSecPlayed = qRes->getInt(3);
@@ -69,12 +69,12 @@ void getUserStats(sql::Connection& dbconn,
         stats.completionTimes[levelId] = completionTime;
     }
 
-    getClassIds(dbconn, userId, stats.classIds); 
+    getClassIds(dbconn, userId, stats.classIds);
 }
 
-void  getClassStats(sql::Connection& dbconn,
+void getClassStats(sql::Connection &dbconn,
                    int classId,
-                   ClassStats& stats) {
+                   ClassStats &stats) {
     std::string query = "SELECT className FROM Class WHERE classId = ?";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
     pstmt->setInt(1, classId);
@@ -82,11 +82,11 @@ void  getClassStats(sql::Connection& dbconn,
     qRes->next();
     stats.classId = classId;
     stats.className = qRes->getString(1);
-    
+
     query = "SELECT userId FROM ClassAssociations WHERE classId = ?";
     pstmt.reset(dbconn.prepareStatement(query));
     pstmt->setInt(1, classId);
-    qRes.reset(pstmt->executeQuery()); 
+    qRes.reset(pstmt->executeQuery());
     while (qRes->next()) {
         int userId = qRes->getInt(1);
         UserStats userStats;
@@ -95,9 +95,9 @@ void  getClassStats(sql::Connection& dbconn,
     }
 }
 
-void getEnabledLevelIds(sql::Connection& dbconn,
+void getEnabledLevelIds(sql::Connection &dbconn,
                         int classId,
-                        std::vector<int>& levelIds) {
+                        std::vector<int> &levelIds) {
     std::string query = "SELECT levelId FROM LevelAssociations WHERE classId = ?";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
     pstmt->setInt(1, classId);
@@ -108,9 +108,9 @@ void getEnabledLevelIds(sql::Connection& dbconn,
     }
 }
 
-void getLevelInfo(sql::Connection& dbconn,
+void getLevelInfo(sql::Connection &dbconn,
                   int levelId,
-                  LevelInfo& info) {
+                  LevelInfo &info) {
     std::string query = "SELECT levelId, levelName, levelDescription FROM Level WHERE levelId = ";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
     std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
@@ -120,29 +120,29 @@ void getLevelInfo(sql::Connection& dbconn,
     info.description = qRes->getString(3);
 }
 
-void getUserLevelRecord(sql::Connection& dbconn,
+void getUserLevelRecord(sql::Connection &dbconn,
                         int userId, int levelId,
-                        LevelRecord& record) {
+                        LevelRecord &record) {
     std::string query = "SELECT levelHighScore, completionTime FROM ScoreInfo WHERE userId = ? AND levelId = ?";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
     pstmt->setInt(1, userId);
-    pstmt->setInt(2, levelId); 
+    pstmt->setInt(2, levelId);
     std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
     if (qRes->next()) {
         record.highScore = qRes->getInt(1);
-        record.bestCompletionTimeSecs = qRes->getInt(2); 
+        record.bestCompletionTimeSecs = qRes->getInt(2);
     } else {
         record.highScore = -1;
         record.bestCompletionTimeSecs = -1;
     }
-    getLevelInfo(dbconn, levelId, record.level); 
+    getLevelInfo(dbconn, levelId, record.level);
 }
 
-/* Request handlers */ 
+/* Request handlers */
 
-Status handleLogin(sql::Connection& dbconn,
-                 std::string username, std::string userpass,
-                 LoginResult& loginres) {
+Status handleLogin(sql::Connection &dbconn,
+                   std::string username, std::string userpass,
+                   LoginResult &loginres) {
     loginres.userType = DNE;
     try {
         std::string query = "SELECT userId, isAdmin FROM User WHERE username = ? AND password = ?";
@@ -154,18 +154,18 @@ Status handleLogin(sql::Connection& dbconn,
             int id = qRes->getInt(1);
             int isAdmin = qRes->getInt(2);
             loginres.userId = id;
-            loginres.userType = isAdmin ? UserType::ADMIN : UserType::STUDENT; 
+            loginres.userType = isAdmin ? UserType::ADMIN : UserType::STUDENT;
         }
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleLogin: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
-Status handleCreateAcc(sql::Connection& dbconn,
-                     std::string username, std::string userpass, UserType type,
-                     LoginResult& res) {
+Status handleCreateAcc(sql::Connection &dbconn,
+                       std::string username, std::string userpass, UserType type,
+                       LoginResult &res) {
     res.userType = DNE;
     try {
         std::string query = "INSERT INTO User(username, password, isAdmin, totalScore, totalTime) VALUES (?, ?, ?, ?, ?)";
@@ -176,7 +176,7 @@ Status handleCreateAcc(sql::Connection& dbconn,
         pstmt->setInt(4, 0);
         pstmt->setInt(5, 0);
         pstmt->execute();
-        
+
         // Retrieve the added ID.
         query = "SELECT LAST_INSERT_ID()";
         pstmt.reset(dbconn.prepareStatement(query));
@@ -189,29 +189,29 @@ Status handleCreateAcc(sql::Connection& dbconn,
         std::cerr << "ERROR: SQL Exception from handleCreateAcc: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
-Status handleAddClassroom(sql::Connection& dbconn, int userId, int classId) {
+Status handleAddClassroom(sql::Connection &dbconn, int userId, int classId) {
     try {
         std::string query = "INSERT INTO ClassAssociations(userId, classId) VALUES(?, ?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, userId);
         pstmt->setInt(2, classId);
         pstmt->execute();
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleAddClassroom: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
-Status handleCreateClassroom(sql::Connection& dbconn,
-                           int userId, const std::string& className) {
+Status handleCreateClassroom(sql::Connection &dbconn,
+                             int userId, const std::string &className) {
     try {
         std::string query = "INSERT INTO Class(className) VALUES(?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
-        pstmt->setString(1 , className);
+        pstmt->setString(1, className);
         pstmt->execute();
 
         query = "SELECT LAST_INSERT_ID()";
@@ -220,16 +220,16 @@ Status handleCreateClassroom(sql::Connection& dbconn,
         qRes->next();
         int classId = qRes->getInt(1);
 
-        handleAddClassroom(dbconn, userId, classId); 
-    } catch (sql::SQLException& e) {
+        handleAddClassroom(dbconn, userId, classId);
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleCreateClassroom: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
-Status handlePostStats(sql::Connection& dbconn,
-                     int userId, const GameStats& stats) {
+Status handlePostStats(sql::Connection &dbconn,
+                       int userId, const GameStats &stats) {
 
     // TODO: We want to execute these queries atomically. 
     try {
@@ -270,28 +270,28 @@ Status handlePostStats(sql::Connection& dbconn,
             pstmt->setInt(4, stats.secToComplete);
             pstmt->execute();
         }
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handlePostStats: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
-Status handleGetUserStats(sql::Connection& dbconn,
+Status handleGetUserStats(sql::Connection &dbconn,
                           int userId,
-                          UserStats& stats) {
+                          UserStats &stats) {
     try {
         getUserStats(dbconn, userId, stats);
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserStats: " << e.what() << std::endl;
         return DB_ERR;
     }
     return OK;
 }
 
-Status handleGetUserLevelInfo(sql::Connection& dbconn,
+Status handleGetUserLevelInfo(sql::Connection &dbconn,
                               int userId,
-                              UserLevelInfo& info) {
+                              UserLevelInfo &info) {
     try {
         std::vector<int> classIds;
         getClassIds(dbconn, userId, classIds);
@@ -301,48 +301,66 @@ Status handleGetUserLevelInfo(sql::Connection& dbconn,
             for (auto levelId : levelIds) {
                 LevelRecord record;
                 getUserLevelRecord(dbconn, userId, levelId, record);
-                info[classId].push_back(record); 
+                info[classId].push_back(record);
             }
         }
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserLevelInfo: " << e.what() << std::endl;
         return DB_ERR;
     }
     return OK;
 }
 
-Status handleGetEnabledLevels(sql::Connection& dbconn,
-                            int userId,
-                            std::vector<int>& levelIds) {
+Status handleGetEnabledLevels(sql::Connection &dbconn,
+                              int userId,
+                              std::vector<int> &levelIds) {
     try {
         std::vector<int> classIds;
         getClassIds(dbconn, userId, classIds);
         for (auto classId : classIds) {
-            getEnabledLevelIds(dbconn, classId, levelIds); 
+            getEnabledLevelIds(dbconn, classId, levelIds);
         }
-    } catch(sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetEnabledLevels: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
-Status handleEnableLevel(sql::Connection& dbconn,
-                       int userId, int classId, int levelId) {
+Status handleGetEnabledClassLevels(sql::Connection &dbconn,
+                                   int classId,
+                                   std::vector<int> &levelIds) {
+    try {
+        std::string query = "SELECT FROM LevelAssociations WHERE classId = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, classId);
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+        while (qRes->next()) {
+            levelIds.push_back(qRes->getInt(1));
+        }
+    } catch (sql::SQLException &e) {
+        std::cerr << "ERROR: SQL Exception from handleGetEnabledClassLevels: " << e.what() << std::endl;
+        return DB_ERR;
+    }
+    return OK;
+}
+
+Status handleEnableLevel(sql::Connection &dbconn,
+                         int userId, int classId, int levelId) {
     try {
         std::string query = "INSERT INTO LevelAssociations(classId, levelId) VALUES(?, ?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, classId);
         pstmt->setInt(2, levelId);
         pstmt->execute();
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleEnableLevel: " << e.what() << std::endl;
         return DB_ERR;
     }
     return OK;
 }
 
-Status handleDisableLevel(sql::Connection& dbconn,
+Status handleDisableLevel(sql::Connection &dbconn,
                           int userId, int classId, int levelId) {
     try {
         std::string query = "DELETE FROM LevelAssociations WHERE classId = ? AND levelId = ?";
@@ -350,46 +368,46 @@ Status handleDisableLevel(sql::Connection& dbconn,
         pstmt->setInt(1, classId);
         pstmt->setInt(2, levelId);
         pstmt->execute();
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleDisableLevel: " << e.what() << std::endl;
         return DB_ERR;
     }
     return OK;
 }
 
-Status handleGetClassStats(sql::Connection& dbconn,
-                              int classId,
-                              ClassStats& stats) {
+Status handleGetClassStats(sql::Connection &dbconn,
+                           int classId,
+                           ClassStats &stats) {
     try {
         getClassStats(dbconn, classId, stats);
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl;
-        return DB_ERR; 
+        return DB_ERR;
     }
     return OK;
 
 }
 
-Status handleGetAllClassStats(sql::Connection& dbconn,
-                           int userId,
-                           std::vector<ClassStats>& stats) {
+Status handleGetAllClassStats(sql::Connection &dbconn,
+                              int userId,
+                              std::vector<ClassStats> &stats) {
     try {
         std::vector<int> classIds;
         getClassIds(dbconn, userId, classIds);
         for (auto classId : classIds) {
             ClassStats cstats;
             getClassStats(dbconn, classId, cstats);
-            stats.push_back(cstats); 
+            stats.push_back(cstats);
         }
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl;
-        return DB_ERR; 
+        return DB_ERR;
     }
     return OK;
 }
 
-Status handleGetAllLevels(sql::Connection& dbconn,
-                          std::vector<LevelInfo>& out) {
+Status handleGetAllLevels(sql::Connection &dbconn,
+                          std::vector<LevelInfo> &out) {
     try {
         std::string query = "SELECT levelId, levelName, levelDescription FROM Level";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
@@ -399,13 +417,13 @@ Status handleGetAllLevels(sql::Connection& dbconn,
             info.id = qRes->getInt(1);
             info.name = qRes->getString(2);
             info.description = qRes->getString(3);
-            out.push_back(info); 
+            out.push_back(info);
         }
-    } catch (sql::SQLException& e) {
+    } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetAllLevels: " << e.what() << std::endl;
         return DB_ERR;
     }
-    return OK; 
+    return OK;
 }
 
 void handleClient(std::unique_ptr<sf::TcpSocket> client,
@@ -422,130 +440,125 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     sf::Packet respPacket;
     ReqType rtype;
     reqPacket >> rtype;
-    switch (rtype){
-    case LOGIN:
-    {
-        std::string username, userpass;
-        reqPacket >> username >> userpass;
-        LoginResult res;
-        auto status = handleLogin(*dbconn, username, userpass, res);
-        respPacket << status << res;
-        break;
-    }
-    case CREATE_ACC:
-    {
-        std::string username, userpass;
-        UserType type;
-        reqPacket >> username >> userpass >> type;
-        LoginResult res;
-        auto status = handleCreateAcc(*dbconn, username, userpass, type, res);
-        respPacket << status << res;
-        break;
-    }
-    case ADD_CLASS:
-    {
-        int userId, classId;
-        reqPacket >> userId >> classId;
-        auto status = handleAddClassroom(*dbconn, userId, classId);
-        respPacket << status;
-        break;
-    }
-    case CREATE_CLASS:
-    {
-        int userId;
-        std::string className;
-        reqPacket >> userId >> className;
-        auto status = handleCreateClassroom(*dbconn, userId, className);
-        respPacket << status;
-        break;
-    }
-    case POST_STATS:
-    {
-        int userId;
-        GameStats stats;
-        respPacket >> userId >> stats;
-        auto status = handlePostStats(*dbconn, userId, stats);
-        respPacket << status;
-        return;
-    }
-    case GET_USER_STATS:
-    {
-        int userId;
-        reqPacket >> userId;
-        UserStats res;
-        auto status = handleGetUserStats(*dbconn, userId, res);
-        respPacket << status << res;
-        break;
-    }
-    case GET_USER_LEVEL_INFO:
-    {
-        int userId;
-        reqPacket >> userId;
-        UserLevelInfo info;
-        auto status = handleGetUserLevelInfo(*dbconn, userId, info);
-        reqPacket << status << info;
-        break;
-    }
-    case GET_ENABLED_LEVELS:
-    {
-        int userId;
-        reqPacket >> userId;
-        std::vector<int> levelIds;
-        auto status = handleGetEnabledLevels(*dbconn, userId, levelIds);
-        respPacket << status << levelIds;
-        break;
-    }
-    case ENABLE_LEVEL:
-    {
-        int userId, classId, lid;
-        reqPacket >> userId >> classId >> lid;
-        auto status = handleEnableLevel(*dbconn, userId, classId, lid);
-        respPacket << status;
-        break;
-    }
-    case DISABLE_LEVEL:
-    {
-        int userId, classId, lid;
-        reqPacket >> userId >> classId >> lid;
-        auto status = handleDisableLevel(*dbconn, userId, classId, lid);
-        respPacket << status;
-        break;
-    }
-    case GET_CLASS_STATS:
-    {
-        int classId;
-        reqPacket >> classId; 
-        ClassStats res;
-        auto status = handleGetClassStats(*dbconn, classId, res);
-        respPacket << status << res;
-        break; 
-    }
-    case GET_ALL_CLASS_STATS:
-    {
-        int userId;
-        reqPacket >> userId; 
-        std::vector<ClassStats> res;
-        auto status = handleGetAllClassStats(*dbconn, userId, res);
-        respPacket << status << res;
-        break; 
-    }
-    case GET_ALL_LEVELS:
-    {
-        std::vector<LevelInfo> out;
-        auto status = handleGetAllLevels(*dbconn, out);
-        respPacket << status << out;
-        break;
-    }
-    default:
-        std::cerr << "ERROR: Unrecognized request type " << static_cast<int>(rtype) << std::endl;
-        return;
+    switch (rtype) {
+        case LOGIN: {
+            std::string username, userpass;
+            reqPacket >> username >> userpass;
+            LoginResult res;
+            auto status = handleLogin(*dbconn, username, userpass, res);
+            respPacket << status << res;
+            break;
+        }
+        case CREATE_ACC: {
+            std::string username, userpass;
+            UserType type;
+            reqPacket >> username >> userpass >> type;
+            LoginResult res;
+            auto status = handleCreateAcc(*dbconn, username, userpass, type, res);
+            respPacket << status << res;
+            break;
+        }
+        case ADD_CLASS: {
+            int userId, classId;
+            reqPacket >> userId >> classId;
+            auto status = handleAddClassroom(*dbconn, userId, classId);
+            respPacket << status;
+            break;
+        }
+        case CREATE_CLASS: {
+            int userId;
+            std::string className;
+            reqPacket >> userId >> className;
+            auto status = handleCreateClassroom(*dbconn, userId, className);
+            respPacket << status;
+            break;
+        }
+        case POST_STATS: {
+            int userId;
+            GameStats stats;
+            respPacket >> userId >> stats;
+            auto status = handlePostStats(*dbconn, userId, stats);
+            respPacket << status;
+            return;
+        }
+        case GET_USER_STATS: {
+            int userId;
+            reqPacket >> userId;
+            UserStats res;
+            auto status = handleGetUserStats(*dbconn, userId, res);
+            respPacket << status << res;
+            break;
+        }
+        case GET_USER_LEVEL_INFO: {
+            int userId;
+            reqPacket >> userId;
+            UserLevelInfo info;
+            auto status = handleGetUserLevelInfo(*dbconn, userId, info);
+            reqPacket << status << info;
+            break;
+        }
+        case GET_ENABLED_LEVELS: {
+            int userId;
+            reqPacket >> userId;
+            std::vector<int> levelIds;
+            auto status = handleGetEnabledLevels(*dbconn, userId, levelIds);
+            respPacket << status << levelIds;
+            break;
+        }
+        case GET_ENABLED_CLASS_LEVELS: {
+            int classId;
+            reqPacket >> classId;
+            std::vector<int> levelIds;
+            auto status = handleGetEnabledClassLevels(*dbconn, classId, levelIds);
+            respPacket << status << levelIds;
+            break;
+        }
+        case ENABLE_LEVEL: {
+            int userId, classId, lid;
+            reqPacket >> userId >> classId >> lid;
+            auto status = handleEnableLevel(*dbconn, userId, classId, lid);
+            respPacket << status;
+            break;
+        }
+        case DISABLE_LEVEL: {
+            int userId, classId, lid;
+            reqPacket >> userId >> classId >> lid;
+            auto status = handleDisableLevel(*dbconn, userId, classId, lid);
+            respPacket << status;
+            break;
+        }
+        case GET_CLASS_STATS: {
+            int classId;
+            reqPacket >> classId;
+            ClassStats res;
+            auto status = handleGetClassStats(*dbconn, classId, res);
+            respPacket << status << res;
+            break;
+        }
+        case GET_ALL_CLASS_STATS: {
+            int userId;
+            reqPacket >> userId;
+            std::vector<ClassStats> res;
+            auto status = handleGetAllClassStats(*dbconn, userId, res);
+            respPacket << status << res;
+            break;
+        }
+        case GET_ALL_LEVELS: {
+            std::vector<LevelInfo> out;
+            auto status = handleGetAllLevels(*dbconn, out);
+            respPacket << status << out;
+            break;
+        }
+        default:
+            std::cerr << "ERROR: Unrecognized request type " << static_cast<int>(rtype) << std::endl;
+            return;
     }
 
     status = client->send(respPacket);
     if (status != sf::Socket::Done) {
         std::cerr << "ERROR: Unable to send response to " <<
-            client->getRemoteAddress().toString() <<
-            ". send() returned status " << status << std::endl;
+                  client->getRemoteAddress().toString() <<
+                  ". send() returned status " << status << std::endl;
     }
 }
 

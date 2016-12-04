@@ -8,6 +8,7 @@ ClassTab::ClassTab(ClassStats classStats, QWidget *parent) :
     ui->setupUi(this);
     initWidgets();
     setSummaryBox(classStats);
+    setEnabledLevels(classStats.classId);
     setUserTable(classStats);
     setMapTable(classStats);
 }
@@ -25,24 +26,21 @@ void ClassTab::initWidgets(){
     enabledLevelsLabel = new QLabel("Enabled Levels: ");
     userStatsLabel = new QLabel("Student Stats");
     mapStatsLabel = new QLabel("Map Stats");
-    mapUserLabel = new QLabel("Student");
-    levelLabel = new QLabel("Level");
-    levelNameLabel = new QLabel("Level Name");
-    levelScoreLabel = new QLabel("High Score");
-    completionTimeLabel = new QLabel("Best Time");
 
     summaryBox = new QGroupBox;
     summaryLayout = new QVBoxLayout;
     userStatsTable = new QTableWidget;
     levelStatsTable = new QTableWidget;
     mainLayout = new QVBoxLayout(this);
+    levelArea = new QScrollArea;
 
     summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classPointsLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classTimeLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(enabledLevelsLabel, 0, Qt::AlignCenter);
+    summaryLayout->addWidget(levelArea, 0, Qt::AlignCenter);
     summaryBox->setLayout(summaryLayout);
-    summaryBox->setFixedSize(300, 100);
+    summaryBox->setFixedSize(400, 200);
 
     mainLayout->addWidget(summaryBox, 0, Qt::AlignCenter);
     mainLayout->addWidget(userStatsLabel);
@@ -63,7 +61,6 @@ void ClassTab::setSummaryBox(ClassStats classStats){
         totalPoints += user.totalScore;
         totalTime += user.totalSecPlayed;
     }
-    std::cout << classStats.className << std::endl;
     classNameLabel->setText("Class Name: " + QString::fromStdString(classStats.className));
     classPointsLabel->setText("Total Points: " + QString::number(totalPoints));
     classTimeLabel->setText("Total Time Played: " + getFormattedTime(totalTime));
@@ -138,6 +135,7 @@ void ClassTab::setUserTable(ClassStats classStats){
     }
     userStatsTable->sortByColumn(0, Qt::AscendingOrder);
     userStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
+    userStatsTable->verticalHeader()->setVisible(false);
 }
 
 QColor ClassTab::getLevelColor(UserStats user, int levelID){
@@ -174,7 +172,6 @@ void ClassTab::setMapTable(ClassStats classStats){
     for(int i = 0; i < classStats.studentStats.size(); i++){
         UserStats user = classStats.studentStats.at(i);
         for(auto kv : user.highScores){
-            std::cout << user.completionTimes.size() << std::endl;
             levelStatsTable->insertRow(row);
             QTableWidgetItem *studentNameCell = new QTableWidgetItem(QString::fromStdString(user.username));
             QTableWidgetItem *levIDCell = new QTableWidgetItem(QString::number(kv.first));
@@ -195,4 +192,19 @@ void ClassTab::setMapTable(ClassStats classStats){
     }
     levelStatsTable->sortByColumn(0, Qt::AscendingOrder);
     levelStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
+    levelStatsTable->verticalHeader()->setVisible(false);
+}
+
+void ClassTab::setEnabledLevels(int classID){
+    LoqueClient client;
+    std::vector<int> enabledLevels;
+    client.getEnabledClassLevels(classID, enabledLevels);
+    QHBoxLayout *layout = new QHBoxLayout;
+    QLabel *thumbnail;
+    for(int levelID : enabledLevels){
+        thumbnail = new QLabel;
+        thumbnail->setPixmap(QPixmap(":/assets/pi"));
+        layout->addWidget(thumbnail);
+    }
+    levelArea->setWidget(thumbnail);
 }

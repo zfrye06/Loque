@@ -355,6 +355,19 @@ Status handleDisableLevel(sql::Connection& dbconn,
 }
 
 Status handleGetClassStats(sql::Connection& dbconn,
+                              int classId,
+                              ClassStats& stats) {
+    try {
+        getClassStats(dbconn, classId, stats);
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleGetClassStats: " << e.what() << std::endl;
+        return DB_ERR; 
+    }
+    return OK;
+
+}
+
+Status handleGetAllClassStats(sql::Connection& dbconn,
                            int userId,
                            std::vector<ClassStats>& stats) {
     try {
@@ -497,10 +510,19 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     }
     case GET_CLASS_STATS:
     {
+        int classId;
+        reqPacket >> classId; 
+        ClassStats res;
+        auto status = handleGetClassStats(*dbconn, classId, res);
+        respPacket << status << res;
+        break; 
+    }
+    case GET_ALL_CLASS_STATS:
+    {
         int userId;
         reqPacket >> userId; 
         std::vector<ClassStats> res;
-        auto status = handleGetClassStats(*dbconn, userId, res);
+        auto status = handleGetAllClassStats(*dbconn, userId, res);
         respPacket << status << res;
         break; 
     }

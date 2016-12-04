@@ -136,8 +136,11 @@ class LoqueClient {
     // Disables a level for the given class. UserId must be an instructor id. 
     Status disableLevel(int userId, int classId, int levelId);
 
-    // Retrieves statistics for the given class. UserId must be an instructor id. 
-    Status getClassStats(int userId, std::vector<ClassStats>& stats);
+    // Retrieves the ClassStats associated with the given ID. 
+    Status getClassStats(int classId, ClassStats& stats);
+        
+    // Retrieves statistics for the given class. UserId should be an instructor id. 
+    Status getAllClassStats(int userId, std::vector<ClassStats>& stats);
 
     // Retrieves information about every loque level. 
     Status getAllLevels(std::vector<LevelInfo>& out); 

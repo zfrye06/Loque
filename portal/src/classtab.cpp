@@ -69,7 +69,7 @@ void ClassTab::setSummaryBox(){
 void ClassTab::setUserTable(){
     LoqueClient client;
     ClassStats stats;
-    client.getClassStats(teacherID, classID, stats);
+    client.getClassStats(teacherID, stats);
 
     QStringList headers;
     headers.append("Student");

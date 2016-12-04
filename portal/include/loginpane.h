@@ -4,12 +4,6 @@
 #include <QWidget>
 #include "../shared/loqueclient.h"
 
-struct LoginInfo {
-    std::string username;
-    int userId;
-    UserType type;
-};
-
 namespace Ui {
 class LoginPane;
 }
@@ -24,7 +18,7 @@ public:
 
 signals:
 
-    void onLogin(LoginInfo);
+    void onLogin(UserInfo);
     void onSignupRequested();
 
 private:

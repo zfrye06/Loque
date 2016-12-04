@@ -26,6 +26,7 @@ enum ReqType {
     DISABLE_LEVEL,
     GET_CLASS_STATS,
     GET_ALL_LEVELS,
+    GET_ALL_CLASS_STATS,
 };
 
 inline sf::Packet& operator<<(sf::Packet& packet, const ReqType& t) {

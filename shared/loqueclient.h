@@ -9,7 +9,8 @@
 
 class MapData {
 public:
-    MapData(unsigned int id, std::string path) : path(path), id(id){};
+    MapData(unsigned int id, std::string path, std::string thumbnailPath) : thumbnail(thumbnailPath), path(path), id(id){};
+    std::string thumbnail;
     std::string path;
     unsigned int id;
 };

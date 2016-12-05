@@ -3,10 +3,10 @@
 #include "serialization.h"
 
 MapData Maps[] = {
- MapData(0, "assets/Zapper_Level_1.tmx"),
- MapData(1, "assets/Zapper_Level_2.tmx"),
- MapData(2, "assets/Castle_Level_1.tmx"),
- MapData(3, "assets/Castle_Level_2.tmx")
+ MapData(0, "assets/Zapper_Level_1.tmx", "assets/images/candySky.jpg"),
+ MapData(1, "assets/Zapper_Level_2.tmx", "assets/images/candySky.jpg"),
+ MapData(2, "assets/Castle_Level_1.tmx", "assets/images/candySky.jpg"),
+ MapData(3, "assets/Castle_Level_2.tmx", "assets/images/candySky.jpg")
 };
 std::size_t MapCount = 4;
 

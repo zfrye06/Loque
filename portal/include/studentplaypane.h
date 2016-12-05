@@ -25,10 +25,14 @@ public:
     void addClass(MapData info);
 
 private:
+    UserLevelInfo *levelInfo; 
     QWidget* window;
     QSplitter* splitter;
     QVBoxLayout* layout;
     QListWidget* vertList;
+
+    void addClassRow(const ClassLevelInfo&);
+    void updateDisplay();
 };
 
 #endif // STUDENTPLAYPANE_H

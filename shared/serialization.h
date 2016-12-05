@@ -250,10 +250,10 @@ inline sf::Packet& operator>>(sf::Packet& packet, LevelRecord& record) {
 /* UserLevelInfo */
 
 inline sf::Packet& operator<<(sf::Packet& packet, const UserLevelInfo& info) {
-    for (auto& entry : info) {
-        packet << entry.first; // Write the classId.
-        for (auto& record : entry.second) {
-            packet << record; 
+    for (auto& classInfo : info) {
+        packet << classInfo.classId << classInfo.className;
+        for (auto& record : classInfo.levelRecords) {
+            packet << record;
         }
         packet << loque::serialization::termLevelRecord(); 
     }
@@ -263,19 +263,21 @@ inline sf::Packet& operator<<(sf::Packet& packet, const UserLevelInfo& info) {
 
 inline sf::Packet& operator>>(sf::Packet& packet, UserLevelInfo& info) {
     while (true) {
-        ClassId classId; 
-        packet >> classId;
-        if (classId == loque::serialization::TERM_CLASSID) {
+        ClassLevelInfo classInfo;
+        packet >> classInfo.classId;
+        if (classInfo.classId == loque::serialization::TERM_CLASSID) {
             break;
         }
+        packet >> classInfo.className; 
         while (true) {
             LevelRecord record;
             packet >> record;
             if (loque::serialization::isTermLevelRecord(record)) {
                 break; 
             }
-            info[classId].push_back(record);
+            classInfo.levelRecords.push_back(record);
         }
+        info.push_back(classInfo); 
     }
     return packet;
 }

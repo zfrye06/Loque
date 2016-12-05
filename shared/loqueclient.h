@@ -85,10 +85,18 @@ struct LevelRecord {
     int highScore; // -1 if the user has not completed the level.
     int bestCompletionTimeSecs; // -1 if the user has not completed the level.
     LevelInfo level;
+
+    bool hasCompleted() const; 
 };
 
-typedef int ClassId;
-typedef std::unordered_map<ClassId, std::vector<LevelRecord>> UserLevelInfo;
+// Per-class information on a user's completed levels. 
+struct ClassLevelInfo {
+    int classId;
+    std::string className;
+    std::vector<LevelRecord> levelRecords;
+};
+
+typedef std::vector<ClassLevelInfo> UserLevelInfo; 
 
 // Information about a class in aggregate. 
 struct ClassStats {
@@ -139,7 +147,7 @@ public:
     // to get classroom statistics.
     Status getUserStats(int userId, UserStats& stats);
 
-    // Retrieves information about the levels enabled for the given user, keyed
+    // Retrieves information about the levels enabled for the given user, identified
     // by the class for which they are enabled.
     Status getUserLevelInfo(int userId, UserLevelInfo& out);
 

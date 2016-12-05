@@ -31,6 +31,17 @@ void printUsage(const std::string &progname) {
 
 /* Helpers */
 
+void getClassName(sql::Connection &dbconn,
+                  int classId,
+                  std::string& className) {
+    std::string query = "SELECT className FROM Class WHERE classId = ?";
+    std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, classId);
+    std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    qRes->next();
+    className = qRes->getString(1); 
+}
+
 void getClassIds(sql::Connection &dbconn,
                  int userId,
                  std::vector<int> &classIds) {
@@ -296,13 +307,17 @@ Status handleGetUserLevelInfo(sql::Connection &dbconn,
         std::vector<int> classIds;
         getClassIds(dbconn, userId, classIds);
         for (auto classId : classIds) {
+            ClassLevelInfo classInfo;
+            classInfo.classId = classId;
+            getClassName(dbconn,classId ,classInfo.className);
             std::vector<int> levelIds;
             getEnabledLevelIds(dbconn, classId, levelIds);
             for (auto levelId : levelIds) {
                 LevelRecord record;
                 getUserLevelRecord(dbconn, userId, levelId, record);
-                info[classId].push_back(record);
+                classInfo.levelRecords.push_back(record);
             }
+            info.push_back(classInfo); 
         }
     } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserLevelInfo: " << e.what() << std::endl;

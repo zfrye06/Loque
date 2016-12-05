@@ -2,6 +2,7 @@
 #define REGISTERPANE_H
 
 #include <QWidget>
+#include <QCheckBox>
 #include "../shared/loqueclient.h"
 
 namespace Ui {
@@ -16,14 +17,18 @@ public:
     explicit RegisterPane(QWidget *parent = 0);
     ~RegisterPane();
 
- signals:
-    
+signals:
+
     void onRegistration(UserInfo);
+    void onLoginRequested();
 
 private:
     Ui::RegisterPane *ui;
 
     void attemptRegistration();
+    void adminBoxChanged(int state);
+    void returnToLogin();
+    void displayErrorMessage(const char *errorMessage);
 };
 
 #endif // REGISTERPANE_H

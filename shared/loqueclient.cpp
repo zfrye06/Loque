@@ -2,6 +2,14 @@
 #include "loqueclient.h"
 #include "serialization.h"
 
+MapData Maps[] = {
+ MapData(0, "assets/Zapper_Level_1.tmx"),
+ MapData(1, "assets/Zapper_Level_2.tmx"),
+ MapData(2, "assets/Castle_Level_1.tmx"),
+ MapData(3, "assets/Castle_Level_2.tmx")
+};
+std::size_t MapCount = 4;
+
 std::ostream& operator<<(std::ostream& out, Status s) {
     switch (s) {
     case Status::OK:

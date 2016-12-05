@@ -60,7 +60,7 @@ PlayerState IdleState::getType() {
     return PlayerState::Idle;
 }
 void IdleState::update( Player* player, double dt ) {
-    if ( player->direction.x != 0 && reset ) {
+    if ( player->direction.x != 0 ) {
         walkTimer += dt;
     } else if (player->direction.x == 0 ) {
         walkTimer = 0;
@@ -73,7 +73,7 @@ void IdleState::update( Player* player, double dt ) {
         player->sprite->play(player->idleAnimation);
     }
     if ( walkTimer > player->walkLength ) {
-        if ( fabs(player->direction.x) > 0.9 ) {
+        if ( fabs(player->direction.x) > 0.9 && reset ) {
             if ( player->direction.x > 0 ) {
                 player->switchState( new DashingState(player,1) );
             } else {
@@ -369,7 +369,7 @@ void RunningState::update( Player* player, double dt ) {
     } else if ( player->direction.x > 0.9 && dashingDirection == -1 && crossedNeutral ) {
         player->switchState( new TurningState(player, 1) );
     }
-    if ( (player->direction.x == 0 && player->direction.y == 0) || glm::length(player->direction) < 0.5 ) {
+    if ( (player->direction.x == 0 && player->direction.y == 0) || glm::length(player->direction) < 0.7 ) {
         crossedNeutral = true;
         walkTimer += dt;
     } else {
@@ -487,8 +487,9 @@ TurningState::TurningState( Player* player, float direction ) {
 void TurningState::init() {
     player->sprite->play( player->slideAnimation );
     player->sprite->setFrameTime(sf::seconds(0.16));
-    float d = turnDirection*player->playerSpeed*player->dashingMultiplier;
-    tweenX = tweeny::from(-d).to(0).during(player->turnAroundTime*1000).via(tweeny::easing::quadraticOut);
+    glm::vec2 vel = -toGLM(player->myBody->GetLinearVelocity());
+    tweenX = tweeny::from(vel.x).to(0).during(player->turnAroundTime*1000).via(tweeny::easing::quadraticOut);
+    tweenY = tweeny::from(vel.y).to(0).during(player->turnAroundTime*1000).via(tweeny::easing::quadraticOut);
     turnTimer = 0;
 }
 
@@ -502,7 +503,7 @@ PlayerState TurningState::getType() {
 void TurningState::update( Player* player, double dt ) {
     // If the code reaches here you should never play smash again probably
     glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
-    player->myBody->SetLinearVelocity( b2Vec2(tweenX.step((int)(dt*1000)),vel.y) );
+    player->myBody->SetLinearVelocity( b2Vec2(tweenX.step((int)(dt*1000)),tweenY.step((int)(dt*1000))) );
     turnTimer += dt;
     if ( turnTimer > player->turnAroundTime ) {
         player->switchState( new DashingState(player,turnDirection) );

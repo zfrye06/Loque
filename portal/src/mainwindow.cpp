@@ -32,6 +32,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(registerPane, &RegisterPane::onRegistration,
             this, &MainWindow::handleLogin);
+
+    connect(registerPane, &RegisterPane::onLoginRequested,
+            this, [this] {
+        paneContainer->setCurrentWidget(loginPane);
+    });
 }
 
 void MainWindow::handleLogin(UserInfo user) {

@@ -14,7 +14,20 @@
 #include "world.h"
 #include "hud.h"
 
-int app() {
+std::string getMap(unsigned int id ) {
+    for(unsigned int i=0;i<MapCount;i++ ) {
+        if ( Maps[i].id == id ) {
+            return Maps[i].path;
+        }
+    }
+    throw std::runtime_error( "Couldn't find map!");
+}
+
+int app(int argc, char** argv) {
+    if ( argc != 3 ) {
+        std::cerr << "Wrong number of arguments\nUsage: ./loque [mapID] [userID]\n";
+        return 1;
+    }
     Resources = new ResourceManager();
     Random = new RandomClass();
     physicalWorld = new PhysicalWorld();
@@ -25,7 +38,7 @@ int app() {
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     world->addEntity( new Background("assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ), World::Layer::Background );
-    world->addEntity( new Map( "assets/Castle_Level_2.tmx" ), World::Layer::Midground );
+    world->addEntity( new Map( getMap(std::stoi(argv[1])) ), World::Layer::Midground );
     world->addEntity( new HUD(), World::Layer::Foreground );
     std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);
     if(spawns.size() >= 1){
@@ -78,7 +91,7 @@ int app() {
 
 int main( int argc, char** argv ) {
     try {
-        return app();
+        return app(argc, argv);
     } catch( std::exception e ) {
         std::cout << "ERROR: " << e.what() << "\n";
         throw e;

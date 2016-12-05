@@ -132,6 +132,7 @@ public:
 
 class TurningState : public GenericPlayerState {
     tweeny::tween<float> tweenX;
+    tweeny::tween<float> tweenY;
     float turnDirection;
     float turnTimer;
 public:

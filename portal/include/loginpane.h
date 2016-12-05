@@ -26,6 +26,7 @@ private:
     Ui::LoginPane *ui;
 
     void attemptLogin();
+    void displayErrorMessage(const char *errorMessage);
 };
 
 #endif // LOGINPANE_H

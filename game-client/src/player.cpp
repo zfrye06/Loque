@@ -3,6 +3,7 @@
 Player::Player( std::string resource, glm::vec2 pos) {
     resetToNeutral = false;
     wallJumpDirection = 0;
+    wallJumpLength = 5.f/60.f;
     hitLength = 0.2f;
     successfulTech = false;
     wallJumpTimer = 0;
@@ -11,12 +12,13 @@ Player::Player( std::string resource, glm::vec2 pos) {
     frickedUpLength = 40.f/60.f;
     jumpHelpAmount = 2.f;
     damageBoostLength = 0.25;
+    dead = false;
     damageBoostTimer = 0;
     shockLength = 0.4;
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 6.f/60.f; // Time in seconds to wait for button release for a short hop.
-    dashLength = 0.30; // in seconds
+    dashLength = 0.20; // in seconds
     playerWidth = .35; // in meters
     playerHeight = .35; // in meters
     airDodgeVelocity = 19;
@@ -339,12 +341,12 @@ void Player::update( double dt ) {
     if (!onGround && wallJumpTimer <= 0 && resetToNeutral ) {
         if ( direction.x > 0.9 ) {
             resetToNeutral = false;
-            wallJumpTimer = techLength;
+            wallJumpTimer = wallJumpLength;
             wallJumpDirection = 1;
         } else if ( direction.x < -0.9 ) {
             wallJumpDirection = -1;
             resetToNeutral = false;
-            wallJumpTimer = techLength;
+            wallJumpTimer = wallJumpLength;
         }
 
     }
@@ -354,7 +356,7 @@ void Player::update( double dt ) {
     if ( wallJumpTimer <= 0 ) {
         successfulWallJump = false;
     }
-    if ( ((touchingWallLeft && wallJumpDirection == 1) || (touchingWallRight && wallJumpDirection == -1)) && wallJumpTimer > 0 ) {
+    if ( ((canWallJumpRight && wallJumpDirection == 1) || (canWallJumpLeft && wallJumpDirection == -1)) && wallJumpTimer > 0 ) {
         wallJumpTimer = 0;
         successfulWallJump = true;
     }
@@ -412,6 +414,10 @@ void Player::update( double dt ) {
             world->addEntity(new Respawn(glm::vec2(spawnLoc.x, spawnLoc.y)), World::Layer::Midground);
             return;
         }
+    }
+    if ( dead ) {
+        world->addEntity(new Respawn(glm::vec2(spawnLoc.x, spawnLoc.y)), World::Layer::Midground);
+        return;
     }
     if ( sf::Joystick::isConnected( controllerID ) && controllerFound ) {
         if ( sf::Joystick::isButtonPressed(controllerID,2) || sf::Joystick::isButtonPressed(controllerID,3) ) {

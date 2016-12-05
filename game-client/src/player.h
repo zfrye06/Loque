@@ -46,11 +46,13 @@ public:
     float playerSpeed;
     float jumpHelpAmount;
     float fullHopHeight;
+    float wallJumpLength;
     float shortHopHeight;
     float landLength;
     float airControlMultiplier;
 
     // Control variables
+    bool dead;
     bool successfulWallJump;
     float wallJumpDirection;
     bool resetToNeutral;

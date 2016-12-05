@@ -47,6 +47,7 @@ public:
         Dust,
         Spikes,
         Lava,
+        KillBox,
         Exit,
         RespawnAnim,
         HUD,

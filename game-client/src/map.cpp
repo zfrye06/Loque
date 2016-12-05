@@ -287,16 +287,18 @@ Entity::Type Map::getType(){
 
 void Map::spawnObject( tmx::Object& obj ) {
     if ( obj.getName() == "playerSpawn" ) {
-        world->addEntity(new ::PlayerSpawn(obj), World::Layer::Background);
+        world->addEntity(new ::PlayerSpawn(obj), World::Layer::None);
     } else if( obj.getName() == "laser" ) {
-        world->addEntity( new ::Laser(obj), World::Layer::Background);
+        world->addEntity( new ::Laser(obj), World::Layer::None);
+    } else if( obj.getName() == "killbox" ) {
+        world->addEntity( new ::KillBox(obj), World::Layer::None);
     } else if( obj.getName() == "trampoline" ) {
-        world->addEntity( new ::Trampoline(obj), World::Layer::Background);
+        world->addEntity( new ::Trampoline(obj), World::Layer::None);
     } else if( obj.getName() == "spikes") {
-        world->addEntity( new ::Spikes(obj), World::Layer::Background);
+        world->addEntity( new ::Spikes(obj), World::Layer::None);
     } else if( obj.getName() == "lava") {
         world->addEntity( new ::Lava(obj), World::Layer::Lavaground);
     } else if( obj.getName() == "exit") {
-        world->addEntity( new ::Exit(obj), World::Layer::Background);
+        world->addEntity( new ::Exit(obj), World::Layer::None);
     }
 }

@@ -331,7 +331,7 @@ Status handleGetEnabledClassLevels(sql::Connection &dbconn,
                                    int classId,
                                    std::vector<int> &levelIds) {
     try {
-        std::string query = "SELECT FROM LevelAssociations WHERE classId = ?";
+        std::string query = "SELECT levelId FROM LevelAssociations WHERE classId = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, classId);
         std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());

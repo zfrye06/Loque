@@ -6,6 +6,16 @@
 #include <unordered_map>
 #include <vector>
 
+class MapData {
+public:
+    MapData(unsigned int id, std::string path) : path(path), id(id){};
+    std::string path;
+    unsigned int id;
+};
+
+extern MapData Maps[];
+extern std::size_t MapCount;
+
 enum Status {
     OK,
     NETWORK_ERR,

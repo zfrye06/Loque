@@ -18,7 +18,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     deadZone = 0.25; // in percentage
     walkLength = 0.06; // Time in seconds to wait for stick to smash, before walking
     jumpSquatLength = 6.f/60.f; // Time in seconds to wait for button release for a short hop.
-    dashLength = 0.20; // in seconds
+    dashLength = 0.25; // in seconds
     playerWidth = .35; // in meters
     playerHeight = .35; // in meters
     airDodgeVelocity = 19;

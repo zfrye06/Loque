@@ -5,6 +5,7 @@
 #include <SFML/Audio/Music.hpp>
 
 #include "entity.h"
+#include "background.h"
 #include "exit.h"
 #include "laser.h"
 #include "lava.h"

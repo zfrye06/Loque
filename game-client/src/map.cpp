@@ -23,8 +23,10 @@ Map::Map( std::string resource ) {
                 } else {
                     ambient.openFromFile("assets/audio/music/flower_fields.ogg");
                 }
+                world->addEntity( new Background("assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ), World::Layer::Background );
             } else if ( p.getStringValue() == "dungeon" ) {
                 ambient.openFromFile("assets/audio/music/metamorphis.ogg");
+                world->addEntity( new Background("assets/images/moon.png", "assets/images/castle.png", "assets/images/clouds.png" ), World::Layer::Background );
             }
             ambient.setLoop(true);
             ambient.play();

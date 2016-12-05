@@ -37,7 +37,6 @@ int app(int argc, char** argv) {
     playerStats = new PlayerStats( 0, 0 );
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
-    world->addEntity( new Background("assets/images/sky.png", "assets/images/clouds.png", "assets/images/hills.png" ), World::Layer::Background );
     world->addEntity( new Map( getMap(std::stoi(argv[1])) ), World::Layer::Midground );
     world->addEntity( new HUD(), World::Layer::Foreground );
     std::vector<Entity*> spawns = world->getEntitiesByType(Entity::Type::PlayerSpawn);

@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="256" height="128" tilewidth="64" tileheight="64" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="256" height="128" tilewidth="64" tileheight="64" nextobjectid="5">
+ <tileset firstgid="1" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
+  <image source="images/PhysicsTileset.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="17" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="160" columns="20">
+  <image source="images/DungeonTiles.png" width="1280" height="512"/>
+ </tileset>
+ <tileset firstgid="177" name="MathSpritesheet" tilewidth="64" tileheight="64" tilecount="30" columns="5">
+  <image source="images/MathSpritesheet.png" width="320" height="384"/>
+ </tileset>
+ <tileset firstgid="207" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="30" columns="6">
+  <image source="images/LevelHazards.png" width="384" height="320"/>
+ </tileset>
+ <tileset firstgid="237" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
+  <image source="images/candylandTiles.png" width="896" height="448"/>
+ </tileset>
  <layer name="CandyGraphics" width="256" height="128">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
+   eJzt2cFqwkAQgOHkpdr3NvEZpKD33u0DSD0LXaGCFAombHfWzvfBQC6G5PBnBxwGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAHI5l3v9wPtq9CtCZ1zH6CYAoL/qHtPQPeekf8tI/5KV/yEv/kJf+Ia+e+v8sc/qeoaPngv+qp/6BtvQPebXu344Py8xlDmV2ZaYyb2W2le7t/Ie89A/P47oHXM//faX71e7ffg/Pw/kPeekf8lrav/0e+rG5u57vrn/+PzD98nvnP/Tr1HjObV4LeMCl8YyjbwD0onX/t2/Amt0BqCui/7UD1BXdtP4hTnTT+oc40U3rH+JEN61/iPMFfmhjdA==
   </data>
  </layer>
  <layer name="Decoration" width="256" height="128">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
+   eJzt0zENACAAwDCwQ/CvDxlA1irYszEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN6y5u0C4Jbtf8jyP3T5H7r8D13+hy7/Q5f/ocv/AAAAAAAAAADwrwPA1AGU
   </data>
  </layer>
- <layer name="Physical" width="256" height="128">
+ <layer name="Physical" width="256" height="128" opacity="0.32">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
+   eJzt2DEKwzAQAEHZ/3902hAIkosQyzsDgqsONQtCYwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQcm+8H7kv/0KV/6NI/dOkfuvQPXfqHLv1Dl/6hS//QpX/o0j906R+69A9d+ocu/UOX/qFL/9Clf+jSP9zXMTljYX5v/NsOYD+fbc9moOVq/+eYvzu8I2APV9o8f3YL4B9W+9c+PM9K/9qHZ5r1r314Lv92sKcXVXcAUg==
   </data>
  </layer>
- <objectgroup name="Objects"/>
+ <objectgroup name="Objects">
+  <object id="1" name="laser" x="69.697" y="6418.18" width="1466.67" height="18.1818">
+   <properties>
+    <property name="canBePassed" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="2" name="spikes" x="512.121" y="7678.79" width="57.5758" height="60.6061"/>
+  <object id="3" name="spikes" x="709.091" y="7687.88" width="57.5758" height="57.5758"/>
+  <object id="4" name="spikes" x="900" y="7669.7" width="60.6061" height="75.7576"/>
+ </objectgroup>
 </map>

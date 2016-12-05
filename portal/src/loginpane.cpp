@@ -18,14 +18,28 @@ LoginPane::LoginPane(QWidget *parent) :
 }
 
 void LoginPane::attemptLogin() {
-    UserInfo info;
-    info.username = ui->usernameField->text().toStdString();
-    info.userId = 12345;
-    info.type = UserType::STUDENT;
-    emit onLogin(info);
+    ui->errorLabel->clear();
+    
+    std::string username = ui->usernameField->text().toStdString();
+    std::string password = ui->passwordField->text().toStdString();
+    if (username.length() == 0 || password.length() == 0) {
+        ui->errorLabel->setText("Oops! Be sure to enter a username and password."); 
+        return;
+    }
+    LoqueClient client;
+    LoginResult login;
+    auto status = client.attemptLogin(username, password, login);
+    if (status != Status::OK || login.userType == UserType::DNE) {
+        if (status == Status::NETWORK_ERR) {
+            ui->errorLabel->setText("Oops! Looks like we can't connect to the network.");
+        } else {
+            ui->errorLabel->setText("Oops! Looks like that username has been used before.");
+        }
+        return;
+    }
+    emit onLogin(UserInfo(username, login.userId, login.userType));
 }
 
-LoginPane::~LoginPane()
-{
+LoginPane::~LoginPane() {
     delete ui;
 }

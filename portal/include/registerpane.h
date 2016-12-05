@@ -22,6 +22,8 @@ public:
 
 private:
     Ui::RegisterPane *ui;
+
+    void attemptRegistration();
 };
 
 #endif // REGISTERPANE_H

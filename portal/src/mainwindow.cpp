@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(adminPane);
     paneContainer->addWidget(adminPlayPane);
     setCentralWidget(paneContainer);
-    paneContainer->setCurrentWidget(adminPane);
 
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin); 

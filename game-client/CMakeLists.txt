@@ -36,6 +36,7 @@ set( source
          src/background.cpp
          src/respawn.cpp
          src/trampoline.cpp
+         src/killbox.cpp
          src/map.cpp
          src/laser.cpp
          src/playerstate.cpp

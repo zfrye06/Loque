@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="left-down" width="128" height="32" tilewidth="64" tileheight="64" nextobjectid="29">
+<map version="1.0" orientation="orthogonal" renderorder="left-down" width="128" height="32" tilewidth="64" tileheight="64" nextobjectid="30">
  <properties>
   <property name="ambient" value="candy"/>
  </properties>
@@ -12,24 +12,30 @@
  <tileset firstgid="129" name="LevelHazards" tilewidth="64" tileheight="64" tilecount="30" columns="6">
   <image source="images/LevelHazards.png" width="384" height="320"/>
  </tileset>
- <tileset firstgid="159" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="182" columns="14">
-  <image source="images/DungeonTiles.png" width="896" height="837"/>
+ <tileset firstgid="159" name="DungeonTiles" tilewidth="64" tileheight="64" tilecount="160" columns="20">
+  <image source="images/DungeonTiles.png" width="1280" height="512"/>
  </tileset>
- <tileset firstgid="341" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
+ <tileset firstgid="319" name="PhysicsTileset" tilewidth="64" tileheight="64" tilecount="16" columns="4">
   <image source="images/PhysicsTileset.png" width="256" height="256"/>
  </tileset>
  <layer name="CandyGraphics" width="128" height="32">
+  <properties>
+   <property name="lava" type="bool" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
- <layer name="Physical" width="128" height="32" opacity="0.47">
+ <layer name="Physical" width="128" height="32" visible="0" opacity="0.47">
+  <properties>
+   <property name="lava" type="bool" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJztmgluxCAMRWcOOUna3v8eVVQhIdeAvxcggi8hZRlsh4dZMnm9/vR5y4unEL+9Y1tJ0raL4D+jrdW0+a+tzX9tbf5rayb+Wh+R/D3XmDOua6P493y+qHaiMd7HZ1bQZ6D1T1Kf2n06fw9djJ2jQ57cNn/e/6/R8w/DLL9WYl2Tpm9pFcE/cm4/gtsktTtlz8VChTCWxhItiQ9JX+wxZkWxz2PnuEeq1l4z8W/d92BfGl/vEpn3I7jnvjX3evhP91sxno7ruBHr4F77R3TPM5q/hP3T5juLX+/xLdqfxYc07y25T9f2I/gjfbgXf3S/YFGNf60Ox93av1t90bs9kr1e/FGbo/hr2Ufypz5qawVpafltxeuhJ/Kn59rcLNlKx/k7lFsR78Z67vuesv6jDE7CJf+dhsXF2MrtteJF8lVSeu39nsSftjPNRUt8pXlXYk/K/5PF6zlWWOt/ATZG8edYS+siPrVzhmc/QX1b6yM2Rq7/vXUx44Y3/3zc8nonRe1b6yNj3mz80f0+/Z+O+tQ8Xy2G0liP+in58OBP7T6JP6KDcPfij8p7r6DVt7BvcuNkpCw+SnVz9ucg/hFzQY/9P9dOkUJ8cN9dlAq1LeGPPm8pt6Xc0e9IVuNv/c5Gw7/Wn7jfanWQeCLWi1T026/kO9cI/ki7o7Zrx9L8r8WG7KeTtOxXy39P2xHjf6qjKakukvepHs1jaanZ5M43/zhp+1p0HLON/9ZSey5k/l+1bG1tbXnrF8XC2dU=
+   eJztmgtuwyAMhpuTJem6+19piiYk5BrHb4jgl5CadtiGDxyc5fX6177xm6ckfrNjm0ncuYvgP6Kt2bT4z63Ff24t/nNrJP5aH5H8Pc+YI55ro/hnji9qnmCM1+ezatIxwP4n6A/tPp2/h96InSNhn1w2f7fv7+D1jjCrv2uxpqRZW1pF8PeK+7N9cziC52RHfNa/UZIw5sYSLY6PgzGujJwVxb6OHeMeKWq+RuGfxb6VX68Wue97cK99a37L8H/pbu+Xe5xXLD3OwVn1o7Tm6c3/bu692fSq47Nq4F5naI0PDvvTuPfh2b4Hf8kazuIvrRcsovhTfTDu1vV9txa956PYy+IvtdmLv4Y9p0a483O3Fus1wH2+xDlTLP58v/C3A5lPrW/It36Gcini2Vhm3feU8x9kcAIuRVr2b8RWuebWmhxx80BW7fck/nCe4V60xNe673LscfnvVbyeucLa/0dgoxd/jDW3r8Sn9p7huU6kvq39JTZ6nv+99Ubyhjf/Om95PZOC9q39JTlvNP7Seh/+nw761IyPiqGV66V+Wj48+EO7T+IvETwbevHXxuEhi50Pc21ieTJSFh+tvjX7sxN/LAarMup/zXMJT/+UsPcuWg3a5vCXjrd1FuByl75HMht/63s2Gv7UesL+VqsDxBNxXoSC734V37V68JfMu9Q29Zm7/6nYJPV0kZb9bPvf03ZE/i99NK30lez70g/uY26jbGLXi3+ctGstOo7R8r+1UeOS3P9nbUtLS0ve+gP3TaLj
   </data>
  </layer>
  <objectgroup name="Objects">
-  <object id="1" name="playerSpawn" x="5465.52" y="1630.5" width="58.3658" height="52.8071"/>
+  <object id="1" name="playerSpawn" x="282.199" y="1278.24" width="58.3658" height="52.8071"/>
   <object id="3" name="laser" x="1111.17" y="1280.77" width="15.319" height="190.94">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
@@ -54,7 +60,7 @@
   <object id="11" name="trampoline" x="4422" y="1495" width="56" height="39"/>
   <object id="12" name="spikes" x="2817.12" y="1632.41" width="253.96" height="31.6795"/>
   <object id="13" name="spikes" x="4161.63" y="1824.49" width="766.734" height="30.2216"/>
-  <object id="14" name="lava" x="4958.46" y="1813.86" width="1331.61" height="67.1457"/>
+  <object id="14" name="spikes" x="4984.02" y="1831.29" width="1290.95" height="27.643"/>
   <object id="15" name="laser" x="3265.05" y="1559.21" width="255.205" height="11.1932">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
@@ -111,5 +117,6 @@
    </properties>
   </object>
   <object id="27" name="exit" x="6657.71" y="771.211" width="61.5626" height="61.5626"/>
+  <object id="29" name="killbox" x="1309.32" y="2009.01" width="1305.85" height="48.4932"/>
  </objectgroup>
 </map>

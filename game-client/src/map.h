@@ -13,6 +13,7 @@
 #include "trampoline.h"
 #include "world.h"
 #include "layer.h"
+#include "killbox.h"
 
 class Map : public Entity {
 private:

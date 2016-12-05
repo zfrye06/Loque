@@ -2,6 +2,10 @@
 #define STUDENTPLAYPANE_H
 
 #include <QWidget>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QSplitter>
+#include <QVBoxLayout>
 #include "../shared/loqueclient.h"
 
 namespace Ui {
@@ -18,9 +22,13 @@ public:
 
     void setUser(UserInfo);
     void updateLevelInfo();
+    void addClass(MapData info);
 
 private:
-    Ui::StudentPlayPane *ui;
+    QWidget* window;
+    QSplitter* splitter;
+    QVBoxLayout* layout;
+    QListWidget* vertList;
 };
 
 #endif // STUDENTPLAYPANE_H

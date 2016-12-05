@@ -59,7 +59,9 @@ struct UserInfo {
     std::string username;
     int userId;
     UserType type;
-    UserInfo(std::string username, int userId, UserType type) : username(username), userId(userId), type(type) {}
+    
+    UserInfo(); 
+    UserInfo(std::string username, int userId, UserType type);
 };
 
 // Information about a single user (admin or student).

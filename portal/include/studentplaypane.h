@@ -25,11 +25,12 @@ public:
     void addClass(MapData info);
 
 private:
-    UserLevelInfo *levelInfo; 
-    QWidget* window;
-    QSplitter* splitter;
-    QVBoxLayout* layout;
-    QListWidget* vertList;
+    UserInfo user;
+    std::unique_ptr<UserLevelInfo> levelInfo;
+    QWidget *window;
+    QSplitter *splitter;
+    QVBoxLayout *layout;
+    QListWidget *vertList;
 
     void addClassRow(const ClassLevelInfo&);
     void updateDisplay();

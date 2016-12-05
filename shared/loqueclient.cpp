@@ -40,6 +40,14 @@ std::ostream& operator<<(std::ostream& out, UserType t) {
     return out;
 }
 
+UserInfo::UserInfo() : username(""), userId(-1), type(UserType::DNE) {}
+UserInfo::UserInfo(std::string username, int userId, UserType type) :
+    username(username), userId(userId), type(type) {}
+
+bool LevelRecord::hasCompleted() const {
+    return bestCompletionTimeSecs != -1; 
+}
+
 LoqueClient::LoqueClient() : host("127.0.0.1"), port(5001) {}
 
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
@@ -146,7 +154,15 @@ Status LoqueClient::getEnabledClassLevels(int classID, std::vector<int>& levelId
 }
 
 Status LoqueClient::getUserLevelInfo(int userId, UserLevelInfo& out) {
-    return Status::OK; 
+    sf::Packet toSend;
+    toSend << ReqType::GET_USER_LEVEL_INFO << userId;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (status != OK) {
+        return status; 
+    }
+    toReceive >> status >> out; 
+    return status;
 }
 
 Status LoqueClient::enableLevel(int userId, int classId, int levelId) {

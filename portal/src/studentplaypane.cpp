@@ -5,6 +5,7 @@
 #include <iostream>
 StudentPlayPane::StudentPlayPane(QWidget *parent) :
     QWidget(parent),
+    levelInfo(nullptr),
     splitter(new QSplitter(this)),
     layout(new QVBoxLayout()),
     vertList(new QListWidget())
@@ -21,12 +22,19 @@ StudentPlayPane::~StudentPlayPane() {
 }
 
 void StudentPlayPane::setUser(UserInfo user) {
-    
-
+   this->user = user;
 }
 
 void StudentPlayPane::updateLevelInfo() {
-
+    LoqueClient client;
+    std::unique_ptr<UserLevelInfo> newInfo(new std::vector<ClassLevelInfo>());
+    auto status = client.getUserLevelInfo(user.userId, *newInfo);
+    if (status != Status::OK) {
+        // TODO: show error
+        std::cerr << "ERROR: Unable to update level info. Status returned was " << status << std::endl;
+        return;
+    }
+    levelInfo.reset(newInfo.release());
 }
 
 void StudentPlayPane::addClassRow(const ClassLevelInfo& classInfo) {

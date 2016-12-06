@@ -28,10 +28,8 @@ void RegisterPane::attemptRegistration()
     } else {
         std::string username = ui->usernameField->text().toStdString();
         std::string password = ui->passwordField->text().toStdString();
-        std::string address = "127.0.0.1";
-        int port = 5002;
         LoginResult result;
-        LoqueClient client(address, port);
+        LoqueClient client;
         UserType type = (ui->adminCheck->checkState() == Qt::Unchecked) ? UserType::STUDENT :
                         (ui->adminCheck->checkState() == Qt::Checked) ? UserType::ADMIN : UserType::DNE;
         Status returnStatus = client.createAccount(username, password, type, result);

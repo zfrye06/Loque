@@ -271,6 +271,7 @@ Map::Map( std::string resource ) {
     }
 }
 Map::~Map() {
+    delete map;
     ambient.stop();
 }
 

@@ -31,7 +31,7 @@ private:
     QVBoxLayout *mainLayout;
     QGroupBox *summaryBox;
     QVBoxLayout *summaryLayout;
-    QScrollArea *levelArea;
+    QGroupBox *levelArea;
 
     QLabel *classSummaryLabel;
     QLabel *classNameLabel;

@@ -32,7 +32,7 @@ void ClassTab::initWidgets(){
     userStatsTable = new QTableWidget;
     levelStatsTable = new QTableWidget;
     mainLayout = new QVBoxLayout(this);
-    levelArea = new QScrollArea;
+    levelArea = new QGroupBox;
 
     summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classPointsLabel, 0, Qt::AlignCenter);
@@ -40,7 +40,7 @@ void ClassTab::initWidgets(){
     summaryLayout->addWidget(enabledLevelsLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(levelArea, 0, Qt::AlignCenter);
     summaryBox->setLayout(summaryLayout);
-    summaryBox->setFixedSize(400, 200);
+    summaryBox->setFixedSize(400, 300);
 
     mainLayout->addWidget(summaryBox, 0, Qt::AlignCenter);
     mainLayout->addWidget(userStatsLabel);
@@ -196,6 +196,7 @@ void ClassTab::setMapTable(ClassStats classStats){
 }
 
 void ClassTab::setEnabledLevels(int classID){
+    levelArea->setStyleSheet("QGroupBox{background-color: black}");
     LoqueClient client;
     std::vector<int> enabledLevels;
     client.getEnabledClassLevels(classID, enabledLevels);
@@ -203,8 +204,9 @@ void ClassTab::setEnabledLevels(int classID){
     QLabel *thumbnail;
     for(int levelID : enabledLevels){
         thumbnail = new QLabel;
-        thumbnail->setPixmap(QPixmap(":/assets/pi"));
+        QPixmap pxmap(":/assets/assets/candySky.jpg");
+        thumbnail->setPixmap(pxmap.scaled(75, 75));
         layout->addWidget(thumbnail);
     }
-    levelArea->setWidget(thumbnail);
+    levelArea->setLayout(layout);
 }

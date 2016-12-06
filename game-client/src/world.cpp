@@ -65,6 +65,7 @@ void World::removeEntity( Entity* e, World::Layer l ) {
 void World::draw( sf::RenderWindow& window ) {
     view.setCenter( sf::Vector2f( round(view.getCenter().x), round(view.getCenter().y) ));
     window.setView( windowView );
+    window.clear( sf::Color::Transparent );
     //window.setView(view);
     // For each layer, clear, then draw to the frame buffer.
     for( unsigned int l=0;l<LAYERCOUNT;l++ ) {

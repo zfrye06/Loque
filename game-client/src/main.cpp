@@ -77,7 +77,6 @@ int app(int argc, char** argv) {
         //view.setCenter( round( center.x ), round( center.y ) );
         // Actually do rendering.
         //window.setView( view );
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         world->draw(window);
         window.display();
     }

@@ -525,14 +525,14 @@ void Player::detectGround() {
     b2AABB testAABB;
     b2Vec2 pos = myBody->GetWorldCenter();
     testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight+0.5);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight+0.15);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
     onGround = false;
     if (queryCallback.foundMap) {
         b2RayCastInput input;
         input.p1 = pos;
-        input.p2 = pos+b2Vec2(0,playerHeight+0.5);
+        input.p2 = pos+b2Vec2(0,playerHeight+0.15);
         input.maxFraction = 1;
         b2RayCastOutput output;
         float closestFrac = input.maxFraction+0.1;
@@ -544,7 +544,7 @@ void Player::detectGround() {
             }
         }
         input.p1 = pos+b2Vec2(playerWidth/2.f,0);
-        input.p2 = pos+b2Vec2(playerWidth/2.f,playerHeight+0.5);
+        input.p2 = pos+b2Vec2(playerWidth/2.f,playerHeight+0.15);
         input.maxFraction = 1;
         closestFrac = input.maxFraction+0.1;
         for ( b2Fixture* f : queryCallback.hitFixtures ) {
@@ -555,7 +555,7 @@ void Player::detectGround() {
             }
         }
         input.p1 = pos-b2Vec2(playerWidth/2.f,0);
-        input.p2 = pos+b2Vec2(-playerWidth/2.f,playerHeight+0.5);
+        input.p2 = pos+b2Vec2(-playerWidth/2.f,playerHeight+0.15);
         input.maxFraction = 1;
         closestFrac = input.maxFraction+0.1;
         for ( b2Fixture* f : queryCallback.hitFixtures ) {

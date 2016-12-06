@@ -3,16 +3,17 @@
 
 #include <SFML/Network.hpp>
 #include <ostream>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <string>
 
 class MapData {
 public:
-    MapData(unsigned int id, std::string path, std::string thumbnailPath) : thumbnail(thumbnailPath), path(path), id(id){};
-    std::string thumbnail;
-    std::string path;
     unsigned int id;
+    std::string path;
+    std::string thumbnail;
+    MapData(unsigned int id, std::string path, std::string thumbnailPath) :
+        id(id), path(path), thumbnail(thumbnailPath) {}
 };
 
 extern MapData Maps[];

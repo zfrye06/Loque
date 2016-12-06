@@ -35,7 +35,6 @@ HEADERS  += include/mainwindow.h \
 FORMS    += src/mainwindow.ui \
     src/loginpane.ui \
     src/registerpane.ui \
-    src/studentplaypane.ui \
     src/adminplaypane.ui \
     src/adminpane.ui \
     src/classtab.ui

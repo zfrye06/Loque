@@ -11,6 +11,7 @@ Background::Background(std::string skyFile, std::string cloudsFile, std::string 
 
 void Background::update( double dt ){
     glm::vec2 viewPos = toGLM(world->view.getCenter());
+    glm::vec2 viewSize = toGLM(world->windowView.getSize());
     sf::IntRect hillUV = hills.getTextureRect();
     hillUV.left = viewPos.x/4;
 //    hillUV.top += viewPos.y/280;
@@ -18,21 +19,20 @@ void Background::update( double dt ){
     sf::IntRect cloudsUV = clouds.getTextureRect();
     cloudsUV.left = viewPos.x/8;
     clouds.setTextureRect(cloudsUV);
-    sky.setScale( world->view.getSize().x/sky.getTexture()->getSize().x, world->view.getSize().y/sky.getTexture()->getSize().y );
-    hills.setScale( world->view.getSize().x/hills.getTexture()->getSize().x, world->view.getSize().y/hills.getTexture()->getSize().y );
-    clouds.setScale( world->view.getSize().x/clouds.getTexture()->getSize().x, world->view.getSize().y/clouds.getTexture()->getSize().y );
+    sky.setScale( viewSize.x/sky.getTexture()->getSize().x, viewSize.y/sky.getTexture()->getSize().y );
+    hills.setScale( viewSize.x/hills.getTexture()->getSize().x, viewSize.y/hills.getTexture()->getSize().y );
+    clouds.setScale( viewSize.x/clouds.getTexture()->getSize().x, viewSize.y/clouds.getTexture()->getSize().y );
 }
 
 void Background::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void Background::draw(sf::RenderTarget& window){
-    sf::View temp = window.getView();
     window.setView( world->windowView );
     window.draw(sky);
     window.draw(clouds);
     window.draw(hills);
-    window.setView( temp );
+    window.setView( world->view );
 }
 
 Entity::Type Background::getType(){

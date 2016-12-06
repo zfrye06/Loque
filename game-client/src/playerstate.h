@@ -4,6 +4,7 @@
 #include <tweeny.h>
 
 #include "player.h"
+#include "map.h"
 
 class Player;
 
@@ -178,6 +179,8 @@ public:
 
 class WinState : public GenericPlayerState {
 public:
+    tweeny::tween<float> tweenW;
+    tweeny::tween<float> tweenH;
     WinState( Player* player );
     ~WinState();
     void init();

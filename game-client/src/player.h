@@ -141,6 +141,7 @@ public:
     sf::Sound wallJumpSound;
     sf::Sound airDodgeSound;
     sf::Sound techSound;
+    sf::Sound winSound;
     Player( std::string resource, glm::vec2 pos );
     ~Player();
     void update( double dt );

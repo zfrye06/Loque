@@ -227,6 +227,7 @@ void Player::setUpSounds() {
     hurtSound = sf::Sound(*Resources->getSound( "assets/audio/effects/hurt.ogg" ));
     wallJumpSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump3.ogg" ));
     airDodgeSound = sf::Sound(*Resources->getSound( "assets/audio/effects/jump2.ogg" ));
+    winSound = sf::Sound(*Resources->getSound( "assets/audio/effects/victory.ogg" ));
 }
 
 void Player::setUpBody() {
@@ -281,15 +282,15 @@ void Player::shake(float strength, float length, float period) {
 }
 
 void Player::draw( sf::RenderTarget& window ) {
-    sf::Text stateText;
+    /*sf::Text stateText;
     stateText.setFont( *Resources->getFont( "assets/fonts/arial.ttf" ) );
     stateText.setString( StateString[currentState->getType()] );
     stateText.setCharacterSize(20);
     stateText.setStyle(sf::Text::Bold);
     //stateText.setColor(sf::Color::Red);
     stateText.setPosition(myBody->GetWorldCenter().x*64-48, myBody->GetWorldCenter().y*64-48);
+    window.draw( stateText );*/
     window.draw( *sprite );
-    window.draw( stateText );
 }
 
 void Player::update( double dt ) {
@@ -508,11 +509,13 @@ void Player::update( double dt ) {
     } else {
         sprite->setPosition( pos.x*64+48+shakeAmount.x, pos.y*64-74+shakeAmount.y );
     }
+    smoothCamera += (glm::vec2( (float)pos.x*64, (float)pos.y*64 )+vel-smoothCamera)*(float)dt*4.f;
     position = glm::vec2((float)pos.x*64.f,(float)pos.y*64.f);
     sprite->setRotation( ang*180/3.149562 );
     vel = toGLM(myBody->GetLinearVelocity())*10.f;
-    smoothCamera += (glm::vec2( (float)pos.x*64, (float)pos.y*64 )+vel-smoothCamera)*(float)dt*4.f;
-    world->view.setCenter( toSFML(smoothCamera+shakeAmount2) );
+    if ( currentState->getType() != PlayerState::Win ) {
+        world->view.setCenter( toSFML(smoothCamera+shakeAmount2) );
+    }
     sprite->update( sf::seconds(dt) );
 }
 

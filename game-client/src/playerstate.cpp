@@ -754,6 +754,12 @@ WinState::WinState( Player* player ) {
 }
 
 void WinState::init() {
+    glm::vec2 size = toGLM(world->view.getSize());
+    tweenW = tweeny::from(size.x).to(size.x/2.f).during(3700).via(tweeny::easing::bounceOut);
+    tweenH = tweeny::from(size.y).to(size.y/2.f).during(3700).via(tweeny::easing::bounceOut);
+    Map* map = (Map*)world->getEntitiesByType( Entity::Type::Map )[0];
+    map->ambient.stop();
+    player->winSound.play();
     player->sprite->play( player->winAnimation );
     player->sprite->setLooped( false );
     player->sprite->setFrameTime(sf::seconds(0.1));
@@ -768,6 +774,8 @@ PlayerState WinState::getType() {
 }
 
 void WinState::update( Player* player, double dt ) {
+    world->view.setSize( sf::Vector2f( tweenW.step((int)(dt*1000)), tweenH.step((int)(dt*1000))));
+    world->view.setCenter( player->position.x, player->position.y );
     if ( !player->sprite->isPlaying() ) {
         player->sprite->setLooped( true );
         player->sprite->play( player->winRepeatAnimation );

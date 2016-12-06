@@ -44,7 +44,7 @@ void Exit::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     if(collider->getType() == Entity::Type::Player){
         ::Player* p = static_cast< ::Player*>(collider);
         if ( p->currentState->getType() != PlayerState::Win ) {
-            world->stutter(0.5,0.5);
+            //world->stutter(0.5,0.5);
             //p->shake(10,p->hitLength,0.1);
             p->switchState( new WinState( p ) );
         }

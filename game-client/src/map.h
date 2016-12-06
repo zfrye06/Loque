@@ -18,11 +18,11 @@
 
 class Map : public Entity {
 private:
-    sf::Music ambient;
     tmx::Map* map;
     bool isPowerOfTwo( int x );
     void spawnObject( tmx::Object& object );
 public:
+    sf::Music ambient;
     Map( std::string resource );
     ~Map();
     void update( double dt );

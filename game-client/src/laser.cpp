@@ -57,7 +57,7 @@ void Laser::update( double dt ){
         if ( fireworkWait < 0 ) {
             glm::vec2 rand = pos + glm::vec2( Random->f(-100.f,100.f), Random->f(-100.f,100.f) );
             world->addEntity( new FireworkDust( rand ), World::Layer::Foreground );
-            fireworkWait = Random->f(0.2f,1.f);
+            fireworkWait = Random->f(0.2f,0.3f);
         } else {
             fireworkWait -= dt;
         }
@@ -78,7 +78,7 @@ void Laser::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ){
             p->switchState( new ShockedState( p, glm::normalize(toGLM(hitnormal))*impulseMultiplier, 0, p->shockLength) );
         }
         if (this->canBePassed && !passed ) {
-            fireworkTimer = 3;
+            fireworkTimer = 1.7;
             sound.play();
             passed = true;
             world->addEntity( new FireworkDust( p->position ), World::Layer::Foreground );

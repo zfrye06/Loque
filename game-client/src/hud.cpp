@@ -16,11 +16,16 @@ void HUD::draw(sf::RenderTarget& window){
         sf::Text scoreText;
         scoreText.setFont( *Resources->getFont( "assets/fonts/arial.ttf" ) );
         std::ostringstream s;
-        s << score;
+        s << "Score: " << score;
         scoreText.setString(s.str());
         scoreText.setCharacterSize(40);
-        scoreText.setFillColor(sf::Color::Black);
-        scoreText.setOutlineColor(sf::Color::Black);
+        if ( score >= 0 ) {
+            scoreText.setFillColor(sf::Color::White);
+        } else {
+            scoreText.setFillColor(sf::Color::Red);
+        }
+        scoreText.setOutlineThickness(2);
+        scoreText.setOutlineColor(sf::Color(152,152,152,255));
         scoreText.setStyle(sf::Text::Bold);
         scoreText.setPosition(posX + 10, posY + 10);
         window.draw(scoreText);

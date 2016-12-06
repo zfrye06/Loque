@@ -109,4 +109,19 @@ public:
     Entity::Type getType();
 };
 
+class FireworkDust : public Entity {
+private:
+    sf::Sound sound;
+    sf::Texture* texture;
+    Animation animation;
+    AnimatedSprite* sprite;
+public:
+    FireworkDust( glm::vec2 pos );
+    ~FireworkDust();
+    void update(double dt);
+    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
+    void draw(sf::RenderTarget& window);
+    Entity::Type getType();
+};
+
 #endif

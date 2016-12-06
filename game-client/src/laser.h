@@ -4,9 +4,14 @@
 #include "entity.h"
 #include "dust.h"
 #include "player.h"
+#include "playerstats.h"
 
 class Laser : public Entity {
 public:
+    float fireworkTimer;
+    float fireworkWait;
+    sf::Sound sound;
+    bool passed;
     b2Body* body;
     Laser(tmx::Object& obj);
     glm::vec2 pos;

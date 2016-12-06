@@ -327,3 +327,45 @@ void LavaDust::draw(sf::RenderTarget& window){
 Entity::Type LavaDust::getType(){
     return Entity::Type::Dust;
 }
+
+FireworkDust::FireworkDust( glm::vec2 pos ) {
+    sound = sf::Sound( *Resources->getSound( "assets/audio/effects/pop.ogg" ) );
+    sound.play();
+    texture = Resources->getTexture("assets/images/firework.png");
+    animation.setSpriteSheet(*texture);
+    animation.addFrame(sf::IntRect(0,0,70,70));
+    animation.addFrame(sf::IntRect(70,0,70,70));
+    animation.addFrame(sf::IntRect(70*2,0,70,70));
+    animation.addFrame(sf::IntRect(70*3,0,70,70));
+    animation.addFrame(sf::IntRect(70*4,0,70,70));
+    animation.addFrame(sf::IntRect(70*5,0,70,70));
+    animation.addFrame(sf::IntRect(70*6,0,70,70));
+
+    sprite = new AnimatedSprite( sf::seconds(0.15), false, false );
+    sprite->setOrigin(70.f/2.f,70.f/2.f);
+    sprite->setPosition( pos.x, pos.y );
+    sprite->setScale( 2, 2 );
+    sprite->play(animation);
+}
+
+FireworkDust::~FireworkDust() {
+    delete sprite;
+}
+
+void FireworkDust::update(double dt) {
+    sprite->update( sf::seconds( dt ) );
+    if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
+        world->removeEntity(this, World::Layer::Foreground);
+    }
+}
+
+void FireworkDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
+}
+
+void FireworkDust::draw(sf::RenderTarget& window){
+    window.draw(*sprite);
+}
+
+Entity::Type FireworkDust::getType(){
+    return Entity::Type::Dust;
+}

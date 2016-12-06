@@ -55,6 +55,7 @@ void Respawn::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void Respawn::draw(sf::RenderTarget& window){
+    world->view.setSize(window.getSize().x, window.getSize().y);
     window.draw(*sprite);
 }
 

@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
             this, [this] {
         paneContainer->setCurrentWidget(loginPane);
     });
+
+    //paneContainer->setCurrentWidget(studentPlayPane);
 }
 
 void MainWindow::handleLogin(UserInfo user) {

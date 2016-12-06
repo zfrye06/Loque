@@ -6,6 +6,10 @@
 #include <QListWidgetItem>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QAbstractItemView>
 #include "../shared/loqueclient.h"
 
 namespace Ui {
@@ -30,7 +34,21 @@ private:
     QWidget *window;
     QSplitter *splitter;
     QVBoxLayout *layout;
+    // List containing lists of maps
     QListWidget *vertList;
+    // Contains level thumbnail and levelInfo
+    QHBoxLayout *descriptionAreaLayout;
+    QWidget *descriptionAreaWidget;
+    // Contains level name, description, best score, and play button
+    QWidget *levelInfoWidget;
+    QVBoxLayout *levelInfoLayout;
+
+    QLabel *levelThumbnail;
+    QLabel *levelName;
+    QLabel *levelDescription;
+    QLabel *bestScore;
+    QPushButton *playButton;
+
 
     void addClassRow(const ClassLevelInfo&);
     void updateDisplay();

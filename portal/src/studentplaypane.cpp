@@ -1,6 +1,4 @@
 #include "studentplaypane.h"
-#include "ui_studentplaypane.h"
-#include <QAbstractItemView>
 
 #include <iostream>
 StudentPlayPane::StudentPlayPane(QWidget *parent) :
@@ -8,12 +6,48 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     levelInfo(nullptr),
     splitter(new QSplitter(this)),
     layout(new QVBoxLayout()),
-    vertList(new QListWidget())
+    vertList(new QListWidget()),
+    descriptionAreaLayout(new QHBoxLayout()),
+    descriptionAreaWidget(new QWidget()),
+    levelInfoWidget(new QWidget()),
+    levelInfoLayout(new QVBoxLayout()),
+    levelThumbnail(new QLabel()),
+    levelName(new QLabel()),
+    levelDescription(new QLabel()),
+    bestScore(new QLabel()),
+    playButton(new QPushButton())
 {
+    splitter->setOrientation(Qt::Vertical);
     vertList->setSelectionMode(QAbstractItemView::SingleSelection);
     vertList->setFlow(QListView::TopToBottom);
     layout->addWidget(splitter);
     splitter->addWidget(vertList);
+
+    descriptionAreaWidget->setLayout(descriptionAreaLayout);
+    splitter->addWidget(descriptionAreaWidget);
+
+    // Setting sample level thumbnail
+    QPixmap p(":/assets/assets/candySky.jpg");
+    levelThumbnail->setPixmap(p.scaled(levelThumbnail->width(),levelThumbnail->height(), Qt::KeepAspectRatio));
+
+    levelInfoWidget->setLayout(levelInfoLayout);
+    levelInfoLayout->addWidget(levelName);
+    levelInfoLayout->addWidget(levelDescription);
+    levelInfoLayout->addWidget(bestScore);
+    levelInfoLayout->addWidget(playButton);
+
+    // Setting sample text to know where everything will appear
+    levelName->setText("Level Name");
+    levelDescription->setText("Level Description");
+    bestScore->setText("Best Score");
+    playButton->setText("Play");
+
+    descriptionAreaLayout->addWidget(levelThumbnail);
+    descriptionAreaLayout->addWidget(levelInfoWidget);
+
+    splitter->setStretchFactor(0, 1);
+    splitter->setStretchFactor(1, 5);
+
     this->setLayout(layout);
 }
 

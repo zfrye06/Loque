@@ -31,7 +31,7 @@ private:
     QPushButton *addClassButton;
     QIcon addClassIcon = QIcon(QPixmap(":/assets/add"));
 
-    void initWidgets(std::vector<ClassStats> classStats);
+    void initWidgets(const std::vector<ClassStats>& classStats);
     void initConnections();
 
 };

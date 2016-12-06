@@ -54,10 +54,10 @@ void ClassTab::initConnections(){
 
 }
 
-void ClassTab::setSummaryBox(ClassStats classStats){
+void ClassTab::setSummaryBox(const ClassStats& classStats){
     int totalPoints = 0;
     int totalTime = 0;
-    for(UserStats user : classStats.studentStats){
+    for(auto& user : classStats.studentStats){
         totalPoints += user.totalScore;
         totalTime += user.totalSecPlayed;
     }
@@ -95,7 +95,7 @@ QString ClassTab::getFormattedTime(int seconds){
     return  hourString + minuteString + secString;
 }
 
-void ClassTab::setUserTable(ClassStats classStats){
+void ClassTab::setUserTable(const ClassStats& classStats){
     QStringList headers;
     headers.append("Student");
     headers.append("Total Score");
@@ -110,7 +110,7 @@ void ClassTab::setUserTable(ClassStats classStats){
     userStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     int row = 0;
-    for(UserStats user : classStats.studentStats){
+    for(auto& user : classStats.studentStats){
         QTableWidgetItem *nameCell = new QTableWidgetItem(QString::fromStdString(user.username));
         QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(user.totalScore));
         QTableWidgetItem *timeCell = new QTableWidgetItem(QString::number(user.totalSecPlayed));
@@ -138,7 +138,7 @@ void ClassTab::setUserTable(ClassStats classStats){
     userStatsTable->verticalHeader()->setVisible(false);
 }
 
-QColor ClassTab::getLevelColor(UserStats user, int levelID){
+QColor ClassTab::getLevelColor(const UserStats& user, int levelID){
     QColor color;
     if(user.highScores.find(levelID) == user.highScores.end() ||user.highScores.at(levelID) == 0){
         color.setRgb(235, 16, 16);
@@ -148,7 +148,7 @@ QColor ClassTab::getLevelColor(UserStats user, int levelID){
     return color;
 }
 
-void ClassTab::setMapTable(ClassStats classStats){
+void ClassTab::setMapTable(const ClassStats& classStats){
     QStringList headers;
     headers.append("Student");
     headers.append("Level ID");
@@ -170,8 +170,8 @@ void ClassTab::setMapTable(ClassStats classStats){
     }
 
     for(int i = 0; i < classStats.studentStats.size(); i++){
-        UserStats user = classStats.studentStats.at(i);
-        for(auto kv : user.highScores){
+        const UserStats& user = classStats.studentStats.at(i);
+        for(auto& kv : user.highScores){
             levelStatsTable->insertRow(row);
             QTableWidgetItem *studentNameCell = new QTableWidgetItem(QString::fromStdString(user.username));
             QTableWidgetItem *levIDCell = new QTableWidgetItem(QString::number(kv.first));

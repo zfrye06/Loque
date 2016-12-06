@@ -3,16 +3,16 @@
 
 #include <SFML/Network.hpp>
 #include <ostream>
+#include <string>
 #include <unordered_map>
 #include <vector>
-#include <string>
 
-class MapData {
-public:
-    MapData(unsigned int id, std::string path, std::string thumbnailPath) : thumbnail(thumbnailPath), path(path), id(id){};
-    std::string thumbnail;
-    std::string path;
+struct MapData {
     unsigned int id;
+    std::string path;
+    std::string thumbnail;
+    MapData(unsigned int id, std::string path, std::string thumbnailPath);
+    std::string qtThumbnailPath(); 
 };
 
 extern MapData Maps[];
@@ -82,10 +82,11 @@ struct UserStats {
     std::vector<int> classIds;
 };
 
-// Provides a record of a user's best performance on a particular level. 
+// Provides a record of a user's best performance on a particular level.
+// If LevelRecord::hasCompleted returns false, the user has not played the level.
 struct LevelRecord {
-    int highScore; // -1 if the user has not completed the level.
-    int bestCompletionTimeSecs; // -1 if the user has not completed the level.
+    int highScore;
+    int bestCompletionTimeSecs;
     LevelInfo level;
 
     bool hasCompleted() const; 

@@ -97,5 +97,5 @@ int main( int argc, char** argv ) {
         throw e;
         return 1;
     }
-    return 1;
+    return 0;
 }

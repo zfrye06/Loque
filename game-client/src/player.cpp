@@ -438,19 +438,21 @@ void Player::update( double dt ) {
             float check = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Z);
             float check2 = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R);
 #ifdef WIN32
-            if( (check > 90 || check < -90) && airDodgeReleased ) {
+            if( (check > 80 || check < -80) && airDodgeReleased ) {
 #else
-            if( (check > 90 || check2 > 90) && airDodgeReleased ) {
+            if( (check > 80 || check2 > 80) && airDodgeReleased ) {
 #endif
                 airDodgePressed = true;
-                airDodgeReleased = false;
+                if ( currentState->getType() == PlayerState::AirDodge ) {
+                    airDodgeReleased = false;
+                }
             } else {
                 airDodgePressed = false;
             }
 #ifdef WIN32
-            if( (check < 90 && check > -90) ) {
+            if( (check < 80 && check > -80) ) {
 #else
-            if( (check < 90 && check2 < 90) ) {
+            if( (check < 80 && check2 < 80) ) {
 #endif
                 airDodgeReleased = true;
             }
@@ -522,11 +524,48 @@ void Player::update( double dt ) {
 void Player::detectGround() {
     b2AABB testAABB;
     b2Vec2 pos = myBody->GetWorldCenter();
-    testAABB.lowerBound = b2Vec2(pos.x-0.001, pos.y);
-    testAABB.upperBound = b2Vec2(pos.x+0.001, pos.y+playerHeight+0.05);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight+0.5);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
-    onGround = queryCallback.foundMap;
+    onGround = false;
+    if (queryCallback.foundMap) {
+        b2RayCastInput input;
+        input.p1 = pos;
+        input.p2 = pos+b2Vec2(0,playerHeight+0.5);
+        input.maxFraction = 1;
+        b2RayCastOutput output;
+        float closestFrac = input.maxFraction+0.1;
+        for ( b2Fixture* f : queryCallback.hitFixtures ) {
+            if( f->RayCast(&output,input,0) && output.fraction < closestFrac ) {
+                closestFrac = output.fraction;
+                onGround = true;
+                break;
+            }
+        }
+        input.p1 = pos+b2Vec2(playerWidth/2.f,0);
+        input.p2 = pos+b2Vec2(playerWidth/2.f,playerHeight+0.5);
+        input.maxFraction = 1;
+        closestFrac = input.maxFraction+0.1;
+        for ( b2Fixture* f : queryCallback.hitFixtures ) {
+            if( f->RayCast(&output,input,0) && output.fraction < closestFrac ) {
+                closestFrac = output.fraction;
+                onGround = true;
+                break;
+            }
+        }
+        input.p1 = pos-b2Vec2(playerWidth/2.f,0);
+        input.p2 = pos+b2Vec2(-playerWidth/2.f,playerHeight+0.5);
+        input.maxFraction = 1;
+        closestFrac = input.maxFraction+0.1;
+        for ( b2Fixture* f : queryCallback.hitFixtures ) {
+            if( f->RayCast(&output,input,0) && output.fraction < closestFrac ) {
+                closestFrac = output.fraction;
+                onGround = true;
+                break;
+            }
+        }
+    }
 
     testAABB.lowerBound = b2Vec2(pos.x-0.001, pos.y-playerHeight-0.05);
     testAABB.upperBound = b2Vec2(pos.x+0.001, pos.y);
@@ -631,10 +670,24 @@ void Player::detectWalls() {
 
     b2AABB testAABB;
     testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/2.f);
-    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.5, pos.y+playerHeight/2.f);
+    testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f+0.4, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback;
     physicalWorld->get().QueryAABB( &queryCallback, testAABB );
-    canWallJumpLeft = queryCallback.foundMap;
+    canWallJumpLeft = false;
+    if ( queryCallback.foundMap ) {
+        b2RayCastInput input;
+        input.p1 = pos;
+        input.p2 = pos+b2Vec2(playerWidth/2.f+0.4,0);
+        input.maxFraction = 1;
+        b2RayCastOutput output;
+        float closestFrac = input.maxFraction+0.1;
+        for ( b2Fixture* f : queryCallback.hitFixtures ) {
+            if( f->RayCast(&output,input,0) && output.fraction < closestFrac ) {
+                canWallJumpLeft = true;
+                break;
+            }
+        }
+    }
 
     testAABB.lowerBound = b2Vec2(pos.x, pos.y-playerHeight/3.f);
     testAABB.upperBound = b2Vec2(pos.x+playerWidth/2.f, pos.y+playerHeight/3.f);
@@ -642,11 +695,25 @@ void Player::detectWalls() {
     physicalWorld->get().QueryAABB( &queryCallback2, testAABB );
     touchingWallRight = queryCallback2.foundMap;
 
-    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.5, pos.y-playerHeight/2.f);
+    testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f-0.4, pos.y-playerHeight/2.f);
     testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/2.f);
     MapQueryCallback queryCallback3;
     physicalWorld->get().QueryAABB( &queryCallback3, testAABB );
-    canWallJumpRight = queryCallback3.foundMap;
+    canWallJumpRight = false;
+    if ( queryCallback3.foundMap ) {
+        b2RayCastInput input;
+        input.p1 = pos;
+        input.p2 = pos+b2Vec2(-playerWidth/2.f-0.4,0);
+        input.maxFraction = 1;
+        b2RayCastOutput output;
+        float closestFrac = input.maxFraction+0.1;
+        for ( b2Fixture* f : queryCallback3.hitFixtures ) {
+            if( f->RayCast(&output,input,0) && output.fraction < closestFrac ) {
+                canWallJumpRight = true;
+                break;
+            }
+        }
+    }
 
     testAABB.lowerBound = b2Vec2(pos.x-playerWidth/2.f, pos.y-playerHeight/3.f);
     testAABB.upperBound = b2Vec2(pos.x, pos.y+playerHeight/3.f);

@@ -13,6 +13,8 @@ World::~World() {
 }
 
 World::World( sf::View v ) {
+    c = sf::Color(255,255,255,255);
+    open = true;
     wobble = Resources->getShader("assets/shaders/wobble");
     globalTimer = 0;
     framebuffer.create( (int)v.getSize().x, (int)v.getSize().y );
@@ -83,11 +85,13 @@ void World::draw( sf::RenderWindow& window ) {
                          wobble->setUniform("texture", sf::Shader::CurrentTexture);
                          wobble->setUniform("time",(float)globalTimer);
                          wobble->setUniform("pos",sf::Glsl::Vec2(sf::Vector2f((float)view.getCenter().x,(float)view.getCenter().y)));
+                         sprite.setColor( c );
                          window.draw( sprite, wobble );
                          break;
             }
             default: {
                          sf::Sprite sprite(framebuffer.getTexture());
+                         sprite.setColor( c );
                          window.draw( sprite );
                          break;
                      }
@@ -136,4 +140,12 @@ std::vector<Entity*> World::getEntitiesByType( Entity::Type t ) {
         }
     }
     return foo;
+}
+
+void World::close() {
+    open = false;
+}
+
+bool World::isOpen() {
+    return open;
 }

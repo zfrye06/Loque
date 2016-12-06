@@ -48,7 +48,7 @@ int app(int argc, char** argv) {
     sf::Clock deltaClock;
     // Set up camera view.
     glMatrixMode(GL_MODELVIEW);
-    while( window.isOpen() ) {
+    while( window.isOpen() && world->isOpen() ) {
         // Catch events, probably should be in some sort of event handler.
         sf::Event event;
         while( window.pollEvent( event ) ) {
@@ -81,6 +81,7 @@ int app(int argc, char** argv) {
         world->draw(window);
         window.display();
     }
+    window.close();
     delete Resources;
     delete world;
     delete physicalWorld;

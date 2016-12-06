@@ -179,8 +179,10 @@ public:
 
 class WinState : public GenericPlayerState {
 public:
+    float timer;
     tweeny::tween<float> tweenW;
     tweeny::tween<float> tweenH;
+    tweeny::tween<int> tweenC;
     WinState( Player* player );
     ~WinState();
     void init();

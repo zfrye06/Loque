@@ -754,6 +754,8 @@ WinState::WinState( Player* player ) {
 }
 
 void WinState::init() {
+    timer = 0;
+    tweenC = tweeny::from(255).to(0).during(5000).via(tweeny::easing::quadraticOut);
     glm::vec2 size = toGLM(world->view.getSize());
     tweenW = tweeny::from(size.x).to(size.x/2.f).during(3700).via(tweeny::easing::bounceOut);
     tweenH = tweeny::from(size.y).to(size.y/2.f).during(3700).via(tweeny::easing::bounceOut);
@@ -774,6 +776,14 @@ PlayerState WinState::getType() {
 }
 
 void WinState::update( Player* player, double dt ) {
+    timer += dt;
+    if ( timer > 15 ) {
+        world->close();
+    }
+    if ( timer > 10 ) {
+        int c = tweenC.step((int)(dt*1000));
+        world->c = sf::Color(c,c,c,255);
+    }
     world->view.setSize( sf::Vector2f( tweenW.step((int)(dt*1000)), tweenH.step((int)(dt*1000))));
     world->view.setCenter( player->position.x, player->position.y );
     if ( !player->sprite->isPlaying() ) {

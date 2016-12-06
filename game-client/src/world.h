@@ -17,12 +17,16 @@ class World {
 private:
 // vector probably isn't the most efficient way to store the world...
     std::vector<Entity*> entities[LAYERCOUNT];
+    bool open;
     double timer;
     double globalTimer;
     double stutterLength;
     double stutterPeriod;
     sf::Shader* wobble;
 public:
+    sf::Color c;
+    bool isOpen();
+    void close();
     sf::View windowView;
     sf::View view;
     sf::RenderTexture framebuffer;

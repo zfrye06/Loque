@@ -19,14 +19,14 @@ AdminPane::~AdminPane()
     delete ui;
 }
 
-void AdminPane::initWidgets(std::vector<ClassStats> classStats){
+void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){
     tabs = new QTabWidget(this);
     mainLayout = new QHBoxLayout;
 
     //TODO: Add to layout somewhere
     addClassButton = new QPushButton(addClassIcon, "Add Class");
 
-    for(ClassStats cstats : classStats){
+    for(auto& cstats : classStats){
         tabs->addTab(new ClassTab(cstats), QString::fromStdString(cstats.className));
     }
     mainLayout->addWidget(tabs);

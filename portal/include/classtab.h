@@ -43,11 +43,11 @@ private:
 
     void initWidgets();
     void initConnections();
-    void setSummaryBox(ClassStats classStats);
-    void setUserTable(ClassStats classStats);
-    void setMapTable(ClassStats classStats);
+    void setSummaryBox(const ClassStats& classStats);
+    void setUserTable(const ClassStats& classStats);
+    void setMapTable(const ClassStats& classStats);
     void setEnabledLevels(int classID);
-    QColor getLevelColor(UserStats user, int levelID);
+    QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
 };
 

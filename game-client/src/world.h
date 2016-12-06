@@ -29,7 +29,7 @@ public:
     void close();
     sf::View windowView;
     sf::View view;
-    sf::RenderTexture framebuffer;
+    sf::RenderTexture framebuffer[LAYERCOUNT];
     enum Layer { None, Background, Lavaground, AboveLava, Midground, Foreground };
     World( sf::View v);
     ~World();

@@ -17,8 +17,11 @@ World::World( sf::View v ) {
     open = true;
     wobble = Resources->getShader("assets/shaders/wobble");
     globalTimer = 0;
-    framebuffer.create( (int)v.getSize().x, (int)v.getSize().y );
+    for (int i=0;i<LAYERCOUNT;i++ ) {
+        framebuffer[i].create((int) v.getSize().x, (int) v.getSize().y);
+    }
     view = v;
+    windowView = v;
     timer = 0;
     stutterLength = 0;
     stutterPeriod = 0;
@@ -28,7 +31,9 @@ void World::updateView( sf::FloatRect r ) {
     if ( (int)r.height % 2 == 1 ) {
         r.height--;
     }
-    framebuffer.create( (int)r.width, (int)r.height );
+    for (int i=0;i<LAYERCOUNT;i++ ) {
+        framebuffer[i].create( (int)r.width, (int)r.height );
+    }
     windowView.reset( r );
     view.reset( r );
 }
@@ -60,26 +65,26 @@ void World::removeEntity( Entity* e, World::Layer l ) {
 void World::draw( sf::RenderWindow& window ) {
     view.setCenter( sf::Vector2f( round(view.getCenter().x), round(view.getCenter().y) ));
     window.setView( windowView );
-    framebuffer.setView(view);
     //window.setView(view);
     // For each layer, clear, then draw to the frame buffer.
     for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
-        framebuffer.clear( sf::Color::Transparent );
+        framebuffer[l].setView(view);
+        framebuffer[l].clear( sf::Color::Transparent );
         for( unsigned int i=0;i<entities[l].size();i++ ) {
             if ( !entities[l][i] ) {
                 entities[l].erase( entities[l].begin() + i );
                 i--;
             } else {
-                entities[l][i]->draw(framebuffer);
+                entities[l][i]->draw(framebuffer[l]);
             }
         }
         // This flushes the framebuffer, drawing everything to it.
-        framebuffer.display();
+        framebuffer[l].display();
         // Finally depending on the layer, we draw it to the main window.
         switch(l) {
             case World::Layer::None: { break; }
             case World::Layer::Lavaground: {
-                         sf::Sprite sprite(framebuffer.getTexture());
+                         sf::Sprite sprite(framebuffer[l].getTexture());
                          wobble->setUniform("width",(int)window.getSize().x);
                          wobble->setUniform("height",(int)window.getSize().y);
                          wobble->setUniform("texture", sf::Shader::CurrentTexture);
@@ -90,9 +95,9 @@ void World::draw( sf::RenderWindow& window ) {
                          break;
             }
             default: {
-                         sf::Sprite sprite(framebuffer.getTexture());
+                         sf::Sprite sprite(framebuffer[l].getTexture());
                          sprite.setColor( c );
-                         window.draw( sprite );
+                         window.draw( sprite);
                          break;
                      }
         }

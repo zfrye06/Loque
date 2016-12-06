@@ -82,10 +82,10 @@ int app(int argc, char** argv) {
         window.display();
     }
     window.close();
-    delete Resources;
     delete world;
     delete physicalWorld;
     delete Random;
+    delete Resources;
     return 0;
 }
 

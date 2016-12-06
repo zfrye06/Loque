@@ -9,6 +9,7 @@
 
 class HUD : public Entity {
 public:
+    sf::Text scoreText;
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);

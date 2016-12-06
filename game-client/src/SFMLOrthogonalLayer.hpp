@@ -250,11 +250,11 @@ private:
             }
             else
             {
-                if (ts->hasTransparency())
-                {
-                    auto transparency = ts->getTransparencyColour();
-                    img.createMaskFromColor({ transparency.r, transparency.g, transparency.b, transparency.a });
-                }
+                //if (ts->hasTransparency())
+                //{
+                    //auto transparency = ts->getTransparencyColour();
+                    //img.createMaskFromColor({ transparency.r, transparency.g, transparency.b, transparency.a });
+                //}
                 newTexture->loadFromImage(img);
             }
             m_textureResource.insert(std::make_pair(path, std::move(newTexture)));

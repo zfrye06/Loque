@@ -5,7 +5,7 @@ World* world;
 World::~World() {
     for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
         for( unsigned int i=0;i<entities[l].size();i++ ) {
-            if ( !entities[l][i] ) {
+            if ( entities[l][i] ) {
                 delete entities[l][i];
             }
         }

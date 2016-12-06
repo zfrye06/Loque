@@ -10,6 +10,7 @@ private:
     MapLayer* mapLayer;
 public:
     Layer(MapLayer* ml);
+    ~Layer();
     void update(double dt);
     void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);

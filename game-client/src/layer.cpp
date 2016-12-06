@@ -4,6 +4,10 @@ Layer::Layer(MapLayer* ml){
     mapLayer = ml;
 }
 
+Layer::~Layer() {
+    delete mapLayer;
+}
+
 void Layer::update(double dt){
 }
 

@@ -1,62 +1,113 @@
+#include <iostream>
 #include "studentplaypane.h"
 
-#include <iostream>
 StudentPlayPane::StudentPlayPane(QWidget *parent) :
     QWidget(parent),
     levelInfo(nullptr),
+    activeLevelRecord(nullptr), 
     splitter(new QSplitter(this)),
     layout(new QVBoxLayout()),
-    vertList(new QListWidget()),
     descriptionAreaLayout(new QHBoxLayout()),
+    levelInfoLayout(new QVBoxLayout()),
+    vertList(new QListWidget()),
     descriptionAreaWidget(new QWidget()),
     levelInfoWidget(new QWidget()),
-    levelInfoLayout(new QVBoxLayout()),
-    levelThumbnail(new QLabel()),
-    levelName(new QLabel()),
-    levelDescription(new QLabel()),
-    bestScore(new QLabel()),
+    activeLevelThumbnail(new QLabel()),
+    levelNameLabel(new QLabel()),
+    levelDescLabel(new QLabel()),
+    highScoreLabel(new QLabel()),
     playButton(new QPushButton())
 {
     splitter->setOrientation(Qt::Vertical);
+    splitter->setStretchFactor(0, 1);
+    splitter->setStretchFactor(1, 5);
+    splitter->addWidget(vertList);
+    layout->addWidget(splitter);
+
     vertList->setSelectionMode(QAbstractItemView::SingleSelection);
     vertList->setFlow(QListView::TopToBottom);
-    layout->addWidget(splitter);
-    splitter->addWidget(vertList);
 
+    descriptionAreaLayout->addWidget(activeLevelThumbnail);
+    descriptionAreaLayout->addWidget(levelInfoWidget);
     descriptionAreaWidget->setLayout(descriptionAreaLayout);
     splitter->addWidget(descriptionAreaWidget);
 
-    // Setting sample level thumbnail
-    QPixmap p(":/assets/assets/candySky.jpg");
-    levelThumbnail->setPixmap(p.scaled(levelThumbnail->width(),levelThumbnail->height(), Qt::KeepAspectRatio));
-
-    levelInfoWidget->setLayout(levelInfoLayout);
-    levelInfoLayout->addWidget(levelName);
-    levelInfoLayout->addWidget(levelDescription);
-    levelInfoLayout->addWidget(bestScore);
+    levelInfoLayout->addWidget(levelNameLabel);
+    levelInfoLayout->addWidget(levelDescLabel);
+    levelInfoLayout->addWidget(highScoreLabel);
     levelInfoLayout->addWidget(playButton);
+    levelInfoWidget->setLayout(levelInfoLayout);
 
-    // Setting sample text to know where everything will appear
-    levelName->setText("Level Name");
-    levelDescription->setText("Level Description");
-    bestScore->setText("Best Score");
-    playButton->setText("Play");
-
-    descriptionAreaLayout->addWidget(levelThumbnail);
-    descriptionAreaLayout->addWidget(levelInfoWidget);
-
-    splitter->setStretchFactor(0, 1);
-    splitter->setStretchFactor(1, 5);
+    connect(playButton, &QPushButton::clicked,
+            this, [this] {
+        if (activeLevelRecord != nullptr) {
+            // Launch game.
+        }
+    });
 
     this->setLayout(layout);
+
+    // TODO: Sample levelInfo. Remove.
+    levelInfo.reset(new std::vector<ClassLevelInfo>);
+    ClassLevelInfo info1;
+    info1.classId = 1;
+    info1.className = "Mr. Johnson's";
+    LevelRecord lr1;
+    lr1.highScore = 48;
+    lr1.bestCompletionTimeSecs = 3;
+    lr1.level.id = 0;
+    lr1.level.name = "LEVEL 0";
+    lr1.level.description = "FUN FUN FUN";
+    info1.levelRecords.push_back(lr1);
+    levelInfo->push_back(info1);
+    updateDisplay();
 }
 
 StudentPlayPane::~StudentPlayPane() {
     delete splitter;
 }
 
-void StudentPlayPane::setUser(UserInfo user) {
-   this->user = user;
+void StudentPlayPane::thumbnailClicked(int row, int col) {
+    activeLevelRecord = &levelInfo->at(row).levelRecords.at(col);
+    std::string thumbnailPath = Maps[activeLevelRecord->level.id].qtThumbnailPath();
+    QPixmap thumbnail(QString::fromStdString(thumbnailPath));
+    int width = activeLevelThumbnail->width();
+    int height = activeLevelThumbnail->height(); 
+    activeLevelThumbnail->setPixmap(thumbnail.scaled(width, height, Qt::KeepAspectRatio));
+    levelNameLabel->setText(QString::fromStdString(activeLevelRecord->level.name));
+    levelDescLabel->setText(QString::fromStdString(activeLevelRecord->level.description));
+    highScoreLabel->setText(QString::number(activeLevelRecord->highScore));
+}
+
+void StudentPlayPane::addClassRow(int row, const ClassLevelInfo& classInfo) {
+    vertList->addItem(QString::fromStdString(classInfo.className));
+    QListWidgetItem* item = new QListWidgetItem();
+    QListWidget* horizList = new QListWidget();
+    horizList->setFlow(QListView::LeftToRight);
+    horizList->setSelectionMode(QAbstractItemView::SingleSelection);
+    horizList->setIconSize(QSize(150, 150));
+    item->setSizeHint(QSize(500, 100));
+    vertList->addItem(item);
+    vertList->setItemWidget(item, horizList);
+    for (auto& record : classInfo.levelRecords) {
+        std::string path = Maps[record.level.id].qtThumbnailPath();
+        QIcon thumbnail(QString::fromStdString(path));
+        horizList->addItem(new QListWidgetItem(thumbnail, NULL));
+    }
+    connect(horizList, &QListWidget::currentRowChanged,
+            this, [this, row] (int col) { this->thumbnailClicked(row, col); });
+}
+
+void StudentPlayPane::updateDisplay() {
+    if (levelInfo == nullptr) return;
+    vertList->clear();
+    activeLevelThumbnail->clear();
+    levelNameLabel->clear();
+    levelDescLabel->clear();
+    highScoreLabel->clear();
+    for (int i = 0; i < (int) levelInfo->size(); i++) {
+        addClassRow(i, levelInfo->at(i));
+    }
 }
 
 void StudentPlayPane::updateLevelInfo() {
@@ -65,30 +116,13 @@ void StudentPlayPane::updateLevelInfo() {
     auto status = client.getUserLevelInfo(user.userId, *newInfo);
     if (status != Status::OK) {
         // TODO: show error
-        std::cerr << "ERROR: Unable to update level info. Status returned was " << status << std::endl;
+        std::cerr << "ERROR: Unable to update level info. Status returned was " <<
+            status << std::endl;
         return;
     }
     levelInfo.reset(newInfo.release());
 }
 
-void StudentPlayPane::addClassRow(const ClassLevelInfo& classInfo) {
-    vertList->addItem(QString::fromStdString(classInfo.className));
-    QListWidgetItem* item = new QListWidgetItem();
-    QListWidget* horizList = new QListWidget();
-    horizList->setFlow(QListView::LeftToRight);
-    horizList->setSelectionMode(QAbstractItemView::SingleSelection);
-    item->setSizeHint(QSize(500, 100));
-    vertList->addItem(item);
-    vertList->setItemWidget(item, horizList);
-    for (auto& record : classInfo.levelRecords) {
-        std::string thumbnail = Maps[record.level.id].thumbnail; 
-        horizList->addItem(new QListWidgetItem(QString::fromStdString(thumbnail), NULL));
-    }
-}
-
-void StudentPlayPane::updateDisplay() {
-    if (levelInfo == nullptr) return;
-    for (auto& level : *levelInfo) {
-        addClassRow(level);
-    }
+void StudentPlayPane::setUser(UserInfo user) {
+   this->user = user;
 }

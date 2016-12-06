@@ -7,13 +7,12 @@
 #include <unordered_map>
 #include <vector>
 
-class MapData {
-public:
+struct MapData {
     unsigned int id;
     std::string path;
     std::string thumbnail;
-    MapData(unsigned int id, std::string path, std::string thumbnailPath) :
-        id(id), path(path), thumbnail(thumbnailPath) {}
+    MapData(unsigned int id, std::string path, std::string thumbnailPath);
+    std::string qtThumbnailPath(); 
 };
 
 extern MapData Maps[];
@@ -83,10 +82,11 @@ struct UserStats {
     std::vector<int> classIds;
 };
 
-// Provides a record of a user's best performance on a particular level. 
+// Provides a record of a user's best performance on a particular level.
+// If LevelRecord::hasCompleted returns false, the user has not played the level.
 struct LevelRecord {
-    int highScore; // -1 if the user has not completed the level.
-    int bestCompletionTimeSecs; // -1 if the user has not completed the level.
+    int highScore;
+    int bestCompletionTimeSecs;
     LevelInfo level;
 
     bool hasCompleted() const; 

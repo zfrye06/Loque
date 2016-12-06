@@ -31,27 +31,25 @@ public:
 private:
     UserInfo user;
     std::unique_ptr<UserLevelInfo> levelInfo;
+    LevelRecord *activeLevelRecord;
+
     QWidget *window;
     QSplitter *splitter;
     QVBoxLayout *layout;
-    // List containing lists of maps
-    QListWidget *vertList;
-    // Contains level thumbnail and levelInfo
     QHBoxLayout *descriptionAreaLayout;
-    QWidget *descriptionAreaWidget;
-    // Contains level name, description, best score, and play button
-    QWidget *levelInfoWidget;
     QVBoxLayout *levelInfoLayout;
-
-    QLabel *levelThumbnail;
-    QLabel *levelName;
-    QLabel *levelDescription;
-    QLabel *bestScore;
+    QListWidget *vertList;
+    QWidget *descriptionAreaWidget;
+    QWidget *levelInfoWidget;
+    QLabel *activeLevelThumbnail;
+    QLabel *levelNameLabel;
+    QLabel *levelDescLabel;
+    QLabel *highScoreLabel;
     QPushButton *playButton;
 
-
-    void addClassRow(const ClassLevelInfo&);
+    void addClassRow(int, const ClassLevelInfo&);
     void updateDisplay();
+    void thumbnailClicked(int, int); 
 };
 
 #endif // STUDENTPLAYPANE_H

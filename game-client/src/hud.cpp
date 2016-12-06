@@ -6,6 +6,7 @@ HUD::HUD() {
 }
 
 void HUD::update(double dt){
+    int score = playerStats->getScore();
     if ( score >= 0 ) {
         scoreText.setFillColor(sf::Color::White);
     } else {
@@ -14,7 +15,6 @@ void HUD::update(double dt){
     scoreText.setOutlineThickness(2);
     scoreText.setOutlineColor(sf::Color(152,152,152,255));
     scoreText.setStyle(sf::Text::Bold);
-    int score = playerStats->getScore();
     std::ostringstream s;
     s << "Score: " << score;
     scoreText.setString(s.str());

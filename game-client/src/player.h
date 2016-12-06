@@ -52,6 +52,7 @@ public:
     float airControlMultiplier;
 
     // Control variables
+    bool airDodgeReleased;
     bool dead;
     bool successfulWallJump;
     float wallJumpDirection;

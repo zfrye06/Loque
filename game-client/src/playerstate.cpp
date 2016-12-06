@@ -502,7 +502,6 @@ PlayerState TurningState::getType() {
 
 void TurningState::update( Player* player, double dt ) {
     // If the code reaches here you should never play smash again probably
-    glm::vec2 vel = toGLM(player->myBody->GetLinearVelocity());
     player->myBody->SetLinearVelocity( b2Vec2(tweenX.step((int)(dt*1000)),tweenY.step((int)(dt*1000))) );
     turnTimer += dt;
     if ( turnTimer > player->turnAroundTime ) {

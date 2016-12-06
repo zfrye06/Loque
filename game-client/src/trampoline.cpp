@@ -43,7 +43,11 @@ void Trampoline::update(double dt){
 void Trampoline::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
     if ( collider->getType() == Entity::Type::Player ) {
         ::Player* p = (::Player*)collider;
-        if ( p->currentState->getType() == PlayerState::Airborne ) {
+        if ( p->currentState->getType() == PlayerState::Airborne ||
+             p->currentState->getType() == PlayerState::AirDodge ||
+             p->currentState->getType() == PlayerState::KnockBack ||
+             p->currentState->getType() == PlayerState::SpecialFall ) {
+            p->canDoubleJump = true;
             p->myBody->SetLinearVelocity(b2Vec2(p->myBody->GetLinearVelocity().x, -20));
             p->switchState( new JumpingState( p ) );
         }

@@ -1,6 +1,7 @@
 #include "player.h"
 
 Player::Player( std::string resource, glm::vec2 pos) {
+    airDodgeReleased = true;
     resetToNeutral = false;
     wallJumpDirection = 0;
     wallJumpLength = 5.f/60.f;
@@ -436,13 +437,21 @@ void Player::update( double dt ) {
             float check = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Z);
             float check2 = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R);
 #ifdef WIN32
-            if( check > 90 || check < -90 ) {
+            if( (check > 90 || check < -90) && airDodgeReleased ) {
 #else
-            if( check > 90 || check2 > 90 ) {
+            if( (check > 90 || check2 > 90) && airDodgeReleased ) {
 #endif
                 airDodgePressed = true;
+                airDodgeReleased = false;
             } else {
                 airDodgePressed = false;
+            }
+#ifdef WIN32
+            if( (check < 90 && check > -90) ) {
+#else
+            if( (check < 90 && check2 < 90) ) {
+#endif
+                airDodgeReleased = true;
             }
     } else {
         if (sf::Keyboard::isKeyPressed( sf::Keyboard::LControl ) ) {

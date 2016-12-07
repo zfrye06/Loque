@@ -27,7 +27,7 @@ void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){
     addClassButton = new QPushButton(addClassIcon, "Add Class");
 
     for(auto& cstats : classStats){
-        tabs->addTab(new ClassTab(cstats), QString::fromStdString(cstats.className));
+        tabs->addTab(new ClassTab(cstats, teacherID), QString::fromStdString(cstats.className));
     }
     mainLayout->addWidget(tabs);
     setLayout(mainLayout);

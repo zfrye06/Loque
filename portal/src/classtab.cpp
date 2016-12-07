@@ -2,13 +2,13 @@
 #include "classtab.h"
 #include "ui_classtab.h"
 
-ClassTab::ClassTab(ClassStats classStats, QWidget *parent) :
-    QWidget(parent), ui(new Ui::ClassTab)
+ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
+    QWidget(parent), ui(new Ui::ClassTab), teacherID(teacherID), classID(classStats.classId)
 {
     ui->setupUi(this);
     initWidgets();
     setSummaryBox(classStats);
-    setEnabledLevels(classStats.classId);
+    setEnabledLevels();
     setUserTable(classStats);
     setMapTable(classStats);
 }
@@ -16,6 +16,20 @@ ClassTab::ClassTab(ClassStats classStats, QWidget *parent) :
 ClassTab::~ClassTab()
 {
     delete ui;
+//    delete userStatsTable;
+//    delete levelStatsTable;
+//    delete mainLayout;
+//    delete summaryBox;
+//    delete summaryLayout;
+//    delete levelArea;
+
+//    delete classSummaryLabel;
+//    delete classNameLabel;
+//    delete classPointsLabel;
+//    delete classTimeLabel;
+//    delete enabledLevelsLabel;
+//    delete userStatsLabel;
+//    delete mapStatsLabel;
 }
 
 void ClassTab::initWidgets(){
@@ -195,18 +209,38 @@ void ClassTab::setMapTable(const ClassStats& classStats){
     levelStatsTable->verticalHeader()->setVisible(false);
 }
 
-void ClassTab::setEnabledLevels(int classID){
-    levelArea->setStyleSheet("QGroupBox{background-color: black}");
+void ClassTab::setEnabledLevels(){
+    levelArea->setStyleSheet("QPushButton{background: url(:/assets/assets/candySky.jpg); background-position: top-left; width: 75; height: 75;}");
     LoqueClient client;
     std::vector<int> enabledLevels;
+    std::vector<LevelInfo> allLevels;
     client.getEnabledClassLevels(classID, enabledLevels);
+    client.getAllLevels(allLevels);
     QHBoxLayout *layout = new QHBoxLayout;
-    QLabel *thumbnail;
-    for(int levelID : enabledLevels){
-        thumbnail = new QLabel;
-        QPixmap pxmap(":/assets/assets/candySky.jpg");
-        thumbnail->setPixmap(pxmap.scaled(75, 75));
+    QPushButton *thumbnail;
+    for(LevelInfo info: allLevels){
+        thumbnail = new QPushButton;
+        connect(thumbnail, &QPushButton::clicked, this, &ClassTab::toggleLevel);
         layout->addWidget(thumbnail);
+        thumbnail->setCheckable(true);
+        thumbnail->setText(QString::fromStdString(info.name));
+        thumbnail->setChecked(std::find(enabledLevels.begin(), enabledLevels.end(), info.id) == enabledLevels.end());
+        levelButtons[info.id] = thumbnail;
     }
     levelArea->setLayout(layout);
+}
+
+void ClassTab::toggleLevel(){
+    LoqueClient client;
+    for(int i = 0; i < levelButtons.size(); i++){
+        if(levelButtons[i] == ((QPushButton*) QObject::sender())){
+            QPushButton *btn = levelButtons[i];
+            if(btn->isChecked()){
+                client.disableLevel(teacherID, classID, i);
+            }
+            else{
+                client.enableLevel(teacherID, classID, i);
+            }
+        }
+    }
 }

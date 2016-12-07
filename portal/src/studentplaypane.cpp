@@ -1,3 +1,4 @@
+#include <QProcess>
 #include <iostream>
 #include "studentplaypane.h"
 
@@ -24,8 +25,12 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     splitter->addWidget(vertList);
     layout->addWidget(splitter);
 
+    vertList->setStyleSheet("background-color: transparent;");
     vertList->setSelectionMode(QAbstractItemView::SingleSelection);
+    vertList->setAutoFillBackground(false);
     vertList->setFlow(QListView::TopToBottom);
+    vertList->setFocusPolicy(Qt::NoFocus);
+    vertList->setFrameShape(QFrame::NoFrame);
 
     descriptionAreaLayout->addWidget(activeLevelThumbnail);
     descriptionAreaLayout->addWidget(levelInfoWidget);
@@ -38,10 +43,17 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     levelInfoLayout->addWidget(playButton);
     levelInfoWidget->setLayout(levelInfoLayout);
 
+    playButton->setText("Play");
     connect(playButton, &QPushButton::clicked,
             this, [this] {
         if (activeLevelRecord != nullptr) {
-            // Launch game.
+            QProcess p;
+            p.setWorkingDirectory("/Users/asteele/Sandbox/edu-app-unescaped-characters/");
+            p.setProcessChannelMode(QProcess::MergedChannels);
+            QStringList args;
+            args << "1" << "1";
+            p.startDetached("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client/bin/loque", args);
+            p.waitForFinished();
         }
     });
 
@@ -85,7 +97,9 @@ void StudentPlayPane::addClassRow(int row, const ClassLevelInfo& classInfo) {
     QListWidget* horizList = new QListWidget();
     horizList->setFlow(QListView::LeftToRight);
     horizList->setSelectionMode(QAbstractItemView::SingleSelection);
+    horizList->setFocusPolicy(Qt::NoFocus);
     horizList->setIconSize(QSize(150, 150));
+    horizList->setFrameShape(QFrame::NoFrame);
     item->setSizeHint(QSize(500, 100));
     vertList->addItem(item);
     vertList->setItemWidget(item, horizList);

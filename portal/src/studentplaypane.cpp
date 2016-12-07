@@ -65,20 +65,20 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     this->setLayout(layout);
 
     // TODO: Sample levelInfo. Remove.
-    user.userId = 1;
-    levelInfo.reset(new std::vector<ClassLevelInfo>);
-    ClassLevelInfo info1;
-    info1.classId = 1;
-    info1.className = "Mr. Johnson's";
-    LevelRecord lr1;
-    lr1.highScore = 48;
-    lr1.bestCompletionTimeSecs = 3;
-    lr1.level.id = 0;
-    lr1.level.name = "LEVEL 0";
-    lr1.level.description = "FUN FUN FUN";
-    info1.levelRecords.push_back(lr1);
-    levelInfo->push_back(info1);
-    updateDisplay();
+//    user.userId = 1;
+//    levelInfo.reset(new std::vector<ClassLevelInfo>);
+//    ClassLevelInfo info1;
+//    info1.classId = 1;
+//    info1.className = "Mr. Johnson's";
+//    LevelRecord lr1;
+//    lr1.highScore = 48;
+//    lr1.bestCompletionTimeSecs = 3;
+//    lr1.level.id = 0;
+//    lr1.level.name = "LEVEL 0";
+//    lr1.level.description = "FUN FUN FUN";
+//    info1.levelRecords.push_back(lr1);
+//    levelInfo->push_back(info1);
+//    updateDisplay();
 }
 
 StudentPlayPane::~StudentPlayPane() {

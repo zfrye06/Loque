@@ -15,14 +15,6 @@ ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
 
 ClassTab::~ClassTab()
 {
-    delete ui;
-//    delete userStatsTable;
-//    delete levelStatsTable;
-//    delete mainLayout;
-//    delete summaryBox;
-//    delete summaryLayout;
-//    delete levelArea;
-
 //    delete classSummaryLabel;
 //    delete classNameLabel;
 //    delete classPointsLabel;
@@ -30,6 +22,13 @@ ClassTab::~ClassTab()
 //    delete enabledLevelsLabel;
 //    delete userStatsLabel;
 //    delete mapStatsLabel;
+//    delete ui;
+//    delete userStatsTable;
+//    delete levelStatsTable;
+//    delete summaryBox;
+//    delete levelArea;
+//    delete mainLayout;
+//    delete summaryLayout;
 }
 
 void ClassTab::initWidgets(){
@@ -45,7 +44,7 @@ void ClassTab::initWidgets(){
     summaryLayout = new QVBoxLayout;
     userStatsTable = new QTableWidget;
     levelStatsTable = new QTableWidget;
-    mainLayout = new QVBoxLayout(this);
+    mainLayout = new QVBoxLayout;
     levelArea = new QGroupBox;
 
     summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);

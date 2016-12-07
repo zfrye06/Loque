@@ -12,6 +12,9 @@ AdminPane::AdminPane(int teacherID, QWidget *parent) :
     std::vector<ClassStats> classStats;
     client.getAllClassStats(teacherID, classStats);
     initWidgets(classStats);
+    connect(addClassButton, &QPushButton::clicked, this, [this]{
+//        client.addClassroom(teacherID, )
+    });
 }
 
 AdminPane::~AdminPane()
@@ -25,6 +28,8 @@ void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){
 
     //TODO: Add to layout somewhere
     addClassButton = new QPushButton(addClassIcon, "Add Class");
+    tabs->setCornerWidget(addClassButton);
+
 
     for(auto& cstats : classStats){
         tabs->addTab(new ClassTab(cstats, teacherID), QString::fromStdString(cstats.className));
@@ -33,14 +38,10 @@ void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){
     setLayout(mainLayout);
 }
 
-void AdminPane::initConnections(){
+void AdminPane::setUser(UserInfo user){
 
 }
 
-void AdminPane::setUser(UserInfo user) {
-    
-}
+void AdminPane::updateClassStats(){
 
-void AdminPane::updateClassStats() {
-    
 }

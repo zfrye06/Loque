@@ -2,6 +2,7 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 #include <string>
+#include <stdlib.h>
 
 #include "entity.h"
 #include "map.h"
@@ -20,7 +21,8 @@ std::string getMap(unsigned int id ) {
             return Maps[i].path;
         }
     }
-    throw std::runtime_error( "Couldn't find map!");
+    std::cerr << "Could not find map with id " << id << std::endl;
+    exit(1); 
 }
 
 int app(int argc, char** argv) {
@@ -92,8 +94,7 @@ int main( int argc, char** argv ) {
     try {
         return app(argc, argv);
     } catch( std::exception e ) {
-        std::cout << "ERROR: " << e.what() << "\n";
-        throw e;
+        std::cerr << "ERROR: " << e.what() << "\n";
         return 1;
     }
     return 0;

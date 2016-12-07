@@ -87,7 +87,7 @@ namespace serialization {
     }
 
     bool isTermLevelRecord(const LevelRecord& record) {
-        return record.highScore == -2; 
+        return record.bestCompletionTimeSecs == -2; 
     }
 
     // Indicates EOF when serializing ClassStats.
@@ -255,7 +255,7 @@ inline sf::Packet& operator<<(sf::Packet& packet, const UserLevelInfo& info) {
         for (auto& record : classInfo.levelRecords) {
             packet << record;
         }
-        packet << loque::serialization::termLevelRecord(); 
+        packet << loque::serialization::termLevelRecord();
     }
     packet << loque::serialization::TERM_CLASSID; 
     return packet;
@@ -268,7 +268,7 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserLevelInfo& info) {
         if (classInfo.classId == loque::serialization::TERM_CLASSID) {
             break;
         }
-        packet >> classInfo.className; 
+        packet >> classInfo.className;
         while (true) {
             LevelRecord record;
             packet >> record;
@@ -281,7 +281,6 @@ inline sf::Packet& operator>>(sf::Packet& packet, UserLevelInfo& info) {
     }
     return packet;
 }
-
 
 /* EnabledLevels */
 

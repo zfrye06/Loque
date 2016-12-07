@@ -168,7 +168,7 @@ Status LoqueClient::getUserLevelInfo(int userId, UserLevelInfo& out) {
     if (status != OK) {
         return status; 
     }
-    toReceive >> status >> out; 
+    toReceive >> status >> out;
     return status;
 }
 

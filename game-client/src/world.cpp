@@ -16,10 +16,12 @@ World::World( sf::View v ) {
     c = sf::Color(255,255,255,255);
     open = true;
     wobble = Resources->getShader("assets/shaders/wobble");
+    blur = Resources->getShader("assets/shaders/blur");
     globalTimer = 0;
     for (int i=0;i<LAYERCOUNT;i++ ) {
         framebuffer[i].create((int) v.getSize().x, (int) v.getSize().y);
     }
+	framebuffer[0].setSmooth(true);
     view = v;
     windowView = v;
     timer = 0;
@@ -68,7 +70,7 @@ void World::draw( sf::RenderWindow& window ) {
     window.clear( sf::Color::Transparent );
     //window.setView(view);
     // For each layer, clear, then draw to the frame buffer.
-    for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
+    for( unsigned int l=1;l<LAYERCOUNT;l++ ) {
         framebuffer[l].setView(view);
         framebuffer[l].clear( sf::Color::Transparent );
         for( unsigned int i=0;i<entities[l].size();i++ ) {
@@ -84,6 +86,25 @@ void World::draw( sf::RenderWindow& window ) {
         // Finally depending on the layer, we draw it to the main window.
         switch(l) {
             case World::Layer::None: { break; }
+            case World::Layer::Background: {
+						 // Anything higher than one loses quality.
+						 float blurAmount = 1;
+                         sf::Sprite sprite(framebuffer[l].getTexture());
+                         // Going to use the None framebuffer as the horizontal blur
+                         framebuffer[0].setView(windowView);
+                         framebuffer[0].clear( sf::Color::Transparent );
+                         blur->setUniform("texture", sf::Shader::CurrentTexture);
+                         blur->setUniform("resolution",sf::Glsl::Vec2(sf::Vector2f((float)windowView.getSize().x,(float)windowView.getSize().y)));
+                         blur->setUniform("direction",sf::Glsl::Vec2(sf::Vector2f(blurAmount,0)));
+                         framebuffer[0].draw( sprite, blur );
+                         // Then we re-draw the horiztonal blur with the vertical blur, to the screen!
+						 framebuffer[0].display();
+                         sf::Sprite sprite2(framebuffer[0].getTexture());
+                         sprite2.setColor( c );
+                         blur->setUniform("direction",sf::Glsl::Vec2(sf::Vector2f(0,blurAmount)));
+                         window.draw( sprite2, blur );
+                         break;
+                                           }
             case World::Layer::Lavaground: {
                          sf::Sprite sprite(framebuffer[l].getTexture());
                          wobble->setUniform("width",(int)window.getSize().x);

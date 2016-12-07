@@ -37,6 +37,7 @@ private:
     double stutterLength;
     double stutterPeriod;
     sf::Shader* wobble;
+    sf::Shader* blur;
 public:
     sf::Color c;
     bool isOpen();

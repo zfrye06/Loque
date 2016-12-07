@@ -1,14 +1,11 @@
 #include "adminpane.h"
-#include "ui_adminpane.h"
 #include "classtab.h"
 #include "addclassdialog.h"
 
 AdminPane::AdminPane(int teacherID, QWidget *parent) :
     teacherID(teacherID),
-    QWidget(parent),
-    ui(new Ui::AdminPane)
+    QWidget(parent)
 {
-    ui->setupUi(this);
     LoqueClient client;
     std::vector<ClassStats> classStats;
     client.getAllClassStats(teacherID, classStats);
@@ -22,7 +19,6 @@ AdminPane::AdminPane(int teacherID, QWidget *parent) :
 
 AdminPane::~AdminPane()
 {
-    delete ui;
 }
 
 void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){

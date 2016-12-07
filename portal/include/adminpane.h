@@ -25,7 +25,6 @@ public:
 private:
     int teacherID;
 
-    Ui::AdminPane *ui;
     QHBoxLayout *mainLayout;
     QTabWidget *tabs;
     QPushButton *addClassButton;

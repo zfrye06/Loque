@@ -1,5 +1,5 @@
 #Change this if you need to target a specific CMake version
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1.0)
 
 
 # Enable debug symbols by default
@@ -29,13 +29,16 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/modules" )
 #See the FindSFML.cmake file for additional details and instructions
 find_package(SFML 2 REQUIRED network)
 find_package(MySQLClient REQUIRED)
+find_package(MySQLConnectorCPP REQUIRED)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads)
+target_link_libraries(${EXECUTABLE_NAME} Threads::Threads)
 include_directories(${SFML_INCLUDE_DIR}
 #                   ${MYSQL_INCLUDE_DIR}
-                    ${MYSQLCONNECTORCPP_INCLUDE_DIRS})
+                    ${MYSQLCONNECTORCPP_INCLUDE_DIR})
 target_link_libraries(${EXECUTABLE_NAME} ${SFML_LIBRARIES}
                                          ${MYSQL_LIBRARIES}    
-                                         ${MYSQLCONNECTORCPP_LIBRARIES}
-                                         "/usr/local/Cellar/mysql-connector-c++/1.1.6_1/lib/libmysqlcppconn.dylib")
+                                         ${MYSQLCONNECTORCPP_LIBRARY})
 
 
 # Install target

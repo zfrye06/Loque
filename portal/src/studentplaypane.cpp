@@ -2,6 +2,8 @@
 #include <iostream>
 #include "studentplaypane.h"
 
+QListWidget *classRowList();
+
 StudentPlayPane::StudentPlayPane(QWidget *parent) :
     QWidget(parent),
     levelInfo(nullptr),
@@ -26,6 +28,10 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     splitter->addWidget(vertList);
     layout->addWidget(splitter);
 
+    QPalette palette;
+    palette.setColor(QPalette::Highlight, Qt::transparent);
+    palette.setColor(QPalette::HighlightedText, vertList->palette().color(QPalette::Text));
+    vertList->setPalette(palette);
     vertList->setStyleSheet("background-color: transparent;");
     vertList->setSelectionMode(QAbstractItemView::SingleSelection);
     vertList->setAutoFillBackground(false);
@@ -95,12 +101,7 @@ void StudentPlayPane::thumbnailClicked(int row, int col) {
 void StudentPlayPane::addClassRow(int row, const ClassLevelInfo& classInfo) {
     vertList->addItem(QString::fromStdString(classInfo.className));
     QListWidgetItem* item = new QListWidgetItem();
-    QListWidget* horizList = new QListWidget();
-    horizList->setFlow(QListView::LeftToRight);
-    horizList->setSelectionMode(QAbstractItemView::SingleSelection);
-    horizList->setFocusPolicy(Qt::NoFocus);
-    horizList->setIconSize(QSize(150, 150));
-    horizList->setFrameShape(QFrame::NoFrame);
+    QListWidget *horizList = classRowList();
     item->setSizeHint(QSize(500, 100));
     vertList->addItem(item);
     vertList->setItemWidget(item, horizList);
@@ -140,4 +141,18 @@ void StudentPlayPane::updateLevelInfo() {
 
 void StudentPlayPane::setUser(UserInfo user) {
    this->user = user;
+}
+
+QListWidget *classRowList() {
+    QListWidget* list = new QListWidget();
+    QPalette palette;
+    palette.setColor(QPalette::Highlight, list->palette().color(QPalette::Base));
+    palette.setColor(QPalette::HighlightedText, list->palette().color(QPalette::Text));
+    list->setPalette(palette);
+    list->setFlow(QListView::LeftToRight);
+    list->setSelectionMode(QAbstractItemView::SingleSelection);
+    list->setFocusPolicy(Qt::NoFocus);
+    list->setIconSize(QSize(150, 150));
+    list->setFrameShape(QFrame::NoFrame);
+    return list;
 }

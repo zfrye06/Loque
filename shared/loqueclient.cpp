@@ -244,7 +244,8 @@ Status LoqueClient::makeRequest(sf::Packet& request, sf::Packet& response) {
         return NETWORK_ERR;
     }
     status = conn.receive(response);
-    if (status != sf::Socket::Done) {
+    // Seems as though receive sets the status to disconnected, but this is OK for our game client.
+    if (status != sf::Socket::Done && status != sf::Socket::Disconnected) {
         return NETWORK_ERR;
     }
     return OK;

@@ -35,9 +35,7 @@ HEADERS  += include/mainwindow.h \
 FORMS    += src/mainwindow.ui \
     src/loginpane.ui \
     src/registerpane.ui \
-    src/adminplaypane.ui \
-    src/adminpane.ui \
-    src/classtab.ui
+    src/adminplaypane.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

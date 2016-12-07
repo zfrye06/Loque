@@ -19,8 +19,8 @@ public:
     explicit AdminPane(int teacherID, QWidget *parent = 0);
     ~AdminPane();
 
-    void setUser(UserInfo);
     void updateClassStats();
+    void setUser(UserInfo user);
 
 private:
     int teacherID;
@@ -29,10 +29,9 @@ private:
     QHBoxLayout *mainLayout;
     QTabWidget *tabs;
     QPushButton *addClassButton;
-    QIcon addClassIcon = QIcon(QPixmap(":/assets/add"));
+    QIcon addClassIcon = QIcon(QPixmap(":/assets/assets/add"));
 
     void initWidgets(const std::vector<ClassStats>& classStats);
-    void initConnections();
 
 };
 

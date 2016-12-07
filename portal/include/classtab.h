@@ -20,7 +20,7 @@ class ClassTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ClassTab(ClassStats classStats, QWidget *parent = 0);
+    explicit ClassTab(ClassStats classStats, int teacherID, QWidget *parent = 0);
     ~ClassTab();
 
 private:
@@ -32,6 +32,9 @@ private:
     QGroupBox *summaryBox;
     QVBoxLayout *summaryLayout;
     QGroupBox *levelArea;
+    std::map<int, QPushButton*> levelButtons;
+    int teacherID;
+    int classID;
 
     QLabel *classSummaryLabel;
     QLabel *classNameLabel;
@@ -46,9 +49,10 @@ private:
     void setSummaryBox(const ClassStats& classStats);
     void setUserTable(const ClassStats& classStats);
     void setMapTable(const ClassStats& classStats);
-    void setEnabledLevels(int classID);
+    void setEnabledLevels();
     QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
+    void toggleLevel();
 };
 
 #endif // CLASSTAB_H

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Loque</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -30,6 +30,9 @@
    </property>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string/>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>

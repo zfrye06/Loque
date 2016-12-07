@@ -61,7 +61,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     touchingWallRight = false;
 }
 
-void Player::setUpSprite( std::string resource ) {
+void Player::setUpSprite( std::string& resource ) {
     texture = Resources->getTexture(resource);
     // Walking animation
     airborneAnimation.setSpriteSheet(*texture);
@@ -409,7 +409,7 @@ void Player::update( double dt ) {
 		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::Down ) || sf::Keyboard::isKeyPressed( sf::Keyboard::S ) ) {
 			direction += glm::vec2(0,1);
 		}
-		if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) ) {
+		if ( sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) ) {
             direction *= .8;
         }
         if( sf::Keyboard::isKeyPressed( sf::Keyboard::Escape ) ){

@@ -14,7 +14,7 @@ class Resource {
 public:
     std::string name;
     Resource();
-    Resource( std::string name );
+    Resource( std::string& name ) : name(name){};
     virtual ~Resource();
     virtual void* get();
 };

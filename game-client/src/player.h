@@ -103,7 +103,7 @@ public:
     void shake(float strength, float length, float period);
     void setUpBody();
     void setUpSounds();
-    void setUpSprite( std::string resource );
+    void setUpSprite( std::string& resource );
     void switchState( GenericPlayerState* state );
 
     bool flipped;

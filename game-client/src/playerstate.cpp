@@ -46,6 +46,8 @@ void WalkingState::update( Player* player, double dt ) {
     }
 }
 IdleState::IdleState( Player* player ) {
+    walkTimer = 0;
+    reset = false;
     this->player = player;
 }
 void IdleState::init() {
@@ -96,6 +98,8 @@ void IdleState::update( Player* player, double dt ) {
 }
 
 DashingState::DashingState( Player* player, float dashingDirection ) {
+    walkTimer = 0;
+    dashTimer = 0;
     this->player = player;
     this->dashingDirection = dashingDirection;
 }
@@ -154,6 +158,7 @@ void DashingState::update( Player* player, double dt ) {
 }
 
 JumpSquatState::JumpSquatState( Player* player) {
+    jumpSquatTimer = 0;
     this->player = player;
 }
 
@@ -192,6 +197,7 @@ void JumpSquatState::update( Player* player, double dt ) {
 }
 
 JumpingState::JumpingState( Player* player, float wallJumpDirection) {
+    walkTimer = 0;
     this->wallJumpDirection = wallJumpDirection;
     this->player = player;
 }
@@ -275,6 +281,7 @@ void JumpingState::update( Player* player, double dt ) {
     }
 }
 AirborneState::AirborneState( Player* player) {
+    walkTimer = 0;
     this->player = player;
 }
 
@@ -345,6 +352,8 @@ void AirborneState::update( Player* player, double dt ) {
 
 RunningState::RunningState( Player* player, float direction ) {
     dashingDirection = direction;
+    crossedNeutral = false;
+    walkTimer = 0;
     this->player = player;
 }
 
@@ -480,6 +489,7 @@ void SpecialFallState::update( Player* player, double dt ) {
 }
 
 TurningState::TurningState( Player* player, float direction ) {
+    turnTimer = 0;
     turnDirection = direction;
     this->player = player;
 }
@@ -510,6 +520,10 @@ void TurningState::update( Player* player, double dt ) {
 }
 
 LandingState::LandingState( Player* player ) {
+    bufferedState = nullptr;
+    walkTimer = 0;
+    reset = false;
+    landTimer = 0;
     this->player = player;
 }
 
@@ -594,6 +608,7 @@ void LandingState::update( Player* player, double dt ) {
 }
 
 ShockedState::ShockedState( Player* player, glm::vec2 impulse, int type, float duration ) {
+    shockTimer = 0;
     this->duration = duration;
     this->type = type;
     this->player = player;
@@ -750,6 +765,7 @@ void KnockbackRecoverState::update( Player* player, double dt ) {
 }
 
 WinState::WinState( Player* player ) {
+    timer = 0;
     this->player = player;
 }
 

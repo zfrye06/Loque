@@ -19,6 +19,7 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     highScoreLabel(new QLabel()),
     playButton(new QPushButton())
 {
+    splitter->setHandleWidth(0);
     splitter->setOrientation(Qt::Vertical);
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 5);

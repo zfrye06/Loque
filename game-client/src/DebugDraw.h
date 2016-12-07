@@ -1,3 +1,11 @@
+/**
+ * @file DebugDraw.h
+ * @brief Practically this entire file was rewritten by me, so I pretty much own it now. It had to be re-written due to the 2011 SFML being completely different... It is just the hooks for box2D to call in order to draw stuff.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 /*
     Copyright (C) 2011 Allen Jordan ()
     Copyright (C) 2011 Xabier Larrakoetxea (slok)
@@ -24,7 +32,9 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+// meter to pixel ratio..
 #define RATIO 64.f
+// Default alpha, lines have the same alpha + 50
 #define ALPHA 75
 
 class DebugDraw : public b2Draw {

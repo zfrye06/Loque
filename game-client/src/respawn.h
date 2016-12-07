@@ -1,3 +1,11 @@
+/**
+ * @file respawn.h
+ * @brief Plays a respawn animation, while forcing the player to watch, and respawns the player at the end of it.
+ * @author Zach Frye
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_RESPAWN_H_
 #define LQ_RESPAWN_H_
 
@@ -8,6 +16,9 @@
 #include "world.h"
 #include "player.h"
 
+/**
+ * @brief Plays a respawn animation, while forcing the player to watch, and respawns the player at the end of it.
+ */
 class Respawn : public Entity{
 private:
     sf::Sound sound;

@@ -1,3 +1,11 @@
+/**
+ * @file playerstats.h
+ * @brief Links the game to the server, as well as tracks some statistical information about the player.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_PLAYERSTATS_H_
 #define LQ_PLAYERSTATS_H_
 

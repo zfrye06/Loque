@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="128" height="256" tilewidth="64" tileheight="64" nextobjectid="45">
+ <properties>
+  <property name="ambient" value="candy"/>
+ </properties>
  <tileset firstgid="1" name="candylandTiles" tilewidth="64" tileheight="64" tilecount="98" columns="14">
   <image source="images/candylandTiles.png" width="896" height="448"/>
  </tileset>
@@ -24,7 +27,7 @@
   <object id="1" name="playerSpawn" x="196" y="15942" width="54" height="52"/>
   <object id="5" name="trampoline" x="583" y="15004" width="49" height="35"/>
   <object id="6" name="trampoline" x="259" y="14550" width="54" height="42"/>
-  <object id="7" name="trampoline" x="962" y="12368" width="56" height="39"/>
+  <object id="7" name="trampoline" x="964.2" y="12315.2" width="56" height="39"/>
   <object id="9" name="trampoline" x="3462" y="11344" width="49" height="39"/>
   <object id="17" name="laser" x="8084.85" y="14263.6" width="18.1818" height="2060.61">
    <properties>

@@ -12,8 +12,9 @@ std::string MapData::qtThumbnailPath() {
 MapData Maps[] = {
     MapData(0, "assets/Zapper_Level_1.tmx", "assets/images/candySky.jpg"),
     MapData(1, "assets/Zapper_Level_2.tmx", "assets/images/candySky.jpg"),
-    MapData(2, "assets/Castle_Level_1.tmx", "assets/images/candySky.jpg"),
-    MapData(3, "assets/Castle_Level_2.tmx", "assets/images/candySky.jpg")
+    MapData(2, "assets/Platform_Level_1.tmx", "assets/images/candySky.jpg"),
+    MapData(3, "assets/Castle_Level_1.tmx", "assets/images/candySky.jpg"),
+    MapData(4, "assets/Castle_Level_2.tmx", "assets/images/candySky.jpg")
 };
 std::size_t MapCount = 4;
 
@@ -168,7 +169,7 @@ Status LoqueClient::getUserLevelInfo(int userId, UserLevelInfo& out) {
     if (status != OK) {
         return status; 
     }
-    toReceive >> status >> out; 
+    toReceive >> status >> out;
     return status;
 }
 

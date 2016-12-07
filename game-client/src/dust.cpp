@@ -38,9 +38,6 @@ void DashDust::update(double dt) {
     }
 }
 
-void DashDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
-}
-
 void DashDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
@@ -83,9 +80,6 @@ void JumpDust::update(double dt) {
     if ( !sprite->isPlaying() ) {
         world->removeEntity(this, World::Layer::Midground);
     }
-}
-
-void JumpDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void JumpDust::draw(sf::RenderTarget& window){
@@ -133,9 +127,6 @@ void WallJumpDust::update(double dt) {
     }
 }
 
-void WallJumpDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
-}
-
 void WallJumpDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
@@ -174,9 +165,6 @@ void LandingDust::update(double dt) {
     if ( !sprite->isPlaying() ) {
         world->removeEntity(this, World::Layer::Midground);
     }
-}
-
-void LandingDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void LandingDust::draw(sf::RenderTarget& window){
@@ -227,9 +215,6 @@ void ShockDust::update(double dt) {
     }
 }
 
-void ShockDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
-}
-
 void ShockDust::draw(sf::RenderTarget& window){
     if ( sprite->isPlaying() ) {
         window.draw(*sprite);
@@ -265,9 +250,6 @@ void PokeDust::update(double dt) {
     if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
         world->removeEntity(this, World::Layer::Foreground);
     }
-}
-
-void PokeDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void PokeDust::draw(sf::RenderTarget& window){
@@ -317,9 +299,6 @@ void LavaDust::update(double dt) {
     }
 }
 
-void LavaDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
-}
-
 void LavaDust::draw(sf::RenderTarget& window){
     window.draw(*sprite);
 }
@@ -357,9 +336,6 @@ void FireworkDust::update(double dt) {
     if ( !sprite->isPlaying() && sound.getStatus() != sf::SoundSource::Playing ) {
         world->removeEntity(this, World::Layer::Foreground);
     }
-}
-
-void FireworkDust::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
 }
 
 void FireworkDust::draw(sf::RenderTarget& window){

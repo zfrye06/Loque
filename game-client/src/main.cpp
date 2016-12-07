@@ -1,7 +1,16 @@
+/**
+ * @file main.cpp
+ * @brief Tries to tie all the crazy objects and make a "game" out of them, kinda messy.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
 #include <string>
+#include <stdlib.h>
 
 #include "entity.h"
 #include "map.h"
@@ -20,7 +29,8 @@ std::string getMap(unsigned int id ) {
             return Maps[i].path;
         }
     }
-    throw std::runtime_error( "Couldn't find map!");
+    std::cerr << "Could not find map with id " << id << std::endl;
+    exit(1); 
 }
 
 int app(int argc, char** argv) {
@@ -34,7 +44,7 @@ int app(int argc, char** argv) {
     sf::View view;
     view.reset(sf::FloatRect(0,0,800,600));
     world = new World(view);
-    playerStats = new PlayerStats( 0, 0 );
+    playerStats = new PlayerStats( std::stoi(argv[2]), std::stoi(argv[1]) );
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     world->addEntity( new Map( getMap(std::stoi(argv[1])) ), World::Layer::None );
@@ -44,10 +54,10 @@ int app(int argc, char** argv) {
         ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
         world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Midground);
     }
+    playerStats->startTime();
     //world->addEntity( new PhysicsDebug( world->framebuffer ), World::Layer::Foreground );
     sf::Clock deltaClock;
     // Set up camera view.
-    glMatrixMode(GL_MODELVIEW);
     while( window.isOpen() && world->isOpen() ) {
         // Catch events, probably should be in some sort of event handler.
         sf::Event event;
@@ -77,7 +87,6 @@ int app(int argc, char** argv) {
         //view.setCenter( round( center.x ), round( center.y ) );
         // Actually do rendering.
         //window.setView( view );
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         world->draw(window);
         window.display();
     }
@@ -93,9 +102,11 @@ int main( int argc, char** argv ) {
     try {
         return app(argc, argv);
     } catch( std::exception e ) {
-        std::cout << "ERROR: " << e.what() << "\n";
-        throw e;
+        std::cerr << "ERROR: " << e.what() << "\n";
         return 1;
     }
-    return 0;
+
+    // Unreachable, unless something "breaks" out of the try statement.
+    // In which case we aren't expecting that, thus we must return with an error code!
+    return 1;
 }

@@ -19,8 +19,8 @@ void HUD::update(double dt){
     s << "Score: " << score;
     scoreText.setString(s.str());
     sf::View view = world->view;
-    posX = view.getCenter().x - (view.getSize().x / 2);
-    posY = view.getCenter().y - (view.getSize().y / 2);
+    float posX = view.getCenter().x - (view.getSize().x / 2);
+    float posY = view.getCenter().y - (view.getSize().y / 2);
     scoreText.setPosition(posX + 10, posY + 10);
 }
 

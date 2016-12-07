@@ -1,5 +1,13 @@
-#ifndef CONTACTLISTENER_H
-#define CONTACTLISTENER_H
+/**
+ * @file contactlistener.h
+ * @brief Actually runs the onHit function on entities, and adds a MapQueryCallback to look for the map.
+ * @author Zach Frye
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
+#ifndef LQ_CONTACTLISTENER_H
+#define LQ_CONTACTLISTENER_H
 
 #include <Box2D/Box2D.h>
 #include <vector>

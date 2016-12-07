@@ -65,6 +65,7 @@ void World::removeEntity( Entity* e, World::Layer l ) {
 void World::draw( sf::RenderWindow& window ) {
     view.setCenter( sf::Vector2f( round(view.getCenter().x), round(view.getCenter().y) ));
     window.setView( windowView );
+    window.clear( sf::Color::Transparent );
     //window.setView(view);
     // For each layer, clear, then draw to the frame buffer.
     for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
@@ -115,6 +116,9 @@ void World::update( double dt ) {
     }
     globalTimer += dt;
     timer += dt;
+    // We want a fixed timestep, this particular while loop
+    // can cause a "sprial of doom", but I don't really care
+    // for an edge case like that.
     while ( timer >= TIMESTEP ) {
         for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
             for( unsigned int i=0;i<entities[l].size();i++ ) {

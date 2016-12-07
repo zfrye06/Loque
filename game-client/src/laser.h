@@ -1,3 +1,11 @@
+/**
+ * @file laser.h
+ * @brief Zaps the player or rewards them based on trial and error, or something like that.
+ * @author Zach Frye
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_LASER_H_
 #define LQ_LASER_H_
 
@@ -6,6 +14,9 @@
 #include "player.h"
 #include "playerstats.h"
 
+/**
+ * @brief Zaps the player or rewards them based on trial and error, or something like that.
+ */
 class Laser : public Entity {
 public:
     float fireworkTimer;

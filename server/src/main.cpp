@@ -122,8 +122,9 @@ void getEnabledLevelIds(sql::Connection &dbconn,
 void getLevelInfo(sql::Connection &dbconn,
                   int levelId,
                   LevelInfo &info) {
-    std::string query = "SELECT levelId, levelName, levelDescription FROM Level WHERE levelId = ";
+    std::string query = "SELECT levelId, levelName, levelDescription FROM Level WHERE levelId = ?";
     std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+    pstmt->setInt(1, levelId);
     std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
     qRes->next();
     info.id = qRes->getInt(1);
@@ -309,6 +310,7 @@ Status handleGetUserLevelInfo(sql::Connection &dbconn,
         for (auto classId : classIds) {
             ClassLevelInfo classInfo;
             classInfo.classId = classId;
+            std::cout << "SETTING CLASSID TO " << classId; 
             getClassName(dbconn,classId ,classInfo.className);
             std::vector<int> levelIds;
             getEnabledLevelIds(dbconn, classId, levelIds);
@@ -317,7 +319,7 @@ Status handleGetUserLevelInfo(sql::Connection &dbconn,
                 getUserLevelRecord(dbconn, userId, levelId, record);
                 classInfo.levelRecords.push_back(record);
             }
-            info.push_back(classInfo); 
+            info.push_back(classInfo);
         }
     } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleGetUserLevelInfo: " << e.what() << std::endl;
@@ -509,7 +511,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
             reqPacket >> userId;
             UserLevelInfo info;
             auto status = handleGetUserLevelInfo(*dbconn, userId, info);
-            reqPacket << status << info;
+            respPacket << status << info;
             break;
         }
         case GET_ENABLED_LEVELS: {

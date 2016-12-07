@@ -1,3 +1,11 @@
+/**
+ * @file background.h
+ * @brief Spawns some parallaxed images in the background.
+ * @author Zach Frye
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_BACKGROUND_H_
 #define LQ_BACKGROUND_H_
 

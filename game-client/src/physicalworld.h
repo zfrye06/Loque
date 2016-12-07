@@ -1,3 +1,11 @@
+/**
+ * @file physicalworld.h
+ * @brief Makes an ugly global pointer to box2d, and hooks up the contact listener. It used to also keep the physics updating in discrete chunks of time, but now world handles that.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_PHYSICALWORLD_H_
 #define LQ_PHYSICALWORLD_H_
 

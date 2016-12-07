@@ -13,7 +13,7 @@ project(loque)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Werror -Wno-missing-braces")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
 
 include_directories("${PROJECT_BINARY_DIR}")
@@ -32,9 +32,11 @@ set( source
          src/player.cpp
          src/dust.cpp
          src/exit.cpp
+         src/physicsdebug.cpp
          src/hud.cpp
          src/background.cpp
          src/respawn.cpp
+         src/playerspawn.cpp
          src/trampoline.cpp
          src/killbox.cpp
          src/map.cpp

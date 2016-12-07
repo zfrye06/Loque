@@ -8,12 +8,6 @@ Layer::~Layer() {
     delete mapLayer;
 }
 
-void Layer::update(double dt){
-}
-
-void Layer::onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal){
-}
-
 void Layer::draw(sf::RenderTarget& window){
     window.draw(*mapLayer);
 }

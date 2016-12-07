@@ -1,6 +1,7 @@
 #include "adminpane.h"
 #include "ui_adminpane.h"
 #include "classtab.h"
+#include "addclassdialog.h"
 
 AdminPane::AdminPane(int teacherID, QWidget *parent) :
     teacherID(teacherID),
@@ -13,7 +14,9 @@ AdminPane::AdminPane(int teacherID, QWidget *parent) :
     client.getAllClassStats(teacherID, classStats);
     initWidgets(classStats);
     connect(addClassButton, &QPushButton::clicked, this, [this]{
-//        client.addClassroom(teacherID, )
+        AddClassDialog *d = new AddClassDialog;
+        d->show();
+        connect(d, &AddClassDialog::nameSubmitted, this, &AdminPane::createClassroom);
     });
 }
 
@@ -36,6 +39,11 @@ void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){
     }
     mainLayout->addWidget(tabs);
     setLayout(mainLayout);
+}
+
+void AdminPane::createClassroom(QString name){
+    LoqueClient client;
+    client.createClassroom(teacherID, name.toStdString());
 }
 
 void AdminPane::setUser(UserInfo user){

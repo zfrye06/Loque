@@ -32,6 +32,7 @@ private:
     QIcon addClassIcon = QIcon(QPixmap(":/assets/assets/add"));
 
     void initWidgets(const std::vector<ClassStats>& classStats);
+    void createClassroom(QString name);
 
 };
 

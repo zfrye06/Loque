@@ -54,19 +54,18 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     connect(playButton, &QPushButton::clicked,
             this, [this] {
         if (activeLevelRecord != nullptr) {
-            QProcess p;
-            p.setWorkingDirectory("/Users/asteele/Sandbox/edu-app-unescaped-characters/");
-            p.setProcessChannelMode(QProcess::MergedChannels);
             QStringList args;
-            args << "1" << "1";
-            p.startDetached("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client/bin/loque", args);
-            p.waitForFinished();
+            args << QString::number(activeLevelRecord->level.id) << QString::number(user.userId);
+            QString loqueExec("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client/bin/loque");
+            QString loqueWorkingDir("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client");
+            QProcess::startDetached(loqueExec, args, loqueWorkingDir);
         }
     });
 
     this->setLayout(layout);
 
     // TODO: Sample levelInfo. Remove.
+    user.userId = 1;
     levelInfo.reset(new std::vector<ClassLevelInfo>);
     ClassLevelInfo info1;
     info1.classId = 1;

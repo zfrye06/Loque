@@ -11,15 +11,13 @@ MainWindow::MainWindow(QWidget *parent) :
     loginPane(new LoginPane),
     registerPane(new RegisterPane),
     studentPlayPane(new StudentPlayPane),
-    adminPane(new AdminPane(19)),
-    adminPlayPane(new AdminPlayPane)
+    adminPane(nullptr),
+    adminPlayPane(nullptr)
 {
     ui->setupUi(this);
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     paneContainer->addWidget(studentPlayPane);
-    paneContainer->addWidget(adminPane);
-    paneContainer->addWidget(adminPlayPane);
     setCentralWidget(paneContainer);
 
     connect(loginPane, &LoginPane::onLogin,
@@ -43,8 +41,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::handleLogin(UserInfo user) {
     if (user.type == UserType::ADMIN) {
-        adminPane->setUser(user);
-        adminPane->updateClassStats(); 
+        // TODO: ADD adminPlayPane. 
+        adminPane = new AdminPane(user);
+        paneContainer->addWidget(adminPane);
         paneContainer->setCurrentWidget(adminPane); 
     } else {
         studentPlayPane->setUser(user);

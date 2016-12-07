@@ -25,7 +25,6 @@ public:
 
 private:
 
-    Ui::ClassTab *ui;
     QTableWidget *userStatsTable;
     QTableWidget *levelStatsTable;
     QVBoxLayout *mainLayout;

@@ -493,7 +493,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         case POST_STATS: {
             int userId;
             GameStats stats;
-            respPacket >> userId >> stats;
+            reqPacket >> userId >> stats;
             auto status = handlePostStats(*dbconn, userId, stats);
             respPacket << status;
             return;

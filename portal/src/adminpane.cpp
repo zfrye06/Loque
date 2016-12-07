@@ -23,7 +23,6 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
             status << std::endl;
         return;
     }
-
     for (auto& cstats : classStats){
         tabs->addTab(new ClassTab(cstats, user.userId), QString::fromStdString(cstats.className));
     }
@@ -43,6 +42,8 @@ void AdminPane::refreshClassTabs(){
     for(auto& cstats : classStats){
         tabs->addTab(new ClassTab(cstats, user.userId), QString::fromStdString(cstats.className));
     }
+AdminPane::~AdminPane()
+{
 }
 
 void AdminPane::createClassroom(QString name){
@@ -55,8 +56,4 @@ void AdminPane::createClassroom(QString name){
     }else if (status == Status::OK) {
         refreshClassTabs();
     }
-}
-
-AdminPane::~AdminPane(){
-
 }

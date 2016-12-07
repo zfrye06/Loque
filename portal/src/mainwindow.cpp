@@ -4,8 +4,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <iostream>
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -27,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     paneContainer->addWidget(studentPlayPane);
-
-    setCentralWidget(paneContainer);
+    
+		setCentralWidget(paneContainer);
 
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin);
@@ -51,10 +49,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::handleLogin(UserInfo user) {
     if (user.type == UserType::ADMIN) {
-        // TODO: ADD adminPlayPane.
+        // TODO: ADD adminPlayPane. 
         adminPane = new AdminPane(user);
         paneContainer->addWidget(adminPane);
-        paneContainer->setCurrentWidget(adminPane);
+        paneContainer->setCurrentWidget(adminPane); 
     } else {
         studentPlayPane->setUser(user);
         studentPlayPane->updateLevelInfo();

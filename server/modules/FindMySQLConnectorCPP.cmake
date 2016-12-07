@@ -9,7 +9,7 @@
 #  MYSQLCONNECTORCPP_ROOT_DIR - path to start searching for the module
 
 set(MYSQLCONNECTORCPP_ROOT_DIR
-        ${MYSQLCONNECTORCPP_ROOT_DIR}"
+        "${MYSQLCONNECTORCPP_ROOT_DIR}"
         CACHE
         PATH
         "Where to start looking for this component.")
@@ -70,4 +70,4 @@ if(MYSQLCONNECTORCPP_FOUND)
             "${MYSQLCONNECTORCPP_LIBRARY}")
 # Add any dependencies here
     mark_as_advanced(MYSQLCONNECTORCPP_ROOT_DIR)
-endif()
+endif() 

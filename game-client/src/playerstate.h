@@ -1,3 +1,13 @@
+/**
+ * @file playerstate.h
+ * @brief Contains all the states for the player, or maybe lots of spaghetti. It's hard to tell. \
+ *        init() exists since we don't actually want the states to do stuff on creation, only when the player\
+ *        actually switches states.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_PLAYERSTATE_H_
 #define LQ_PLAYERSTATE_H_
 

@@ -1,9 +1,19 @@
+/**
+ * @file spikes.h
+ * @brief Hurts and applies impulse to the player when they touch it.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
 #ifndef LQ_SPIKES_H_
 #define LQ_SPIKES_H_
 
 #include "entity.h"
 #include "player.h"
 
+/**
+ * @brief Hurts and applies impulse to the player when they touch it.
+ */
 class Spikes : public Entity{
 public:
     b2Body* body;

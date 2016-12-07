@@ -1,3 +1,11 @@
+/**
+ * @file SFMLOrthogonalLayer.hpp
+ * @brief Stole this from the guy who also made the tmx library, but his implementation was actually really buggy. Through hard work and determination, we've fixed a lot of the bugs and it works well enough for our purposes.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 /*********************************************************************
 Matt Marchant 2016
 http://trederia.blogspot.com

@@ -1,3 +1,11 @@
+/**
+ * @file player.h
+ * @brief Oh man, this abomination of a state machine has the majority of the game logic inside of it. I didn't clearly map out the ownership of variables, or how the state machine would look. Just kinda went crazy. Works great though!
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_PLAYER_H_
 #define LQ_PLAYER_H_
 
@@ -20,35 +28,108 @@
 
 class GenericPlayerState;
 
+/**
+ * @brief Oh man, this abomination of a state machine has the majority of the game logic inside of it. I didn't clearly map out the ownership of variables, or how the state machine would look. Just kinda went crazy. Works great though!
+ */
 class Player : public Entity {
 public:
 
     // Configurable variables
-    float directionalInfluence;
+    /**
+     * @brief also known as hitstun, how long in seconds to be stunned for during getting hit. (not shocked!)
+     */
     float hitLength;
+    /**
+     * @brief How much time in seconds does the game wait before signaling a "failed" breakfall. The higher the easier it is to break your fall from a hit.
+     */
     float techLength;
+    /**
+     * @brief This is how long the game waits before allowing the initiation of another tech. Don't frick up!
+     */
     float frickedUpLength;
-    float frickedUpWallJumpLength;
+    /**
+     * @brief How long the game waits before allowing the player to be hurt again.
+     */
     float damageBoostLength;
+    /**
+     * @brief How long in seconds for the player to be in hitstun from a shock.
+     */
     float shockLength;
+    /**
+     * @brief The time in seconds the game waits for the stick to be "smashed" before initiating a walk. If the stick was moved fast enough, it initiates a dash instead. Lower = harder to dash.
+     */
     float walkLength;
+    /**
+     * @brief Initial velocity to launch the player at during an air dodge. It's quadratically interpolated to 0 over airDodgeTime.
+     */
     float airDodgeVelocity;
+    /**
+     * @brief How long does an airdodge take place.
+     */
     float airDodgeTime;
+    /**
+     * @brief The deadzone of a joystick, defaults to 0.25 (25%)
+     */
     float deadZone;
+    /**
+     * @brief How long the player takes to turn around during a run, should never be relevant to good players.
+     */
     float turnAroundTime;
+    /**
+     * @brief The amount of force to apply to the player while air-borne to make them enter a fast-falling status.
+     */
     float fastFallSpeed;
+    /**
+     * @brief How long to wait during a jump-squat. If the player releases the jump button during the jumpsquat they will short hop instead of jump.
+     */
     float jumpSquatLength;
+    /**
+     * @brief How much faster is dashing/running from walking.
+     */
     float dashingMultiplier;
+    /**
+     * @brief How long is the player in a dash, during a dash a player may "dash dance", provided they don't wait longer than this time before turning around.
+     */
     float dashLength;
+    /**
+     * @brief What to set the player's y velocity at during a double jump, it's also used in wall jumping calculations.
+     */
     float doubleJumpHeight;
+    /**
+     * @brief Not the true player height, but it's used to generate the player capsule and calculate physics.
+     */
     float playerHeight;
+    /**
+     * @brief The player width.
+     */
     float playerWidth;
+    /**
+     * @brief How fast the player moves while walking or in special fall.
+     */
     float playerSpeed;
+    /**
+     * @brief If the player holds the jump button while jumping, this force is applied upward for the duration.
+     */
     float jumpHelpAmount;
+    /**
+     * @brief The y velocity to set the player at for a full jump.
+     */
     float fullHopHeight;
+    /**
+     * @brief This is a wall jump buffer, if the player inputs a jump too early, as long as they hit a wall within this timeframe they'll still successfully walljump.
+     */
     float wallJumpLength;
+    /**
+     * @brief What to set the player's y velocity at during a short hop.
+     */
     float shortHopHeight;
+    /**
+     * @brief How long does a landing animation take when the player hits the ground. The player should be able to buffer inputs during it, but can't actually act during this time.
+     */
     float landLength;
+    /**
+     * @brief How much air control does the player have.
+     */
     float airControlMultiplier;
 
     // Control variables

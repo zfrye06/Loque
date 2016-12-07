@@ -274,15 +274,6 @@ Map::~Map() {
     ambient.stop();
 }
 
-void Map::draw( sf::RenderTarget& window ) {
-}
-
-void Map::update( double dt ) {
-}
-
-void Map::onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal ) {
-}
-
 Entity::Type Map::getType(){
     return Entity::Type::Map;
 }

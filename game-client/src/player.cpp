@@ -8,7 +8,6 @@ Player::Player( std::string resource, glm::vec2 pos) {
     hitLength = 0.2f;
     successfulTech = false;
     wallJumpTimer = 0;
-    directionalInfluence = 1.f;
     techLength = 20.f/60.f;
     frickedUpLength = 40.f/60.f;
     jumpHelpAmount = 2.f;

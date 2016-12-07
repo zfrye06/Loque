@@ -1,3 +1,11 @@
+/**
+ * @file main.cpp
+ * @brief Tries to tie all the crazy objects and make a "game" out of them, kinda messy.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/OpenGL.hpp>
 #include <SFML/Window.hpp>
@@ -36,7 +44,7 @@ int app(int argc, char** argv) {
     sf::View view;
     view.reset(sf::FloatRect(0,0,800,600));
     world = new World(view);
-    playerStats = new PlayerStats( 0, 0 );
+    playerStats = new PlayerStats( std::stoi(argv[2]), std::stoi(argv[1]) );
     
     sf::RenderWindow window(sf::VideoMode(800, 600), "Loque");
     world->addEntity( new Map( getMap(std::stoi(argv[1])) ), World::Layer::None );
@@ -46,10 +54,10 @@ int app(int argc, char** argv) {
         ::PlayerSpawn* spawn = static_cast< ::PlayerSpawn*>(spawns[0]);
         world->addEntity(new Respawn(glm::vec2(spawn->pos.x, spawn->pos.y)), World::Layer::Midground);
     }
+    playerStats->startTime();
     //world->addEntity( new PhysicsDebug( world->framebuffer ), World::Layer::Foreground );
     sf::Clock deltaClock;
     // Set up camera view.
-    glMatrixMode(GL_MODELVIEW);
     while( window.isOpen() && world->isOpen() ) {
         // Catch events, probably should be in some sort of event handler.
         sf::Event event;
@@ -97,5 +105,8 @@ int main( int argc, char** argv ) {
         std::cerr << "ERROR: " << e.what() << "\n";
         return 1;
     }
-    return 0;
+
+    // Unreachable, unless something "breaks" out of the try statement.
+    // In which case we aren't expecting that, thus we must return with an error code!
+    return 1;
 }

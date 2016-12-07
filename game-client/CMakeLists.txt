@@ -32,9 +32,11 @@ set( source
          src/player.cpp
          src/dust.cpp
          src/exit.cpp
+         src/physicsdebug.cpp
          src/hud.cpp
          src/background.cpp
          src/respawn.cpp
+         src/playerspawn.cpp
          src/trampoline.cpp
          src/killbox.cpp
          src/map.cpp

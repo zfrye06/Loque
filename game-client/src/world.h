@@ -1,3 +1,11 @@
+/**
+ * @file world.h
+ * @brief Handles storing entities, finding entities, drawing entities, updating entities, and does some framebuffer/view management as well.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_WORLD_H_
 #define LQ_WORLD_H_
 
@@ -6,16 +14,22 @@
 #include <SFML/Window.hpp>
 #include <string>
 #include <vector>
+
+#include "resource.h"
 #include "entity.h"
 #include "physicalworld.h"
 #include "playerstats.h"
 
-#define TIMESTEP 1.f/75.f
+// Determines the the target frame rate 
+#define TIMESTEP 1.f/60.f
+// A badly used constant in order to know how many layers are available.
 #define LAYERCOUNT 6
 
+/**
+ * @brief Handles storing lists of entities, generating framebuffers, drawing the world, updating the world, finding aspects about the world...
+ */
 class World {
 private:
-// vector probably isn't the most efficient way to store the world...
     std::vector<Entity*> entities[LAYERCOUNT];
     bool open;
     double timer;
@@ -38,6 +52,12 @@ public:
     void updateView( sf::FloatRect r );
     void draw( sf::RenderWindow& window );
     void update( double dt );
+    /**
+     * @brief Stutters the game in order to add JUICE
+     *
+     * @param length How long to stutter for.
+     * @param period Length of each stutter.
+     */
     void stutter( double length, double period );
     std::vector<Entity*> getEntitiesByType(Entity::Type t);
 };

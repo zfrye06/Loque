@@ -1,3 +1,11 @@
+/**
+ * @file resource.h
+ * @brief Handles loading shared resources into memory. No worries about multi-loading images or whatever.
+ *        Definitely could have smartened up the polymorphism here. Works fine regardless.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
 #ifndef LQ_RESOURCE_H_
 #define LQ_RESOURCE_H_
 

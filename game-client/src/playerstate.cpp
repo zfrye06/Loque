@@ -653,7 +653,7 @@ KnockbackState::KnockbackState( Player* player, glm::vec2 impulse ) {
 void KnockbackState::init() {
     player->hurtSound.play();
     float strength = glm::length(impulse);
-    glm::vec2 di = glm::normalize(player->direction*player->directionalInfluence*strength);
+    glm::vec2 di = glm::normalize(player->direction*strength);
     glm::vec2 newImpulse = glm::normalize(impulse);
     // If it would make us face the wrong way entirely... Don't do any DI
     if ( !isnan(di.x) && glm::dot(glm::normalize(impulse),di) > 0 ) {

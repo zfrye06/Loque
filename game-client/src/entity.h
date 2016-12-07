@@ -1,3 +1,11 @@
+/**
+ * @file entity.h
+ * @brief The meat and potatoes of a video game, provides easy access to rendering, and a singular contact hook in order to do game logic. Contains some basic entities that have little to no dependencies.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_ENTITY_H_
 #define LQ_ENTITY_H_
 
@@ -5,10 +13,10 @@
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <glm/glm.hpp>
-#include <tmxlite/Map.hpp>
-#include <tmxlite/Property.hpp>
 #include <Box2D/Box2D.h>
+
+#include <glm/glm.hpp>
+// Some math constant stuff, anything that needs GLM is probably going to need these
 inline sf::Vector2f toSFML(const glm::vec2 &v) {
         return sf::Vector2f(v.x, v.y);
 }
@@ -22,11 +30,7 @@ inline glm::vec2 toGLM(const sf::Vector2f &v) {
         return glm::vec2(v.x, v.y);
 }
 
-#include "physicalworld.h"
-#include "AnimatedSprite.hpp"
-#include "DebugDraw.h"
-#include "resource.h"
-
+// Imagine using a language that doesn't come with PI by default... OH WAIT
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -56,26 +60,4 @@ public:
     };
     virtual Type getType();
 };
-
-class PhysicsDebug : public Entity {
-private:
-    DebugDraw* drawer;
-public:
-    PhysicsDebug( sf::RenderTarget& window );
-    ~PhysicsDebug();
-    void update( double dt );
-    void onHit( Entity* collider, b2Contact* c, b2Vec2 hitnormal );
-    void draw( sf::RenderTarget& window );
-    Entity::Type getType();
-};
-class PlayerSpawn : public Entity {
-public:
-    glm::vec2 pos;
-    PlayerSpawn(tmx::Object& obj);
-    void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
-    void draw(sf::RenderTarget& window);
-    Entity::Type getType();
-};
-
 #endif

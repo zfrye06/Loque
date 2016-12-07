@@ -1,3 +1,11 @@
+/**
+ * @file dust.h
+ * @brief Little embarrassed by this, since all of these objects have mostly the same functionality, but use tons of different classes anyway! Each dust spawns an animation (and sound), then deletes itself. That's it!
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_DASHDUST_H_
 #define LQ_DASHDUST_H_
 
@@ -17,7 +25,6 @@ public:
     DashDust( glm::vec2 pos, bool flipped, float angle );
     ~DashDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -31,7 +38,6 @@ public:
     JumpDust( glm::vec2 pos, float angle, bool doub = false );
     ~JumpDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -45,7 +51,6 @@ public:
     LandingDust( glm::vec2 pos, float angle );
     ~LandingDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -59,7 +64,6 @@ public:
     WallJumpDust( glm::vec2 pos, bool flipped, float angle );
     ~WallJumpDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -74,7 +78,6 @@ public:
     ShockDust( glm::vec2 pos );
     ~ShockDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -89,7 +92,6 @@ public:
     PokeDust( glm::vec2 pos );
     ~PokeDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -104,7 +106,6 @@ public:
     LavaDust( glm::vec2 pos );
     ~LavaDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };
@@ -119,7 +120,6 @@ public:
     FireworkDust( glm::vec2 pos );
     ~FireworkDust();
     void update(double dt);
-    void onHit(Entity* collider, b2Contact* c, b2Vec2 hitnormal);
     void draw(sf::RenderTarget& window);
     Entity::Type getType();
 };

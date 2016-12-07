@@ -1,3 +1,11 @@
+/**
+ * @file lava.h
+ * @brief Spawns some sick animated lava, with a separated top layer with sweet bubbling stuffs.
+ * @author Dalton Nell
+ * @version 0.0.0
+ * @date 2016-12-06
+ */
+
 #ifndef LQ_LAVA_H_
 #define LQ_LAVA_H_
 
@@ -7,6 +15,9 @@
 #include "world.h"
 #include "player.h"
 
+/**
+ * @brief Spawns some sick animated lava, with a separated top layer with sweet bubbling stuffs.
+ */
 class Lava : public Entity{
 private:
     tmx::FloatRect rect;

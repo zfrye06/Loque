@@ -10,7 +10,7 @@ PlayerStats::PlayerStats(int userId, int levelId) : userId(userId) {
 
 void PlayerStats::startTime() {
     stats.secToComplete = 0;
-    stats.pointsScored = 10;
+    stats.pointsScored = 0;
 }
 
 void PlayerStats::setScore(double s) {

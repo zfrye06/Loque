@@ -23,7 +23,7 @@ double PlayerStats::getScore() {
 }
 
 void PlayerStats::sendStats() {
-    stats.secToComplete += time;
+    stats.secToComplete = time;
     auto status = client.postGameStats(userId, stats);
     if (status != Status::OK) {
         std::cerr << "ERROR: Unable to post player stats: " << status << std::endl;

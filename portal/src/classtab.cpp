@@ -1,11 +1,10 @@
 #include <iostream>
+#include <QHeaderView>
 #include "classtab.h"
-#include "ui_classtab.h"
 
 ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
-    QWidget(parent), ui(new Ui::ClassTab), teacherID(teacherID), classID(classStats.classId)
+    QWidget(parent), teacherID(teacherID), classID(classStats.classId)
 {
-    ui->setupUi(this);
     initWidgets();
     setSummaryBox(classStats);
     setEnabledLevels();

@@ -1,8 +1,8 @@
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QSizePolicy>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QSizePolicy>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(adminPane);
     paneContainer->addWidget(adminPlayPane);
     setCentralWidget(paneContainer);
-    paneContainer->setCurrentWidget(adminPane);
 
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin); 

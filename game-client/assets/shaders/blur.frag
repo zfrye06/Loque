@@ -16,5 +16,5 @@ void main()
 	color += texture2D(texture, uv - (off1 / resolution)) * 0.3162162162;
 	color += texture2D(texture, uv + (off2 / resolution)) * 0.0702702703;
 	color += texture2D(texture, uv - (off2 / resolution)) * 0.0702702703;
-    gl_FragColor = color;
+    gl_FragColor = color * gl_Color;
 }

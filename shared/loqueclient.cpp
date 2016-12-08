@@ -101,9 +101,9 @@ Status LoqueClient::addClassroom(int userId, int classId) {
     return status;
 }
 
-Status LoqueClient::createClassroom(int userId, const std::string& className) {
+Status LoqueClient::createClassroom(int userId, const std::string& className, ClassStats& classStats) {
     sf::Packet toSend;
-    toSend << ReqType::CREATE_CLASS << userId << className;
+    toSend << ReqType::CREATE_CLASS << userId << className << classStats;
     sf::Packet toReceive;
     auto status = makeRequest(toSend, toReceive);
     if (status != OK) {

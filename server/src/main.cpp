@@ -219,7 +219,7 @@ Status handleAddClassroom(sql::Connection &dbconn, int userId, int classId) {
 }
 
 Status handleCreateClassroom(sql::Connection &dbconn,
-                             int userId, const std::string &className) {
+                             int userId, const std::string &className, ClassStats& classStats) {
     try {
         std::string query = "INSERT INTO Class(className) VALUES(?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
@@ -231,6 +231,12 @@ Status handleCreateClassroom(sql::Connection &dbconn,
         std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
         qRes->next();
         int classId = qRes->getInt(1);
+        classStats.classId = classId;
+        classStats.className = className;
+        std::vector<LevelInfo> lvls;
+        std::vector<UserStats> userStats;
+        classStats.enabledLevels = lvls;
+        classStats.studentStats = userStats;
 
         handleAddClassroom(dbconn, userId, classId);
     } catch (sql::SQLException &e) {
@@ -485,8 +491,9 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         case CREATE_CLASS: {
             int userId;
             std::string className;
-            reqPacket >> userId >> className;
-            auto status = handleCreateClassroom(*dbconn, userId, className);
+            ClassStats cstats;
+            reqPacket >> userId >> className >> cstats;
+            auto status = handleCreateClassroom(*dbconn, userId, className, cstats);
             respPacket << status;
             break;
         }

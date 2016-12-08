@@ -39,7 +39,10 @@ void AdminPane::initWidgets(const std::vector<ClassStats>& classStats){
 
 void AdminPane::createClassroom(QString name){
     LoqueClient client;
-    client.createClassroom(teacherID, name.toStdString());
+    ClassStats classStats;
+    client.createClassroom(teacherID, name.toStdString(), classStats);
+    tabs->addTab(new ClassTab(classStats, teacherID), QString::fromStdString(classStats.className));
+    emit classCreated(classStats.classId);
 }
 
 void AdminPane::setUser(UserInfo user){

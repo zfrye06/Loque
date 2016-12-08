@@ -139,7 +139,7 @@ public:
 
     // Creates a classroom with the given name whose sole member is the given user.
     // The given userId should be that of an instructor.
-    Status createClassroom(int userId, const std::string& className);
+    Status createClassroom(int userId, const std::string& className, ClassStats& classStats);
 
     // Adds a game record for the given user. This should be called
     // after each completed level.

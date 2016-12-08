@@ -22,6 +22,9 @@ public:
     void updateClassStats();
     void setUser(UserInfo user);
 
+signals:
+    void classCreated(int classID);
+
 private:
     int teacherID;
 

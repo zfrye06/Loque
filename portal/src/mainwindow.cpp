@@ -3,7 +3,6 @@
 #include <QSizePolicy>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
 #include <QApplication>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -25,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     setCentralWidget(paneContainer);
-
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin);
 

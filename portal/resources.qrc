@@ -4,5 +4,6 @@
         <file>assets/candySky.jpg</file>
         <file>assets/levelView.png</file>
         <file>assets/styles.qss</file>
+        <file>assets/candy1.mp4</file>
     </qresource>
 </RCC>

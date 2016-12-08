@@ -16,7 +16,7 @@ MapData Maps[] = {
     MapData(3, "assets/Castle_Level_1.tmx", "assets/images/candySky.jpg"),
     MapData(4, "assets/Castle_Level_2.tmx", "assets/images/candySky.jpg")
 };
-std::size_t MapCount = 4;
+std::size_t MapCount = 5;
 
 std::ostream& operator<<(std::ostream& out, Status s) {
     switch (s) {

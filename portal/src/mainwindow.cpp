@@ -4,6 +4,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QApplication>
+#include <QMenuBar>
+#include <QPushButton>
+#include <QMenu>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     setCentralWidget(paneContainer);
+    menuBar()->setHidden(true);
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin);
 
@@ -49,6 +53,14 @@ void MainWindow::handleLogin(UserInfo user) {
         paneContainer->addWidget(adminPane);
         paneContainer->setCurrentWidget(adminPane); 
     } else {
+        menuBar()->setHidden(false);
+        QList<QMenu*> menus = menuBar()->findChildren<QMenu*>();
+        for(int i = 0; i < menus.size(); i++){
+            if(menus.at(i)->title() == "File"){
+                menus.at(i)->addAction("Add Class");
+                break;
+            }
+        }
         studentPlayPane = new StudentPlayPane(user);
         paneContainer->addWidget(studentPlayPane);
         paneContainer->setCurrentWidget(studentPlayPane);

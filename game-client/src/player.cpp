@@ -435,10 +435,10 @@ void Player::update( double dt ) {
     }
     if ( sf::Joystick::isConnected( controllerID ) && controllerFound && sf::Joystick::hasAxis(controllerID,sf::Joystick::Axis::Z) ) {
             float check = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::Z);
-            float check2 = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R);
 #ifdef WIN32
             if( (check > 80 || check < -80) && airDodgeReleased ) {
 #else
+            float check2 = sf::Joystick::getAxisPosition(controllerID,sf::Joystick::Axis::R);
             if( (check > 80 || check2 > 80) && airDodgeReleased ) {
 #endif
                 airDodgePressed = true;

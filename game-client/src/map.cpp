@@ -41,7 +41,7 @@ Map::Map( std::string resource ) {
     mapBody->SetUserData(this);
 
     // First grab physical layer
-    tmx::TileLayer* tileSet;
+    tmx::TileLayer* tileSet = nullptr;
     const tmx::Tileset* realTileSet = nullptr;
     for (unsigned int i=0 ;i < map->getTilesets().size(); i++) {
         auto l = map->getTilesets()[i];
@@ -53,8 +53,8 @@ Map::Map( std::string resource ) {
         throw std::runtime_error("Couldn't find physics tileset inside map");
     }
     //for( auto l : map->getLayers() ) {
-    bool aboveLava;
-    int darkness;
+    bool aboveLava = false;
+    int darkness = 255;
     for (unsigned int i=0 ;i < map->getLayers().size(); i++) {
         auto l = map->getLayers()[i].get();
         switch( l->getType() ) {

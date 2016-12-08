@@ -310,7 +310,6 @@ Status handleGetUserLevelInfo(sql::Connection &dbconn,
         for (auto classId : classIds) {
             ClassLevelInfo classInfo;
             classInfo.classId = classId;
-            std::cout << "SETTING CLASSID TO " << classId; 
             getClassName(dbconn,classId ,classInfo.className);
             std::vector<int> levelIds;
             getEnabledLevelIds(dbconn, classId, levelIds);

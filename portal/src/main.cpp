@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[])
 {
-    QFile styles(":/assets/assets/styles.qss");
+    QFile styles(":/assets/styles.qss");
     styles.open(QFile::ReadOnly);
     QString styleString = QLatin1String(styles.readAll());
 

@@ -28,10 +28,9 @@ void RegisterPane::attemptRegistration()
     } else {
         std::string username = ui->usernameField->text().toStdString();
         std::string password = ui->passwordField->text().toStdString();
+        UserType type = ui->adminCheck->isChecked() ? UserType::ADMIN : UserType::STUDENT;
         LoginResult result;
         LoqueClient client;
-        UserType type = (ui->adminCheck->checkState() == Qt::Unchecked) ? UserType::STUDENT :
-                        (ui->adminCheck->checkState() == Qt::Checked) ? UserType::ADMIN : UserType::DNE;
         Status returnStatus = client.createAccount(username, password, type, result);
         if(returnStatus == Status::NETWORK_ERR)
         {

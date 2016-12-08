@@ -9,6 +9,7 @@
 #include <QGroupBox>
 #include <QScrollArea>
 #include "addclassdialog.h"
+#include "levelsettingsdialog.h"
 #include "../../shared/loqueclient.h"
 
 
@@ -38,8 +39,11 @@ private:
     QScrollArea *tableArea;
     QVBoxLayout *scrollLayout;
     std::unique_ptr<AddClassDialog> currClassDialog;
+
     int teacherID;
     int classID;
+    std::vector<int> enabledLevels;
+    std::vector<LevelInfo> allLevels;
 
     QLabel *classSummaryLabel;
     QLabel *classIdLabel;

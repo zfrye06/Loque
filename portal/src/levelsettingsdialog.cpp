@@ -18,6 +18,8 @@ LevelSettingsDialog::LevelSettingsDialog(std::vector<int> enabledLevels, std::ve
             col = 0;
         }
     }
+//    mainLayout->addWidget(new LevelBox(allLevels[0], std::find(enabledLevels.begin(), enabledLevels.end(), allLevels[0].id) != enabledLevels.end(), this), row, col++, 1, 1);
+
     setLayout(mainLayout);
 }
 
@@ -47,7 +49,7 @@ LevelBox::LevelBox(LevelInfo lvlInfo, bool enabled, QWidget *parent) : enabled(e
     hLayout->addLayout(vLayout);
     box->setLayout(hLayout);
     box->setParent(parent);
-    box->setFixedSize(QSize(50,50));
+    box->setFixedSize(QSize(500, 250));
 }
 
 LevelBox::~LevelBox()

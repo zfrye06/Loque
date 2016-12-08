@@ -21,12 +21,8 @@ class StudentPlayPane : public QWidget
     Q_OBJECT
 
 public:
-    explicit StudentPlayPane(QWidget *parent = 0);
+    explicit StudentPlayPane(UserInfo, QWidget *parent = 0);
     ~StudentPlayPane();
-
-    void setUser(UserInfo);
-    void updateLevelInfo();
-    void addClass(MapData info);
 
 private:
     UserInfo user;
@@ -48,6 +44,7 @@ private:
     QPushButton *playButton;
 
     void addClassRow(int, const ClassLevelInfo&);
+    void updateLevelInfo();
     void updateDisplay();
     void thumbnailClicked(int, int); 
 };

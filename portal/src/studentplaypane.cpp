@@ -4,8 +4,9 @@
 
 QListWidget *classRowList();
 
-StudentPlayPane::StudentPlayPane(QWidget *parent) :
+StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
+    user(user), 
     levelInfo(nullptr),
     activeLevelRecord(nullptr),
     splitter(new QSplitter(this)),
@@ -55,7 +56,7 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
             this, [this] {
         if (activeLevelRecord != nullptr) {
             QStringList args;
-            args << QString::number(activeLevelRecord->level.id) << QString::number(user.userId);
+            args << QString::number(activeLevelRecord->level.id) << QString::number(this->user.userId);
             QString loqueExec("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client/bin/loque");
             QString loqueWorkingDir("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client");
             QProcess::startDetached(loqueExec, args, loqueWorkingDir);
@@ -64,21 +65,24 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
 
     this->setLayout(layout);
 
+    updateLevelInfo();
+    updateDisplay(); 
+
     // TODO: Sample levelInfo. Remove.
-    user.userId = 1;
-    levelInfo.reset(new std::vector<ClassLevelInfo>);
-    ClassLevelInfo info1;
-    info1.classId = 1;
-    info1.className = "Mr. Johnson's";
-    LevelRecord lr1;
-    lr1.highScore = 48;
-    lr1.bestCompletionTimeSecs = 3;
-    lr1.level.id = 0;
-    lr1.level.name = "LEVEL 0";
-    lr1.level.description = "FUN FUN FUN";
-    info1.levelRecords.push_back(lr1);
-    levelInfo->push_back(info1);
-    updateDisplay();
+//    user.userId = 1;
+//    levelInfo.reset(new std::vector<ClassLevelInfo>);
+//    ClassLevelInfo info1;
+//    info1.classId = 1;
+//    info1.className = "Mr. Johnson's";
+//    LevelRecord lr1;
+//    lr1.highScore = 48;
+//    lr1.bestCompletionTimeSecs = 3;
+//    lr1.level.id = 0;
+//    lr1.level.name = "LEVEL 0";
+//    lr1.level.description = "FUN FUN FUN";
+//    info1.levelRecords.push_back(lr1);
+//    levelInfo->push_back(info1);
+//    updateDisplay();
 }
 
 StudentPlayPane::~StudentPlayPane() {
@@ -138,10 +142,6 @@ void StudentPlayPane::updateLevelInfo() {
     levelInfo.reset(newInfo.release());
 }
 
-void StudentPlayPane::setUser(UserInfo user) {
-   this->user = user;
-}
-
 QListWidget *classRowList() {
     QListWidget* list = new QListWidget();
     QPalette palette;
@@ -151,7 +151,7 @@ QListWidget *classRowList() {
     list->setFlow(QListView::LeftToRight);
     list->setSelectionMode(QAbstractItemView::SingleSelection);
     list->setFocusPolicy(Qt::NoFocus);
-    list->setIconSize(QSize(150, 150));
+    list->setIconSize(QSize(200, 200));
     list->setFrameShape(QFrame::NoFrame);
     return list;
 }

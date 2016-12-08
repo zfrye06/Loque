@@ -316,7 +316,6 @@ Status handleGetUserLevelInfo(sql::Connection &dbconn,
         for (auto classId : classIds) {
             ClassLevelInfo classInfo;
             classInfo.classId = classId;
-            std::cout << "SETTING CLASSID TO " << classId; 
             getClassName(dbconn,classId ,classInfo.className);
             std::vector<int> levelIds;
             getEnabledLevelIds(dbconn, classId, levelIds);
@@ -500,7 +499,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         case POST_STATS: {
             int userId;
             GameStats stats;
-            respPacket >> userId >> stats;
+            reqPacket >> userId >> stats;
             auto status = handlePostStats(*dbconn, userId, stats);
             respPacket << status;
             return;

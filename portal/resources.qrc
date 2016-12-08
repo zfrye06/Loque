@@ -1,6 +1,7 @@
 <RCC>
-    <qresource prefix="/assets">
+    <qresource prefix="/">
         <file>assets/plus.png</file>
         <file>assets/candySky.jpg</file>
+        <file>assets/levelView.png</file>
     </qresource>
 </RCC>

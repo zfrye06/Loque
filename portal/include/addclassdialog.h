@@ -2,6 +2,7 @@
 #define ADDCLASSDIALOG_H
 
 #include <QDialog>
+#include "../../shared/loqueclient.h"
 
 namespace Ui {
 class AddClassDialog;
@@ -12,14 +13,17 @@ class AddClassDialog : public QDialog
     Q_OBJECT
 
 signals:
-    void nameSubmitted(QString name);
+    void classCreated(ClassStats &cstats);
 
 public:
-    explicit AddClassDialog(QWidget *parent = 0);
+    explicit AddClassDialog(int userId, QWidget *parent = 0);
     ~AddClassDialog();
 
 private:
     Ui::AddClassDialog *ui;
+    int userId;
+    void createClassroom(QString name);
+    void showLabel(int classID);
 
 
 };

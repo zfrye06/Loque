@@ -31,15 +31,18 @@ HEADERS  += include/mainwindow.h \
     include/adminplaypane.h \
     include/adminpane.h \
     include/classtab.h \
-    src/addclassdialog.h \
-    include/addclassdialog.h
+    #src/addclassdialog.h \
+    include/addclassdialog.h \
+    #src/classtab.h
+    include/classtab.h
 
 
 FORMS    += src/mainwindow.ui \
     src/loginpane.ui \
     src/registerpane.ui \
     src/adminplaypane.ui \
-    src/addclassdialog.ui
+    src/addclassdialog.ui \
+    src/classtab.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

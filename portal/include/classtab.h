@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QScrollArea>
+#include "addclassdialog.h"
 #include "../../shared/loqueclient.h"
 
 
@@ -23,36 +24,38 @@ public:
     explicit ClassTab(ClassStats classStats, int teacherID, QWidget *parent = 0);
     ~ClassTab();
 
+signals:
+    void classCreated(ClassStats &cstats);
+
 private:
 
-    Ui::ClassTab *ui;
     QTableWidget *userStatsTable;
     QTableWidget *levelStatsTable;
     QVBoxLayout *mainLayout;
     QGroupBox *summaryBox;
     QVBoxLayout *summaryLayout;
-    QGroupBox *levelArea;
-    std::map<int, QPushButton*> levelButtons;
+    QHBoxLayout *topLayout;
+    QScrollArea *tableArea;
+    QVBoxLayout *scrollLayout;
+    std::unique_ptr<AddClassDialog> currClassDialog;
     int teacherID;
     int classID;
 
     QLabel *classSummaryLabel;
+    QLabel *classIdLabel;
     QLabel *classNameLabel;
     QLabel *classPointsLabel;
     QLabel *classTimeLabel;
     QLabel *enabledLevelsLabel;
     QLabel *userStatsLabel;
-    QLabel *mapStatsLabel;
+    QLabel *levelStatsLabel;
 
     void initWidgets();
-    void initConnections();
     void setSummaryBox(const ClassStats& classStats);
     void setUserTable(const ClassStats& classStats);
     void setMapTable(const ClassStats& classStats);
-    void setEnabledLevels();
     QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
-    void toggleLevel();
 };
 
 #endif // CLASSTAB_H

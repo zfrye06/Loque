@@ -9,6 +9,7 @@ PlayerStats::PlayerStats(int userId, int levelId) : userId(userId) {
 }
 
 void PlayerStats::startTime() {
+    time = 0;
     stats.secToComplete = 0;
     stats.pointsScored = 0;
 }
@@ -22,6 +23,7 @@ double PlayerStats::getScore() {
 }
 
 void PlayerStats::sendStats() {
+    stats.secToComplete = time;
     auto status = client.postGameStats(userId, stats);
     if (status != Status::OK) {
         std::cerr << "ERROR: Unable to post player stats: " << status << std::endl;
@@ -29,5 +31,5 @@ void PlayerStats::sendStats() {
 }
 
 void PlayerStats::update(double dt) {
-    stats.secToComplete += dt;
+    time += dt;
 }

@@ -1,13 +1,13 @@
 #include <iostream>
 #include <QHeaderView>
 #include "classtab.h"
+#include <QToolButton>
 
 ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
-    QWidget(parent), teacherID(teacherID), classID(classStats.classId)
+    QWidget(parent), teacherID(teacherID), classID(classStats.classId), currClassDialog(nullptr)
 {
     initWidgets();
     setSummaryBox(classStats);
-    setEnabledLevels();
     setUserTable(classStats);
     setMapTable(classStats);
 }
@@ -35,36 +35,56 @@ void ClassTab::initWidgets(){
     classNameLabel = new QLabel;
     classPointsLabel = new QLabel;
     classTimeLabel = new QLabel;
-    enabledLevelsLabel = new QLabel("Enabled Levels: ");
     userStatsLabel = new QLabel("Student Stats");
-    mapStatsLabel = new QLabel("Map Stats");
+    levelStatsLabel = new QLabel("Level Stats");
+    classIdLabel = new QLabel;
+    QToolButton *levelButton = new QToolButton;
+    QIcon lvl(QPixmap(":/assets/levelView.png"));
+    levelButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    levelButton->setIcon(lvl);
+    levelButton->setText("Level Settings");
+    levelButton->setIconSize(QSize(75,75));
+    levelButton->setFixedSize(QSize(100, 100));
+    QToolButton *addClassButton = new QToolButton;
+    QIcon plus(QPixmap(":/assets/plus.png"));
+    addClassButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    addClassButton->setIcon(plus);
+    addClassButton->setText("Add Class");
+    addClassButton->setIconSize(QSize(75,75));
+    addClassButton->setFixedSize(QSize(100, 100));
 
     summaryBox = new QGroupBox;
     summaryLayout = new QVBoxLayout;
     userStatsTable = new QTableWidget;
     levelStatsTable = new QTableWidget;
     mainLayout = new QVBoxLayout;
-    levelArea = new QGroupBox;
+    topLayout = new QHBoxLayout;
 
+    summaryLayout->addWidget(classIdLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classPointsLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classTimeLabel, 0, Qt::AlignCenter);
-    summaryLayout->addWidget(enabledLevelsLabel, 0, Qt::AlignCenter);
-    summaryLayout->addWidget(levelArea, 0, Qt::AlignCenter);
     summaryBox->setLayout(summaryLayout);
-    summaryBox->setFixedSize(400, 300);
+    summaryBox->setFixedSize(200, 100);
 
-    mainLayout->addWidget(summaryBox, 0, Qt::AlignCenter);
+    topLayout->addWidget(levelButton);
+    topLayout->addWidget(summaryBox);
+    topLayout->addWidget(addClassButton);
+    mainLayout->addLayout(topLayout);
+
     mainLayout->addWidget(userStatsLabel);
     mainLayout->addWidget(userStatsTable);
-    mainLayout->addWidget(mapStatsLabel);
+    mainLayout->addWidget(levelStatsLabel);
     mainLayout->addWidget(levelStatsTable);
     setLayout(mainLayout);
+    connect(addClassButton, &QPushButton::clicked, this, [this]{
+        currClassDialog.reset(new AddClassDialog(teacherID));
+        currClassDialog->show();
+        connect(currClassDialog.get(), &AddClassDialog::classCreated, this, &ClassTab::classCreated);
+    });
 }
 
-void ClassTab::initConnections(){
 
-}
 
 void ClassTab::setSummaryBox(const ClassStats& classStats){
     int totalPoints = 0;
@@ -73,6 +93,7 @@ void ClassTab::setSummaryBox(const ClassStats& classStats){
         totalPoints += user.totalScore;
         totalTime += user.totalSecPlayed;
     }
+    classIdLabel->setText("Class ID: " + QString::number(classStats.classId));
     classNameLabel->setText("Class Name: " + QString::fromStdString(classStats.className));
     classPointsLabel->setText("Total Points: " + QString::number(totalPoints));
     classTimeLabel->setText("Total Time Played: " + getFormattedTime(totalTime));
@@ -207,38 +228,38 @@ void ClassTab::setMapTable(const ClassStats& classStats){
     levelStatsTable->verticalHeader()->setVisible(false);
 }
 
-void ClassTab::setEnabledLevels(){
-    levelArea->setStyleSheet("QPushButton{background: url(:/assets/assets/candySky.jpg); background-position: top-left; width: 75; height: 75;}");
-    LoqueClient client;
-    std::vector<int> enabledLevels;
-    std::vector<LevelInfo> allLevels;
-    client.getEnabledClassLevels(classID, enabledLevels);
-    client.getAllLevels(allLevels);
-    QHBoxLayout *layout = new QHBoxLayout;
-    QPushButton *thumbnail;
-    for(LevelInfo info: allLevels){
-        thumbnail = new QPushButton;
-        connect(thumbnail, &QPushButton::clicked, this, &ClassTab::toggleLevel);
-        layout->addWidget(thumbnail);
-        thumbnail->setCheckable(true);
-        thumbnail->setText(QString::fromStdString(info.name));
-        thumbnail->setChecked(std::find(enabledLevels.begin(), enabledLevels.end(), info.id) == enabledLevels.end());
-        levelButtons[info.id] = thumbnail;
-    }
-    levelArea->setLayout(layout);
-}
+//void ClassTab::setEnabledLevels(){
+//    levelArea->setStyleSheet("QPushButton{background: url(:/assets/assets/candySky.jpg); background-position: top-left; width: 75; height: 75;}");
+//    LoqueClient client;
+//    std::vector<int> enabledLevels;
+//    std::vector<LevelInfo> allLevels;
+//    client.getEnabledClassLevels(classID, enabledLevels);
+//    client.getAllLevels(allLevels);
+//    QHBoxLayout *layout = new QHBoxLayout;
+//    QPushButton *thumbnail;
+//    for(LevelInfo info: allLevels){
+//        thumbnail = new QPushButton;
+//        connect(thumbnail, &QPushButton::clicked, this, &ClassTab::toggleLevel);
+//        layout->addWidget(thumbnail);
+//        thumbnail->setCheckable(true);
+//        thumbnail->setText(QString::fromStdString(info.name));
+//        thumbnail->setChecked(std::find(enabledLevels.begin(), enabledLevels.end(), info.id) == enabledLevels.end());
+//        levelButtons[info.id] = thumbnail;
+//    }
+//    levelArea->setLayout(layout);
+//}
 
-void ClassTab::toggleLevel(){
-    LoqueClient client;
-    for(int i = 0; i < levelButtons.size(); i++){
-        if(levelButtons[i] == ((QPushButton*) QObject::sender())){
-            QPushButton *btn = levelButtons[i];
-            if(btn->isChecked()){
-                client.disableLevel(teacherID, classID, i);
-            }
-            else{
-                client.enableLevel(teacherID, classID, i);
-            }
-        }
-    }
-}
+//void ClassTab::toggleLevel(){
+//    LoqueClient client;
+//    for(int i = 0; i < levelButtons.size(); i++){
+//        if(levelButtons[i] == ((QPushButton*) QObject::sender())){
+//            QPushButton *btn = levelButtons[i];
+//            if(btn->isChecked()){
+//                client.disableLevel(teacherID, classID, i);
+//            }
+//            else{
+//                client.enableLevel(teacherID, classID, i);
+//            }
+//        }
+//    }
+//}

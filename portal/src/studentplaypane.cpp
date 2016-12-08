@@ -7,7 +7,7 @@ QListWidget *classRowList();
 StudentPlayPane::StudentPlayPane(QWidget *parent) :
     QWidget(parent),
     levelInfo(nullptr),
-    activeLevelRecord(nullptr), 
+    activeLevelRecord(nullptr),
     splitter(new QSplitter(this)),
     layout(new QVBoxLayout()),
     descriptionAreaLayout(new QHBoxLayout()),
@@ -65,20 +65,20 @@ StudentPlayPane::StudentPlayPane(QWidget *parent) :
     this->setLayout(layout);
 
     // TODO: Sample levelInfo. Remove.
-//    user.userId = 1;
-//    levelInfo.reset(new std::vector<ClassLevelInfo>);
-//    ClassLevelInfo info1;
-//    info1.classId = 1;
-//    info1.className = "Mr. Johnson's";
-//    LevelRecord lr1;
-//    lr1.highScore = 48;
-//    lr1.bestCompletionTimeSecs = 3;
-//    lr1.level.id = 0;
-//    lr1.level.name = "LEVEL 0";
-//    lr1.level.description = "FUN FUN FUN";
-//    info1.levelRecords.push_back(lr1);
-//    levelInfo->push_back(info1);
-//    updateDisplay();
+    user.userId = 1;
+    levelInfo.reset(new std::vector<ClassLevelInfo>);
+    ClassLevelInfo info1;
+    info1.classId = 1;
+    info1.className = "Mr. Johnson's";
+    LevelRecord lr1;
+    lr1.highScore = 48;
+    lr1.bestCompletionTimeSecs = 3;
+    lr1.level.id = 0;
+    lr1.level.name = "LEVEL 0";
+    lr1.level.description = "FUN FUN FUN";
+    info1.levelRecords.push_back(lr1);
+    levelInfo->push_back(info1);
+    updateDisplay();
 }
 
 StudentPlayPane::~StudentPlayPane() {
@@ -90,7 +90,7 @@ void StudentPlayPane::thumbnailClicked(int row, int col) {
     std::string thumbnailPath = Maps[activeLevelRecord->level.id].qtThumbnailPath();
     QPixmap thumbnail(QString::fromStdString(thumbnailPath));
     int width = activeLevelThumbnail->width();
-    int height = activeLevelThumbnail->height(); 
+    int height = activeLevelThumbnail->height();
     activeLevelThumbnail->setPixmap(thumbnail.scaled(width, height, Qt::KeepAspectRatio));
     levelNameLabel->setText(QString::fromStdString(activeLevelRecord->level.name));
     levelDescLabel->setText(QString::fromStdString(activeLevelRecord->level.description));

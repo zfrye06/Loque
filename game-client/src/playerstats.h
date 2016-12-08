@@ -21,6 +21,7 @@
 class PlayerStats {
 private:
     int userId;
+    double time;
     GameStats stats;
     LoqueClient client;
 public:

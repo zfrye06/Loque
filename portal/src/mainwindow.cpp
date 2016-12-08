@@ -11,19 +11,26 @@ MainWindow::MainWindow(QWidget *parent) :
     loginPane(new LoginPane),
     registerPane(new RegisterPane),
     studentPlayPane(new StudentPlayPane),
-    adminPane(new AdminPane(19)),
-    adminPlayPane(new AdminPlayPane)
+    adminPane(nullptr),
+    adminPlayPane(nullptr)
 {
+
+
     ui->setupUi(this);
+
+    //For testing purposes, we want to look at adminPane
+//    adminPane = new AdminPane(UserInfo());
+//    paneContainer->addWidget(adminPane);
+
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     paneContainer->addWidget(studentPlayPane);
-    paneContainer->addWidget(adminPane);
-    paneContainer->addWidget(adminPlayPane);
-    setCentralWidget(paneContainer);
+    
+        setCentralWidget(paneContainer);
 
     connect(loginPane, &LoginPane::onLogin,
-            this, &MainWindow::handleLogin); 
+            this, &MainWindow::handleLogin);
+
 
     connect(loginPane, &LoginPane::onSignupRequested,
             this, [this] {
@@ -37,19 +44,19 @@ MainWindow::MainWindow(QWidget *parent) :
             this, [this] {
         paneContainer->setCurrentWidget(loginPane);
     });
-
     //paneContainer->setCurrentWidget(studentPlayPane);
 }
 
 void MainWindow::handleLogin(UserInfo user) {
     if (user.type == UserType::ADMIN) {
-        adminPane->setUser(user);
-        adminPane->updateClassStats(); 
+        // TODO: ADD adminPlayPane. 
+        adminPane = new AdminPane(user);
+        paneContainer->addWidget(adminPane);
         paneContainer->setCurrentWidget(adminPane); 
     } else {
         studentPlayPane->setUser(user);
-        studentPlayPane->updateLevelInfo(); 
-        paneContainer->setCurrentWidget(studentPlayPane); 
+        studentPlayPane->updateLevelInfo();
+        paneContainer->setCurrentWidget(studentPlayPane);
     }
 }
 

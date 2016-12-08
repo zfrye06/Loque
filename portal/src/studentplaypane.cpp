@@ -42,7 +42,8 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
     });
 
     updateLevelInfo();
-    updateDisplay(); 
+    updateDisplay();
+    ui->stackedWidget->showFullScreen();
 
     // TODO: Sample levelInfo. Remove.
 //    user.userId = 1;

@@ -13,7 +13,7 @@ class AddClassDialog : public QDialog
     Q_OBJECT
 
 signals:
-    void classCreated(int classID);
+    void classCreated(ClassStats cstats);
 
 public:
     explicit AddClassDialog(int userId, QWidget *parent = 0);

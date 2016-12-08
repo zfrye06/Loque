@@ -6,7 +6,7 @@ MapData::MapData(unsigned int id, std::string path, std::string thumbnailPath) :
     id(id), path(path), thumbnail(thumbnailPath) {}
 
 std::string MapData::qtThumbnailPath() {
-    return ":/assets/assets/candySky.jpg";
+    return ":/assets/candySky.jpg";
 }
 
 MapData Maps[] = {
@@ -142,7 +142,7 @@ Status LoqueClient::createClassroom(int userId, const std::string& className, Cl
     if (status != OK) {
         return status;
     }
-    toReceive >> status;
+    toReceive >> status >> classStats;
     return status;
 }
 

@@ -231,14 +231,8 @@ Status handleCreateClassroom(sql::Connection &dbconn,
         std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
         qRes->next();
         int classId = qRes->getInt(1);
-        classStats.classId = classId;
-        classStats.className = className;
-        std::vector<LevelInfo> lvls;
-        std::vector<UserStats> userStats;
-        classStats.enabledLevels = lvls;
-        classStats.studentStats = userStats;
-
         handleAddClassroom(dbconn, userId, classId);
+        getClassStats(dbconn, classId, classStats);
     } catch (sql::SQLException &e) {
         std::cerr << "ERROR: SQL Exception from handleCreateClassroom: " << e.what() << std::endl;
         return DB_ERR;
@@ -493,7 +487,7 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
             ClassStats cstats;
             reqPacket >> userId >> className >> cstats;
             auto status = handleCreateClassroom(*dbconn, userId, className, cstats);
-            respPacket << status;
+            respPacket << status << cstats;
             break;
         }
         case POST_STATS: {

@@ -24,8 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
-    
-        setCentralWidget(paneContainer);
+    setCentralWidget(paneContainer);
 
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin);

@@ -2,5 +2,6 @@
     <qresource prefix="/assets">
         <file>assets/plus.png</file>
         <file>assets/candySky.jpg</file>
+        <file>assets/styles.qss</file>
     </qresource>
 </RCC>

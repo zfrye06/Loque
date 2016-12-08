@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QAbstractItemView>
+#include "ui_studentplaypane.h"
 #include "../shared/loqueclient.h"
 
 namespace Ui {
@@ -29,19 +30,7 @@ private:
     std::unique_ptr<UserLevelInfo> levelInfo;
     LevelRecord *activeLevelRecord;
 
-    QWidget *window;
-    QSplitter *splitter;
-    QVBoxLayout *layout;
-    QHBoxLayout *descriptionAreaLayout;
-    QVBoxLayout *levelInfoLayout;
-    QListWidget *vertList;
-    QWidget *descriptionAreaWidget;
-    QWidget *levelInfoWidget;
-    QLabel *activeLevelThumbnail;
-    QLabel *levelNameLabel;
-    QLabel *levelDescLabel;
-    QLabel *highScoreLabel;
-    QPushButton *playButton;
+    Ui::StudentPlayPane *ui;
 
     void addClassRow(int, const ClassLevelInfo&);
     void updateLevelInfo();

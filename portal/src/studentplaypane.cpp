@@ -2,6 +2,7 @@
 #include <QScrollBar>
 #include <iostream>
 #include "studentplaypane.h"
+#include "ui_studentplaypane.h"
 
 QListWidget *classRowList();
 
@@ -10,54 +11,26 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
     user(user), 
     levelInfo(nullptr),
     activeLevelRecord(nullptr),
-    splitter(new QSplitter(this)),
-    layout(new QVBoxLayout()),
-    descriptionAreaLayout(new QHBoxLayout()),
-    levelInfoLayout(new QVBoxLayout()),
-    vertList(new QListWidget()),
-    descriptionAreaWidget(new QWidget()),
-    levelInfoWidget(new QWidget()),
-    activeLevelThumbnail(new QLabel()),
-    levelNameLabel(new QLabel()),
-    levelDescLabel(new QLabel()),
-    highScoreLabel(new QLabel()),
-    playButton(new QPushButton())
+    ui(new Ui::StudentPlayPane)
 {
-    splitter->setHandleWidth(0);
-    splitter->setOrientation(Qt::Vertical);
-    splitter->setStretchFactor(0, 1);
-    splitter->setStretchFactor(1, 5);
-    splitter->addWidget(vertList);
-    layout->addWidget(splitter);
+    ui->setupUi(this);
 
     QPalette palette;
     palette.setColor(QPalette::Highlight, Qt::transparent);
-    palette.setColor(QPalette::HighlightedText, vertList->palette().color(QPalette::Text));
-    vertList->setPalette(palette);
-    vertList->setStyleSheet("background-color: transparent;");
-    vertList->setSelectionMode(QAbstractItemView::SingleSelection);
-    vertList->setAutoFillBackground(false);
-    vertList->setFlow(QListView::TopToBottom);
-    vertList->setFocusPolicy(Qt::NoFocus);
-    vertList->setFrameShape(QFrame::NoFrame);
-    vertList->verticalScrollBar()->hide();
-    vertList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    vertList->horizontalScrollBar()->hide();
-    vertList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    palette.setColor(QPalette::HighlightedText, ui->vertList->palette().color(QPalette::Text));
+    ui->vertList->setPalette(palette);
+    ui->vertList->setStyleSheet("background-color: transparent;");
+    ui->vertList->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->vertList->setAutoFillBackground(false);
+    ui->vertList->setFlow(QListView::TopToBottom);
+    ui->vertList->setFocusPolicy(Qt::NoFocus);
+    ui->vertList->setFrameShape(QFrame::NoFrame);
+    ui->vertList->verticalScrollBar()->hide();
+    ui->vertList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui->vertList->horizontalScrollBar()->hide();
+    ui->vertList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    descriptionAreaLayout->addWidget(activeLevelThumbnail);
-    descriptionAreaLayout->addWidget(levelInfoWidget);
-    descriptionAreaWidget->setLayout(descriptionAreaLayout);
-    splitter->addWidget(descriptionAreaWidget);
-
-    levelInfoLayout->addWidget(levelNameLabel);
-    levelInfoLayout->addWidget(levelDescLabel);
-    levelInfoLayout->addWidget(highScoreLabel);
-    levelInfoLayout->addWidget(playButton);
-    levelInfoWidget->setLayout(levelInfoLayout);
-
-    playButton->setText("Play");
-    connect(playButton, &QPushButton::clicked,
+    connect(ui->playButton, &QPushButton::clicked,
             this, [this] {
         if (activeLevelRecord != nullptr) {
             QStringList args;
@@ -67,8 +40,6 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
             QProcess::startDetached(loqueExec, args, loqueWorkingDir);
         }
     });
-
-    this->setLayout(layout);
 
     updateLevelInfo();
     updateDisplay(); 
@@ -91,28 +62,29 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
 }
 
 StudentPlayPane::~StudentPlayPane() {
-    delete splitter;
+    delete ui;
 }
 
 void StudentPlayPane::thumbnailClicked(int row, int col) {
     activeLevelRecord = &levelInfo->at(row).levelRecords.at(col);
     std::string thumbnailPath = Maps[activeLevelRecord->level.id].qtThumbnailPath();
     QPixmap thumbnail(QString::fromStdString(thumbnailPath));
-    int width = activeLevelThumbnail->width();
-    int height = activeLevelThumbnail->height();
-    activeLevelThumbnail->setPixmap(thumbnail.scaled(width, height, Qt::KeepAspectRatio));
-    levelNameLabel->setText(QString::fromStdString(activeLevelRecord->level.name));
-    levelDescLabel->setText(QString::fromStdString(activeLevelRecord->level.description));
-    highScoreLabel->setText(QString::number(activeLevelRecord->highScore));
+    int width = ui->activeLevelThumbnail->width();
+    int height = ui->activeLevelThumbnail->height();
+    ui->activeLevelThumbnail->setPixmap(thumbnail.scaled(width, height, Qt::KeepAspectRatio));
+    ui->levelNameLabel->setText(QString::fromStdString(activeLevelRecord->level.name));
+    ui->levelDescLabel->setText(QString::fromStdString(activeLevelRecord->level.description));
+    ui->highScoreLabel->setText(QString::number(activeLevelRecord->highScore));
+    ui->playButton->show();
 }
 
 void StudentPlayPane::addClassRow(int row, const ClassLevelInfo& classInfo) {
-    vertList->addItem(QString::fromStdString(classInfo.className));
+    ui->vertList->addItem(QString::fromStdString(classInfo.className));
     QListWidgetItem* item = new QListWidgetItem();
     QListWidget *horizList = classRowList();
     item->setSizeHint(QSize(500, 100));
-    vertList->addItem(item);
-    vertList->setItemWidget(item, horizList);
+    ui->vertList->addItem(item);
+    ui->vertList->setItemWidget(item, horizList);
     for (auto& record : classInfo.levelRecords) {
         std::string path = Maps[record.level.id].qtThumbnailPath();
         QIcon thumbnail(QString::fromStdString(path));
@@ -125,11 +97,12 @@ void StudentPlayPane::addClassRow(int row, const ClassLevelInfo& classInfo) {
 
 void StudentPlayPane::updateDisplay() {
     if (levelInfo == nullptr) return;
-    vertList->clear();
-    activeLevelThumbnail->clear();
-    levelNameLabel->clear();
-    levelDescLabel->clear();
-    highScoreLabel->clear();
+    ui->vertList->clear();
+    ui->activeLevelThumbnail->clear();
+    ui->levelNameLabel->clear();
+    ui->levelDescLabel->clear();
+    ui->highScoreLabel->clear();
+    ui->playButton->hide();
     for (int i = 0; i < (int) levelInfo->size(); i++) {
         addClassRow(i, levelInfo->at(i));
     }

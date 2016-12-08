@@ -1,4 +1,5 @@
 #include <QProcess>
+#include <QScrollBar>
 #include <iostream>
 #include "studentplaypane.h"
 
@@ -39,6 +40,10 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
     vertList->setFlow(QListView::TopToBottom);
     vertList->setFocusPolicy(Qt::NoFocus);
     vertList->setFrameShape(QFrame::NoFrame);
+    vertList->verticalScrollBar()->hide();
+    vertList->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    vertList->horizontalScrollBar()->hide();
+    vertList->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     descriptionAreaLayout->addWidget(activeLevelThumbnail);
     descriptionAreaLayout->addWidget(levelInfoWidget);
@@ -111,6 +116,7 @@ void StudentPlayPane::addClassRow(int row, const ClassLevelInfo& classInfo) {
     for (auto& record : classInfo.levelRecords) {
         std::string path = Maps[record.level.id].qtThumbnailPath();
         QIcon thumbnail(QString::fromStdString(path));
+        //QString label(QString::fromStdString(record.level.name));
         horizList->addItem(new QListWidgetItem(thumbnail, NULL));
     }
     connect(horizList, &QListWidget::currentRowChanged,
@@ -153,5 +159,9 @@ QListWidget *classRowList() {
     list->setFocusPolicy(Qt::NoFocus);
     list->setIconSize(QSize(200, 200));
     list->setFrameShape(QFrame::NoFrame);
+    list->verticalScrollBar()->hide();
+    list->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    list->horizontalScrollBar()->hide();
+    list->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     return list;
 }

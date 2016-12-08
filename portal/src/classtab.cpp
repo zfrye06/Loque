@@ -37,7 +37,7 @@ void ClassTab::initWidgets(){
     classTimeLabel = new QLabel;
     enabledLevelsLabel = new QLabel("Enabled Levels: ");
     userStatsLabel = new QLabel("Student Stats");
-    mapStatsLabel = new QLabel("Map Stats");
+    levelStatsLabel = new QLabel("Level Stats");
 
     summaryBox = new QGroupBox;
     summaryLayout = new QVBoxLayout;
@@ -57,7 +57,7 @@ void ClassTab::initWidgets(){
     mainLayout->addWidget(summaryBox, 0, Qt::AlignCenter);
     mainLayout->addWidget(userStatsLabel);
     mainLayout->addWidget(userStatsTable);
-    mainLayout->addWidget(mapStatsLabel);
+    mainLayout->addWidget(levelStatsLabel);
     mainLayout->addWidget(levelStatsTable);
     setLayout(mainLayout);
 }

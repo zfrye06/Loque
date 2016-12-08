@@ -41,7 +41,7 @@ private:
     QLabel *classTimeLabel;
     QLabel *enabledLevelsLabel;
     QLabel *userStatsLabel;
-    QLabel *mapStatsLabel;
+    QLabel *levelStatsLabel;
 
     void initWidgets();
     void initConnections();

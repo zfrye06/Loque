@@ -17,12 +17,12 @@ void RegisterPane::attemptRegistration()
 {
     if (ui->usernameField->text().size() == 0) {
         displayErrorMessage("Username cannot be blank.");
-    } else if (ui->usernameField->text().size() < 6 || ui->usernameField->text().size() > 20) {
-        displayErrorMessage("Username must be between six and twenty characters long.");
+    } else if (ui->usernameField->text().size() > 20) {
+        displayErrorMessage("Username is too long.");
     } else if (ui->passwordField->text().size() == 0) {
         displayErrorMessage("Password cannot be blank.");
-    } else if (ui->passwordField->text().size() < 6 || ui->usernameField->text().size() > 20) {
-        displayErrorMessage("Password must be between six and twenty characters long.");
+    } else if (ui->usernameField->text().size() > 20) {
+        displayErrorMessage("Password is too long.");
     } else if (ui->passwordField->text().toStdString() != ui->confirmPasswordField->text().toStdString()) {
         displayErrorMessage("Passwords do not match.");
     } else {
@@ -34,11 +34,11 @@ void RegisterPane::attemptRegistration()
         Status returnStatus = client.createAccount(username, password, type, result);
         if(returnStatus == Status::NETWORK_ERR)
         {
-            displayErrorMessage("Failed to create account due to network problems.");
+            displayErrorMessage("Cannot connect to the server");
         }
         else if (returnStatus == Status::DB_ERR)
         {
-            displayErrorMessage("Failed to create account due to database problems.");
+            displayErrorMessage("Username already in use.");
         }
         else
         {

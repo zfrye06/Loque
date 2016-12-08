@@ -29,7 +29,7 @@ private:
     QHBoxLayout *mainLayout;
     QTabWidget *tabs;
 
-    void addClassTab(ClassStats &cstats);
+    void addClassTab(int classID);
     void refreshClassTabs();
 };
 

@@ -22,8 +22,7 @@ void AddClassDialog::createClassroom(QString name){
     LoqueClient client;
     ClassStats cstats;
     auto status = client.createClassroom(userId, name.toStdString(), cstats);
-    std::cout << cstats.className << std::endl;
-    emit classCreated(cstats);
+    emit classCreated(cstats.classId);
     if (status == Status::DB_ERR) {
 
     } else if (status == Status::NETWORK_ERR) {

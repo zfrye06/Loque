@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
-    paneContainer->addWidget(studentPlayPane);
     
         setCentralWidget(paneContainer);
 

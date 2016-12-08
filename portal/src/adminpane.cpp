@@ -35,7 +35,10 @@ AdminPane::~AdminPane()
 {
 }
 
-void AdminPane::addClassTab(ClassStats &cstats){
+void AdminPane::addClassTab(int classID){
+    LoqueClient client;
+    ClassStats cstats;
+    client.getClassStats(classID, cstats);
     ClassTab *c = new ClassTab(cstats, user.userId);
     connect(c, &ClassTab::classCreated, this, &AdminPane::addClassTab);
     tabs->addTab(c, QString::fromStdString(cstats.className));

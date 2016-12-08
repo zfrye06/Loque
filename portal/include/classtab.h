@@ -25,7 +25,7 @@ public:
     ~ClassTab();
 
 signals:
-    void classCreated(ClassStats &cstats);
+    void classCreated(int classID);
 
 private:
 

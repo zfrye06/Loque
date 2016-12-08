@@ -54,6 +54,7 @@ struct LevelInfo {
     std::string name;
     std::string description;
 };
+std::ostream& operator<<(std::ostream&, const LevelInfo&); 
 
 struct UserInfo {
     std::string username;
@@ -63,6 +64,7 @@ struct UserInfo {
     UserInfo(); 
     UserInfo(std::string username, int userId, UserType type);
 };
+std::ostream& operator<<(std::ostream&, const UserInfo&); 
 
 // Information about a single user (admin or student).
 struct UserStats {
@@ -91,6 +93,7 @@ struct LevelRecord {
 
     bool hasCompleted() const; 
 };
+std::ostream& operator<<(std::ostream&, const LevelRecord&); 
 
 // Per-class information on a user's completed levels. 
 struct ClassLevelInfo {
@@ -98,6 +101,7 @@ struct ClassLevelInfo {
     std::string className;
     std::vector<LevelRecord> levelRecords;
 };
+std::ostream& operator<<(std::ostream&, const ClassLevelInfo&);
 
 typedef std::vector<ClassLevelInfo> UserLevelInfo; 
 

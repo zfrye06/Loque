@@ -3,5 +3,6 @@
         <file>assets/plus.png</file>
         <file>assets/candySky.jpg</file>
         <file>assets/levelView.png</file>
+        <file>assets/styles.qss</file>
     </qresource>
 </RCC>

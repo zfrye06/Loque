@@ -4,18 +4,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QApplication>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     paneContainer(new QStackedWidget),
     loginPane(new LoginPane),
     registerPane(new RegisterPane),
-    studentPlayPane(new StudentPlayPane),
+    studentPlayPane(nullptr),
     adminPane(nullptr),
     adminPlayPane(nullptr)
 {
-
-
     ui->setupUi(this);
 
     //For testing purposes, we want to look at adminPane
@@ -44,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent) :
             this, [this] {
         paneContainer->setCurrentWidget(loginPane);
     });
-    //paneContainer->setCurrentWidget(studentPlayPane);
 }
 
 void MainWindow::handleLogin(UserInfo user) {
@@ -54,8 +53,8 @@ void MainWindow::handleLogin(UserInfo user) {
         paneContainer->addWidget(adminPane);
         paneContainer->setCurrentWidget(adminPane); 
     } else {
-        studentPlayPane->setUser(user);
-        studentPlayPane->updateLevelInfo();
+        studentPlayPane = new StudentPlayPane(user);
+        paneContainer->addWidget(studentPlayPane);
         paneContainer->setCurrentWidget(studentPlayPane);
     }
 }

@@ -48,12 +48,45 @@ std::ostream& operator<<(std::ostream& out, UserType t) {
     return out;
 }
 
+std::ostream& operator<<(std::ostream& out, const LevelInfo& info) {
+    out << "LevelInfo<id: " << info.id <<
+        ", name: " << info.name <<
+        ", description: " << info.description <<
+        ">";
+    return out; 
+}
+
 UserInfo::UserInfo() : username(""), userId(-1), type(UserType::DNE) {}
 UserInfo::UserInfo(std::string username, int userId, UserType type) :
     username(username), userId(userId), type(type) {}
 
+std::ostream& operator<<(std::ostream& out, const UserInfo& info) {
+    out << "UserInfo<username: " << info.username <<
+        ", userId: " << info.userId <<
+        ", type: " << info.type <<
+        ">";
+    return out;
+}
+
 bool LevelRecord::hasCompleted() const {
     return bestCompletionTimeSecs != -1; 
+}
+
+std::ostream& operator<<(std::ostream& out, const LevelRecord& record) {
+    out << "LevelRecord<highScore: " << record.highScore <<
+        ", bestCompletionTimeSecs: " << record.bestCompletionTimeSecs <<
+        ", level: " << record.level <<
+        ">";
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const ClassLevelInfo& info) {
+    out << "ClassLevelInfo<classId: " << info.classId <<
+        ", className: " << info.className <<
+        ", levelRecords: ";
+    for (auto& r : info.levelRecords) out << r << ", ";
+    out << ">";
+    return out;
 }
 
 LoqueClient::LoqueClient() : host("127.0.0.1"), port(5001) {}

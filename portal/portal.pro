@@ -42,7 +42,8 @@ FORMS    += src/mainwindow.ui \
     src/registerpane.ui \
     src/adminplaypane.ui \
     src/addclassdialog.ui \
-    src/classtab.ui
+    src/classtab.ui \
+    src/studentplaypane.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

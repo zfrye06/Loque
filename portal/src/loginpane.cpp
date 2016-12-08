@@ -24,7 +24,7 @@ void LoginPane::attemptLogin() {
     std::string username = ui->usernameField->text().toStdString();
     std::string password = ui->passwordField->text().toStdString();
     if (username.length() == 0 || password.length() == 0) {
-        displayErrorMessage("Be sure to enter a username and password.");
+        displayErrorMessage("Be sure to enter a username and password!");
         return;
     }
     LoqueClient client;
@@ -32,7 +32,7 @@ void LoginPane::attemptLogin() {
     auto status = client.attemptLogin(username, password, login);
     if (status != Status::OK || login.userType == UserType::DNE) {
         if (status == Status::NETWORK_ERR) {
-            displayErrorMessage("Looks like we can't connect to the network.");
+            displayErrorMessage("Oops! Looks like we can't connect to the network right now.");
         } else {
             displayErrorMessage("Username or password is incorrect.");
         }

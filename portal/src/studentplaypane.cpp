@@ -15,8 +15,6 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->classList->setStyleSheet("QListWidget::item:hover { background-color: #E1E1E1; }");
-
     QPalette palette;
     palette.setColor(QPalette::Highlight, Qt::transparent);
     palette.setColor(QPalette::HighlightedText, ui->levelList->palette().color(QPalette::Text));
@@ -105,7 +103,7 @@ void StudentPlayPane::levelThumbnailClicked(int col) {
     if (activeLevelRecord->hasCompleted()) {
         ui->highScoreLabel->setText("High Score: " + QString::number(activeLevelRecord->highScore));
     } else {
-        ui->highScoreLabel->clear();
+        ui->highScoreLabel->setText("Looks like you haven't played this level yet!");
     }
 }
 
@@ -120,19 +118,23 @@ void StudentPlayPane::playButtonClicked() {
 }
 
 void StudentPlayPane::showAddClassDialog() {
-    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"));
+    bool ok = false;
+    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"), ok=ok);
+    if (!ok) return;
     LoqueClient client;
     auto status = client.addClassroom(user.userId, classId);
     if (status != Status::OK) {
         // TODO: SHOW ERROR
-        std::cerr << "ERROR: Unable to add classroom. Server returned status " << status << std::endl;
+        std::cerr << "ERROR: Unable to add classroom. " <<
+                     "Server returned status " << status << std::endl;
         return;
     }
     UserLevelInfo info;
     status = client.getUserLevelInfo(user.userId, info);
     if (status != Status::OK) {
         // TODO: SHOW ERROR
-        std::cerr << "ERROR: Unable to get user level info. Server returned status " << status << std::endl;
+        std::cerr << "ERROR: Unable to get user level info. " <<
+                     "Server returned status " << status << std::endl;
         return;
     }
     for (auto& classInfo : info) {

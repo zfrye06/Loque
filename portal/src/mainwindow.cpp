@@ -20,10 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QAction *logoutAction = new QAction(tr("Log Out"), this);
-    connect(logoutAction, &QAction::triggered, this, &MainWindow::logout);
-    ui->menuFile->addAction(logoutAction);
-
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     setCentralWidget(paneContainer);
@@ -44,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
         paneContainer->setCurrentWidget(loginPane);
     });
 
+    ui->menuFile->setDisabled(true);
 }
 
 MainWindow::~MainWindow() {
@@ -65,6 +62,11 @@ void MainWindow::handleLogin(UserInfo user) {
                 studentPlayPane, &StudentPlayPane::showAddClassDialog);
         ui->menuFile->addAction(addClassAction);
     }
+    logoutAction = new QAction(tr("Log Out"));
+    connect(logoutAction, &QAction::triggered,
+            this, &MainWindow::logout);
+    ui->menuFile->addAction(logoutAction);
+    ui->menuFile->setEnabled(true);
 }
 
 void MainWindow::logout() {
@@ -78,4 +80,7 @@ void MainWindow::logout() {
         paneContainer->removeWidget(studentPlayPane);
         delete studentPlayPane;
     }
+    ui->menuFile->removeAction(logoutAction);
+    delete logoutAction;
+    ui->menuFile->setDisabled(true);
 }

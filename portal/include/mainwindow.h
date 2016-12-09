@@ -34,6 +34,7 @@ private:
     AdminPlayPane *adminPlayPane;
 
     QAction *addClassAction; // Does not own.
+    QAction *logoutAction;  // Does not own.
 
     void handleLogin(UserInfo);
     void logout();

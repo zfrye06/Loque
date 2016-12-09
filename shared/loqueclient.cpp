@@ -6,11 +6,11 @@ MapData::MapData(unsigned int id, std::string path, std::string thumbnailPath) :
     id(id), path(path), thumbnail(thumbnailPath) {}
 
 MapData Maps[] = {
-    MapData(0, "assets/Zapper_Level_1.tmx", ":assets/Zapper_Level_1_thumb.png"),
-    MapData(1, "assets/Zapper_Level_2.tmx", ":assets/Zapper_Level_2_thumb.png"),
-    MapData(2, "assets/Platform_Level_1.tmx", ":assets/Platform_Level_1_thumb.png"),
-    MapData(3, "assets/Castle_Level_1.tmx", ":assets/Castle_Level_1_thumb.png"),
-    MapData(4, "assets/Castle_Level_2.tmx", ":assets/Castle_Level_2_thumb.png")
+    MapData(0, "assets/Zapper_Level_1.tmx", ":assets/Zapper_Level_1.png"),
+    MapData(1, "assets/Zapper_Level_2.tmx", ":assets/Zapper_Level_2.png"),
+    MapData(2, "assets/Platform_Level_1.tmx", ":assets/Platform_Level_1.png"),
+    MapData(3, "assets/Castle_Level_1.tmx", ":assets/Castle_Level_1.png"),
+    MapData(4, "assets/Castle_Level_2.tmx", ":assets/Castle_Level_2.png")
 };
 std::size_t MapCount = 5;
 

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+         body {
+             background-color: #f5f5f5;
+         }
+         h1 {
+             padding: 30px 0 0 0;
+             font-size: 1.7em;
+             text-align: center;
+         }
+         h2 {
+             position: relative;
+             left: 12.5%;
+             font-size: 1.2em;
+             margin: 20px 0 2px 0;
+         }
+         h1, h2, th, td {
+             font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+         }
+         table {
+             width: 75%;
+             text-align: center;
+             box-shadow: 1px 1px 1px #999;
+             background-color: #ffffff;
+         }
+         th {
+             font-size: 1.2em;
+             height: 35px;
+         }
+         td {
+             margin: 5px 0 5px 0;
+             padding: 10px 0 10px 0;
+             padding-left: 10px;
+         }
+         td:hover {
+             background-color: rgba(0, 100, 200, .4);
+         }
+         div#play-time-container {
+             position: relative;
+             left: 12.5%
+         }
+         /* D3 styles. */
+         .bar {
+             fill: steelblue;
+         }
+         .bar:hover {
+             fill: brown;
+         }
+         .axis--x path {
+             display: none;
+         }
+         student-plot {
+             text-align: center;
+         }
+        </style>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    </head>
+    <body>
+        <h1>Loque Class Report - CS 3505</h1>
+        <h2>Summary</h2>
+        <table id="summary-table" align="center">
+            <tr>
+                <th>Total Time Played</th>
+                <th>Highest Scoring Student</th>
+            </tr>
+            <tr>
+                <td>480 hours 39 minutes</td>
+                <td>John Smith</td>
+            </tr>
+        </table>
+        <h2>Enabled Levels</h2>
+        <table id="levels-table" align="center">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Candy Dungeon</td>
+                <td>Engage with the muse in this fun exploration of shmooze</td>
+            </tr>
+            <tr>
+                <td>Castle Playground</td>
+                <td>Think fast. Much arithmetic. Very modulo.</td>
+            </tr>
+        </table>
+        <h2>Student Detail</h2>
+        <table id="student-detail-table" align="center">
+            <tr>
+                <th>Student</th>
+                <th>Total Time Played</th>
+                <th>Total Score</th>
+                <th>Levels Complete</th>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+            <tr>
+                <td>John Smith</td>
+                <td>3 hours 49 minutes</td>
+                <td>5,389</td>
+                <td>1, 5, 6, 7</td>
+            </tr>
+        </table>
+        <h2>Student Play Time Plot</h2>
+        <div id="play-time-container">
+            <svg id="student-plot" width="960" height="500"></svg>
+        </div>
+        <script>
+         var svg = d3.select("svg"),
+             margin = {top: 20, right: 20, bottom: 30, left: 40},
+             width = +svg.attr("width") - margin.left - margin.right,
+             height = +svg.attr("height") - margin.top - margin.bottom;
+
+         var x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+             y = d3.scaleLinear().rangeRound([height, 0]);
+
+         var g = svg.append("g")
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+         var data = [{name: 'John', hours: 3},
+                     {name: 'Alex', hours: 14},
+                     {name: 'Martin', hours: 21},
+                     {name: 'Claire', hours: 10},
+                     {name: 'Mary', hours: 15},
+                     {name: 'Susan', hours: 3},
+                     {name: 'Jared', hours: 26},
+                     {name: 'Josh', hours: 18}]
+         
+         x.domain(data.map(function(d) { return d.name; }));
+         y.domain([0, d3.max(data, function(d) { return d.hours; })]);
+
+         g.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + height + ")")
+          .call(d3.axisBottom(x));
+
+         g.append("g")
+          .attr("class", "axis axis--y")
+          .call(d3.axisLeft(y).ticks(10))
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", "0.71em")
+          .attr("text-anchor", "end")
+          .text("Hours");
+
+         g.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.name); })
+          .attr("y", function(d) { return y(d.hours); })
+          .attr("width", x.bandwidth())
+          .attr("height", function(d) { return height - y(d.hours); });
+        </script>
+    </body>
+</html>

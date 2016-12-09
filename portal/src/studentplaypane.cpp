@@ -103,7 +103,7 @@ void StudentPlayPane::levelThumbnailClicked(int col) {
     if (activeLevelRecord->hasCompleted()) {
         ui->highScoreLabel->setText("High Score: " + QString::number(activeLevelRecord->highScore));
     } else {
-        ui->highScoreLabel->clear();
+        ui->highScoreLabel->setText("Looks like you haven't played this level yet!");
     }
 }
 

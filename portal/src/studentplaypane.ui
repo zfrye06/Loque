@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>607</width>
+    <width>720</width>
     <height>572</height>
    </rect>
   </property>
@@ -215,7 +215,7 @@ background-color: red;
                    <widget class="QLabel" name="activeLevelThumbnail">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>15</horstretch>
+                      <horstretch>10</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
@@ -225,6 +225,12 @@ background-color: red;
                       <height>0</height>
                      </size>
                     </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>0</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
                     <property name="text">
                      <string>TextLabel</string>
                     </property>
@@ -232,6 +238,12 @@ background-color: red;
                   </item>
                   <item>
                    <widget class="QWidget" name="levelInfoWidget" native="true">
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="autoFillBackground">
                      <bool>false</bool>
                     </property>
@@ -242,7 +254,7 @@ background-color: red;
                         <widget class="QLabel" name="levelNameLabel">
                          <property name="font">
                           <font>
-                           <pointsize>28</pointsize>
+                           <pointsize>32</pointsize>
                           </font>
                          </property>
                          <property name="text">

@@ -143,38 +143,41 @@ void ClassTab::setUserTable(const ClassStats& classStats){
     headers.append("Student");
     headers.append("Total Score");
     headers.append("Time Played");
-    headers.append("Level 1 Completed");
-    headers.append("Level 2 Completed");
-    headers.append("Level 3 Completed");
+
+    int numlvls = allLevels.size();
+
+    for(int i = 0; i < numlvls; i++){
+        headers.append("Level " + QString::number(i+1) + " Completed");
+    }
 
     userStatsTable->setRowCount(classStats.studentStats.size());
-    userStatsTable->setColumnCount(6);
+    userStatsTable->setColumnCount(3 + numlvls);
     userStatsTable->setHorizontalHeaderLabels(headers);
     userStatsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     int row = 0;
+    int col = 3;
     for(auto& user : classStats.studentStats){
         QTableWidgetItem *nameCell = new QTableWidgetItem(QString::fromStdString(user.username));
         QTableWidgetItem *scoreCell = new QTableWidgetItem(QString::number(user.totalScore));
         QTableWidgetItem *timeCell = new QTableWidgetItem(QString::number(user.totalSecPlayed));
-        QTableWidgetItem *lvl1Cell = new QTableWidgetItem();
-        QTableWidgetItem *lvl2Cell = new QTableWidgetItem();
-        QTableWidgetItem *lvl3Cell = new QTableWidgetItem();
-        lvl1Cell->setBackgroundColor(getLevelColor(user, 1));
-        lvl2Cell->setBackgroundColor(getLevelColor(user, 2));
-        lvl3Cell->setBackgroundColor(getLevelColor(user, 3));
         nameCell->setTextAlignment(Qt::AlignCenter);
         scoreCell->setTextAlignment(Qt::AlignCenter);
         timeCell->setTextAlignment(Qt::AlignCenter);
-        lvl1Cell->setTextAlignment(Qt::AlignCenter);
-        lvl2Cell->setTextAlignment(Qt::AlignCenter);
-        lvl3Cell->setTextAlignment(Qt::AlignCenter);
+
         userStatsTable->setItem(row, 0, nameCell);
         userStatsTable->setItem(row, 1, scoreCell);
         userStatsTable->setItem(row, 2, timeCell);
-        userStatsTable->setItem(row, 3, lvl1Cell);
-        userStatsTable->setItem(row, 4, lvl2Cell);
-        userStatsTable->setItem(row++, 5, lvl3Cell);
+
+        QTableWidgetItem *lvlCell = new QTableWidgetItem;
+        for(int i = 0; i < numlvls; i++){
+            lvlCell = new QTableWidgetItem;
+            lvlCell->setBackgroundColor(getLevelColor(user, i));
+            lvlCell->setTextAlignment(Qt::AlignCenter);
+            userStatsTable->setItem(row, col++, lvlCell);
+        }
+        row++;
+        col = 3;
     }
     userStatsTable->sortByColumn(0, Qt::AscendingOrder);
     userStatsTable->setSelectionMode(QAbstractItemView::NoSelection);

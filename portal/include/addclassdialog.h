@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "../../shared/loqueclient.h"
+#include <QMessageBox>
 
 namespace Ui {
 class AddClassDialog;

@@ -12,7 +12,6 @@ struct MapData {
     std::string path;
     std::string thumbnail;
     MapData(unsigned int id, std::string path, std::string thumbnailPath);
-    std::string qtThumbnailPath(); 
 };
 
 extern MapData Maps[];

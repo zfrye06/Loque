@@ -33,7 +33,12 @@ LevelBox::LevelBox(LevelInfo lvlInfo, bool enabled, QWidget *parent) : enabled(e
     QGroupBox *box = new QGroupBox;
     QHBoxLayout *hLayout = new QHBoxLayout;
     QVBoxLayout *vLayout = new QVBoxLayout;
-    QPixmap img(":/assets/candySky.jpg");
+    QPixmap img;
+    for( int i=0;i<MapCount;i++ ) {
+        if ( Maps[i].id == lvlInfo.id ) {
+            img = QPixmap(Maps[i].thumbnail.c_str());
+        }
+    }
     QLabel *imgLabel = new QLabel;
     imgLabel->setPixmap(img);
     QLabel *idLabel = new QLabel(QString::number(lvlInfo.id));

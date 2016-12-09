@@ -140,7 +140,7 @@ void World::update( double dt ) {
     // We want a fixed timestep, this particular while loop
     // can cause a "sprial of doom", but I don't really care
     // for an edge case like that.
-    while ( timer >= TIMESTEP ) {
+    if ( timer >= TIMESTEP ) {
         for( unsigned int l=0;l<LAYERCOUNT;l++ ) {
             for( unsigned int i=0;i<entities[l].size();i++ ) {
                 if ( !entities[l][i] ) {

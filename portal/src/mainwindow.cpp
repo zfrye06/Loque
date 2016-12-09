@@ -20,14 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QAction *logoutAction = new QAction(tr("Log Out"), this);
-    connect(logoutAction, &QAction::triggered, this, &MainWindow::logout);
-    ui->menuFile->addAction(logoutAction);
-
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     setCentralWidget(paneContainer);
-    menuBar()->setHidden(true);
+
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin);
 
@@ -44,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
         paneContainer->setCurrentWidget(loginPane);
     });
 
+    ui->menuFile->setDisabled(true);
 }
 
 MainWindow::~MainWindow() {
@@ -56,14 +53,6 @@ void MainWindow::handleLogin(UserInfo user) {
         paneContainer->addWidget(adminPane);
         paneContainer->setCurrentWidget(adminPane); 
     } else {
-        menuBar()->setHidden(false);
-        QList<QMenu*> menus = menuBar()->findChildren<QMenu*>();
-        for(int i = 0; i < menus.size(); i++){
-            if(menus.at(i)->title() == "File"){
-                menus.at(i)->addAction("Add Class");
-                break;
-            }
-        }
         studentPlayPane = new StudentPlayPane(user);
         paneContainer->addWidget(studentPlayPane);
         paneContainer->setCurrentWidget(studentPlayPane);
@@ -73,6 +62,11 @@ void MainWindow::handleLogin(UserInfo user) {
                 studentPlayPane, &StudentPlayPane::showAddClassDialog);
         ui->menuFile->addAction(addClassAction);
     }
+    logoutAction = new QAction(tr("Log Out"));
+    connect(logoutAction, &QAction::triggered,
+            this, &MainWindow::logout);
+    ui->menuFile->addAction(logoutAction);
+    ui->menuFile->setEnabled(true);
 }
 
 void MainWindow::logout() {
@@ -86,4 +80,7 @@ void MainWindow::logout() {
         paneContainer->removeWidget(studentPlayPane);
         delete studentPlayPane;
     }
+    ui->menuFile->removeAction(logoutAction);
+    delete logoutAction;
+    ui->menuFile->setDisabled(true);
 }

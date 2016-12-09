@@ -77,7 +77,7 @@ void StudentPlayPane::classClicked(int col) {
     clearLevelDescription();
     activeClass = &levelInfo->at(col);
     for (auto& record : activeClass->levelRecords) {
-        std::string path = Maps[record.level.id].qtThumbnailPath();
+        std::string path = Maps[record.level.id].thumbnail;
         QIcon thumbnail(QString::fromStdString(path));
         ui->levelList->addItem(new QListWidgetItem(thumbnail, NULL));
     }
@@ -93,7 +93,7 @@ void StudentPlayPane::levelThumbnailClicked(int col) {
     if (col == -1) return;
     ui->levelDescriptionStack->setCurrentWidget(ui->levelDescriptionPage);
     activeLevelRecord = &activeClass->levelRecords.at(col);
-    std::string thumbnailPath = Maps[activeLevelRecord->level.id].qtThumbnailPath();
+    std::string thumbnailPath = Maps[activeLevelRecord->level.id].thumbnail;
     QPixmap thumbnail(QString::fromStdString(thumbnailPath));
     int width = ui->activeLevelThumbnail->width();
     int height = ui->activeLevelThumbnail->height();

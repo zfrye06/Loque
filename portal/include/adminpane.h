@@ -6,6 +6,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <memory>
+
+#include "adminsidebar.h"
 #include "addclassdialog.h"
 #include "../shared/loqueclient.h"
 
@@ -28,6 +30,7 @@ private:
     QIcon addClassIcon = QIcon(QPixmap(":/assets/assets/add"));
     QHBoxLayout *mainLayout;
     QTabWidget *tabs;
+    AdminSidebar *sidebar;
 
     void addClassTab(ClassStats cstats);
     void refreshClassTabs();

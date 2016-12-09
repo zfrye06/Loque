@@ -4,6 +4,10 @@
         <file>assets/candySky.jpg</file>
         <file>assets/levelView.png</file>
         <file>assets/styles.qss</file>
-        <file>assets/candy1.mp4</file>
+        <file>assets/Castle_Level_1_thumb.png</file>
+        <file>assets/Castle_Level_2_thumb.png</file>
+        <file>assets/Platform_Level_1_thumb.png</file>
+        <file>assets/Zapper_Level_1_thumb.png</file>
+        <file>assets/Zapper_Level_2_thumb.png</file>
     </qresource>
 </RCC>

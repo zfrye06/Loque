@@ -118,19 +118,23 @@ void StudentPlayPane::playButtonClicked() {
 }
 
 void StudentPlayPane::showAddClassDialog() {
-    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"));
+    bool ok = false;
+    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"), ok=ok);
+    if (!ok) return;
     LoqueClient client;
     auto status = client.addClassroom(user.userId, classId);
     if (status != Status::OK) {
         // TODO: SHOW ERROR
-        std::cerr << "ERROR: Unable to add classroom. Server returned status " << status << std::endl;
+        std::cerr << "ERROR: Unable to add classroom. " <<
+                     "Server returned status " << status << std::endl;
         return;
     }
     UserLevelInfo info;
     status = client.getUserLevelInfo(user.userId, info);
     if (status != Status::OK) {
         // TODO: SHOW ERROR
-        std::cerr << "ERROR: Unable to get user level info. Server returned status " << status << std::endl;
+        std::cerr << "ERROR: Unable to get user level info. " <<
+                     "Server returned status " << status << std::endl;
         return;
     }
     for (auto& classInfo : info) {

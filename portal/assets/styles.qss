@@ -3,12 +3,17 @@ MainWindow {
   background-color: #ffffff;
 }
 
+QListWidget::item:hover {
+  background-color: #E1E1E1;
+}
+
 QPushButton:hover {
   background-color: #E1E1E1;
 }
 
-QListWidget::item:hover {
-  background-color: #E1E1E1;
+QPushButton#playButton {
+  border-radius: 5px;
+  background-color: #65D56C;
 }
 
 /* QToolTip */

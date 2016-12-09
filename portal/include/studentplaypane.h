@@ -28,14 +28,16 @@ public:
 private:
     UserInfo user;
     std::unique_ptr<UserLevelInfo> levelInfo;
+    ClassLevelInfo *activeClass;
     LevelRecord *activeLevelRecord;
-
     Ui::StudentPlayPane *ui;
 
-    void addClassRow(int, const ClassLevelInfo&);
     void updateLevelInfo();
     void updateDisplay();
-    void thumbnailClicked(int, int); 
+    void classClicked(int);
+    void levelThumbnailClicked(int);
+    void playButtonClicked();
+    void clearLevelDescription();
 };
 
 #endif // STUDENTPLAYPANE_H

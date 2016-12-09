@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="mainPane">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -127,11 +127,20 @@
              <pointsize>14</pointsize>
             </font>
            </property>
+           <property name="cursor" stdset="0">
+            <cursorShape>OpenHandCursor</cursorShape>
+           </property>
            <property name="focusPolicy">
             <enum>Qt::StrongFocus</enum>
            </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
            <property name="styleSheet">
-            <string notr="true">background-color: transparent;</string>
+            <string notr="true">background-color: transparent;
+QListWidget::item:hover {
+background-color: red;
+}</string>
            </property>
            <property name="frameShape">
             <enum>QFrame::NoFrame</enum>

@@ -128,6 +128,9 @@
               <pointsize>18</pointsize>
              </font>
             </property>
+            <property name="cursor">
+             <cursorShape>OpenHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>Login</string>
             </property>
@@ -139,6 +142,9 @@
              <font>
               <pointsize>18</pointsize>
              </font>
+            </property>
+            <property name="cursor">
+             <cursorShape>OpenHandCursor</cursorShape>
             </property>
             <property name="text">
              <string>Sign Up</string>

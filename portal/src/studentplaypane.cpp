@@ -15,8 +15,6 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->classList->setStyleSheet("QListWidget::item:hover { background-color: #E1E1E1; }");
-
     QPalette palette;
     palette.setColor(QPalette::Highlight, Qt::transparent);
     palette.setColor(QPalette::HighlightedText, ui->levelList->palette().color(QPalette::Text));

@@ -15,7 +15,25 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="AdminSidebar" name="listWidget">
+    <widget class="QListWidget" name="listWidget">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
@@ -53,7 +71,7 @@ padding: 10px; color: white;
      </property>
      <item>
       <property name="text">
-       <string/>
+       <string>dfsgjodsfgjpdfgjpsdfgoj</string>
       </property>
      </item>
      <item>
@@ -65,13 +83,6 @@ padding: 10px; color: white;
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>AdminSidebar</class>
-   <extends>QListWidget</extends>
-   <header location="global">adminsidebar.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

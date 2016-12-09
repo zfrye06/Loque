@@ -5,13 +5,14 @@
 AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
     user(user),
-    mainLayout(new QHBoxLayout),
+    mainLayout(new QHBoxLayout(this)),
     tabs(new QTabWidget(this)),
-    sidebar(new AdminSidebar)
+    sidebar(new AdminSidebar(user, this))
 {
     mainLayout->addWidget(sidebar);
     mainLayout->addWidget(tabs);
     setLayout(mainLayout);
+
     refreshClassTabs();
 }
 

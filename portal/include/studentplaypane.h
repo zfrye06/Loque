@@ -25,6 +25,8 @@ public:
     explicit StudentPlayPane(UserInfo, QWidget *parent = 0);
     ~StudentPlayPane();
 
+    void showAddClassDialog();
+
 private:
     UserInfo user;
     std::unique_ptr<UserLevelInfo> levelInfo;

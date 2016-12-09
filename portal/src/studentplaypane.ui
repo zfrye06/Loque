@@ -17,7 +17,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="mainPane">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -61,15 +61,6 @@
                 </color>
                </brush>
               </colorrole>
-              <colorrole role="Highlight">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>109</red>
-                 <green>147</green>
-                 <blue>164</blue>
-                </color>
-               </brush>
-              </colorrole>
              </active>
              <inactive>
               <colorrole role="Button">
@@ -99,15 +90,6 @@
                 </color>
                </brush>
               </colorrole>
-              <colorrole role="Highlight">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>109</red>
-                 <green>147</green>
-                 <blue>164</blue>
-                </color>
-               </brush>
-              </colorrole>
              </inactive>
              <disabled>
               <colorrole role="Button">
@@ -134,15 +116,6 @@
                  <red>0</red>
                  <green>0</green>
                  <blue>0</blue>
-                </color>
-               </brush>
-              </colorrole>
-              <colorrole role="Highlight">
-               <brush brushstyle="SolidPattern">
-                <color alpha="255">
-                 <red>212</red>
-                 <green>212</green>
-                 <blue>212</blue>
                 </color>
                </brush>
               </colorrole>

@@ -1,3 +1,4 @@
+#include <QInputDialog>
 #include <QProcess>
 #include <QScrollBar>
 #include <iostream>
@@ -29,6 +30,9 @@ StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
 
     connect(ui->playButton, &QPushButton::clicked,
             this, &StudentPlayPane::playButtonClicked);
+
+    connect(ui->firstClassButton, &QPushButton::clicked,
+            this, &StudentPlayPane::showAddClassDialog);
 
     updateLevelInfo();
     updateDisplay();
@@ -110,6 +114,34 @@ void StudentPlayPane::playButtonClicked() {
         QString loqueExec("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client/bin/loque");
         QString loqueWorkingDir("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client");
         QProcess::startDetached(loqueExec, args, loqueWorkingDir);
+    }
+}
+
+void StudentPlayPane::showAddClassDialog() {
+    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"));
+    LoqueClient client;
+    auto status = client.addClassroom(user.userId, classId);
+    if (status != Status::OK) {
+        // TODO: SHOW ERROR
+        std::cerr << "ERROR: Unable to add classroom. Server returned status " << status << std::endl;
+        return;
+    }
+    UserLevelInfo info;
+    status = client.getUserLevelInfo(user.userId, info);
+    if (status != Status::OK) {
+        // TODO: SHOW ERROR
+        std::cerr << "ERROR: Unable to get user level info. Server returned status " << status << std::endl;
+        return;
+    }
+    for (auto& classInfo : info) {
+       if (classInfo.classId == classId) {
+           levelInfo->push_back(classInfo);
+           ui->classList->addItem(QString::fromStdString(classInfo.className));
+           if (activeClass == nullptr) {
+               ui->stackedWidget->setCurrentWidget(ui->mainPane);
+               classClicked(0);
+           }
+       }
     }
 }
 

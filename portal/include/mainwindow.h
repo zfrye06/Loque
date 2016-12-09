@@ -16,8 +16,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -34,7 +33,10 @@ private:
     AdminPane *adminPane;
     AdminPlayPane *adminPlayPane;
 
+    QAction *addClassAction; // Does not own.
+
     void handleLogin(UserInfo);
+    void logout();
 };
 
 #endif // MAINWINDOW_H

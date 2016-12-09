@@ -20,17 +20,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //For testing purposes, we want to look at adminPane
-//    adminPane = new AdminPane(UserInfo());
-//    paneContainer->addWidget(adminPane);
+    QAction *logoutAction = new QAction(tr("Log Out"), this);
+    connect(logoutAction, &QAction::triggered, this, &MainWindow::logout);
+    ui->menuFile->addAction(logoutAction);
 
     paneContainer->addWidget(loginPane);
     paneContainer->addWidget(registerPane);
     setCentralWidget(paneContainer);
-    menuBar()->setHidden(true);
+
     connect(loginPane, &LoginPane::onLogin,
             this, &MainWindow::handleLogin);
-
 
     connect(loginPane, &LoginPane::onSignupRequested,
             this, [this] {
@@ -44,30 +43,39 @@ MainWindow::MainWindow(QWidget *parent) :
             this, [this] {
         paneContainer->setCurrentWidget(loginPane);
     });
+
+}
+
+MainWindow::~MainWindow() {
+    delete ui;
 }
 
 void MainWindow::handleLogin(UserInfo user) {
     if (user.type == UserType::ADMIN) {
-        // TODO: ADD adminPlayPane. 
         adminPane = new AdminPane(user);
         paneContainer->addWidget(adminPane);
         paneContainer->setCurrentWidget(adminPane); 
     } else {
-        menuBar()->setHidden(false);
-        QList<QMenu*> menus = menuBar()->findChildren<QMenu*>();
-        for(int i = 0; i < menus.size(); i++){
-            if(menus.at(i)->title() == "File"){
-                menus.at(i)->addAction("Add Class");
-                break;
-            }
-        }
         studentPlayPane = new StudentPlayPane(user);
         paneContainer->addWidget(studentPlayPane);
         paneContainer->setCurrentWidget(studentPlayPane);
+
+        addClassAction = new QAction(tr("Add Class"));
+        connect(addClassAction, &QAction::triggered,
+                studentPlayPane, &StudentPlayPane::showAddClassDialog);
+        ui->menuFile->addAction(addClassAction);
     }
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+void MainWindow::logout() {
+    paneContainer->setCurrentWidget(loginPane);
+    if (adminPane != nullptr) {
+        paneContainer->removeWidget(adminPane);
+        delete adminPane;
+    } else {
+        ui->menuFile->removeAction(addClassAction);
+        delete addClassAction;
+        paneContainer->removeWidget(studentPlayPane);
+        delete studentPlayPane;
+    }
 }

@@ -19,8 +19,6 @@ LoginPane::LoginPane(QWidget *parent) :
 }
 
 void LoginPane::attemptLogin() {
-    ui->errorLabel->clear();
-    
     std::string username = ui->usernameField->text().toStdString();
     std::string password = ui->passwordField->text().toStdString();
     if (username.length() == 0 || password.length() == 0) {
@@ -38,6 +36,9 @@ void LoginPane::attemptLogin() {
         }
         return;
     }
+    ui->errorLabel->clear();
+    ui->usernameField->clear();
+    ui->passwordField->clear();
     emit onLogin(UserInfo(username, login.userId, login.userType));
 }
 

@@ -22,16 +22,18 @@
   <image source="images/blackTile.png" width="64" height="64"/>
  </tileset>
  <layer name="bkg" width="128" height="128">
+  <properties>
+   <property name="darkness" type="int" value="151"/>
+   <property name="lava" type="bool" value="false"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJztwwENAAAMw6A6mn93F3JIWDVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVXfP6aQwKY=
   </data>
  </layer>
- <layer name="shadow" width="128" height="128" opacity="0.25">
-  <data encoding="base64" compression="zlib">
-   eJztwwENAAAMAiCf0P5tDHLY6CVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX1/QHLIgEt
-  </data>
- </layer>
  <layer name="CandyGraphics" width="128" height="128">
+  <properties>
+   <property name="lava" type="bool" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJztnN2qHTUYhoNV/MEqRa0VPKi1uwceuMFWUG9Ar0AQRMGKh6JFEU/9bdV9VN1gvTiLV+J8rAk7/Xa+/MxkVtaa9bzwsPZkMsnsvJlJJsnMsXPuGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGACS6r3/wbb97xEvf//Q6Sn7hnhvcvkEFhKTw9cHnhq5Erw9ysDrxam07t81kyp/hr4KcKpivdfRZqiXyNh+l7Qu4zWTIluDLxl7LueSf8oiJurG2FdOAn+7l1Ga0b8kWv7twhybYv3t5RPl9x5WenfHLgW4SiShqXeZbRmxJ/Uta29z6kmX6sOnKjt3mW0drxeHnghZsgMTa0DpWlAO/9LdMFt6smFkSvj72W1HevfW3XA627w973McdCOmra4hWrrX+/yWTul9+ESPSyMl/I/9kzYu4zWjtVPn4rVp/RK+V96HOwOtWp1LOyuxym1SLd3eayVpXVD5Sd9jx8VWv7ZgLGB/fM7lB9PDPOP9T1K+6O9y24f2ZbEa+2r9r7mPP21z9hAH+9lnuBnAz9XMNXr1Lla40JuZvqHSI20n9YznY83129NrB+g1bs89wlrDj82jx+20ynF2vNWXDPyDO8Hvct0n0j1q667+L07p1yeOf2ZSTO8BzAuOJ9wvqWF5ngvepBJV+riLxPzh7QvMo93MVG2XlYc/Rxf4v1dtf1gPI9L7tF1JWFaMf9PIvGg3P83Bt4eeCdStlqxuKl2X8ta2yuyrn8XpCf++3UJvj14UcWBOv9T0teoVq7PV6P7iX2h/6I/Br5Q273Lch+xpMdWLU1NX/cxc8+V+L89/590m3bYr9l/wtlr9Kd4bynW/9f54P/y/teoJt1cW/J3QT74v7z/NffmKfXKalvEf/8c8ryRD/63ZepaLz/+kvO/tB8h4vrfPnPHgFLea+XqQm3//6rD/xbM0ZS0YnPBJf1//W7S9wO/B5xGzgfq/U/102L7ar2fMl4g+15XYVfV9muJdMFmW2v+S+YHLZXWsd5luY/k+gA1fbiUSs4ld2zr/GDDNu4BrfyXb0a85DbjU/KOmYxPyXPjYwOPu/L3zeCMlu/9WGrlf0wfN8r/kCmtAz9k9j+MhKXmh2v9/yiy/5NI2OdGGpCuAy3f/apd/2nJ75f6+U1kv/j/rgr7ykgDdhdLsfopdeFZ9+h4goRdDMJk+zlXfv+B3fY/xD+33EqExeLA7mIpFT8XljoepnvSuly1StZ2x/bpsNbneQjMVeu8pvo/5XwOnSVlrfHxa46ecWdjO+E4TuocLf+96Pu191/G2sJvPIln1thbqH8K09eKnd+nLu6tC37xfhn/LcXey5F23K/pyfmv5xffdJvnOH1+qfcMXfBLv3+7/uek/Z+yzliUm0M+No6Fev9rv+OcUmqNT0oxf3P+HxXEhfPUju3qOQPdBljrSUu/D+aCc/PvLVtrffx3CU7d2Xoh1gUtS83cYWqNf0ph3XTufJ8gtj8XF7ZfB1Lv+GmF84w+HxcJOzb25+LC8nVA+ncyR+Pf2Uz5H/b99RrRlL8573U82G4dCFVy/de8T1yj3mVzKKTqQK7/X7M++HYmLa3e5XJITF1Hkks31J3xN/ymwGfuvD4cf3uXCcwn1B21Lc+dX6qw20G83ucO85F25f2B70Zf33ObfuO/o8d+zdcHA98OfD3GYx5gHUxtV5gHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgP8BIfHFdg==
   </data>
@@ -69,7 +71,7 @@
   </object>
   <object id="52" name="laser" x="4566.17" y="3968.17" width="17" height="197">
    <properties>
-    <property name="canBePassed" type="bool" value="false"/>
+    <property name="canBePassed" type="bool" value="true"/>
    </properties>
   </object>
   <object id="53" name="laser" x="4566.17" y="3580.17" width="17" height="197">

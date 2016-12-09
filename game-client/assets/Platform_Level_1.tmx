@@ -19,6 +19,9 @@
   <image source="images/MathSpritesheet.png" width="320" height="384"/>
  </tileset>
  <layer name="CandyGraphics" width="128" height="256">
+  <properties>
+   <property name="lava" type="bool" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    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
   </data>
@@ -43,6 +46,9 @@
   </data>
  </layer>
  <layer name="Decoration" width="128" height="256">
+  <properties>
+   <property name="lava" type="bool" value="true"/>
+  </properties>
   <data encoding="base64" compression="zlib">
    eJzt3UFqAkEQBVDnAtmrOUEOIU1C9iG5/13CEA2DKLpQy+7/HgyOuimo+oUOg65WAIxiM1VXwKPpOUAWex+gL9sb7G27vy/nen6LWWAMx7OwzLi890m+IY/cQx6f0yCP3EMeuYc8a7mHOHIPeeQeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgNl6qq6ACvoOmWQfcsk/AAAAQLbD9SHXiZiZA8wAZLMDIJPsAwDAeHzOz6TvmfQdMsk+5JJ/wB4AAAAAAAAAAAAAAAAAAAAAAACA8eyqC6BUW5xvp9PnjKvtHzfT37F0/JzxtMW5/MP1XvfH0ltFIQAAwD/XMSCX/AMAAABQ6aW6AAAAAAAIsrxfzL1jWc712xwA9kAmfWdmDvLoOWSzAyCD6395rumzWRiLfkIWmYc8cs+9vFcX8MTWF3J36f0efFUX0IHj35MfaR/r/3UOMzBS72f6n+37xGsfD6+iDyn/K/JTXQCl9D+b/mf7rC6AUvKfTf+znfpOCAAAAAAAQF921QVQqlUXQKlWXQClWnUBlGrVBQAAcDe/UvINmA==
   </data>

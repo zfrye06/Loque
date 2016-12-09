@@ -22,16 +22,7 @@ public:
 
 private:
     Ui::LevelSettingsDialog *ui;
-};
-
-class LevelBox : public QWidget
-{
-public:
-    explicit LevelBox(LevelInfo lvlInfo, bool enabled, QWidget *parent = 0);
-    ~LevelBox();
-
-private:
-    bool enabled;
+    QGroupBox* addLevel(LevelInfo lvlInfo, bool enabled);
 };
 
 #endif // LEVELSETTINGSDIALOG_H

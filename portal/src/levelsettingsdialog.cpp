@@ -6,30 +6,23 @@ LevelSettingsDialog::LevelSettingsDialog(std::vector<int> enabledLevels, std::ve
     ui(new Ui::LevelSettingsDialog)
 {
     ui->setupUi(this);
-    QGridLayout *mainLayout = new QGridLayout;
 
     int row = 0;
     int col = 0;
 
-    for(int i = 0; i < allLevels.size(); i++){
-        mainLayout->addWidget(new LevelBox(allLevels[i], std::find(enabledLevels.begin(), enabledLevels.end(), allLevels[i].id) != enabledLevels.end(), this), row, col++, 1, 1);
+    QListWidgetItem *item;
+    for(size_t i = 0; i < allLevels.size(); i++){
+        item = new QListWidgetItem;
+        ui->levelList->setItemWidget(item, addLevel(allLevels[i], std::find(enabledLevels.begin(), enabledLevels.end(), allLevels[i].id) != enabledLevels.end()));
+//        ui->levelList->  addWidget(new LevelBox(allLevels[i], std::find(enabledLevels.begin(), enabledLevels.end(), allLevels[i].id) != enabledLevels.end(), this), row, col++, 1, 1);
         if(col > 2){
             row++;
             col = 0;
         }
     }
-//    mainLayout->addWidget(new LevelBox(allLevels[0], std::find(enabledLevels.begin(), enabledLevels.end(), allLevels[0].id) != enabledLevels.end(), this), row, col++, 1, 1);
-
-    setLayout(mainLayout);
 }
 
-LevelSettingsDialog::~LevelSettingsDialog()
-{
-    delete ui;
-}
-
-LevelBox::LevelBox(LevelInfo lvlInfo, bool enabled, QWidget *parent) : enabled(enabled), QWidget(parent)
-{
+QGroupBox* LevelSettingsDialog::addLevel(LevelInfo lvlInfo, bool enabled){
     QGroupBox *box = new QGroupBox;
     QHBoxLayout *hLayout = new QHBoxLayout;
     QVBoxLayout *vLayout = new QVBoxLayout;
@@ -48,11 +41,11 @@ LevelBox::LevelBox(LevelInfo lvlInfo, bool enabled, QWidget *parent) : enabled(e
     hLayout->addWidget(imgLabel);
     hLayout->addLayout(vLayout);
     box->setLayout(hLayout);
-    box->setParent(parent);
     box->setFixedSize(QSize(500, 250));
+    return box;
 }
 
-LevelBox::~LevelBox()
+LevelSettingsDialog::~LevelSettingsDialog()
 {
-
+    delete ui;
 }

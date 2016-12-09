@@ -4,7 +4,7 @@
 #include <QToolButton>
 
 ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
-    QWidget(parent), teacherID(teacherID), classID(classStats.classId), currClassDialog(nullptr)
+    QWidget(parent), teacherID(teacherID), currClassDialog(nullptr), classID(classStats.classId)
 {
     LoqueClient client;
     client.getEnabledClassLevels(classID, enabledLevels);
@@ -213,7 +213,7 @@ void ClassTab::setMapTable(const ClassStats& classStats){
         levelMap[info.id] = info.name;
     }
 
-    for(int i = 0; i < classStats.studentStats.size(); i++){
+    for(size_t i = 0; i < classStats.studentStats.size(); i++){
         const UserStats& user = classStats.studentStats.at(i);
         for(auto& kv : user.highScores){
             levelStatsTable->insertRow(row);

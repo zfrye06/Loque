@@ -57,6 +57,7 @@ void RegisterPane::displayErrorMessage(const char *errorMessage)
 void RegisterPane::adminBoxChanged(int state)
 {
     int width, height;
+    width = height = 0;
     if (state == Qt::Unchecked)
     {
         width = 0;

@@ -33,7 +33,6 @@ HEADERS  += include/mainwindow.h \
     include/adminpane.h \
     include/classtab.h \
     include/addclassdialog.h \
-    include/classtab.h \
     include/levelsettingsdialog.h
 
 

@@ -79,47 +79,47 @@
     <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="54" x="2229.5" y="3482" width="406" height="18.5">
+  <object id="54" name="laser" x="2229.5" y="3482" width="406" height="18.5">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="56" x="3253" y="3355.75" width="406" height="18.5">
+  <object id="56" name="laser" x="3253" y="3355.75" width="406" height="18.5">
    <properties>
     <property name="canBePassed" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="57" x="3184" y="2454" width="349" height="26">
+  <object id="57" name="laser" x="3184" y="2454" width="349" height="26">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="58" x="2604.5" y="2576" width="349" height="26">
+  <object id="58" name="laser" x="2604.5" y="2576" width="349" height="26">
    <properties>
     <property name="canBePassed" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="60" x="5361" y="4243" width="242" height="19">
+  <object id="60" name="laser" x="5361" y="4243" width="242" height="19">
    <properties>
     <property name="canBePassed" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="61" x="5101" y="4243" width="216" height="20">
+  <object id="61" name="laser" x="5101" y="4243" width="216" height="20">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="62" x="5686" y="5403" width="94" height="20">
+  <object id="62" name="laser" x="5686" y="5403" width="94" height="20">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="63" x="5873" y="5396" width="94" height="20">
+  <object id="63" name="laser" x="5873" y="5396" width="94" height="20">
    <properties>
     <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
-  <object id="64" x="5171" y="5401" width="94" height="20">
+  <object id="64" name="laser" x="5171" y="5401" width="94" height="20">
    <properties>
     <property name="canBePassed" type="bool" value="true"/>
    </properties>

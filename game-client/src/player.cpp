@@ -37,7 +37,7 @@ Player::Player( std::string resource, glm::vec2 pos) {
     canDoubleJump = true;
     releasedJump = true;
     airDodgePressed = false;
-    airControlMultiplier = 2.5;
+    airControlMultiplier = 3.5;
     flashTimer = 0;
     flashLength = 0;
     techTimer = 0;

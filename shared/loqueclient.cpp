@@ -64,6 +64,15 @@ std::ostream& operator<<(std::ostream& out, const UserInfo& info) {
     return out;
 }
 
+std::ostream& operator<<(std::ostream& out, const UserStats& stats) {
+    out << "UserStats<userId: " << stats.userId <<
+        ", username: " << stats.username <<
+        ", totalSecPlayed: " << stats.totalSecPlayed <<
+        ", totalScore: " << stats.totalScore <<
+        ">";
+    return out;
+}
+
 bool LevelRecord::hasCompleted() const {
     return bestCompletionTimeSecs != -1; 
 }
@@ -83,6 +92,22 @@ std::ostream& operator<<(std::ostream& out, const ClassLevelInfo& info) {
     for (auto& r : info.levelRecords) out << r << ", ";
     out << ">";
     return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const ClassStats& stats) {
+    out << "ClassStats<classId: " << stats.classId <<
+        ", className: " << stats.className <<
+        ", studentStats: [";
+    for (auto& ustats : stats.studentStats) {
+        out << ustats << ", "; 
+    }
+    out << "]" <<
+        ", enabledLevels:[";
+    for (auto& level : stats.enabledLevels) {
+        out << level << ", "; 
+    }
+    out << "]>";
+    return out; 
 }
 
 LoqueClient::LoqueClient() : host("127.0.0.1"), port(5001) {}

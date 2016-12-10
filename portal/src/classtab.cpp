@@ -95,15 +95,15 @@ void ClassTab::initWidgets(){
     client.getEnabledClassLevels(cstats.classId, enabledLevels);
 
     connect(addClassButton, &QToolButton::clicked, this, [this]{
-        currClassDialog.reset(new AddClassDialog(teacherID));
+        currClassDialog.reset(new CreateClassDialog(teacherID));
         currClassDialog->show();
-        connect(currClassDialog.get(), &AddClassDialog::classCreated, this, &ClassTab::classCreated);
+        connect(currClassDialog.get(), &CreateClassDialog::classCreated, this, &ClassTab::classCreated);
     });
 
     connect(levelButton, &QToolButton::clicked, this, [this]{
-        levelDialog.reset(new LevelSettingsDialog(cstats.classId, enabledLevels, allLevels, teacherID));
-        levelDialog->show();
-        connect(levelDialog.get(), &LevelSettingsDialog::refresh, this, &ClassTab::refresh);
+//        levelDialog.reset(new LevelSettingsDialog(cstats.classId, enabledLevels, allLevels, teacherID));
+//        levelDialog->show();
+//        connect(levelDialog.get(), &LevelSettingsDialog::refresh, this, &ClassTab::refresh);
     });
 
     connect(deleteClassButton, &QPushButton::clicked, this, [this]{

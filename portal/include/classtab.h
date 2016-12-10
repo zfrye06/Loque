@@ -36,7 +36,7 @@ private:
     std::vector<LevelInfo> allLevels;
     std::vector<int> enabledLevels;
 
-    std::unique_ptr<AddClassDialog> currClassDialog;
+    std::unique_ptr<CreateClassDialog> currClassDialog;
     std::unique_ptr<LevelSettingsDialog> levelDialog;
     std::unique_ptr<DeleteClassConfirmation> dcc;
     

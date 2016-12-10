@@ -7,7 +7,10 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     user(user),
     allClassStats(new std::vector<ClassStats>()),
     activeClassIdx(-1),
-    ui(new Ui::AdminPane)
+    ui(new Ui::AdminPane),
+    createClassDialog(nullptr),
+    levelSettingsDialog(nullptr),
+    deleteClassConfirmation(nullptr)
 {
     ui->setupUi(this);
     ui->classList->setAttribute(Qt::WA_MacShowFocusRect, 0);
@@ -28,15 +31,33 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
 
     connect(ui->levelSettingsButton, &QPushButton::clicked,
             this, [this] {
-
+        if (activeClassIdx == -1) return;
+        auto& activeClass = this->allClassStats->at(activeClassIdx);
+        levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, this->activeClassIdx,
+                                                          activeClass.enabledLevels, this->allLevels));
+        levelSettingsDialog->show();
     });
 
     connect(ui->deleteClassButton, &QPushButton::clicked,
             this, [this] {
-
+        deleteClassConfirmation.reset(new DeleteClassConfirmation);
+        deleteClassConfirmation->show();
+        connect(deleteClassConfirmation.get(), &DeleteClassConfirmation::accepted,
+                this, &AdminPane::refreshClassTabs);
     });
 
     refreshClassTabs();
+
+    // Populate list of all levels. This is a one-time operation.
+    LoqueClient client;
+    auto status = client.getAllLevels(this->allLevels);
+    if (status != Status::OK) {
+        std::cerr << "ERROR: Unable to populate list of all levels. " <<
+            "Client returned status " << status << std::endl;
+
+        // TODO: Should we really disable level settings in this case? 
+        ui->levelSettingsButton->setEnabled(false); 
+    }
 }
 
 AdminPane::~AdminPane() {
@@ -64,6 +85,7 @@ void AdminPane::refreshClassTabs() {
     for (auto& classStats : *allClassStats) {
         ui->classList->addItem(QString::fromStdString(classStats.className));
     }
+    ui->classList->item(0)->setSelected(true);
     classClicked(0);
 }
 
@@ -79,5 +101,8 @@ void AdminPane::classClicked(int row) {
 }
 
 void AdminPane::showCreateClassDialog() {
-
+    createClassDialog.reset(new CreateClassDialog(user.userId));
+    createClassDialog->show();
+    connect(createClassDialog.get(), &CreateClassDialog::classCreated,
+            this, &AdminPane::refreshClassTabs); 
 }

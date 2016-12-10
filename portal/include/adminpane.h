@@ -7,6 +7,8 @@
 #include <QPushButton>
 #include <memory>
 #include "addclassdialog.h"
+#include "deleteclassconfirmation.h"
+#include "levelsettingsdialog.h"
 #include "../shared/loqueclient.h"
 #include "ui_adminpane.h"
 
@@ -22,10 +24,14 @@ signals:
     void classCreated(int classID);
 private:
     UserInfo user;
+    std::vector<LevelInfo> allLevels; 
     std::unique_ptr<std::vector<ClassStats>> allClassStats;
     int activeClassIdx;
     Ui::AdminPane *ui;
-
+    std::unique_ptr<CreateClassDialog> createClassDialog; 
+    std::unique_ptr<LevelSettingsDialog> levelSettingsDialog;
+    std::unique_ptr<DeleteClassConfirmation> deleteClassConfirmation; 
+    
     void refreshClassTabs();
     void classClicked(int);
     void showCreateClassDialog();

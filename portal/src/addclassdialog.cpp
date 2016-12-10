@@ -2,7 +2,7 @@
 #include "addclassdialog.h"
 #include "ui_addclassdialog.h"
 
-AddClassDialog::AddClassDialog(int userId, QWidget *parent) :
+CreateClassDialog::CreateClassDialog(int userId, QWidget *parent) :
     userId(userId), QDialog(parent),
     ui(new Ui::AddClassDialog)
 {
@@ -13,12 +13,11 @@ AddClassDialog::AddClassDialog(int userId, QWidget *parent) :
     });
 }
 
-AddClassDialog::~AddClassDialog()
-{
+CreateClassDialog::~CreateClassDialog() {
     delete ui;
 }
 
-void AddClassDialog::createClassroom(QString name){
+void CreateClassDialog::createClassroom(QString name){
     LoqueClient client;
     ClassStats cstats;
     auto status = client.createClassroom(userId, name.toStdString(), cstats);

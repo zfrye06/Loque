@@ -9,7 +9,7 @@ namespace Ui {
 class AddClassDialog;
 }
 
-class AddClassDialog : public QDialog
+class CreateClassDialog : public QDialog
 {
     Q_OBJECT
 
@@ -17,8 +17,8 @@ signals:
     void classCreated(ClassStats cstats);
 
 public:
-    explicit AddClassDialog(int userId, QWidget *parent = 0);
-    ~AddClassDialog();
+    explicit CreateClassDialog(int userId, QWidget *parent = 0);
+    ~CreateClassDialog();
 
 private:
     Ui::AddClassDialog *ui;

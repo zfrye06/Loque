@@ -82,6 +82,7 @@ struct UserStats {
     // If the user is a student, these reflect the classes they are a member of.
     std::vector<int> classIds;
 };
+std::ostream& operator<<(std::ostream&, const UserStats&); 
 
 // Provides a record of a user's best performance on a particular level.
 // If LevelRecord::hasCompleted returns false, the user has not played the level.
@@ -111,6 +112,7 @@ struct ClassStats {
     std::vector<UserStats> studentStats;
     std::vector<LevelInfo> enabledLevels;
 };
+std::ostream& operator<<(std::ostream&, const ClassStats&); 
 
 // Use an instance of LoqueClient to make API
 // calls to a running Loque Server.

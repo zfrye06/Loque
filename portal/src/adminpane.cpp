@@ -314,7 +314,7 @@ void AdminPane::deleteClass(){
         return;
     }
     delete ui->classList->takeItem(activeClassIdx);
-    allClassStats->erase(allClassStats->begin() + activeClassIdx);
+    allClassStats->erase(allClassStats->begin() + activeClassIdx - 1);
     if (allClassStats->size() > 0) {
         ui->classList->item(0)->setSelected(true); 
         classClicked(0); 

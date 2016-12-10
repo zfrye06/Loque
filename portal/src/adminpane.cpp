@@ -35,9 +35,9 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
         if (activeClassIdx == -1) return;
         auto& activeClass = this->allClassStats->at(activeClassIdx);
         int activeClassId = activeClass.classId;
-       levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, activeClassId,
+        levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, activeClassId,
                                                          activeClass.enabledLevels, this->allLevels));
-       levelSettingsDialog->show();
+        levelSettingsDialog->show();
     });
 
     connect(ui->deleteClassButton, &QPushButton::clicked,

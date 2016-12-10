@@ -1,6 +1,6 @@
 #include <QListView>
 #include "levelsettingsdialog.h"
-#include "ui_levelsettingsdialog.h"
+#include "launchgame.h"
 
 LevelSettingsDialog::LevelSettingsDialog(int teacherId, int classId,
                                          const std::vector<LevelInfo>& enabledLevels,
@@ -50,8 +50,8 @@ QGroupBox* LevelSettingsDialog::addLevel(const LevelInfo& lvlInfo, bool enabled)
     QHBoxLayout *hLayout = new QHBoxLayout;
     QVBoxLayout *vLayout = new QVBoxLayout;
     QPixmap img;
-    for(size_t i=0;i<MapCount;i++ ) {
-        if ( Maps[i].id == lvlInfo.id ) {
+    for(size_t i = 0; i < MapCount; i++) {
+        if (Maps[i].id == lvlInfo.id) {
             img = QPixmap(Maps[i].thumbnail.c_str());
         }
     }
@@ -73,6 +73,12 @@ QGroupBox* LevelSettingsDialog::addLevel(const LevelInfo& lvlInfo, bool enabled)
 
     connect(toggleButton, SIGNAL(clicked()), mapper, SLOT(map()));
     mapper->setMapping(toggleButton, lvlInfo.id);
+    
+    int lid = lvlInfo.id;
+    int tid = this->teacherId; 
+    connect(playButton, &QPushButton::clicked,
+            this, [lid, tid] { launchGame(lid, tid); });
+        
     vLayout->addWidget(nameLabel);
     vLayout->addWidget(descriptionLabel);
     vLayout->addWidget(playButton);

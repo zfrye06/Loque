@@ -1,19 +1,22 @@
+#include <QListView>
 #include "levelsettingsdialog.h"
 #include "ui_levelsettingsdialog.h"
-#include <QListView>
-#include <iostream>
 
-LevelSettingsDialog::LevelSettingsDialog(int classID,
-                                         std::vector<int> enabledIDs,
-                                         std::vector<LevelInfo> allLevels,
-                                         int teacherID, QWidget *parent) :
+LevelSettingsDialog::LevelSettingsDialog(int teacherId, int classId,
+                                         const std::vector<LevelInfo>& enabledLevels,
+                                         const std::vector<LevelInfo>& allLevels,
+                                         QWidget *parent) :
     QDialog(parent),
+    teacherId(teacherId),
+    classId(classId), 
     ui(new Ui::LevelSettingsDialog),
-    classID(classID),
-    teacherID(teacherID)
+    mapper(new QSignalMapper)
 {
     ui->setupUi(this);
-    mapper = new QSignalMapper;
+    for (auto& level : enabledLevels) {
+        enabledIds.push_back(level.id); 
+    }
+
     connect(this, &LevelSettingsDialog::clicked, this, &LevelSettingsDialog::toggleLevel);
     connect(mapper, SIGNAL(mapped(int)), this, SIGNAL(clicked(int)));
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &LevelSettingsDialog::submitLevels);
@@ -27,7 +30,7 @@ LevelSettingsDialog::LevelSettingsDialog(int classID,
     int row = 0;
     int col = 0;
     for(size_t i = 0; i < allLevels.size(); i++){
-        auto enabled = std::find(enabledIDs.begin(), enabledIDs.end(), allLevels[i].id) != enabledIDs.end();
+        auto enabled = std::find(enabledIds.begin(), enabledIds.end(), allLevels[i].id) != enabledIds.end();
         layout->addWidget(addLevel(allLevels[i], enabled), row, col++);
         if(col > 1){
             row++;
@@ -36,6 +39,10 @@ LevelSettingsDialog::LevelSettingsDialog(int classID,
     }
 
     frame->setLayout(layout);
+}
+
+LevelSettingsDialog::~LevelSettingsDialog() {
+    delete ui;
 }
 
 QGroupBox* LevelSettingsDialog::addLevel(const LevelInfo& lvlInfo, bool enabled){
@@ -79,7 +86,7 @@ QGroupBox* LevelSettingsDialog::addLevel(const LevelInfo& lvlInfo, bool enabled)
 
 void LevelSettingsDialog::toggleLevel(const int &levelID){
 //    std::cout << levelID << std::endl;
-//    if(std::find(enabledIDs.begin(), enabledIDs.end(), levelID) != enabledIDs.end()){
+//    if(std::find(enabledIds.begin(), enabledIds.end(), levelID) != enabledIds.end()){
 
 //    } else{
 
@@ -87,29 +94,24 @@ void LevelSettingsDialog::toggleLevel(const int &levelID){
     QPushButton* btn = btns[levelID];
     if(btn->text() == "Disable Level"){
         btn->setText("Enable Level");
-        enabledIDs.erase(std::remove(enabledIDs.begin(), enabledIDs.end(), levelID), enabledIDs.end());
+        enabledIds.erase(std::remove(enabledIds.begin(), enabledIds.end(), levelID), enabledIds.end());
         levelsToEnable.erase(std::remove(levelsToEnable.begin(), levelsToEnable.end(), levelID), levelsToEnable.end());
         levelsToDisable.push_back(levelID);
     } else{
         levelsToDisable.erase(std::remove(levelsToDisable.begin(), levelsToDisable.end(), levelID), levelsToDisable.end());
         levelsToEnable.push_back(levelID);
-        enabledIDs.push_back(levelID);
+        enabledIds.push_back(levelID);
         btn->setText("Disable Level");
     }
 }
 
-void LevelSettingsDialog::submitLevels(){
+void LevelSettingsDialog::submitLevels() {
     LoqueClient client;
     for(int id : levelsToDisable){
-        client.disableLevel(teacherID, classID, id);
+        client.disableLevel(teacherId, classId, id);
     }
     for(int id : levelsToEnable){
-        client.enableLevel(teacherID, classID, id);
+        client.enableLevel(teacherId, classId, id);
     }
     emit refresh();
-}
-
-LevelSettingsDialog::~LevelSettingsDialog()
-{
-    delete ui;
 }

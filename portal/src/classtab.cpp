@@ -101,9 +101,9 @@ void ClassTab::initWidgets(){
     });
 
     connect(levelButton, &QToolButton::clicked, this, [this]{
-        levelDialog.reset(new LevelSettingsDialog(cstats.classId, enabledLevels, allLevels, teacherID));
-        levelDialog->show();
-        connect(levelDialog.get(), &LevelSettingsDialog::refresh, this, &ClassTab::refresh);
+//        levelDialog.reset(new LevelSettingsDialog(cstats.classId, enabledLevels, allLevels, teacherID));
+//        levelDialog->show();
+//        connect(levelDialog.get(), &LevelSettingsDialog::refresh, this, &ClassTab::refresh);
     });
 
     connect(deleteClassButton, &QPushButton::clicked, this, [this]{

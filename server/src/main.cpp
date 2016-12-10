@@ -442,6 +442,19 @@ Status handleGetAllLevels(sql::Connection &dbconn,
     return OK;
 }
 
+Status handleDeleteClass(sql::Connection &dbconn, int classID){
+    try {
+        std::string query = "DELETE FROM Class WHERE classID = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, classID);
+        std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
+    } catch (sql::SQLException &e) {
+        std::cerr << "ERROR: SQL Exception from handleDeleteClass: " << e.what() << std::endl;
+        return DB_ERR;
+    }
+    return OK;
+}
+
 void handleClient(std::unique_ptr<sf::TcpSocket> client,
                   std::unique_ptr<sql::Connection> dbconn) {
     sf::Packet reqPacket;
@@ -457,6 +470,13 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     ReqType rtype;
     reqPacket >> rtype;
     switch (rtype) {
+        case DELETE_CLASS: {
+            int classID;
+            reqPacket >> classID;
+            auto status = handleDeleteClass(*dbconn, classID);
+            respPacket << status;
+            break;
+        }
         case LOGIN: {
             std::string username, userpass;
             reqPacket >> username >> userpass;

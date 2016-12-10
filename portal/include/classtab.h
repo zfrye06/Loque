@@ -28,6 +28,7 @@ public:
 
 signals:
     void classCreated(ClassStats cstats);
+    void classDeleted();
 
 private:
 

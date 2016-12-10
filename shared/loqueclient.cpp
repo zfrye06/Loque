@@ -142,6 +142,18 @@ Status LoqueClient::createClassroom(int userId, const std::string& className, Cl
     return status;
 }
 
+Status LoqueClient::deleteClass(int classID) {
+    sf::Packet toSend;
+    toSend << ReqType::DELETE_CLASS << classID;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (status != OK) {
+        return status;
+    }
+    toReceive >> status;
+    return status;
+}
+
 Status LoqueClient::postGameStats(int userId, const GameStats& stats) {
     sf::Packet toSend;
     toSend << ReqType::POST_STATS << userId << stats;

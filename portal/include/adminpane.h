@@ -33,6 +33,7 @@ private:
     AdminSidebar *sidebar;
 
     void addClassTab(ClassStats cstats);
+    void deleteClassTab();
     void refreshClassTabs();
 };
 

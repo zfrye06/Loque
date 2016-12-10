@@ -4,19 +4,25 @@
 
 AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
-    user(user),
-    mainLayout(new QHBoxLayout(this)),
-    tabs(new QTabWidget(this)),
-    sidebar(new AdminSidebar(user, this))
+    ui(new Ui::AdminPane),
+    user(user)
+    // mainLayout(new QHBoxLayout(this)),
+    // tabs(new QTabWidget(this)),
+    // sidebar(new AdminSidebar(user, this))
 {
-    mainLayout->addWidget(sidebar);
-    mainLayout->addWidget(tabs);
-    setLayout(mainLayout);
+    ui->setupUi(this);
+    // mainLayout->addWidget(sidebar);
+    // mainLayout->addWidget(tabs);
+    // setLayout(mainLayout);
 
-    refreshClassTabs();
+    // refreshClassTabs();
+    std::cout << "SETTING" << std::endl;
+    ui->stackedWidget->setCurrentWidget(ui->noClassesPage);
+    std::cout << "MADE IT" << std::endl;
 }
 
 AdminPane::~AdminPane() {
+    delete ui;
 }
 
 void AdminPane::refreshClassTabs() {

@@ -11,6 +11,8 @@
 #include "addclassdialog.h"
 #include "../shared/loqueclient.h"
 
+#include "ui_adminpane.h"
+
 class AdminPane : public QWidget
 {
     Q_OBJECT
@@ -27,6 +29,7 @@ signals:
 private:
     UserInfo user;
 
+    Ui::AdminPane *ui;
     QIcon addClassIcon = QIcon(QPixmap(":/assets/assets/add"));
     QHBoxLayout *mainLayout;
     QTabWidget *tabs;

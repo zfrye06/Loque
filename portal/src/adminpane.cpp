@@ -5,6 +5,7 @@
 AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
     user(user),
+    ui(new Ui::AdminPane),
     mainLayout(new QHBoxLayout(this)),
     tabs(new QTabWidget(this)),
     sidebar(new AdminSidebar(user, this))
@@ -18,9 +19,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
 
 AdminPane::~AdminPane() {
 }
-#include "report.h"
-#include <fstream>
-#include <iostream>
+
 void AdminPane::refreshClassTabs() {
     std::vector<ClassStats> classStats;
     LoqueClient client;

@@ -51,7 +51,8 @@ FORMS    += src/mainwindow.ui \
     src/studentplaypane.ui \
     src/levelsettingsdialog.ui \
     src/adminsidebar.ui \
-    src/deleteclassconfirmation.ui
+    src/deleteclassconfirmation.ui \
+    src/adminpane.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

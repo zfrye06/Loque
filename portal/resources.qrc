@@ -17,5 +17,7 @@
         <file>assets/Platform_Level_1.png</file>
         <file>assets/Zapper_Level_1.png</file>
         <file>assets/Zapper_Level_2.png</file>
+        <file>assets/check@2x.png</file>
+        <file>assets/close.png</file>
     </qresource>
 </RCC>

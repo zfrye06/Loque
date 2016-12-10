@@ -1,5 +1,7 @@
 #include <iostream>
 #include "adminsidebar.h"
+#include "addclassdialog.h"
+#include "classtab.h"
 
 AdminSidebar::AdminSidebar(UserInfo user, QWidget *parent) : QWidget(parent), user(user), sidebar(new QListWidget), vertLayout(new QVBoxLayout)
 { 
@@ -16,12 +18,42 @@ void AdminSidebar::initWidgets()
     sidebar->setStyleSheet(QString("QListWidget { background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(100, 100, 100, 255), stop:1 rgba(150, 150, 150, 255));      border-right: 2px groove gray;     }        QListWidget::item:hover     {     background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(150, 150, 150, 255), stop:1 rgba(200, 200, 200, 255));     }        QListWidget::item:selected     {     background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(200, 200, 200, 200), stop:1 rgba(220, 220, 220, 255));     }        QListWidget::item     {     border-bottom: 2px groove gray;     padding: 10px; color: white;     }"));
     sidebar->setFocusPolicy(Qt::NoFocus);
     refreshSidebar();
-    QListWidgetItem *addClassIcon = new QListWidgetItem(QIcon(":/assets/plus.png"), "");
-    QListWidgetItem *levelViewIcon = new QListWidgetItem(QIcon(":/assets/levelView.png"), "");
+    addClassIcon = new QListWidgetItem(QIcon(":/assets/plus.png"), "");
+    levelViewIcon = new QListWidgetItem(QIcon(":/assets/levelView.png"), "");
     sidebar->addItem(addClassIcon);
     sidebar->addItem(levelViewIcon);
+    sidebar->setWrapping(false);
+    sidebar->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    sidebar->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     vertLayout->addWidget(sidebar);
     setLayout(vertLayout);
+
+    connect(sidebar, &QListWidget::itemClicked, this, &AdminSidebar::handleSidebarClick);
+
+}
+
+#include <iostream>
+void AdminSidebar::handleSidebarClick(QListWidgetItem *item)
+{
+    if (item == addClassIcon) {
+        AddClassDialog *dialog = new AddClassDialog(user.userId);
+        dialog->show();
+        connect(dialog, &AddClassDialog::classCreated, this, &AdminSidebar::createClass);
+    } else if (item == levelViewIcon) {
+
+    } else {
+        for (int i = 0; i < sidebar->count() - 2; ++i) {
+            if (item->text() == sidebar->itemAt(QPoint(i, 0))->text()) {
+                std::cout << i << sidebar->itemAt(QPoint(i, 0))->text().toStdString() << std::endl;
+                emit classTabChanged(i);
+            }
+        }
+    }
+}
+
+void AdminSidebar::createClass(ClassStats cstats)
+{
+    emit classCreated(cstats);
 }
 
 void AdminSidebar::refreshSidebar()
@@ -36,7 +68,8 @@ void AdminSidebar::refreshSidebar()
     }
 
     for(ClassStats& cstats : classStats) {
-        QListWidgetItem *item = new QListWidgetItem(cstats.className.c_str());
+        QListWidgetItem *item = new QListWidgetItem("");
+        item->setText(cstats.className.c_str());
         item->setSizeHint(QSize(79, 79));
         sidebar->addItem(item);
     }

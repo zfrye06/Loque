@@ -27,6 +27,8 @@ void AdminPane::refreshClassTabs()
         return;
     }
     tabs->clear();
+    connect(sidebar, &AdminSidebar::classCreated, this, &AdminPane::addClassTab);
+    connect(sidebar, &AdminSidebar::classTabChanged, this, &AdminPane::changeClassTab);
     for(auto& cstats : classStats){
         ClassTab *c = new ClassTab(cstats, user.userId);
         connect(c, &ClassTab::classCreated, this, &AdminPane::addClassTab);
@@ -44,4 +46,9 @@ void AdminPane::addClassTab(ClassStats cstats)
     connect(c, &ClassTab::classCreated, this, &AdminPane::addClassTab);
     tabs->addTab(c, QString::fromStdString(cstats.className));
     tabs->setCurrentWidget(c);
+}
+
+void AdminPane::changeClassTab(int index)
+{
+    tabs->setCurrentIndex(index);
 }

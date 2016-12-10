@@ -3,8 +3,13 @@
 #include "classtab.h"
 #include <QToolButton>
 
-ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
-    QWidget(parent), cstats(classStats), teacherID(teacherID), currClassDialog(nullptr), levelDialog(nullptr), dcc(nullptr)
+ClassTab::ClassTab(int teacherID, ClassStats classStats, QWidget *parent) :
+    QWidget(parent),
+    teacherID(teacherID),
+    cstats(classStats),
+    currClassDialog(nullptr),
+    levelDialog(nullptr),
+    dcc(nullptr)
 {
     LoqueClient client;
     client.getAllLevels(allLevels);

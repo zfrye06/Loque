@@ -32,7 +32,7 @@ private:
     QTabWidget *tabs;
     AdminSidebar *sidebar;
 
-    void addClassTab(ClassStats cstats);
+    void addClassTab(const ClassStats& cstats);
     void refreshClassTabs();
 };
 

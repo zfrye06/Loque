@@ -1,6 +1,7 @@
 
 MainWindow {
-  background-color: #FDF7D8;
+  /* background-color: #FDF7D8; */
+  background-color: #ffffff;
 }
 
 QListWidget::item:hover {

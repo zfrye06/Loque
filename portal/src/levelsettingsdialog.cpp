@@ -3,7 +3,10 @@
 #include <QListView>
 #include <iostream>
 
-LevelSettingsDialog::LevelSettingsDialog(int classID, std::vector<int> enabledIDs, std::vector<LevelInfo> allLevels, int teacherID, QWidget *parent) :
+LevelSettingsDialog::LevelSettingsDialog(int classID,
+                                         std::vector<int> enabledIDs,
+                                         std::vector<LevelInfo> allLevels,
+                                         int teacherID, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LevelSettingsDialog),
     classID(classID),
@@ -24,7 +27,8 @@ LevelSettingsDialog::LevelSettingsDialog(int classID, std::vector<int> enabledID
     int row = 0;
     int col = 0;
     for(size_t i = 0; i < allLevels.size(); i++){
-        layout->addWidget(addLevel(allLevels[i], std::find(enabledIDs.begin(), enabledIDs.end(), allLevels[i].id) != enabledIDs.end()), row, col++);
+        auto enabled = std::find(enabledIDs.begin(), enabledIDs.end(), allLevels[i].id) != enabledIDs.end();
+        layout->addWidget(addLevel(allLevels[i], enabled), row, col++);
         if(col > 1){
             row++;
             col = 0;
@@ -34,7 +38,7 @@ LevelSettingsDialog::LevelSettingsDialog(int classID, std::vector<int> enabledID
     frame->setLayout(layout);
 }
 
-QGroupBox* LevelSettingsDialog::addLevel(LevelInfo lvlInfo, bool enabled){
+QGroupBox* LevelSettingsDialog::addLevel(const LevelInfo& lvlInfo, bool enabled){
     QGroupBox *box = new QGroupBox;
     QHBoxLayout *hLayout = new QHBoxLayout;
     QVBoxLayout *vLayout = new QVBoxLayout;

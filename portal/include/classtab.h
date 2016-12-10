@@ -23,7 +23,7 @@ class ClassTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit ClassTab(ClassStats classStats, int teacherID, QWidget *parent = 0);
+    explicit ClassTab(int teacherID, ClassStats classStats, QWidget *parent = 0);
     ~ClassTab();
 
 signals:
@@ -31,6 +31,15 @@ signals:
 
 private:
 
+    int teacherID;
+    ClassStats cstats;
+    std::vector<LevelInfo> allLevels;
+    std::vector<int> enabledLevels;
+
+    std::unique_ptr<AddClassDialog> currClassDialog;
+    std::unique_ptr<LevelSettingsDialog> levelDialog;
+    std::unique_ptr<DeleteClassConfirmation> dcc;
+    
     QTableWidget *userStatsTable;
     QTableWidget *levelStatsTable;
     QVBoxLayout *mainLayout;
@@ -39,15 +48,7 @@ private:
     QHBoxLayout *topLayout;
     QScrollArea *tableArea;
     QVBoxLayout *scrollLayout;
-    std::unique_ptr<AddClassDialog> currClassDialog;
-    std::unique_ptr<LevelSettingsDialog> levelDialog;
-    std::unique_ptr<DeleteClassConfirmation> dcc;
-
-    int teacherID;
-    ClassStats cstats;
-    std::vector<LevelInfo> allLevels;
-    std::vector<int> enabledLevels;
-
+    
     QLabel *classSummaryLabel;
     QLabel *classIdLabel;
     QLabel *classNameLabel;

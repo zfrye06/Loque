@@ -18,7 +18,10 @@ class LevelSettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit LevelSettingsDialog(int classID, std::vector<int> enabledIDs,  std::vector<LevelInfo> allLevels, int teacherID, QWidget *parent = 0);
+    LevelSettingsDialog(int classID,
+                        std::vector<int> enabledIDs,
+                        std::vector<LevelInfo> allLevels,
+                        int teacherID, QWidget *parent = 0);
     ~LevelSettingsDialog();
 
 signals:
@@ -28,7 +31,7 @@ signals:
 private:
     QSignalMapper *mapper;
     Ui::LevelSettingsDialog *ui;
-    QGroupBox* addLevel(LevelInfo lvlInfo, bool enabled);
+    QGroupBox* addLevel(const LevelInfo& lvlInfo, bool enabled);
     std::vector<int> levelsToDisable;
     std::vector<int> levelsToEnable;
     ClassStats cstats;

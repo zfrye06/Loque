@@ -388,7 +388,6 @@ Status handleGetEnabledClassLevels(sql::Connection& dbconn,
 Status handleEnableLevel(sql::Connection& dbconn,
                          int userId, int classId, int levelId) {
     try {
-        std::cout << "ENABLING " << classId << " " << levelId << std::endl;
         std::string query = "INSERT INTO LevelAssociations(classId, levelId) VALUES(?, ?)";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, classId);

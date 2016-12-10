@@ -23,7 +23,8 @@ SOURCES += src/main.cpp\
     src/levelsettingsdialog.cpp \
     src/deleteclassconfirmation.cpp \
     src/report.cpp \
-    src/createclassdialog.cpp
+    src/createclassdialog.cpp \
+    src/launchgame.cpp
 
 HEADERS  += include/mainwindow.h \
     ../shared/loqueclient.h \
@@ -35,7 +36,8 @@ HEADERS  += include/mainwindow.h \
     include/levelsettingsdialog.h \
     include/deleteclassconfirmation.h \
     include/report.h \
-    include/createclassdialog.h
+    include/createclassdialog.h \
+    include/launchgame.h
 
 
 FORMS    += src/mainwindow.ui \

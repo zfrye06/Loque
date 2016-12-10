@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QSignalMapper>
 #include "../../shared/loqueclient.h"
+#include "ui_levelsettingsdialog.h"
 
 namespace Ui {
 class LevelSettingsDialog;

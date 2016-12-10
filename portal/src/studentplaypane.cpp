@@ -3,7 +3,7 @@
 #include <QScrollBar>
 #include <iostream>
 #include "studentplaypane.h"
-#include "ui_studentplaypane.h"
+#include "launchgame.h"
 
 StudentPlayPane::StudentPlayPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
@@ -109,11 +109,7 @@ void StudentPlayPane::levelThumbnailClicked(int col) {
 
 void StudentPlayPane::playButtonClicked() {
     if (activeLevelRecord != nullptr) {
-        QStringList args;
-        args << QString::number(activeLevelRecord->level.id) << QString::number(this->user.userId);
-        QString loqueExec("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client/bin/loque");
-        QString loqueWorkingDir("/Users/asteele/Sandbox/edu-app-unescaped-characters/game-client");
-        QProcess::startDetached(loqueExec, args, loqueWorkingDir);
+        launchGame(activeLevelRecord->level.id, user.userId); 
     }
 }
 

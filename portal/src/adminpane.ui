@@ -245,6 +245,12 @@ border: 1px solid black;
               </item>
              </layout>
             </item>
+            <item>
+             <widget class="QTableWidget" name="userTable"/>
+            </item>
+            <item>
+             <widget class="QTableWidget" name="mapTable"/>
+            </item>
            </layout>
           </widget>
          </item>

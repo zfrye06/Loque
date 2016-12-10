@@ -164,7 +164,9 @@ Status LoqueClient::addClassroom(int userId, int classId) {
     return status;
 }
 
-Status LoqueClient::createClassroom(int userId, const std::string& className, ClassStats& classStats) {
+Status LoqueClient::createClassroom(int userId,
+                                    const std::string& className,
+                                    ClassStats& classStats) {
     sf::Packet toSend;
     toSend << ReqType::CREATE_CLASS << userId << className << classStats;
     sf::Packet toReceive;
@@ -176,16 +178,26 @@ Status LoqueClient::createClassroom(int userId, const std::string& className, Cl
     return status;
 }
 
+<<<<<<< HEAD
 Status LoqueClient::deleteClass(int classID) {
     sf::Packet toSend;
     toSend << ReqType::DELETE_CLASS << classID;
+=======
+Status LoqueClient::deleteClassroom(int classId) {
+    sf::Packet toSend;
+    toSend << ReqType::DELETE_CLASS << classId;
+>>>>>>> 486f366... server - Fix getClassStats. Add delete classroom.
     sf::Packet toReceive;
     auto status = makeRequest(toSend, toReceive);
     if (status != OK) {
         return status;
     }
     toReceive >> status;
+<<<<<<< HEAD
     return status;
+=======
+    return status; 
+>>>>>>> 486f366... server - Fix getClassStats. Add delete classroom.
 }
 
 Status LoqueClient::postGameStats(int userId, const GameStats& stats) {

@@ -16,9 +16,16 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     // setLayout(mainLayout);
 
     // refreshClassTabs();
-    std::cout << "SETTING" << std::endl;
-    ui->stackedWidget->setCurrentWidget(ui->noClassesPage);
-    std::cout << "MADE IT" << std::endl;
+    ui->classList->addItem("CS 3505");
+    ui->classList->addItem("MR. ROMERO");
+    ui->currClassLabel->setText("CS 3505");
+    ui->studentsLabel->setText("Students");
+    ui->studentsList->addItem("John Romero");
+    ui->studentsList->addItem("Lisa Stultz");
+    ui->studentsList->addItem("Bernie (Sanderz)");
+    ui->studentsList->addItem("Alex Dalton Christian");
+
+    ui->classList->setAttribute(Qt::WA_MacShowFocusRect, 0);
 }
 
 AdminPane::~AdminPane() {

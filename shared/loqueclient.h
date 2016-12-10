@@ -146,6 +146,9 @@ public:
     // Adds the student with the given id to the given classroom.
     Status addClassroom(int userId, int classId);
 
+    // Removes the user with the given id from the given classroom.
+    Status removeClassroom(int userId, int classId); 
+
     // Creates a classroom with the given name whose sole member is the given user.
     // The given userId should be that of an instructor.
     Status createClassroom(int userId, const std::string& className, ClassStats& classStats);

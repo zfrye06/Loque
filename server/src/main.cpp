@@ -227,6 +227,21 @@ Status handleAddClassroom(sql::Connection& dbconn,
     return OK;
 }
 
+Status handleRemoveClassroom(sql::Connection& dbconn,
+                             int userId, int classId) {
+    try {
+        std::string query = "DELETE FROM ClassAssociations where userId = ? AND classId = ?";
+        std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
+        pstmt->setInt(1, userId);
+        pstmt->setInt(2, classId);
+        pstmt->execute();
+    } catch (sql::SQLException& e) {
+        std::cerr << "ERROR: SQL Exception from handleRemoveClassroom: " << e.what() << std::endl;
+        return DB_ERR;
+    }
+    return OK;
+}
+
 Status handleCreateClassroom(sql::Connection& dbconn,
                              int userId, const std::string& className,
                              ClassStats& classStats) {
@@ -517,6 +532,13 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
         int userId, classId;
         reqPacket >> userId >> classId;
         auto status = handleAddClassroom(*dbconn, userId, classId);
+        respPacket << status;
+        break;
+    }
+    case REMOVE_CLASS: {
+        int userId, classId;
+        reqPacket >> userId >> classId;
+        auto status = handleRemoveClassroom(*dbconn, userId, classId);
         respPacket << status;
         break;
     }

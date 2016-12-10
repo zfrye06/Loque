@@ -17,6 +17,7 @@ enum ReqType {
     LOGIN,
     CREATE_ACC,
     ADD_CLASS,
+    REMOVE_CLASS,
     CREATE_CLASS,
     DELETE_CLASS,
     POST_STATS,

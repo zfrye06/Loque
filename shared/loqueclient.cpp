@@ -170,6 +170,18 @@ Status LoqueClient::addClassroom(int userId, int classId) {
     return status;
 }
 
+Status LoqueClient::removeClassroom(int userId, int classId) {
+    sf::Packet toSend;
+    toSend << ReqType::REMOVE_CLASS << userId << classId;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (status != OK) {
+        return status;
+    }
+    toReceive >> status;
+    return status;
+}
+
 Status LoqueClient::createClassroom(int userId,
                                     const std::string& className,
                                     ClassStats& classStats) {

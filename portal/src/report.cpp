@@ -136,7 +136,7 @@ static std::string studentRow(const UserStats& student) {
 
 static const char *preStudentPlayTimePlot =
     "</table>"
-    "<h2>Student Play Time Plot</h2>"
+    "<h2>Student Play Time Plot (Minutes)</h2>"
     "<div id=\"play-time-container\">"
     "<svg id=\"student-plot\" width=\"960\" height=\"500\"></svg>"
     "</div>"

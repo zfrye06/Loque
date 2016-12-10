@@ -8,7 +8,6 @@ DeleteClassConfirmation::DeleteClassConfirmation(QWidget *parent) :
     ui->setupUi(this);
 }
 
-DeleteClassConfirmation::~DeleteClassConfirmation()
-{
+DeleteClassConfirmation::~DeleteClassConfirmation() {
     delete ui;
 }

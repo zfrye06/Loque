@@ -104,28 +104,6 @@ void AdminPane::classClicked(int row) {
      setUserTable();
      setMapTable();
 }
-
-void AdminPane::showCreateClassDialog() {
-    createClassDialog.reset(new CreateClassDialog(user.userId));
-    createClassDialog->show();
-    connect(createClassDialog.get(), &CreateClassDialog::classCreated,
-            this, &AdminPane::refreshClassTabs); 
-}
-
-void AdminPane::showHtmlReportDialog() {
-    if (activeClassIdx < 0) return;
-    try {
-        QString filter = "HTML File (*.html)";
-        QString filename = QFileDialog::getSaveFileName(this, tr("Create HTML Report"),
-                                                        QString(), filter, &filter);
-        std::ofstream out(filename.toStdString());
-        writeHtmlReport(out, allClassStats->at(activeClassIdx));
-        out.close();
-    } catch (std::exception& e) {
-        std::cerr << "ERROR: Unable to save html report. " << e.what() << std::endl;
-    }
-}
-
 void AdminPane::setSummaryBox(){
     int totalPoints = 0;
     int totalTime = 0;
@@ -281,4 +259,43 @@ void AdminPane::setMapTable(){
     ui->mapTable->sortByColumn(0, Qt::AscendingOrder);
     ui->mapTable->setSelectionMode(QAbstractItemView::NoSelection);
     ui->mapTable->verticalHeader()->setVisible(false);
+}
+
+void AdminPane::showCreateClassDialog() {
+    createClassDialog.reset(new CreateClassDialog());
+    createClassDialog->show();
+    connect(createClassDialog.get(), &CreateClassDialog::createClass,
+        this, [this] (std::string name) {
+            LoqueClient client;
+            allClassStats->push_back(ClassStats());
+            auto status = client.createClassroom(this->user.userId, name, allClassStats->back());
+            if (status != Status::OK) {
+                std::cerr << "ERROR: Unable to create class. " <<
+                    "Server returned status " << status << std::endl; 
+                allClassStats->pop_back();
+                QString message = status == Status::DB_ERR ?
+                    "Hmmm. Looks like there was a problem creating the class." :
+                    "Hmmm. Looks like we can't connect to the server right now.";
+                QMessageBox mbox;
+                mbox.setText(message);
+                mbox.setWindowTitle("Error");
+                mbox.show();
+                return;
+            } 
+            ui->classList->addItem(QString::fromStdString(name)); 
+     }); 
+}
+
+void AdminPane::showHtmlReportDialog() {
+    if (activeClassIdx < 0) return;
+    try {
+        QString filter = "HTML File (*.html)";
+        QString filename = QFileDialog::getSaveFileName(this, tr("Create HTML Report"),
+                                                        QString(), filter, &filter);
+        std::ofstream out(filename.toStdString());
+        writeHtmlReport(out, allClassStats->at(activeClassIdx));
+        out.close();
+    } catch (std::exception& e) {
+        std::cerr << "ERROR: Unable to save html report. " << e.what() << std::endl;
+    }
 }

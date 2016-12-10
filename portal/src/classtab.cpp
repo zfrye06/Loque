@@ -260,7 +260,7 @@ void ClassTab::setMapTable(){
 
 void ClassTab::deleteClass(){
     LoqueClient client;
-    auto status = client.deleteClass(cstats.classId);
+    auto status = client.deleteClassroom(cstats.classId);
     if(status == Status::OK){
         emit classDeleted();
     } else if(status == Status::DB_ERR){

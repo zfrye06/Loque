@@ -118,7 +118,7 @@ border: none; </string>
                  </font>
                 </property>
                 <property name="cursor">
-                 <cursorShape>OpenHandCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">border-radius: 5px;

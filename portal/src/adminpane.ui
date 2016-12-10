@@ -69,6 +69,13 @@ border: none; </string>
                </widget>
               </item>
               <item>
+               <widget class="QGroupBox" name="summaryBox">
+                <property name="title">
+                 <string>Class Summary</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="clcreateClassButton">
                 <property name="font">
                  <font>

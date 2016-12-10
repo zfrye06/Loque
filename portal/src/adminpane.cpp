@@ -48,8 +48,6 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
                 this, &AdminPane::refreshClassTabs);
     });
 
-    refreshClassTabs();
-
     // Populate list of all levels. This is a one-time operation.
     LoqueClient client;
     auto status = client.getAllLevels(this->allLevels);
@@ -57,9 +55,11 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
         std::cerr << "ERROR: Unable to populate list of all levels. " <<
             "Client returned status " << status << std::endl;
 
-        // TODO: Should we really disable level settings in this case? 
-        ui->levelSettingsButton->setEnabled(false); 
+        // TODO: Should we really disable level settings in this case?
+        ui->levelSettingsButton->setEnabled(false);
     }
+    refreshClassTabs();
+
 }
 
 AdminPane::~AdminPane() {
@@ -67,7 +67,7 @@ AdminPane::~AdminPane() {
 }
 
 void AdminPane::refreshClassTabs() {
-    std::unique_ptr<std::vector<ClassStats> > newClassStats(new std::vector<ClassStats>);
+    std::unique_ptr<std::vector<ClassStats>> newClassStats(new std::vector<ClassStats>);
     LoqueClient client;
     auto status = client.getAllClassStats(user.userId, *newClassStats);
     if (status != Status::OK) {
@@ -76,6 +76,7 @@ void AdminPane::refreshClassTabs() {
             "Client returned status" << status << std::endl;
         return;
     }
+
     allClassStats.swap(newClassStats);
     ui->classList->clear();
     // TODO: CLEAR THE TABLES HERE
@@ -87,6 +88,9 @@ void AdminPane::refreshClassTabs() {
     for (auto& classStats : *allClassStats) {
         ui->classList->addItem(QString::fromStdString(classStats.className));
     }
+    setSummaryBox(allClassStats->at(0));
+    setUserTable(allClassStats->at(0));
+    setMapTable(allClassStats->at(0));
     ui->classList->item(0)->setSelected(true);
     classClicked(0);
 }

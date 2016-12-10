@@ -39,11 +39,12 @@ private:
     QScrollArea *tableArea;
     QVBoxLayout *scrollLayout;
     std::unique_ptr<AddClassDialog> currClassDialog;
+    std::unique_ptr<LevelSettingsDialog> levelDialog;
 
     int teacherID;
-    int classID;
-    std::vector<int> enabledLevels;
+    ClassStats cstats;
     std::vector<LevelInfo> allLevels;
+    std::vector<int> enabledLevels;
 
     QLabel *classSummaryLabel;
     QLabel *classIdLabel;
@@ -55,9 +56,10 @@ private:
     QLabel *levelStatsLabel;
 
     void initWidgets();
-    void setSummaryBox(const ClassStats& classStats);
-    void setUserTable(const ClassStats& classStats);
-    void setMapTable(const ClassStats& classStats);
+    void setSummaryBox();
+    void setUserTable();
+    void setMapTable();
+    void refresh();
     QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
 };

@@ -121,9 +121,7 @@ border: none; </string>
                  <cursorShape>OpenHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Create a Class</string>
@@ -142,8 +140,7 @@ border: 1px solid black;
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
+                 <string notr="true">
 </string>
                 </property>
                 <property name="text">
@@ -163,8 +160,8 @@ border: 1px solid black;
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; </string>
+                 <string notr="true">
+</string>
                 </property>
                 <property name="text">
                  <string>Level Settings</string>
@@ -183,8 +180,7 @@ border: 1px solid black; </string>
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
+                 <string notr="true">
 </string>
                 </property>
                 <property name="text">

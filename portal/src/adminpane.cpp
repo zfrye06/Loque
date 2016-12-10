@@ -45,7 +45,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
         deleteClassConfirmation.reset(new DeleteClassConfirmation);
         deleteClassConfirmation->show();
         connect(deleteClassConfirmation.get(), &DeleteClassConfirmation::accepted,
-                this, &AdminPane::refreshClassTabs);
+                this, &AdminPane::deleteClass);
     });
 
     // Populate list of all levels. This is a one-time operation.
@@ -297,5 +297,25 @@ void AdminPane::showHtmlReportDialog() {
         out.close();
     } catch (std::exception& e) {
         std::cerr << "ERROR: Unable to save html report. " << e.what() << std::endl;
+    }
+}
+
+void AdminPane::deleteClass(){
+    LoqueClient client;
+    auto status = client.deleteClassroom(allClassStats->at(activeClassIdx).classId);
+    if(status == Status::OK){
+        delete ui->classList->takeItem(activeClassIdx);
+        allClassStats->erase(allClassStats->begin() + activeClassIdx);
+        if (allClassStats->size() > 0) {
+            ui->classList->item(0)->setSelected(true); 
+            classClicked(0); 
+        } else {
+            activeClassIdx = -1;
+            ui->stackedWidget->setCurrentWidget(ui->noClassesPage); 
+        }
+    } else if(status == Status::DB_ERR){
+        std::cout << "ERROR: Unable to delete class from the database. Client returned status " << status << std::endl;
+    } else if(status == Status::NETWORK_ERR){
+        std::cout << "ERROR: Unable to connect to the server. Client returned status " << status << std::endl;
     }
 }

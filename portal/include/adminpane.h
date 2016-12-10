@@ -42,6 +42,7 @@ private:
     void setUserTable();
     void setMapTable();
     void setSummaryBox();
+    void deleteClass();
     QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
 };

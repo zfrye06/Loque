@@ -99,11 +99,14 @@ static const char *preEnabledLevels =
     "<table id=\"levels-table\" align=\"center\">"
     "<tr>"
     "<th>Name</th>"
+    "<th>Number</th>"
     "<th>Description</th>"
     "</tr>";
 
 static std::string enabledLevelRow(const LevelInfo& level) {
-    return "<tr><td>" + level.name + "</td><td>" + level.description + "</td></tr>";
+    return "<tr><td>" + level.name +
+        "</td><td>" + std::to_string(level.id) +
+        "</td><td>" + level.description + "</td></tr>";
 }
 
 static const char *preStudentDetail =
@@ -118,10 +121,17 @@ static const char *preStudentDetail =
     "</tr>";
 
 static std::string studentRow(const UserStats& student) {
+    std::vector<int> levelsComplete;
+    student.levelsComplete(levelsComplete);
+    std::string levelsStr; 
+    for (int i = 0; i < (int)levelsComplete.size(); i++) {
+        levelsStr += std::to_string(levelsComplete.at(i));
+        if (i < (int)levelsComplete.size() - 1) levelsStr += ", ";
+    }
     return "<tr><td>" + student.username +
         "</td><td>" + timeStrFromSeconds(student.totalSecPlayed) +
         "</td><td>" + std::to_string(student.totalScore) +
-        "</td><td>1</td></tr>"; // TODO: SHOW LEVELS COMPLETED.
+        "</td><td>" + levelsStr + "</td></tr>";
 }
 
 static const char *preStudentPlayTimePlot =
@@ -141,19 +151,15 @@ static const char *preStudentPlayTimePlot =
     ".attr(\"transform\", \"translate(\" + margin.left + \",\" + margin.top + \")\");"
     "var data = [";
 
-static int secToHours(int sec) {
-    return (sec / 60) / 60; 
-}
-
 static std::string studentPlayTimeObject(const UserStats& student) {
-    return "{name: '" + student.username + "', hours: " +
-        std::to_string(secToHours(student.totalSecPlayed)) + "}";
+    return "{name: '" + student.username + "', minutes: " +
+        std::to_string((student.totalSecPlayed / 60)) + "}";
 }
 
 static const char *htmlCloser =
     "];"
     "x.domain(data.map(function(d) { return d.name; }));"
-    "y.domain([0, d3.max(data, function(d) { return d.hours; })]);"
+    "y.domain([0, d3.max(data, function(d) { return d.minutes; })]);"
     "g.append(\"g\")"
     ".attr(\"class\", \"axis axis--x\")"
     ".attr(\"transform\", \"translate(0,\" + height + \")\")"
@@ -166,15 +172,15 @@ static const char *htmlCloser =
     ".attr(\"y\", 6)"
     ".attr(\"dy\", \"0.71em\")"
     ".attr(\"text-anchor\", \"end\")"
-    ".text(\"Hours\");"
+    ".text(\"Minutes\");"
     "g.selectAll(\".bar\")"
     ".data(data)"
     ".enter().append(\"rect\")"
     ".attr(\"class\", \"bar\")"
     ".attr(\"x\", function(d) { return x(d.name); })"
-    ".attr(\"y\", function(d) { return y(d.hours); })"
+    ".attr(\"y\", function(d) { return y(d.minutes); })"
     ".attr(\"width\", x.bandwidth())"
-    ".attr(\"height\", function(d) { return height - y(d.hours); });"
+    ".attr(\"height\", function(d) { return height - y(d.minutes); });"
     "</script>"
     "</body>"
     "</html>";

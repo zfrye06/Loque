@@ -81,6 +81,8 @@ struct UserStats {
     // If the user is an instructor, these reflect the classes they manage.
     // If the user is a student, these reflect the classes they are a member of.
     std::vector<int> classIds;
+
+    void levelsComplete(std::vector<int>& out) const;
 };
 
 // Provides a record of a user's best performance on a particular level.

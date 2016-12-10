@@ -64,6 +64,12 @@ std::ostream& operator<<(std::ostream& out, const UserInfo& info) {
     return out;
 }
 
+void UserStats::levelsComplete(std::vector<int>& out) const {
+    for (auto& entry : highScores) {
+        out.push_back(entry.first); 
+    }
+}
+
 bool LevelRecord::hasCompleted() const {
     return bestCompletionTimeSecs != -1; 
 }

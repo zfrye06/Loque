@@ -44,6 +44,7 @@ private:
     void setSummaryBox();
     void deleteClass();
     QColor getLevelColor(const UserStats& user, int levelID);
+    QIcon getIcon(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
 };
 

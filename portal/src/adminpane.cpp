@@ -183,7 +183,8 @@ void AdminPane::setUserTable(){
         QTableWidgetItem *lvlCell = new QTableWidgetItem;
         for(int i = 0; i < numlvls; i++){
             lvlCell = new QTableWidgetItem;
-            lvlCell->setBackgroundColor(getLevelColor(user, i));
+//            lvlCell->setBackgroundColor(getLevelColor(user, i));
+            lvlCell->setIcon(getIcon(user, i));
             lvlCell->setTextAlignment(Qt::AlignCenter);
             ui->userTable->setItem(row, col++, lvlCell);
         }
@@ -193,6 +194,16 @@ void AdminPane::setUserTable(){
     ui->userTable->sortByColumn(0, Qt::AscendingOrder);
     ui->userTable->setSelectionMode(QAbstractItemView::NoSelection);
     ui->userTable->verticalHeader()->setVisible(false);
+}
+
+QIcon AdminPane::getIcon(const UserStats& user, int levelID){
+    QIcon icon;
+    if(user.highScores.find(levelID) == user.highScores.end() ||user.highScores.at(levelID) == 0){
+        icon.addPixmap(QPixmap(":/assets/close.png"));
+    } else {
+        icon.addPixmap(QPixmap(":/assets/check@2x.png"));
+    }
+    return icon;
 }
 
 QColor AdminPane::getLevelColor(const UserStats& user, int levelID){

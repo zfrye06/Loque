@@ -496,127 +496,126 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     ReqType rtype;
     reqPacket >> rtype;
     switch (rtype) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-        case DELETE_CLASS: {
-            int classID;
-            reqPacket >> classID;
-            auto status = handleDeleteClass(*dbconn, classID);
-            respPacket << status;
-            break;
-        }
-        case LOGIN: {
-            std::string username, userpass;
-            reqPacket >> username >> userpass;
-            LoginResult res;
-            auto status = handleLogin(*dbconn, username, userpass, res);
-            respPacket << status << res;
-            break;
-        }
-        case CREATE_ACC: {
-            std::string username, userpass;
-            UserType type;
-            reqPacket >> username >> userpass >> type;
-            LoginResult res;
-            auto status = handleCreateAcc(*dbconn, username, userpass, type, res);
-            respPacket << status << res;
-            break;
-        }
-        case ADD_CLASS: {
-            int userId, classId;
-            reqPacket >> userId >> classId;
-            auto status = handleAddClassroom(*dbconn, userId, classId);
-            respPacket << status;
-            break;
-        }
-        case CREATE_CLASS: {
-            int userId;
-            std::string className;
-            ClassStats cstats;
-            reqPacket >> userId >> className >> cstats;
-            auto status = handleCreateClassroom(*dbconn, userId, className, cstats);
-            respPacket << status << cstats;
-            break;
-        }
-        case POST_STATS: {
-            int userId;
-            GameStats stats;
-            reqPacket >> userId >> stats;
-            auto status = handlePostStats(*dbconn, userId, stats);
-            respPacket << status;
-            return;
-        }
-        case GET_USER_STATS: {
-            int userId;
-            reqPacket >> userId;
-            UserStats res;
-            auto status = handleGetUserStats(*dbconn, userId, res);
-            respPacket << status << res;
-            break;
-        }
-        case GET_USER_LEVEL_INFO: {
-            int userId;
-            reqPacket >> userId;
-            UserLevelInfo info;
-            auto status = handleGetUserLevelInfo(*dbconn, userId, info);
-            respPacket << status << info;
-            break;
-        }
-        case GET_ENABLED_LEVELS: {
-            int userId;
-            reqPacket >> userId;
-            std::vector<int> levelIds;
-            auto status = handleGetEnabledLevels(*dbconn, userId, levelIds);
-            respPacket << status << levelIds;
-            break;
-        }
-        case GET_ENABLED_CLASS_LEVELS: {
-            int classId;
-            reqPacket >> classId;
-            std::vector<int> levelIds;
-            auto status = handleGetEnabledClassLevels(*dbconn, classId, levelIds);
-            respPacket << status << levelIds;
-            break;
-        }
-        case ENABLE_LEVEL: {
-            int userId, classId, lid;
-            reqPacket >> userId >> classId >> lid;
-            auto status = handleEnableLevel(*dbconn, userId, classId, lid);
-            respPacket << status;
-            break;
-        }
-        case DISABLE_LEVEL: {
-            int userId, classId, lid;
-            reqPacket >> userId >> classId >> lid;
-            auto status = handleDisableLevel(*dbconn, userId, classId, lid);
-            respPacket << status;
-            break;
-        }
-        case GET_CLASS_STATS: {
-            int classId;
-            reqPacket >> classId;
-            ClassStats res;
-            auto status = handleGetClassStats(*dbconn, classId, res);
-            respPacket << status << res;
-            break;
-        }
-        case GET_ALL_CLASS_STATS: {
-            int userId;
-            reqPacket >> userId;
-            std::vector<ClassStats> res;
-            auto status = handleGetAllClassStats(*dbconn, userId, res);
-            respPacket << status << res;
-            break;
-        }
-        case GET_ALL_LEVELS: {
-            std::vector<LevelInfo> out;
-            auto status = handleGetAllLevels(*dbconn, out);
-            respPacket << status << out;
-            break;
-        }
-        default:
-            std::cerr << "ERROR: Unrecognized request type " << static_cast<int>(rtype) << std::endl;
-            return;
+    case LOGIN: {
+        std::string username, userpass;
+        reqPacket >> username >> userpass;
+        LoginResult res;
+        auto status = handleLogin(*dbconn, username, userpass, res);
+        respPacket << status << res;
+        break;
+    }
+    case CREATE_ACC: {
+        std::string username, userpass;
+        UserType type;
+        reqPacket >> username >> userpass >> type;
+        LoginResult res;
+        auto status = handleCreateAcc(*dbconn, username, userpass, type, res);
+        respPacket << status << res;
+        break;
+    }
+    case ADD_CLASS: {
+        int userId, classId;
+        reqPacket >> userId >> classId;
+        auto status = handleAddClassroom(*dbconn, userId, classId);
+        respPacket << status;
+        break;
+    }
+    case CREATE_CLASS: {
+        int userId;
+        std::string className;
+        ClassStats cstats;
+        reqPacket >> userId >> className >> cstats;
+        auto status = handleCreateClassroom(*dbconn, userId, className, cstats);
+        respPacket << status << cstats;
+        break;
+    }
+    case DELETE_CLASS: {
+        int classID;
+        reqPacket >> classID;
+        auto status = handleDeleteClass(*dbconn, classID);
+        respPacket << status;
+        break;
+    }
+
+    case POST_STATS: {
+        int userId;
+        GameStats stats;
+        reqPacket >> userId >> stats;
+        auto status = handlePostStats(*dbconn, userId, stats);
+        respPacket << status;
+        return;
+    }
+    case GET_USER_STATS: {
+        int userId;
+        reqPacket >> userId;
+        UserStats res;
+        auto status = handleGetUserStats(*dbconn, userId, res);
+        respPacket << status << res;
+        break;
+    }
+    case GET_USER_LEVEL_INFO: {
+        int userId;
+        reqPacket >> userId;
+        UserLevelInfo info;
+        auto status = handleGetUserLevelInfo(*dbconn, userId, info);
+        respPacket << status << info;
+        break;
+    }
+    case GET_ENABLED_LEVELS: {
+        int userId;
+        reqPacket >> userId;
+        std::vector<int> levelIds;
+        auto status = handleGetEnabledLevels(*dbconn, userId, levelIds);
+        respPacket << status << levelIds;
+        break;
+    }
+    case GET_ENABLED_CLASS_LEVELS: {
+        int classId;
+        reqPacket >> classId;
+        std::vector<int> levelIds;
+        auto status = handleGetEnabledClassLevels(*dbconn, classId, levelIds);
+        respPacket << status << levelIds;
+        break;
+    }
+    case ENABLE_LEVEL: {
+        int userId, classId, lid;
+        reqPacket >> userId >> classId >> lid;
+        auto status = handleEnableLevel(*dbconn, userId, classId, lid);
+        respPacket << status;
+        break;
+    }
+    case DISABLE_LEVEL: {
+        int userId, classId, lid;
+        reqPacket >> userId >> classId >> lid;
+        auto status = handleDisableLevel(*dbconn, userId, classId, lid);
+        respPacket << status;
+        break;
+    }
+    case GET_CLASS_STATS: {
+        int classId;
+        reqPacket >> classId;
+        ClassStats res;
+        auto status = handleGetClassStats(*dbconn, classId, res);
+        respPacket << status << res;
+        break;
+    }
+    case GET_ALL_CLASS_STATS: {
+        int userId;
+        reqPacket >> userId;
+        std::vector<ClassStats> res;
+        auto status = handleGetAllClassStats(*dbconn, userId, res);
+        respPacket << status << res;
+        break;
+    }
+    case GET_ALL_LEVELS: {
+        std::vector<LevelInfo> out;
+        auto status = handleGetAllLevels(*dbconn, out);
+        respPacket << status << out;
+        break;
+    }
+    default:
+        std::cerr << "ERROR: Unrecognized request type " << static_cast<int>(rtype) << std::endl;
+        return;
     }
 
     status = client->send(respPacket);

@@ -148,13 +148,8 @@ public:
     // The given userId should be that of an instructor.
     Status createClassroom(int userId, const std::string& className, ClassStats& classStats);
 
-<<<<<<< HEAD
-    //Deletes the class with the given id.
-    Status deleteClass(int classID);
-=======
     // Deletes the given classroom, removing all students and instructors. 
-    Status deleteClassroom(int classId); 
->>>>>>> 486f366... server - Fix getClassStats. Add delete classroom.
+    Status deleteClassroom(int classId);
 
     // Adds a game record for the given user. This should be called
     // after each completed level.

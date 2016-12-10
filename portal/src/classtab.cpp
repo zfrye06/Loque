@@ -259,8 +259,15 @@ void ClassTab::setMapTable(){
 }
 
 void ClassTab::deleteClass(){
-//    LoqueClient client;
-//    client.deleteClass(teacherID, cstats.classId);
+    LoqueClient client;
+    auto status = client.deleteClass(cstats.classId);
+    if(status == Status::OK){
+        emit classDeleted();
+    } else if(status == Status::DB_ERR){
+        std::cout << "ERROR: Unable to delete class from the database. Client returned status " << status << std::endl;
+    } else if(status == Status::NETWORK_ERR){
+        std::cout << "ERROR: Unable to connect to the server. Client returned status " << status << std::endl;
+    }
 }
 
 void ClassTab::refresh(){

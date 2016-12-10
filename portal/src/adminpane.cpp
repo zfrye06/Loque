@@ -18,7 +18,9 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
 
 AdminPane::~AdminPane() {
 }
-
+#include "report.h"
+#include <fstream>
+#include <iostream>
 void AdminPane::refreshClassTabs() {
     std::vector<ClassStats> classStats;
     LoqueClient client;
@@ -30,16 +32,27 @@ void AdminPane::refreshClassTabs() {
         return;
     }
     tabs->clear();
+    connect(sidebar, &AdminSidebar::classCreated, this, &AdminPane::addClassTab);
+    connect(sidebar, &AdminSidebar::classTabChanged, this, &AdminPane::changeClassTab);
     for(auto& cstats : classStats){
-        ClassTab *c = new ClassTab(user.userId, cstats);
-        connect(c, &ClassTab::classCreated, this, &AdminPane::addClassTab);
-        tabs->addTab(c, QString::fromStdString(cstats.className));
+        addClassTab(cstats);
+        tabs->setCurrentIndex(0);
     }
 }
 
 void AdminPane::addClassTab(const ClassStats& cstats) {
     ClassTab *c = new ClassTab(user.userId, cstats);
     connect(c, &ClassTab::classCreated, this, &AdminPane::addClassTab);
+    connect(c, &ClassTab::classDeleted, this, &AdminPane::deleteClassTab);
     tabs->addTab(c, QString::fromStdString(cstats.className));
     tabs->setCurrentWidget(c);
+}
+
+void AdminPane::deleteClassTab(){
+    tabs->removeTab(tabs->indexOf((QWidget*) QObject::sender()));
+    tabs->setCurrentIndex(0);
+}
+void AdminPane::changeClassTab(int index)
+{
+    tabs->setCurrentIndex(index);
 }

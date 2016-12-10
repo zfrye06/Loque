@@ -33,7 +33,9 @@ private:
     AdminSidebar *sidebar;
 
     void addClassTab(const ClassStats& cstats);
+    void deleteClassTab();
     void refreshClassTabs();
+    void changeClassTab(int index);
 };
 
 #endif // ADMINPANE_H

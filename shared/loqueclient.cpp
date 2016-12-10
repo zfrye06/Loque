@@ -85,6 +85,40 @@ std::ostream& operator<<(std::ostream& out, const ClassLevelInfo& info) {
     return out;
 }
 
+int ClassStats::totalSecPlayed() const {
+    int total = 0;
+    for (auto& s : studentStats) {
+        total += s.totalSecPlayed;
+    }
+    return total; 
+}
+
+const UserStats *ClassStats::highestScoringStudent() const {
+    int bestScore = -1;
+    int bestIdx = -1;
+    for (int i = 0; i < (int)studentStats.size(); i++) {
+        int s = studentStats.at(i).totalScore;
+        if (s > bestScore) {
+            bestScore = s;
+            bestIdx = i;
+        }
+    }
+    return bestIdx >= 0 ? &studentStats.at(bestIdx) : nullptr; 
+}
+
+const UserStats *ClassStats::mostFrequentPlayer() const {
+    int bestTime = -1;
+    int bestIdx = -1;
+    for (int i = 0; i < (int)studentStats.size(); i++) {
+        int t = studentStats.at(i).totalSecPlayed;
+        if (t > bestTime) {
+            bestTime = t;
+            bestIdx = i;
+        }
+    }
+    return bestIdx >= 0 ? &studentStats.at(bestIdx) : nullptr; 
+}
+
 LoqueClient::LoqueClient() : host("127.0.0.1"), port(5001) {}
 
 LoqueClient::LoqueClient(const std::string& host, int port) : host(host), port(port) {}
@@ -139,6 +173,18 @@ Status LoqueClient::createClassroom(int userId, const std::string& className, Cl
         return status;
     }
     toReceive >> status >> classStats;
+    return status;
+}
+
+Status LoqueClient::deleteClass(int classID) {
+    sf::Packet toSend;
+    toSend << ReqType::DELETE_CLASS << classID;
+    sf::Packet toReceive;
+    auto status = makeRequest(toSend, toReceive);
+    if (status != OK) {
+        return status;
+    }
+    toReceive >> status;
     return status;
 }
 

@@ -110,6 +110,10 @@ struct ClassStats {
     std::string className;
     std::vector<UserStats> studentStats;
     std::vector<LevelInfo> enabledLevels;
+
+    int totalSecPlayed() const;
+    const UserStats *highestScoringStudent() const;
+    const UserStats *mostFrequentPlayer() const;
 };
 
 // Use an instance of LoqueClient to make API
@@ -143,6 +147,9 @@ public:
     // Creates a classroom with the given name whose sole member is the given user.
     // The given userId should be that of an instructor.
     Status createClassroom(int userId, const std::string& className, ClassStats& classStats);
+
+    //Deletes the class with the given id.
+    Status deleteClass(int classID);
 
     // Adds a game record for the given user. This should be called
     // after each completed level.

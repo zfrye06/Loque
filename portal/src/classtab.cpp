@@ -95,9 +95,9 @@ void ClassTab::initWidgets(){
     client.getEnabledClassLevels(cstats.classId, enabledLevels);
 
     connect(addClassButton, &QToolButton::clicked, this, [this]{
-        currClassDialog.reset(new AddClassDialog(teacherID));
+        currClassDialog.reset(new CreateClassDialog(teacherID));
         currClassDialog->show();
-        connect(currClassDialog.get(), &AddClassDialog::classCreated, this, &ClassTab::classCreated);
+        connect(currClassDialog.get(), &CreateClassDialog::classCreated, this, &ClassTab::classCreated);
     });
 
     connect(levelButton, &QToolButton::clicked, this, [this]{

@@ -21,11 +21,11 @@ SOURCES += src/main.cpp\
     src/adminplaypane.cpp \
     src/adminpane.cpp \
     src/classtab.cpp \
-    src/addclassdialog.cpp \
     src/levelsettingsdialog.cpp \
     src/adminsidebar.cpp \
     src/deleteclassconfirmation.cpp \
-    src/report.cpp
+    src/report.cpp \
+    src/createclassdialog.cpp
 
 HEADERS  += include/mainwindow.h \
     ../shared/loqueclient.h \
@@ -34,12 +34,12 @@ HEADERS  += include/mainwindow.h \
     include/studentplaypane.h \
     include/adminplaypane.h \
     include/adminpane.h \
-    include/addclassdialog.h \
     include/classtab.h \
     include/levelsettingsdialog.h \
     include/adminsidebar.h \
     include/deleteclassconfirmation.h \
-    include/report.h
+    include/report.h \
+    include/createclassdialog.h
 
 
 FORMS    += src/mainwindow.ui \

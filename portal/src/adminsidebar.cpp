@@ -1,6 +1,6 @@
 #include <iostream>
 #include "adminsidebar.h"
-#include "addclassdialog.h"
+#include "createclassdialog.h"
 #include "classtab.h"
 
 AdminSidebar::AdminSidebar(UserInfo user, QWidget *parent) : QWidget(parent), user(user), sidebar(new QListWidget), vertLayout(new QVBoxLayout)
@@ -36,9 +36,9 @@ void AdminSidebar::initWidgets()
 void AdminSidebar::handleSidebarClick(QListWidgetItem *item)
 {
     if (item == addClassIcon) {
-        AddClassDialog *dialog = new AddClassDialog(user.userId);
+        CreateClassDialog *dialog = new CreateClassDialog(user.userId);
         dialog->show();
-        connect(dialog, &AddClassDialog::classCreated, this, &AdminSidebar::createClass);
+        connect(dialog, &CreateClassDialog::classCreated, this, &AdminSidebar::createClass);
     } else if (item == levelViewIcon) {
 
     } else {

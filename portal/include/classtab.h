@@ -8,7 +8,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QScrollArea>
-#include "addclassdialog.h"
+#include "createclassdialog.h"
 #include "levelsettingsdialog.h"
 #include "deleteclassconfirmation.h"
 #include "../../shared/loqueclient.h"
@@ -37,7 +37,7 @@ private:
     std::vector<LevelInfo> allLevels;
     std::vector<int> enabledLevels;
 
-    std::unique_ptr<AddClassDialog> currClassDialog;
+    std::unique_ptr<CreateClassDialog> currClassDialog;
     std::unique_ptr<LevelSettingsDialog> levelDialog;
     std::unique_ptr<DeleteClassConfirmation> dcc;
     

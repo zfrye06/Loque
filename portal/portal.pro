@@ -19,7 +19,6 @@ SOURCES += src/main.cpp\
     src/registerpane.cpp \
     src/studentplaypane.cpp \
     src/adminpane.cpp \
-    src/classtab.cpp \
     src/levelsettingsdialog.cpp \
     src/deleteclassconfirmation.cpp \
     src/report.cpp \
@@ -32,7 +31,6 @@ HEADERS  += include/mainwindow.h \
     include/registerpane.h \
     include/studentplaypane.h \
     include/adminpane.h \
-    include/classtab.h \
     include/levelsettingsdialog.h \
     include/deleteclassconfirmation.h \
     include/report.h \

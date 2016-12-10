@@ -17,6 +17,10 @@ QPushButton#playButton {
   background-color: #65D56C;
 }
 
+QTableWidget::item:hover {
+  background-color: rgba(0, 100, 200, .4);
+}
+
 /* QToolTip */
 /* { */
 /*      border: 1px solid black; */

@@ -264,7 +264,7 @@ border: 1px solid black;
                       <string notr="true">margin-top: 15px;</string>
                      </property>
                      <property name="text">
-                      <string>Students</string>
+                      <string>Student Summary</string>
                      </property>
                     </widget>
                    </item>
@@ -292,10 +292,21 @@ border: 1px solid black;
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="userTable"/>
+             <widget class="QTableWidget" name="userTable">
+              <property name="cursor" stdset="0">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+             </widget>
             </item>
             <item>
-             <widget class="QTableWidget" name="mapTable"/>
+             <widget class="QTableWidget" name="mapTable">
+              <property name="cursor" stdset="0">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>

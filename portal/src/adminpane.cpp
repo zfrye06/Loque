@@ -2,7 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include "adminpane.h"
-#include "classtab.h"
 #include "report.h"
 
 AdminPane::AdminPane(UserInfo user, QWidget *parent) :

@@ -14,19 +14,14 @@ class CreateClassDialog : public QDialog
     Q_OBJECT
 
 signals:
-    void classCreated(ClassStats cstats);
+    void createClass(std::string name);
 
 public:
-    explicit CreateClassDialog(int userId, QWidget *parent = 0);
+    explicit CreateClassDialog(QWidget *parent = 0);
     ~CreateClassDialog();
 
 private:
     Ui::AddClassDialog *ui;
-    int userId;
-    void createClassroom(QString name);
-    void showLabel(int classID);
-
-
 };
 
 #endif // ADDCLASSDIALOG_H

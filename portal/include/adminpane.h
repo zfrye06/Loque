@@ -35,6 +35,7 @@ private:
     void addClassTab(ClassStats cstats);
     void deleteClassTab();
     void refreshClassTabs();
+    void changeClassTab(int index);
 };
 
 #endif // ADMINPANE_H

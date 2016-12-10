@@ -27,6 +27,8 @@ void AdminPane::refreshClassTabs()
         return;
     }
     tabs->clear();
+    connect(sidebar, &AdminSidebar::classCreated, this, &AdminPane::addClassTab);
+    connect(sidebar, &AdminSidebar::classTabChanged, this, &AdminPane::changeClassTab);
     for(auto& cstats : classStats){
         addClassTab(cstats);
         tabs->setCurrentIndex(0);
@@ -49,4 +51,8 @@ void AdminPane::addClassTab(ClassStats cstats)
 void AdminPane::deleteClassTab(){
     tabs->removeTab(tabs->indexOf((QWidget*) QObject::sender()));
     tabs->setCurrentIndex(0);
+}
+void AdminPane::changeClassTab(int index)
+{
+    tabs->setCurrentIndex(index);
 }

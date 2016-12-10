@@ -10,6 +10,7 @@
 #include <QScrollArea>
 #include "addclassdialog.h"
 #include "levelsettingsdialog.h"
+#include "deleteclassconfirmation.h"
 #include "../../shared/loqueclient.h"
 
 
@@ -40,6 +41,7 @@ private:
     QVBoxLayout *scrollLayout;
     std::unique_ptr<AddClassDialog> currClassDialog;
     std::unique_ptr<LevelSettingsDialog> levelDialog;
+    std::unique_ptr<DeleteClassConfirmation> dcc;
 
     int teacherID;
     ClassStats cstats;
@@ -60,6 +62,7 @@ private:
     void setUserTable();
     void setMapTable();
     void refresh();
+    void deleteClass();
     QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
 };

@@ -23,7 +23,8 @@ SOURCES += src/main.cpp\
     src/classtab.cpp \
     src/addclassdialog.cpp \
     src/levelsettingsdialog.cpp \
-    src/adminsidebar.cpp
+    src/adminsidebar.cpp \
+    src/deleteclassconfirmation.cpp
 
 HEADERS  += include/mainwindow.h \
     ../shared/loqueclient.h \
@@ -35,7 +36,8 @@ HEADERS  += include/mainwindow.h \
     include/addclassdialog.h \
     include/classtab.h \
     include/levelsettingsdialog.h \
-    include/adminsidebar.h
+    include/adminsidebar.h \
+    include/deleteclassconfirmation.h
 
 
 FORMS    += src/mainwindow.ui \
@@ -46,7 +48,8 @@ FORMS    += src/mainwindow.ui \
     src/classtab.ui \
     src/studentplaypane.ui \
     src/levelsettingsdialog.ui \
-    src/adminsidebar.ui
+    src/adminsidebar.ui \
+    src/deleteclassconfirmation.ui
 
 unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system

@@ -4,7 +4,7 @@
 #include <QToolButton>
 
 ClassTab::ClassTab(ClassStats classStats, int teacherID, QWidget *parent) :
-    QWidget(parent), cstats(classStats), teacherID(teacherID), currClassDialog(nullptr), levelDialog(nullptr)
+    QWidget(parent), cstats(classStats), teacherID(teacherID), currClassDialog(nullptr), levelDialog(nullptr), dcc(nullptr)
 {
     LoqueClient client;
     client.getAllLevels(allLevels);
@@ -55,6 +55,8 @@ void ClassTab::initWidgets(){
     addClassButton->setText("Add Class");
     addClassButton->setIconSize(QSize(75,75));
     addClassButton->setFixedSize(QSize(100, 100));
+    QPushButton *deleteClassButton = new QPushButton("Delete Class");
+    deleteClassButton->setFixedWidth(100);
 
     summaryBox = new QGroupBox;
     summaryLayout = new QVBoxLayout;
@@ -62,6 +64,7 @@ void ClassTab::initWidgets(){
     levelStatsTable = new QTableWidget;
     mainLayout = new QVBoxLayout;
     topLayout = new QHBoxLayout;
+    QHBoxLayout *bottomLayout = new QHBoxLayout;
 
     summaryLayout->addWidget(classIdLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);
@@ -73,12 +76,14 @@ void ClassTab::initWidgets(){
     topLayout->addWidget(levelButton);
     topLayout->addWidget(summaryBox);
     topLayout->addWidget(addClassButton);
+    bottomLayout->addWidget(deleteClassButton);
     mainLayout->addLayout(topLayout);
 
     mainLayout->addWidget(userStatsLabel);
     mainLayout->addWidget(userStatsTable);
     mainLayout->addWidget(levelStatsLabel);
     mainLayout->addWidget(levelStatsTable);
+    mainLayout->addLayout(bottomLayout);
     setLayout(mainLayout);
 
     LoqueClient client;
@@ -94,6 +99,12 @@ void ClassTab::initWidgets(){
         levelDialog.reset(new LevelSettingsDialog(cstats.classId, enabledLevels, allLevels, teacherID));
         levelDialog->show();
         connect(levelDialog.get(), &LevelSettingsDialog::refresh, this, &ClassTab::refresh);
+    });
+
+    connect(deleteClassButton, &QPushButton::clicked, this, [this]{
+        dcc.reset(new DeleteClassConfirmation);
+        dcc->show();
+        connect(dcc.get(), &DeleteClassConfirmation::accepted, this, &ClassTab::deleteClass);
     });
 }
 
@@ -240,6 +251,11 @@ void ClassTab::setMapTable(){
     levelStatsTable->sortByColumn(0, Qt::AscendingOrder);
     levelStatsTable->setSelectionMode(QAbstractItemView::NoSelection);
     levelStatsTable->verticalHeader()->setVisible(false);
+}
+
+void ClassTab::deleteClass(){
+//    LoqueClient client;
+//    client.deleteClass(teacherID, cstats.classId);
 }
 
 void ClassTab::refresh(){

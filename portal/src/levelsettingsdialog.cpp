@@ -47,7 +47,14 @@ QGroupBox* LevelSettingsDialog::addLevel(LevelInfo lvlInfo, bool enabled){
     QLabel *imgLabel = new QLabel;
     imgLabel->setPixmap(img.scaled(250, 250, Qt::KeepAspectRatio));
     QLabel *nameLabel = new QLabel(QString::fromStdString(lvlInfo.name));
+    QFont font = nameLabel->font();
+    font.setPointSize(20);
+    font.setBold(true);
+    nameLabel->setFont(font);
     QLabel *descriptionLabel = new QLabel(QString::fromStdString(lvlInfo.description));
+    QFont dfont = descriptionLabel->font();
+    dfont.setPointSize(16);
+    descriptionLabel->setFont(dfont);
     descriptionLabel->setWordWrap(true);
     QPushButton *playButton = new QPushButton("Play");
     QPushButton *toggleButton = new QPushButton(enabled ? "Disable Level" : "Enable Level");

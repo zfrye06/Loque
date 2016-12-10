@@ -53,12 +53,9 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     if (status != Status::OK) {
         std::cerr << "ERROR: Unable to populate list of all levels. " <<
             "Client returned status " << status << std::endl;
-
-        // TODO: Should we really disable level settings in this case?
         ui->levelSettingsButton->setEnabled(false);
     }
     refreshClassTabs();
-
 }
 
 AdminPane::~AdminPane() {
@@ -70,9 +67,12 @@ void AdminPane::refreshClassTabs() {
     LoqueClient client;
     auto status = client.getAllClassStats(user.userId, *newClassStats);
     if (status != Status::OK) {
-        // TODO: Show the user that we couldn't get the info.
         std::cerr << "ERROR: Unable to download class stats. " <<
             "Client returned status" << status << std::endl;
+        QMessageBox mbox;
+        mbox.setWindowTitle("Error");
+        mbox.setText(tr("Hmmm. Looks like we can't connect to the serer right now."));
+        mbox.show();
         return;
     }
 
@@ -87,9 +87,6 @@ void AdminPane::refreshClassTabs() {
     for (auto& classStats : *allClassStats) {
         ui->classList->addItem(QString::fromStdString(classStats.className));
     }
-    setSummaryBox();
-    setUserTable();
-    setMapTable();
     ui->classList->item(0)->setSelected(true);
     classClicked(0);
 }
@@ -300,7 +297,7 @@ void AdminPane::showHtmlReportDialog() {
 void AdminPane::deleteClass(){
     LoqueClient client;
     auto status = client.deleteClassroom(allClassStats->at(activeClassIdx).classId);
-    if(status != Status::OK){
+    if(status != Status::OK) {
         std::cerr << "ERROR: Unable to delete class from the database. " <<
             "Client returned status " << status << std::endl;
         QString message = status == Status::DB_ERR ?

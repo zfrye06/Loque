@@ -107,7 +107,7 @@ border: none; </string>
                  </font>
                 </property>
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -139,7 +139,7 @@ border: none; </string>
                       <string notr="true">margin-top: 15px;</string>
                      </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string>Students</string>
                      </property>
                     </widget>
                    </item>

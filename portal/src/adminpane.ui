@@ -72,14 +72,93 @@ border: none; </string>
                <widget class="QPushButton" name="clcreateClassButton">
                 <property name="font">
                  <font>
-                  <pointsize>20</pointsize>
+                  <pointsize>13</pointsize>
                  </font>
                 </property>
                 <property name="cursor">
                  <cursorShape>OpenHandCursor</cursorShape>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">border-radius: 5px;
+border: 1px solid black; 
+</string>
+                </property>
                 <property name="text">
                  <string>Create a Class</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="exportHtmlButton">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border-radius: 5px;
+border: 1px solid black; 
+</string>
+                </property>
+                <property name="text">
+                 <string>Create HTML Report</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/assets/exportIcon.png</normaloff>:/assets/exportIcon.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="levelSettingsButton">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border-radius: 5px;
+border: 1px solid black; </string>
+                </property>
+                <property name="text">
+                 <string>Level Settings</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/assets/levelView.png</normaloff>:/assets/levelView.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="deleteClassButton">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border-radius: 5px;
+border: 1px solid black; 
+</string>
+                </property>
+                <property name="text">
+                 <string>Delete Class</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>:/assets/deleteIcon.png</normaloff>:/assets/deleteIcon.png</iconset>
                 </property>
                </widget>
               </item>
@@ -140,80 +219,6 @@ border: none; </string>
                      </property>
                      <property name="text">
                       <string>Students</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item alignment="Qt::AlignBottom">
-                    <widget class="QPushButton" name="exportHtmlButton">
-                     <property name="maximumSize">
-                      <size>
-                       <width>30</width>
-                       <height>30</height>
-                      </size>
-                     </property>
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">border-radius: 5px;
-border: 1px solid black; 
-</string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset>
-                       <normaloff>:/assets/exportIcon.png</normaloff>:/assets/exportIcon.png</iconset>
-                     </property>
-                    </widget>
-                   </item>
-                   <item alignment="Qt::AlignBottom">
-                    <widget class="QPushButton" name="levelSettingsButton">
-                     <property name="maximumSize">
-                      <size>
-                       <width>30</width>
-                       <height>30</height>
-                      </size>
-                     </property>
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">border-radius: 5px;
-border: 1px solid black; </string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset resource="../resources.qrc">
-                       <normaloff>:/assets/levelView.png</normaloff>:/assets/levelView.png</iconset>
-                     </property>
-                    </widget>
-                   </item>
-                   <item alignment="Qt::AlignBottom">
-                    <widget class="QPushButton" name="deleteClassButton">
-                     <property name="maximumSize">
-                      <size>
-                       <width>30</width>
-                       <height>30</height>
-                      </size>
-                     </property>
-                     <property name="cursor">
-                      <cursorShape>PointingHandCursor</cursorShape>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">border-radius: 5px;
-border: 1px solid black; 
-</string>
-                     </property>
-                     <property name="text">
-                      <string/>
-                     </property>
-                     <property name="icon">
-                      <iconset>
-                       <normaloff>:/assets/deleteIcon.png</normaloff>:/assets/deleteIcon.png</iconset>
                      </property>
                     </widget>
                    </item>

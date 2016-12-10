@@ -174,12 +174,12 @@ inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<LevelInfo>& 
 
 inline sf::Packet& operator>>(sf::Packet& packet, std::vector<LevelInfo>& infos) {
     while (true) {
-        LevelInfo info;
-        packet >> info;
-        if (loque::serialization::isTermLevelInfo(info)) {
+        infos.push_back(LevelInfo());
+        packet >> infos.back();
+        if (loque::serialization::isTermLevelInfo(infos.back())) {
+            infos.pop_back();
             break;
         }
-        infos.push_back(info); 
     }
     return packet;
 }
@@ -323,25 +323,25 @@ inline sf::Packet& operator<<(sf::Packet& packet, const ClassStats& stats) {
 inline sf::Packet& operator>>(sf::Packet& packet, ClassStats& stats) {
     packet >> stats.classId >> stats.className; 
     while (true) {
-        UserStats s;
-        packet >> s;
-        if (loque::serialization::isTermUser(s)) {
+        stats.studentStats.push_back(UserStats()); 
+        packet >> stats.studentStats.back();
+        if (loque::serialization::isTermUser(stats.studentStats.back())) {
+            stats.studentStats.pop_back(); 
             break;
         }
-        stats.studentStats.push_back(s); 
     }
     while (true) {
-        LevelInfo info;
-        packet >> info;
-        if (loque::serialization::isTermLevelInfo(info)) {
+        stats.enabledLevels.push_back(LevelInfo());
+        packet >> stats.enabledLevels.back();
+        if (loque::serialization::isTermLevelInfo(stats.enabledLevels.back())) {
+            stats.enabledLevels.pop_back();
             break;
         }
-        stats.enabledLevels.push_back(info); 
     }
     return packet;
 }
 
-inline sf::Packet& operator<<(sf::Packet& packet, std::vector<ClassStats>& stats) {
+inline sf::Packet& operator<<(sf::Packet& packet, const std::vector<ClassStats>& stats) {
     for (auto& cstats : stats) {
         packet << cstats;
     }
@@ -352,11 +352,12 @@ inline sf::Packet& operator<<(sf::Packet& packet, std::vector<ClassStats>& stats
 inline sf::Packet& operator>>(sf::Packet& packet, std::vector<ClassStats>& stats) {
     while (true) {
         ClassStats cStats;
-        packet >> cStats;
-        if (loque::serialization::isTermClassStats(cStats)) {
+        stats.push_back(cStats); 
+        packet >> stats.back();
+        if (loque::serialization::isTermClassStats(stats.back())) {
+            stats.pop_back(); 
             break;
         }
-        stats.push_back(cStats); 
     }
     return packet; 
 }

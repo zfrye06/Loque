@@ -128,6 +128,10 @@ border: 1px solid black;
                 <property name="text">
                  <string>Create a Class</string>
                 </property>
+                <property name="icon">
+                 <iconset resource="../resources.qrc">
+                  <normaloff>:/assets/plus.png</normaloff>:/assets/plus.png</iconset>
+                </property>
                </widget>
               </item>
               <item>
@@ -150,7 +154,7 @@ border: 1px solid black;
                  <string>Create HTML Report</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources.qrc">
                   <normaloff>:/assets/exportIcon.png</normaloff>:/assets/exportIcon.png</iconset>
                 </property>
                </widget>
@@ -199,7 +203,7 @@ border: 1px solid black;
                  <string>Delete Class</string>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="../resources.qrc">
                   <normaloff>:/assets/deleteIcon.png</normaloff>:/assets/deleteIcon.png</iconset>
                 </property>
                </widget>

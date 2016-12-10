@@ -9,7 +9,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
     user(user),
     allClassStats(new std::vector<ClassStats>()),
-    activeClassIdx(-1),
+    activeClassIdx(0),
     ui(new Ui::AdminPane),
     createClassDialog(nullptr),
     levelSettingsDialog(nullptr),
@@ -88,22 +88,21 @@ void AdminPane::refreshClassTabs() {
     for (auto& classStats : *allClassStats) {
         ui->classList->addItem(QString::fromStdString(classStats.className));
     }
-    setSummaryBox(allClassStats->at(0));
-    setUserTable(allClassStats->at(0));
-    setMapTable(allClassStats->at(0));
+    setSummaryBox();
+    setUserTable();
+    setMapTable();
     ui->classList->item(0)->setSelected(true);
     classClicked(0);
 }
 
 void AdminPane::classClicked(int row) {
-    // if (row == -1) return;
-    // activeClassIdx = row;
-    // const ClassStats& currStats = allClassStats->at(activeClassIdx);
-    // ui->studentsList->clear();
-    // for (auto& ustats : currStats.studentStats) {
-    //     ui->studentsList->addItem(QString::fromStdString(ustats.username));
-    // }
-    // ui->currClassLabel->setText(QString::fromStdString(currStats.className));
+     if (row == -1) return;
+     activeClassIdx = row;
+     const ClassStats& currStats = allClassStats->at(activeClassIdx);
+     ui->currClassLabel->setText(QString::fromStdString(currStats.className));
+     setSummaryBox();
+     setUserTable();
+     setMapTable();
 }
 
 void AdminPane::showCreateClassDialog() {
@@ -127,9 +126,10 @@ void AdminPane::showHtmlReportDialog() {
     }
 }
 
-void AdminPane::setSummaryBox(const ClassStats &cstats){
+void AdminPane::setSummaryBox(){
     int totalPoints = 0;
     int totalTime = 0;
+    const ClassStats &cstats = allClassStats->at(activeClassIdx);
     for(auto& user : cstats.studentStats){
         totalPoints += user.totalScore;
         totalTime += user.totalSecPlayed;
@@ -179,7 +179,9 @@ QString AdminPane::getFormattedTime(int seconds){
     return  hourString + minuteString + secString;
 }
 
-void AdminPane::setUserTable(const ClassStats &cstats){
+void AdminPane::setUserTable(){
+    ui->userTable->clear();
+    const ClassStats &cstats = allClassStats->at(activeClassIdx);
     QStringList headers;
     headers.append("Student");
     headers.append("Total Score");
@@ -235,7 +237,9 @@ QColor AdminPane::getLevelColor(const UserStats& user, int levelID){
     return color;
 }
 
-void AdminPane::setMapTable(const ClassStats &cstats){
+void AdminPane::setMapTable(){
+    ui->mapTable->clear();
+    const ClassStats &cstats = allClassStats->at(activeClassIdx);
     QStringList headers;
     headers.append("Student");
     headers.append("Level ID");
@@ -246,7 +250,6 @@ void AdminPane::setMapTable(const ClassStats &cstats){
     ui->mapTable->setHorizontalHeaderLabels(headers);
     ui->mapTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    LoqueClient client;
     int row = ui->mapTable->rowCount();
     std::map<int, std::string> levelMap;
 

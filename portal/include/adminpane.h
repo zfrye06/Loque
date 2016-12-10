@@ -39,9 +39,9 @@ private:
     void classClicked(int);
     void showCreateClassDialog();
     void showHtmlReportDialog(); 
-    void setUserTable(const ClassStats &cstats);
-    void setMapTable(const ClassStats &cstats);
-    void setSummaryBox(const ClassStats &cstats);
+    void setUserTable();
+    void setMapTable();
+    void setSummaryBox();
     QColor getLevelColor(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);
 };

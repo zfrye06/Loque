@@ -35,6 +35,7 @@ private:
     void refreshClassTabs();
     void classClicked(int);
     void showCreateClassDialog();
+    void showHtmlReportDialog(); 
 };
 
 #endif // ADMINPANE_H

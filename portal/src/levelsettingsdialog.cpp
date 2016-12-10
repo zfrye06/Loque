@@ -112,6 +112,7 @@ void LevelSettingsDialog::submitLevels() {
         client.disableLevel(teacherId, classId, id);
     }
     for(int id : levelsToEnable){
+        std::cout << teacherId << " " << classId << " " << id << std::endl;
         client.enableLevel(teacherId, classId, id);
     }
     emit refresh();

@@ -1,6 +1,9 @@
+#include <QFileDialog>
+#include <fstream>
 #include <iostream>
 #include "adminpane.h"
 #include "classtab.h"
+#include "report.h"
 
 AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     QWidget(parent),
@@ -25,15 +28,14 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
             this, &AdminPane::showCreateClassDialog);
 
     connect(ui->exportHtmlButton, &QPushButton::clicked,
-            this, [this] {
-
-    });
+            this, &AdminPane::showHtmlReportDialog); 
 
     connect(ui->levelSettingsButton, &QPushButton::clicked,
             this, [this] {
         if (activeClassIdx == -1) return;
         auto& activeClass = this->allClassStats->at(activeClassIdx);
-        levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, this->activeClassIdx,
+        int activeClassId = activeClass.classId;
+        levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, activeClassId,
                                                           activeClass.enabledLevels, this->allLevels));
         levelSettingsDialog->show();
     });
@@ -105,4 +107,18 @@ void AdminPane::showCreateClassDialog() {
     createClassDialog->show();
     connect(createClassDialog.get(), &CreateClassDialog::classCreated,
             this, &AdminPane::refreshClassTabs); 
+}
+
+void AdminPane::showHtmlReportDialog() {
+    if (activeClassIdx < 0) return;
+    try {
+        QString filter = "HTML File (*.html)";
+        QString filename = QFileDialog::getSaveFileName(this, tr("Create HTML Report"),
+                                                        QString(), filter, &filter);
+        std::ofstream out(filename.toStdString());
+        writeHtmlReport(out, allClassStats->at(activeClassIdx));
+        out.close();
+    } catch (std::exception& e) {
+        std::cerr << "ERROR: Unable to save html report. " << e.what() << std::endl;
+    }
 }

@@ -21,7 +21,6 @@ SOURCES += src/main.cpp\
     src/adminpane.cpp \
     src/classtab.cpp \
     src/levelsettingsdialog.cpp \
-    src/adminsidebar.cpp \
     src/deleteclassconfirmation.cpp \
     src/report.cpp \
     src/createclassdialog.cpp
@@ -34,7 +33,6 @@ HEADERS  += include/mainwindow.h \
     include/adminpane.h \
     include/classtab.h \
     include/levelsettingsdialog.h \
-    include/adminsidebar.h \
     include/deleteclassconfirmation.h \
     include/report.h \
     include/createclassdialog.h
@@ -47,7 +45,6 @@ FORMS    += src/mainwindow.ui \
     src/classtab.ui \
     src/studentplaypane.ui \
     src/levelsettingsdialog.ui \
-    src/adminsidebar.ui \
     src/deleteclassconfirmation.ui \
     src/adminpane.ui
 

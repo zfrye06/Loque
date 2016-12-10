@@ -45,7 +45,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
         deleteClassConfirmation.reset(new DeleteClassConfirmation);
         deleteClassConfirmation->show();
         connect(deleteClassConfirmation.get(), &DeleteClassConfirmation::accepted,
-                this, &AdminPane::refreshClassTabs);
+                this, &AdminPane::deleteClass);
     });
 
     // Populate list of all levels. This is a one-time operation.
@@ -281,4 +281,16 @@ void AdminPane::setMapTable(){
     ui->mapTable->sortByColumn(0, Qt::AscendingOrder);
     ui->mapTable->setSelectionMode(QAbstractItemView::NoSelection);
     ui->mapTable->verticalHeader()->setVisible(false);
+}
+
+void AdminPane::deleteClass(){
+    LoqueClient client;
+    auto status = client.deleteClassroom(allClassStats->at(activeClassIdx).classId);
+    if(status == Status::OK){
+        delete ui->classList->takeItem(activeClassIdx);
+    } else if(status == Status::DB_ERR){
+        std::cout << "ERROR: Unable to delete class from the database. Client returned status " << status << std::endl;
+    } else if(status == Status::NETWORK_ERR){
+        std::cout << "ERROR: Unable to connect to the server. Client returned status " << status << std::endl;
+    }
 }

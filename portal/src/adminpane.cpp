@@ -139,15 +139,12 @@ void AdminPane::setSummaryBox(){
     QLabel *classPointsLabel = new QLabel("Total Points: " + QString::number(totalPoints));
     QLabel *classTimeLabel = new QLabel("Total Time Played: " + getFormattedTime(totalTime));
 
-    QGroupBox *summaryBox = new QGroupBox;
     QVBoxLayout *summaryLayout = new QVBoxLayout;
-
     summaryLayout->addWidget(classIdLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classNameLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classPointsLabel, 0, Qt::AlignCenter);
     summaryLayout->addWidget(classTimeLabel, 0, Qt::AlignCenter);
-    summaryBox->setLayout(summaryLayout);
-    summaryBox->setFixedSize(200, 100);
+    ui->summaryBox->setLayout(summaryLayout);
 }
 
 QString AdminPane::getFormattedTime(int seconds){

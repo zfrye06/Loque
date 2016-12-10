@@ -5,7 +5,6 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include "adminpane.h"
-#include "adminplaypane.h"
 #include "loginpane.h"
 #include "studentplaypane.h"
 #include "registerpane.h"
@@ -31,7 +30,6 @@ private:
     RegisterPane *registerPane;
     StudentPlayPane *studentPlayPane;
     AdminPane *adminPane;
-    AdminPlayPane *adminPlayPane;
 
     QAction *addClassAction; // Does not own.
     QAction *logoutAction;  // Does not own.

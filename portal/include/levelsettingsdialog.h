@@ -18,10 +18,10 @@ class LevelSettingsDialog : public QDialog
     Q_OBJECT
 
 public:
-    LevelSettingsDialog(int classID,
-                        std::vector<int> enabledIDs,
-                        std::vector<LevelInfo> allLevels,
-                        int teacherID, QWidget *parent = 0);
+    LevelSettingsDialog(int teacherId, int classId,
+                        const std::vector<LevelInfo>& enabledLevels,
+                        const std::vector<LevelInfo>& allLevels,
+                        QWidget *parent = 0);
     ~LevelSettingsDialog();
 
 signals:
@@ -29,16 +29,16 @@ signals:
     void refresh();
 
 private:
-    QSignalMapper *mapper;
+    int teacherId;
+    int classId;
+    std::vector<int> enabledIds;
+    
     Ui::LevelSettingsDialog *ui;
-    QGroupBox* addLevel(const LevelInfo& lvlInfo, bool enabled);
+    QSignalMapper *mapper;
     std::vector<int> levelsToDisable;
     std::vector<int> levelsToEnable;
-    ClassStats cstats;
-    int teacherID;
-    int classID;
-    std::vector<int> enabledIDs;
     std::unordered_map<int, QPushButton*> btns;
+    QGroupBox* addLevel(const LevelInfo& lvlInfo, bool enabled);
     void toggleLevel(const int &levelID);
     void submitLevels();
 

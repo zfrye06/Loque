@@ -15,8 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     loginPane(new LoginPane),
     registerPane(new RegisterPane),
     studentPlayPane(nullptr),
-    adminPane(nullptr),
-    adminPlayPane(nullptr)
+    adminPane(nullptr)
 {
     ui->setupUi(this);
 

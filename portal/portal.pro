@@ -18,11 +18,9 @@ SOURCES += src/main.cpp\
     src/loginpane.cpp \
     src/registerpane.cpp \
     src/studentplaypane.cpp \
-    src/adminplaypane.cpp \
     src/adminpane.cpp \
     src/classtab.cpp \
     src/levelsettingsdialog.cpp \
-    src/adminsidebar.cpp \
     src/deleteclassconfirmation.cpp \
     src/report.cpp \
     src/createclassdialog.cpp
@@ -32,11 +30,9 @@ HEADERS  += include/mainwindow.h \
     include/loginpane.h \
     include/registerpane.h \
     include/studentplaypane.h \
-    include/adminplaypane.h \
     include/adminpane.h \
     include/classtab.h \
     include/levelsettingsdialog.h \
-    include/adminsidebar.h \
     include/deleteclassconfirmation.h \
     include/report.h \
     include/createclassdialog.h
@@ -45,12 +41,10 @@ HEADERS  += include/mainwindow.h \
 FORMS    += src/mainwindow.ui \
     src/loginpane.ui \
     src/registerpane.ui \
-    src/adminplaypane.ui \
     src/addclassdialog.ui \
     src/classtab.ui \
     src/studentplaypane.ui \
     src/levelsettingsdialog.ui \
-    src/adminsidebar.ui \
     src/deleteclassconfirmation.ui \
     src/adminpane.ui
 

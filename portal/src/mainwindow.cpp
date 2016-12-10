@@ -74,13 +74,17 @@ void MainWindow::logout() {
     if (adminPane != nullptr) {
         paneContainer->removeWidget(adminPane);
         delete adminPane;
+        adminPane = nullptr; 
     } else {
         ui->menuFile->removeAction(addClassAction);
         delete addClassAction;
+        addClassAction = nullptr; 
         paneContainer->removeWidget(studentPlayPane);
         delete studentPlayPane;
+        studentPlayPane = nullptr;
     }
     ui->menuFile->removeAction(logoutAction);
     delete logoutAction;
+    logoutAction = nullptr;
     ui->menuFile->setDisabled(true);
 }

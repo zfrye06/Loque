@@ -78,18 +78,21 @@ void AdminPane::refreshClassTabs() {
     }
 
     allClassStats.swap(newClassStats);
-    // ui->classList->clear();
-    // ui->studentsList->clear();
-     if (allClassStats->size() == 0) {
-         activeClassIdx = -1;
-         ui->stackedWidget->setCurrentWidget(ui->noClassesPage);
-         return;
-     }
-     setSummaryBox(allClassStats->at(0));
-     setUserTable(allClassStats->at(0));
-     setMapTable(allClassStats->at(0));
-//     ui->classList->item(0)->setSelected(true);
-//     classClicked(0);
+    ui->classList->clear();
+    // TODO: CLEAR THE TABLES HERE
+    if (allClassStats->size() == 0) {
+        activeClassIdx = -1;
+        ui->stackedWidget->setCurrentWidget(ui->noClassesPage);
+        return;
+    }
+    for (auto& classStats : *allClassStats) {
+        ui->classList->addItem(QString::fromStdString(classStats.className));
+    }
+    setSummaryBox(allClassStats->at(0));
+    setUserTable(allClassStats->at(0));
+    setMapTable(allClassStats->at(0));
+    ui->classList->item(0)->setSelected(true);
+    classClicked(0);
 }
 
 void AdminPane::classClicked(int row) {

@@ -287,7 +287,8 @@ void AdminPane::showCreateClassDialog() {
         }
         ui->classList->addItem(QString::fromStdString(name));
         ui->stackedWidget->setCurrentWidget(ui->mainpage);
-
+        ui->classList->item(ui->classList->count() - 1)->setSelected(true);
+        classClicked(ui->classList->count() - 1);
     });
 }
 
@@ -331,5 +332,4 @@ void AdminPane::deleteClass(){
         activeClassIdx = -1;
         ui->stackedWidget->setCurrentWidget(ui->noClassesPage);
     }
-    std::cout << allClassStats->size() << std::endl;
 }

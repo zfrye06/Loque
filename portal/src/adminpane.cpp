@@ -17,8 +17,8 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     ui->setupUi(this);
     ui->classList->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
-    connect(ui->classList, &QListWidget::currentRowChanged,
-            this, &AdminPane::classClicked);
+    connect(ui->classList, &QListWidget::clicked,
+            this, &AdminPane::rowSelected);
 
     connect(ui->clcreateClassButton, &QPushButton::clicked,
             this, &AdminPane::showCreateClassDialog);
@@ -27,7 +27,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
             this, &AdminPane::showCreateClassDialog);
 
     connect(ui->exportHtmlButton, &QPushButton::clicked,
-            this, &AdminPane::showHtmlReportDialog); 
+            this, &AdminPane::showHtmlReportDialog);
 
     connect(ui->levelSettingsButton, &QPushButton::clicked,
             this, [this] {
@@ -35,7 +35,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
         auto& activeClass = this->allClassStats->at(activeClassIdx);
         int activeClassId = activeClass.classId;
         levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, activeClassId,
-                                                         activeClass.enabledLevels, this->allLevels));
+                                                          activeClass.enabledLevels, this->allLevels));
         levelSettingsDialog->show();
     });
 
@@ -52,7 +52,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
     auto status = client.getAllLevels(this->allLevels);
     if (status != Status::OK) {
         std::cerr << "ERROR: Unable to populate list of all levels. " <<
-            "Client returned status " << status << std::endl;
+                     "Client returned status " << status << std::endl;
         ui->levelSettingsButton->setEnabled(false);
     }
     refreshClassTabs();
@@ -68,7 +68,7 @@ void AdminPane::refreshClassTabs() {
     auto status = client.getAllClassStats(user.userId, *newClassStats);
     if (status != Status::OK) {
         std::cerr << "ERROR: Unable to download class stats. " <<
-            "Client returned status" << status << std::endl;
+                     "Client returned status" << status << std::endl;
         QMessageBox mbox;
         mbox.setWindowTitle("Error");
         mbox.setText(tr("Hmmm. Looks like we can't connect to the serer right now."));
@@ -91,14 +91,19 @@ void AdminPane::refreshClassTabs() {
     classClicked(0);
 }
 
+void AdminPane::rowSelected(QModelIndex index)
+{
+    classClicked(index.row());
+}
+
 void AdminPane::classClicked(int row) {
-     if (row == -1) return;
-     activeClassIdx = row;
-     const ClassStats& currStats = allClassStats->at(activeClassIdx);
-     ui->currClassLabel->setText(QString::fromStdString(currStats.className));
-     setSummaryBox();
-     setUserTable();
-     setMapTable();
+    if (row == -1) return;
+    activeClassIdx = row;
+    const ClassStats& currStats = allClassStats->at(activeClassIdx);
+    ui->currClassLabel->setText(QString::fromStdString(currStats.className));
+    setSummaryBox();
+    setUserTable();
+    setMapTable();
 }
 
 void AdminPane::setSummaryBox(){
@@ -180,7 +185,7 @@ void AdminPane::setUserTable(){
         QTableWidgetItem *lvlCell = new QTableWidgetItem;
         for(int i = 0; i < numlvls; i++){
             lvlCell = new QTableWidgetItem;
-//            lvlCell->setBackgroundColor(getLevelColor(user, i));
+            //            lvlCell->setBackgroundColor(getLevelColor(user, i));
             lvlCell->setIcon(getIcon(user, i));
             lvlCell->setTextAlignment(Qt::AlignCenter);
             ui->userTable->setItem(row, col++, lvlCell);
@@ -263,25 +268,27 @@ void AdminPane::showCreateClassDialog() {
     createClassDialog.reset(new CreateClassDialog());
     createClassDialog->show();
     connect(createClassDialog.get(), &CreateClassDialog::createClass,
-        this, [this] (std::string name) {
-            LoqueClient client;
-            allClassStats->push_back(ClassStats());
-            auto status = client.createClassroom(this->user.userId, name, allClassStats->back());
-            if (status != Status::OK) {
-                std::cerr << "ERROR: Unable to create class. " <<
-                    "Server returned status " << status << std::endl; 
-                allClassStats->pop_back();
-                QString message = status == Status::DB_ERR ?
-                    "Hmmm. Looks like there was a problem creating the class." :
-                    "Hmmm. Looks like we can't connect to the server right now.";
-                QMessageBox mbox;
-                mbox.setText(message);
-                mbox.setWindowTitle("Error");
-                mbox.show();
-                return;
-            } 
-            ui->classList->addItem(QString::fromStdString(name)); 
-     }); 
+            this, [this] (std::string name) {
+        LoqueClient client;
+        allClassStats->push_back(ClassStats());
+        auto status = client.createClassroom(this->user.userId, name, allClassStats->back());
+        if (status != Status::OK) {
+            std::cerr << "ERROR: Unable to create class. " <<
+                         "Server returned status " << status << std::endl;
+            allClassStats->pop_back();
+            QString message = status == Status::DB_ERR ?
+                        "Hmmm. Looks like there was a problem creating the class." :
+                        "Hmmm. Looks like we can't connect to the server right now.";
+            QMessageBox mbox;
+            mbox.setText(message);
+            mbox.setWindowTitle("Error");
+            mbox.show();
+            return;
+        }
+        ui->classList->addItem(QString::fromStdString(name));
+        ui->stackedWidget->setCurrentWidget(ui->mainpage);
+
+    });
 }
 
 void AdminPane::showHtmlReportDialog() {
@@ -303,23 +310,26 @@ void AdminPane::deleteClass(){
     auto status = client.deleteClassroom(allClassStats->at(activeClassIdx).classId);
     if(status != Status::OK) {
         std::cerr << "ERROR: Unable to delete class from the database. " <<
-            "Client returned status " << status << std::endl;
+                     "Client returned status " << status << std::endl;
         QString message = status == Status::DB_ERR ?
-            "Hmmm. Looks like there was a problem deleting the class." :
-            "Hmmm. Looks like we can't connect to the server right now.";
+                    "Hmmm. Looks like there was a problem deleting the class." :
+                    "Hmmm. Looks like we can't connect to the server right now.";
         QMessageBox mbox;
         mbox.setText(message);
         mbox.setWindowTitle("Error");
         mbox.show();
         return;
     }
+
+    allClassStats->erase(allClassStats->begin() + activeClassIdx);
     delete ui->classList->takeItem(activeClassIdx);
-    allClassStats->erase(allClassStats->begin() + activeClassIdx - 1);
+
     if (allClassStats->size() > 0) {
-        ui->classList->item(0)->setSelected(true); 
-        classClicked(0); 
+        ui->classList->item(0)->setSelected(true);
+        classClicked(0);
     } else {
         activeClassIdx = -1;
-        ui->stackedWidget->setCurrentWidget(ui->noClassesPage); 
+        ui->stackedWidget->setCurrentWidget(ui->noClassesPage);
     }
+    std::cout << allClassStats->size() << std::endl;
 }

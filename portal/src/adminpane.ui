@@ -121,19 +121,13 @@ border: none; </string>
                  </font>
                 </property>
                 <property name="cursor">
-                 <cursorShape>OpenHandCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Create a Class</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../resources.qrc">
-                  <normaloff>:/assets/plus.png</normaloff>:/assets/plus.png</iconset>
                 </property>
                </widget>
               </item>
@@ -149,16 +143,11 @@ border: 1px solid black;
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
+                 <string notr="true">
 </string>
                 </property>
                 <property name="text">
                  <string>Create HTML Report</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../resources.qrc">
-                  <normaloff>:/assets/exportIcon.png</normaloff>:/assets/exportIcon.png</iconset>
                 </property>
                </widget>
               </item>
@@ -174,15 +163,11 @@ border: 1px solid black;
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; </string>
+                 <string notr="true">
+</string>
                 </property>
                 <property name="text">
                  <string>Level Settings</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../resources.qrc">
-                  <normaloff>:/assets/levelView.png</normaloff>:/assets/levelView.png</iconset>
                 </property>
                </widget>
               </item>
@@ -198,16 +183,11 @@ border: 1px solid black; </string>
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
+                 <string notr="true">
 </string>
                 </property>
                 <property name="text">
                  <string>Delete Class</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="../resources.qrc">
-                  <normaloff>:/assets/deleteIcon.png</normaloff>:/assets/deleteIcon.png</iconset>
                 </property>
                </widget>
               </item>
@@ -350,8 +330,6 @@ border: 1px solid black;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

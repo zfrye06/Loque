@@ -71,12 +71,12 @@
   </object>
   <object id="52" name="laser" x="4566.17" y="3968.17" width="17" height="197">
    <properties>
-    <property name="canBePassed" type="bool" value="true"/>
+    <property name="canBePassed" type="bool" value="false"/>
    </properties>
   </object>
   <object id="53" name="laser" x="4566.17" y="3580.17" width="17" height="197">
    <properties>
-    <property name="canBePassed" type="bool" value="false"/>
+    <property name="canBePassed" type="bool" value="true"/>
    </properties>
   </object>
   <object id="54" name="laser" x="2229.5" y="3482" width="406" height="18.5">

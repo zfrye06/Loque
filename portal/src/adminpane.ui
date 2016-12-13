@@ -16,6 +16,9 @@
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="mainpage">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
@@ -118,12 +121,10 @@ border: none; </string>
                  </font>
                 </property>
                 <property name="cursor">
-                 <cursorShape>OpenHandCursor</cursorShape>
+                 <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Create a Class</string>
@@ -142,8 +143,7 @@ border: 1px solid black;
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
+                 <string notr="true">
 </string>
                 </property>
                 <property name="text">
@@ -163,8 +163,8 @@ border: 1px solid black;
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; </string>
+                 <string notr="true">
+</string>
                 </property>
                 <property name="text">
                  <string>Level Settings</string>
@@ -183,8 +183,7 @@ border: 1px solid black; </string>
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">border-radius: 5px;
-border: 1px solid black; 
+                 <string notr="true">
 </string>
                 </property>
                 <property name="text">

@@ -7,6 +7,7 @@
 #include <QMenuBar>
 #include <QPushButton>
 #include <QMenu>
+#include <QAction>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -56,12 +57,12 @@ void MainWindow::handleLogin(UserInfo user) {
         paneContainer->addWidget(studentPlayPane);
         paneContainer->setCurrentWidget(studentPlayPane);
 
-        addClassAction = new QAction(tr("Add Class"));
+        addClassAction = new QAction(tr("Add Class"), 0);
         connect(addClassAction, &QAction::triggered,
                 studentPlayPane, &StudentPlayPane::showAddClassDialog);
         ui->menuFile->addAction(addClassAction);
     }
-    logoutAction = new QAction(tr("Log Out"));
+    logoutAction = new QAction(tr("Log Out"), 0);
     connect(logoutAction, &QAction::triggered,
             this, &MainWindow::logout);
     ui->menuFile->addAction(logoutAction);

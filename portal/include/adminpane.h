@@ -36,6 +36,7 @@ private:
     std::unique_ptr<DeleteClassConfirmation> deleteClassConfirmation; 
     
     void refreshClassTabs();
+    void rowSelected(QModelIndex);
     void classClicked(int);
     void showCreateClassDialog();
     void showHtmlReportDialog(); 

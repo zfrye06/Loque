@@ -515,7 +515,7 @@ void TurningState::update( Player* player, double dt ) {
     player->myBody->SetLinearVelocity( b2Vec2(tweenX.step((int)(dt*1000)),tweenY.step((int)(dt*1000))) );
     turnTimer += dt;
     if ( turnTimer > player->turnAroundTime ) {
-        player->switchState( new DashingState(player,turnDirection) );
+        player->switchState( new RunningState(player,turnDirection) );
     }
 }
 

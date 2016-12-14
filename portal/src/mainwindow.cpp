@@ -51,7 +51,7 @@ void MainWindow::handleLogin(UserInfo user) {
     if (user.type == UserType::ADMIN) {
         adminPane = new AdminPane(user);
         paneContainer->addWidget(adminPane);
-        paneContainer->setCurrentWidget(adminPane); 
+        paneContainer->setCurrentWidget(adminPane);
     } else {
         studentPlayPane = new StudentPlayPane(user);
         paneContainer->addWidget(studentPlayPane);
@@ -61,10 +61,14 @@ void MainWindow::handleLogin(UserInfo user) {
         connect(addClassAction, &QAction::triggered,
                 studentPlayPane, &StudentPlayPane::showAddClassDialog);
         ui->menuFile->addAction(addClassAction);
+        refreshAction = new QAction(tr("Refresh"), 0);
+        ui->menuFile->addAction(refreshAction);
+        connect(refreshAction, &QAction::triggered,
+                studentPlayPane, &StudentPlayPane::updateInfo);
     }
     logoutAction = new QAction(tr("Log Out"), 0);
     connect(logoutAction, &QAction::triggered,
-            this, &MainWindow::logout);
+            this, &MainWindow::logout); 
     ui->menuFile->addAction(logoutAction);
     ui->menuFile->setEnabled(true);
 }
@@ -77,7 +81,10 @@ void MainWindow::logout() {
         adminPane = nullptr; 
     } else {
         ui->menuFile->removeAction(addClassAction);
+        ui->menuFile->removeAction(refreshAction);
+        delete refreshAction;
         delete addClassAction;
+        refreshAction = nullptr;
         addClassAction = nullptr; 
         paneContainer->removeWidget(studentPlayPane);
         delete studentPlayPane;

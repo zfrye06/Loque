@@ -26,6 +26,7 @@ public:
     ~StudentPlayPane();
 
     void showAddClassDialog();
+    void updateInfo();
 
 private:
     UserInfo user;
@@ -36,6 +37,7 @@ private:
 
     void updateLevelInfo();
     void updateDisplay();
+    void refreshDisplay();
     void classClicked(int);
     void levelThumbnailClicked(int);
     void playButtonClicked();

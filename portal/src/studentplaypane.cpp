@@ -75,6 +75,19 @@ void StudentPlayPane::updateDisplay() {
     }
 }
 
+void StudentPlayPane::refreshDisplay() {
+    activeClass = nullptr;
+    activeLevelRecord = nullptr;
+    clearLevelDescription();
+    if (levelInfo == nullptr || levelInfo->size() == 0) {
+        ui->stackedWidget->setCurrentWidget(ui->noClassesPane);
+    } else {
+        ui->stackedWidget->setCurrentWidget(ui->mainPane);
+        ui->classList->item(0)->setSelected(true);
+        classClicked(0);
+    }
+}
+
 void StudentPlayPane::classClicked(int col) {
     ui->levelList->clear();
     clearLevelDescription();
@@ -146,6 +159,11 @@ void StudentPlayPane::showAddClassDialog() {
            }
        }
     }
+}
+
+void StudentPlayPane::updateInfo() {
+    updateLevelInfo();
+    refreshDisplay();
 }
 
 void StudentPlayPane::clearLevelDescription() {

@@ -115,7 +115,7 @@ void StudentPlayPane::playButtonClicked() {
 
 void StudentPlayPane::showAddClassDialog() {
     bool ok = false;
-    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"), ok=ok);
+    int classId = QInputDialog::getInt(this, tr("Add a Class"), tr("Enter the Class ID"), 0, 0, INT_MAX, 1, &ok);
     if (!ok) return;
     LoqueClient client;
     auto status = client.addClassroom(user.userId, classId);

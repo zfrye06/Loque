@@ -29,7 +29,7 @@ public:
 
 private:
     UserInfo user;
-    std::unique_ptr<UserLevelInfo> levelInfo;
+    UserLevelInfo* levelInfo;
     ClassLevelInfo *activeClass;
     LevelRecord *activeLevelRecord;
     Ui::StudentPlayPane *ui;

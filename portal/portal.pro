@@ -8,6 +8,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+CONFIG += c++11
+
 TARGET = loque
 TEMPLATE = app
 
@@ -52,13 +54,18 @@ unix:!macx {
 LIBS += -L/usr/local/lib -lsfml-network -lsfml-system
 INCLUDEPATH += /usr/local/include/SFML
 INCLUDEPATH += /usr/include/SFML
-INCLUDEPATH += ./include
 }
 macx:  {
 LIBS += -L/usr/local/Cellar/sfml/2.3.2/lib -L/usr/local/Cellar/sfml/2.4.0/lib -lsfml-network -lsfml-system
 INCLUDEPATH += /usr/local/Cellar/sfml/2.3.2/include /usr/local/Cellar/sfml/2.4.0/include
-INCLUDEPATH += ./include
 }
+win32: {
+    DEFINES += SFML_STATIC GLEW_STATIC UNICODE
+    LIBS += -lsfml-network-s -lsfml-system-s -lws2_32 -lwinmm
+}
+
+
+INCLUDEPATH += ./include
 
 RESOURCES += \
     resources.qrc

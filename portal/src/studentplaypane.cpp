@@ -44,7 +44,7 @@ StudentPlayPane::~StudentPlayPane() {
 
 void StudentPlayPane::updateLevelInfo() {
     LoqueClient client;
-    std::unique_ptr<UserLevelInfo> newInfo(new std::vector<ClassLevelInfo>());
+    UserLevelInfo* newInfo = new UserLevelInfo();
     auto status = client.getUserLevelInfo(user.userId, *newInfo);
     if (status != Status::OK) {
         // TODO: show error
@@ -52,7 +52,10 @@ void StudentPlayPane::updateLevelInfo() {
             status << std::endl;
         return;
     }
-    levelInfo.reset(newInfo.release());
+    if ( levelInfo ) {
+        delete levelInfo;
+    }
+    levelInfo = newInfo;
 }
 
 void StudentPlayPane::updateDisplay() {
@@ -60,7 +63,7 @@ void StudentPlayPane::updateDisplay() {
     activeLevelRecord = nullptr;
     ui->classList->clear();
     clearLevelDescription();
-    if (levelInfo.get() == nullptr || levelInfo->size() == 0) {
+    if (levelInfo == nullptr || levelInfo->size() == 0) {
         ui->stackedWidget->setCurrentWidget(ui->noClassesPane);
     } else {
         ui->stackedWidget->setCurrentWidget(ui->mainPane);

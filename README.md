@@ -1,14 +1,14 @@
 #loque
 
-## Made by The Unescaped Characters.
----
+Made by The Unescaped Characters.
+
 ## Installation instructions:
 1. You'll want to install this by compiling the source, though *some* precompiled binaries can be found in a tag on the [releases](https://github.com/University-of-Utah-CS3505/edu-app-unescaped-characters/releases) page. (The Windows build doesn't have the server, Linux build may be missing libraries since it expects you to compile it, and Mac may or may not have precompiled binaries whatsoever.)
 2. First install the listed dependencies:
-    *. [tmxlite](https://github.com/fallahn/tmxlite)
-    *. [sfml](http://www.sfml-dev.org/)
-    *. [mysqlconnector-c++](https://dev.mysql.com/downloads/connector/cpp/)
-    *. [qt-creator](https://www.qt.io/ide/)
+    * [tmxlite](https://github.com/fallahn/tmxlite)
+    * [sfml](http://www.sfml-dev.org/)
+    * [mysqlconnector-c++](https://dev.mysql.com/downloads/connector/cpp/)
+    * [qt-creator](https://www.qt.io/ide/)
 3. Clone this repository. `git clone git@github.com:University-of-Utah-CS3505/edu-app-unescaped-characters.git`
 4. Configure and build the game-client and server with cmake.
 ```sh

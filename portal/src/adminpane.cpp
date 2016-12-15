@@ -228,6 +228,8 @@ QColor AdminPane::getLevelColor(const UserStats& user, int levelID){
 
 void AdminPane::setMapTable(){
     ui->mapTable->clear();
+    ui->mapTable->setRowCount(0);
+    ui->mapTable->setColumnCount(5);
     const ClassStats &cstats = allClassStats->at(activeClassIdx);
     QStringList headers;
     headers.append("Student");

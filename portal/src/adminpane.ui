@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>714</width>
-    <height>456</height>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -115,6 +115,12 @@ border: none; </string>
               </item>
               <item>
                <widget class="QPushButton" name="clcreateClassButton">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>30</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <pointsize>13</pointsize>
@@ -122,9 +128,6 @@ border: none; </string>
                 </property>
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Create a Class</string>
@@ -141,10 +144,6 @@ border: none; </string>
                 </property>
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">
-</string>
                 </property>
                 <property name="text">
                  <string>Create HTML Report</string>
@@ -163,8 +162,7 @@ border: none; </string>
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Level Settings</string>
@@ -183,8 +181,7 @@ border: none; </string>
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">
-</string>
+                 <string notr="true"/>
                 </property>
                 <property name="text">
                  <string>Delete Class</string>

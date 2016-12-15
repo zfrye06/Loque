@@ -384,14 +384,16 @@ Status handleGetEnabledLevels(sql::Connection& dbconn,
 
 Status handleGetEnabledClassLevels(sql::Connection& dbconn,
                                    int classId,
-                                   std::vector<int>& levelIds) {
+                                   std::vector<LevelInfo>& levels) {
     try {
         std::string query = "SELECT levelId FROM LevelAssociations WHERE classId = ?";
         std::unique_ptr<sql::PreparedStatement> pstmt(dbconn.prepareStatement(query));
         pstmt->setInt(1, classId);
         std::unique_ptr<sql::ResultSet> qRes(pstmt->executeQuery());
         while (qRes->next()) {
-            levelIds.push_back(qRes->getInt(1));
+            LevelInfo levelInfo;
+            getLevelInfo(dbconn, qRes->getInt(1), levelInfo);
+            levels.push_back(levelInfo);
         }
     } catch (sql::SQLException& e) {
         std::cerr << "ERROR: SQL Exception from handleGetEnabledClassLevels: " << e.what() << std::endl;
@@ -594,9 +596,9 @@ void handleClient(std::unique_ptr<sf::TcpSocket> client,
     case GET_ENABLED_CLASS_LEVELS: {
         int classId;
         reqPacket >> classId;
-        std::vector<int> levelIds;
-        auto status = handleGetEnabledClassLevels(*dbconn, classId, levelIds);
-        respPacket << status << levelIds;
+        std::vector<LevelInfo> levels;
+        auto status = handleGetEnabledClassLevels(*dbconn, classId, levels);
+        respPacket << status << levels;
         break;
     }
     case ENABLE_LEVEL: {

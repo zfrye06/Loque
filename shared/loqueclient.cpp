@@ -244,7 +244,7 @@ Status LoqueClient::getEnabledLevels(int userId, std::vector<int>& levelIds) {
     return status; 
 }
 
-Status LoqueClient::getEnabledClassLevels(int classID, std::vector<int>& levelIds) {
+Status LoqueClient::getEnabledClassLevels(int classID, std::vector<LevelInfo>& levels) {
     sf::Packet toSend;
     toSend << ReqType::GET_ENABLED_CLASS_LEVELS << classID;
     sf::Packet toReceive;
@@ -252,7 +252,7 @@ Status LoqueClient::getEnabledClassLevels(int classID, std::vector<int>& levelId
     if (status != OK) {
         return status;
     }
-    toReceive >> status >> levelIds;
+    toReceive >> status >> levels;
     return status;
 }
 

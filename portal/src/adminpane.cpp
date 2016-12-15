@@ -37,6 +37,7 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
         levelSettingsDialog.reset(new LevelSettingsDialog(this->user.userId, activeClassId,
                                                           activeClass.enabledLevels, this->allLevels));
         levelSettingsDialog->show();
+        connect(levelSettingsDialog.get(), &LevelSettingsDialog::refresh, this, &AdminPane::refreshEnabledLevels);
     });
 
     connect(ui->deleteClassButton, &QPushButton::clicked,
@@ -60,6 +61,13 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
 
 AdminPane::~AdminPane() {
     delete ui;
+}
+
+void AdminPane::refreshEnabledLevels(){
+    LoqueClient client;
+    ClassStats &c = allClassStats->at(activeClassIdx);
+    c.enabledLevels.clear();
+    client.getEnabledClassLevels(c.classId, c.enabledLevels);
 }
 
 void AdminPane::refreshClassTabs() {

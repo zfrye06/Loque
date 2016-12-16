@@ -102,6 +102,7 @@ void AdminPane::refreshClassTabs() {
     }
 
     allClassStats.swap(newClassStats);
+    QStringList list;
     ui->classList->clear();
     // TODO: CLEAR THE TABLES HERE
     if (allClassStats->size() == 0) {
@@ -110,8 +111,10 @@ void AdminPane::refreshClassTabs() {
         return;
     }
     for (auto& classStats : *allClassStats) {
-        ui->classList->addItem(QString::fromStdString(classStats.className));
+        list.push_back(QString::fromStdString(classStats.className));
     }
+    qSort(list);
+    ui->classList->addItems(list);
     ui->classList->item(0)->setSelected(true);
     classClicked(0);
 }

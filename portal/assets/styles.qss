@@ -16,3 +16,12 @@ QPushButton#playButton {
 QTableWidget::item:hover {
   background-color: rgba(0, 100, 200, .4);
 }
+
+QListWidget::item:selected:!active {
+  background-color: rgb(51, 94, 242);
+  color: rgb(255, 255, 255)
+}
+
+QListWidget::!active{
+  border: none;
+}

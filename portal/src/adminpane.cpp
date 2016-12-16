@@ -16,9 +16,12 @@ AdminPane::AdminPane(UserInfo user, QWidget *parent) :
 {
     ui->setupUi(this);
     ui->classList->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    ui->userList->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
     connect(ui->classList, &QListWidget::clicked,
             this, &AdminPane::rowSelected);
+
+    connect(ui->userList, &QListWidget::clicked, this, &AdminPane::userSelected);
 
     connect(ui->clcreateClassButton, &QPushButton::clicked,
             this, &AdminPane::showCreateClassDialog);
@@ -70,6 +73,20 @@ void AdminPane::refreshEnabledLevels(){
     client.getEnabledClassLevels(c.classId, c.enabledLevels);
 }
 
+void AdminPane::setUserList(){
+    QStringList list;
+    ui->userList->clear();
+    ClassStats curClass = allClassStats->at(activeClassIdx);
+    for(UserStats user : curClass.studentStats){
+        nameStats[QString(QString::fromStdString(user.username))] = user;
+        list.push_back(QString::fromStdString(user.username));
+    }
+    qSort(list);
+    list.push_front(QString::fromStdString("All"));
+    ui->userList->addItems(list);
+    ui->userList->item(0)->setSelected(true);
+}
+
 void AdminPane::refreshClassTabs() {
     std::unique_ptr<std::vector<ClassStats>> newClassStats(new std::vector<ClassStats>);
     LoqueClient client;
@@ -104,6 +121,11 @@ void AdminPane::rowSelected(QModelIndex index)
     classClicked(index.row());
 }
 
+void AdminPane::userSelected(QModelIndex index)
+{
+    setMapTable(ui->userList->item(index.row())->text().toStdString());
+}
+
 void AdminPane::classClicked(int row) {
     if (row == -1) return;
     activeClassIdx = row;
@@ -111,7 +133,8 @@ void AdminPane::classClicked(int row) {
     ui->currClassLabel->setText(QString::fromStdString(currStats.className));
     setSummaryBox();
     setUserTable();
-    setMapTable();
+    setUserList();
+    setMapTable("All");
 }
 
 void AdminPane::setSummaryBox(){
@@ -226,7 +249,7 @@ QColor AdminPane::getLevelColor(const UserStats& user, int levelID){
     return color;
 }
 
-void AdminPane::setMapTable(){
+void AdminPane::setMapTable(std::string username){
     ui->mapTable->clear();
     ui->mapTable->setRowCount(0);
     ui->mapTable->setColumnCount(5);
@@ -241,7 +264,7 @@ void AdminPane::setMapTable(){
     ui->mapTable->setHorizontalHeaderLabels(headers);
     ui->mapTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    int row = ui->mapTable->rowCount();
+    int row = 0;
     std::map<int, std::string> levelMap;
 
     for(LevelInfo info : allLevels){
@@ -250,6 +273,7 @@ void AdminPane::setMapTable(){
 
     for(size_t i = 0; i < cstats.studentStats.size(); i++){
         const UserStats& user = cstats.studentStats.at(i);
+        if(user.username == username || username == "All"){
         for(auto& kv : user.highScores){
             ui->mapTable->insertRow(row);
             QTableWidgetItem *studentNameCell = new QTableWidgetItem(QString::fromStdString(user.username));
@@ -267,6 +291,7 @@ void AdminPane::setMapTable(){
             ui->mapTable->setItem(row, 2, levelNameCell);
             ui->mapTable->setItem(row, 3, scoreCell);
             ui->mapTable->setItem(row++, 4, timeCell);
+        }
         }
     }
     ui->mapTable->sortByColumn(0, Qt::AscendingOrder);

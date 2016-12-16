@@ -33,7 +33,8 @@ private:
     Ui::AdminPane *ui;
     std::unique_ptr<CreateClassDialog> createClassDialog; 
     std::unique_ptr<LevelSettingsDialog> levelSettingsDialog;
-    std::unique_ptr<DeleteClassConfirmation> deleteClassConfirmation; 
+    std::unique_ptr<DeleteClassConfirmation> deleteClassConfirmation;
+    std::map<QString, UserStats> nameStats;
     
     void refreshClassTabs();
     void rowSelected(QModelIndex);
@@ -41,10 +42,12 @@ private:
     void showCreateClassDialog();
     void showHtmlReportDialog(); 
     void setUserTable();
-    void setMapTable();
+    void setMapTable(std::string username);
     void setSummaryBox();
     void deleteClass();
     void refreshEnabledLevels();
+    void setUserList();
+    void userSelected(QModelIndex index);
     QColor getLevelColor(const UserStats& user, int levelID);
     QIcon getIcon(const UserStats& user, int levelID);
     QString getFormattedTime(int seconds);

@@ -67,7 +67,10 @@
                 </property>
                 <property name="styleSheet">
                  <string notr="true">max-width: parent;
-border: none; </string>
+border: none;</string>
+                </property>
+                <property name="showDropIndicator" stdset="0">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -278,6 +281,34 @@ border: none; </string>
               </property>
               <property name="styleSheet">
                <string notr="true"/>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QListWidget" name="userList">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>20</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">border: none;</string>
+              </property>
+              <property name="showDropIndicator" stdset="0">
+               <bool>true</bool>
+              </property>
+              <property name="flow">
+               <enum>QListView::LeftToRight</enum>
+              </property>
+              <property name="resizeMode">
+               <enum>QListView::Fixed</enum>
+              </property>
+              <property name="uniformItemSizes">
+               <bool>false</bool>
+              </property>
+              <property name="sortingEnabled">
+               <bool>false</bool>
               </property>
              </widget>
             </item>

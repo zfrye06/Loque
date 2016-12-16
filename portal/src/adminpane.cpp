@@ -77,8 +77,8 @@ void AdminPane::setUserList(){
     QStringList list;
     ui->userList->clear();
     ClassStats curClass = allClassStats->at(activeClassIdx);
-    for(UserStats user : curClass.studentStats){
-        nameStats[QString(QString::fromStdString(user.username))] = user;
+    for(UserStats& user : curClass.studentStats){
+        nameStats[user.username] = user;
         list.push_back(QString::fromStdString(user.username));
     }
     qSort(list);
@@ -127,6 +127,7 @@ void AdminPane::rowSelected(QModelIndex index)
 void AdminPane::userSelected(QModelIndex index)
 {
     setMapTable(ui->userList->item(index.row())->text().toStdString());
+    setSummaryBox(ui->userList->item(index.row())->text().toStdString());
 }
 
 void AdminPane::classClicked(int row) {
@@ -134,22 +135,37 @@ void AdminPane::classClicked(int row) {
     activeClassIdx = row;
     const ClassStats& currStats = allClassStats->at(activeClassIdx);
     ui->currClassLabel->setText(QString::fromStdString(currStats.className));
-    setSummaryBox();
-    setUserTable();
+    setSummaryBox("All");
     setUserList();
     setMapTable("All");
 }
 
-void AdminPane::setSummaryBox(){
+void AdminPane::setSummaryBox(std::string username){
+    ui->classLabel->clear();
+    ui->classNameLabel->clear();
+    ui->totalPointsLabel->clear();
+    ui->totalTimeLabel->clear();
     int totalPoints = 0;
     int totalTime = 0;
     const ClassStats &cstats = allClassStats->at(activeClassIdx);
-    for(auto& user : cstats.studentStats){
-        totalPoints += user.totalScore;
-        totalTime += user.totalSecPlayed;
+    if(username == "All"){
+        ui->summaryBox->setTitle("Class Summary");
+        ui->classIdLabel->setText("Class ID: " + QString::number(cstats.classId));
+        ui->classNameLabel->setText("Class Name: " + QString::fromStdString(cstats.className));
+        for(auto& user : cstats.studentStats){
+            totalPoints += user.totalScore;
+            totalTime += user.totalSecPlayed;
+        }
     }
-    ui->classIdLabel->setText("Class ID: " + QString::number(cstats.classId));
-    ui->classNameLabel->setText("Class Name: " + QString::fromStdString(cstats.className));
+    else{
+        ui->summaryBox->setTitle("User Summary");
+        UserStats user = nameStats[username];
+        ui->classIdLabel->setText("User ID: " + QString::number(user.userId));
+        ui->classNameLabel->setText("Username: " + QString::fromStdString(user.username));
+        totalPoints = user.totalScore;
+        totalTime = user.totalSecPlayed;
+    }
+
     ui->totalPointsLabel->setText("Total Points: " + QString::number(totalPoints));
     ui->totalTimeLabel->setText("Total Time Played: " + getFormattedTime(totalTime));
 }
@@ -184,7 +200,6 @@ QString AdminPane::getFormattedTime(int seconds){
 }
 
 void AdminPane::setUserTable(){
-    ui->userTable->clear();
     const ClassStats &cstats = allClassStats->at(activeClassIdx);
     QStringList headers;
     headers.append("Student");
@@ -197,10 +212,6 @@ void AdminPane::setUserTable(){
         headers.append("Level " + QString::number(i+1) + " Completed");
     }
 
-    ui->userTable->setRowCount(cstats.studentStats.size());
-    ui->userTable->setColumnCount(3 + numlvls);
-    ui->userTable->setHorizontalHeaderLabels(headers);
-    ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     int row = 0;
     int col = 3;
@@ -212,9 +223,6 @@ void AdminPane::setUserTable(){
         scoreCell->setTextAlignment(Qt::AlignCenter);
         timeCell->setTextAlignment(Qt::AlignCenter);
 
-        ui->userTable->setItem(row, 0, nameCell);
-        ui->userTable->setItem(row, 1, scoreCell);
-        ui->userTable->setItem(row, 2, timeCell);
 
         QTableWidgetItem *lvlCell = new QTableWidgetItem;
         for(int i = 0; i < numlvls; i++){
@@ -222,14 +230,10 @@ void AdminPane::setUserTable(){
             //            lvlCell->setBackgroundColor(getLevelColor(user, i));
             lvlCell->setIcon(getIcon(user, i));
             lvlCell->setTextAlignment(Qt::AlignCenter);
-            ui->userTable->setItem(row, col++, lvlCell);
         }
         row++;
         col = 3;
     }
-    ui->userTable->sortByColumn(0, Qt::AscendingOrder);
-    ui->userTable->setSelectionMode(QAbstractItemView::NoSelection);
-    ui->userTable->verticalHeader()->setVisible(false);
 }
 
 QIcon AdminPane::getIcon(const UserStats& user, int levelID){

@@ -34,7 +34,8 @@ private:
     std::unique_ptr<CreateClassDialog> createClassDialog; 
     std::unique_ptr<LevelSettingsDialog> levelSettingsDialog;
     std::unique_ptr<DeleteClassConfirmation> deleteClassConfirmation;
-    std::map<QString, UserStats> nameStats;
+    std::map<std::string, UserStats> nameStats;
+    std::string curUserTab;
     
     void refreshClassTabs();
     void rowSelected(QModelIndex);
@@ -43,7 +44,7 @@ private:
     void showHtmlReportDialog(); 
     void setUserTable();
     void setMapTable(std::string username);
-    void setSummaryBox();
+    void setSummaryBox(std::string username);
     void deleteClass();
     void refreshEnabledLevels();
     void setUserList();

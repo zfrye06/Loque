@@ -275,19 +275,6 @@ border: none;</string>
              </layout>
             </item>
             <item>
-             <widget class="QTableWidget" name="userTable">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="cursor" stdset="0">
-               <cursorShape>PointingHandCursor</cursorShape>
-              </property>
-              <property name="styleSheet">
-               <string notr="true"/>
-              </property>
-             </widget>
-            </item>
-            <item>
              <widget class="QListWidget" name="userList">
               <property name="maximumSize">
                <size>

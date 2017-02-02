@@ -1,4 +1,4 @@
-#loque
+#Loque
 
 Made by The Unescaped Characters.
 
